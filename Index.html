@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+  font-family: Arial;
+  background: #111;
+  color: white;
+  text-align: center;
+}
+
+.container {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+}
+
+input, button {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 10px;
+  border: none;
+}
+
+button {
+  background: #4f8cff;
+  color: white;
+}
+
+.vs {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.choice {
+  flex: 1;
+  padding: 20px;
+  background: #222;
+  border-radius: 10px;
+  cursor: pointer;
+}
+  </style>
+</head>
+<body>
+
+  <div class="container">
+  <h1>🔥 Ranking</h1>
+
+  <input id="newItem" placeholder="Legg til noe">
+  <button onclick="addItem()">Legg til</button>
+
+  <div class="vs">
+    <div class="choice" onclick="choose(0)" id="a">-</div>
+    <div class="choice" onclick="choose(1)" id="b">-</div>
+  </div>
+
+  <div id="ranking"></div>
+  </div>
+
+  <script>
+    let items = JSON.parse(localStorage.getItem("items")) || [];
+let current = [];
+
+function save() {
+  localStorage.setItem("items", JSON.stringify(items));
+}
+
+function addItem() {
+  const name = document.getElementById("newItem").value;
+  if (!name) return;
+
+  items.push({ name, rating: 1000 });
+  document.getElementById("newItem").value = "";
+
+  save();
+  update();
+  newMatch();
+}
+
+function expected(a, b) {
+  return 1 / (1 + Math.pow(10, (b - a) / 400));
+}
+
+function updateElo(w, l) {
+  const K = 32;
+  let Ew = expected(w.rating, l.rating);
+
+  w.rating += K * (1 - Ew);
+  l.rating += K * (0 - (1 - Ew));
+}
+
+function newMatch() {
+  if (items.length < 2) return;
+
+  let a = Math.floor(Math.random() * items.length);
+  let b;
+  do { b = Math.floor(Math.random() * items.length); }
+  while (a === b);
+
+  current = [items[a], items[b]];
+
+  document.getElementById("a").innerText = current[0].name;
+  document.getElementById("b").innerText = current[1].name;
+}
+
+function choose(i) {
+  updateElo(current[i], current[1 - i]);
+
+  save();
+  update();
+  newMatch();
+}
+
+function update() {
+  let sorted = [...items].sort((a,b)=>b.rating-a.rating);
+
+  document.getElementById("ranking").innerHTML =
+    "<h3>🏆 Ranking</h3>" +
+    sorted.map((x,i)=>
+      `${i+1}. ${x.name} (${Math.round(x.rating)})`
+    ).join("<br>");
+}
+
+update();
+newMatch();
+  </script>
+
+</body>
+</html>
