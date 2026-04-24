@@ -134,11 +134,9 @@ button:hover {
   <h1>⚔️ The Ultimate Ranking</h1>
 
   <input id="newItem" placeholder="Legg til noe">
-<select id="newCategory"></select>
 <div id="categoryContainer"></div>
 
 <input id="newCategoryInput" placeholder="Ny kategori">
-<button onclick="addCategory()">+ kategori</button>
 <button onclick="addCategory()">+ kategori</button>
 
 <button onclick="addItem()">Legg til</button>
@@ -178,7 +176,7 @@ function addItem() {
 ).map(cb => cb.value);
 
 
-  if (!name || !category) return;
+  if (!name || selectedCategories.length === 0) return;
 
  items.push({
   id: Date.now() + Math.random(),
@@ -188,7 +186,6 @@ function addItem() {
 });
 
   document.getElementById("newItem").value = "";
-  document.getElementById("newCategory").value = "";
   document.querySelectorAll("#categoryContainer input")
   .forEach(cb => cb.checked = false);
 
@@ -215,24 +212,6 @@ function newMatch() {
     document.getElementById("a").innerText = "Legg til flere items";
     document.getElementById("b").innerText = "";
     return;
-    document.getElementById("a").style.background = "#1f1f1f";
-    document.getElementById("b").style.background = "#1f1f1f";
-    document.getElementById("a").blur?.();
-    document.getElementById("b").blur?.();
-    document.activeElement.blur();
-    let aEl = document.getElementById("a");
-let bEl = document.getElementById("b");
-
-aEl.innerText = current[0].name;
-bEl.innerText = current[1].name;
-
-// 🔥 RESET VISUAL STATE
-aEl.classList.remove("active");
-bEl.classList.remove("active");
-
-// force repaint (liten hack som løser rare UI bugs)
-aEl.offsetHeight;
-bEl.offsetHeight;
   }
 
   let a = Math.floor(Math.random() * items.length);
@@ -283,11 +262,14 @@ function editCategory(id) {
   let item = items.find(x => x.id === id);
   if (!item) return;
 
-  let newCategory = prompt("Ny kategori:", item.category || "");
+  let newCategory = prompt("Skriv kategorier (kommaseparert):", item.categories.join(", "));
 
   if (newCategory === null) return;
 
-  item.category = normalizeCategory(newCategory);
+  item.categories = newCategory
+    .split(",")
+    .map(c => normalizeCategory(c))
+    .filter(Boolean);
 
   save();
   update();
@@ -311,15 +293,6 @@ function draw() {
   save();
   update();
   newMatch();
-}
-
-function normalizeCategory(cat) {
-  if (!cat) return null;
-
-  return cat
-    .trim()
-    .toLowerCase()
-    .replace(/\b\w/g, c => c.toUpperCase());
 }
 
 function addCategory() {
