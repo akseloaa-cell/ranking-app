@@ -751,6 +751,18 @@ function editItemCategories(id) {
   update();
 }
 
+function renderCategories() {
+  const categories = getCategories();
+  const container = document.getElementById("categoryDropdown");
+
+  container.innerHTML = categories.map(cat => `
+    <label class="category-item">
+      <input type="checkbox" value="${cat}" onchange="updateDropdownLabel()">
+      <span>${cat}</span>
+    </label>
+  `).join("");
+}
+
 /* ---------------- INIT ---------------- */
 
 renderCategories();
@@ -786,7 +798,27 @@ function updateDropdownLabel() {
     label.innerText = `${checked.length} valgt`;
   }
 }
-onchange="updateDropdownLabel()"
+
+function addCategory() {
+  const input = document.getElementById("newCategoryInput").value;
+  const cat = normalizeCategory(input);
+
+  if (!cat) return;
+
+  // legg til i items (robust lagring)
+  items.push({
+    id: Date.now() + Math.random(),
+    name: "__category_seed__",
+    categories: [cat],
+    rating: 1000
+  });
+
+  document.getElementById("newCategoryInput").value = "";
+
+  save();
+  renderCategories();
+  updateDropdownLabel();
+}
 
 showMain()
 showTournament()
