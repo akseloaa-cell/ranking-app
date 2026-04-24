@@ -134,6 +134,9 @@ function update() {
 
 update();
 newMatch();
+    document.getElementById("newItem").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") addItem();
+});
   </script>
 
 </body>
