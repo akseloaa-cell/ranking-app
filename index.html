@@ -134,7 +134,13 @@ button:hover {
   <h1>⚔️ The Ultimate Ranking</h1>
 
   <input id="newItem" placeholder="Legg til noe">
-<input id="newCategory" placeholder="Kategori (f.eks mat, musikk)">
+<select id="newCategory"></select>
+<div id="categoryContainer"></div>
+
+<input id="newCategoryInput" placeholder="Ny kategori">
+<button onclick="addCategory()">+ kategori</button>
+<button onclick="addCategory()">+ kategori</button>
+
 <button onclick="addItem()">Legg til</button>
 
   <div class="vs">
@@ -152,30 +158,40 @@ button:hover {
     items = items.map(item => ({
   id: item.id || Date.now() + Math.random(),
   name: item.name,
-  category: item.category || "ukjent",
+  categories: item.categories || [item.category || "ukjent"],
   rating: item.rating
 }));
-let current = [];
 
+let current = [];
+let categories = JSON.parse(localStorage.getItem("categories")) || [];
+
+    
 function save() {
   localStorage.setItem("items", JSON.stringify(items));
+  localStorage.setItem("categories", JSON.stringify(categories));
 }
 
 function addItem() {
   const name = document.getElementById("newItem").value;
-  const category = document.getElementById("newCategory").value;
+  const selectedCategories = Array.from(
+  document.querySelectorAll("#categoryContainer input:checked")
+).map(cb => cb.value);
+
 
   if (!name || !category) return;
 
-  items.push({
-    id: Date.now() + Math.random(),
-    name,
-    category,
-    rating: 1000
-  });
+ items.push({
+  id: Date.now() + Math.random(),
+  name,
+  categories: selectedCategories,
+  rating: 1000
+});
 
   document.getElementById("newItem").value = "";
   document.getElementById("newCategory").value = "";
+  document.querySelectorAll("#categoryContainer input")
+  .forEach(cb => cb.checked = false);
+
 
   save();
   update();
@@ -249,7 +265,7 @@ function update() {
     "<h3>🏆 Ranking</h3>" +
     sorted.map((x,i)=>
   `${i+1}. ${x.name} <span onclick="editCategory(${x.id})" style="cursor:pointer; color:#4f8cff;">
-  [${x.category || "ingen kategori"}]
+  [${x.categories ? x.categories.join(", ") : "ingen kategori"}]
 </span> (${Math.round(x.rating)})`
 ).join("<br>");
 }
@@ -296,7 +312,43 @@ function draw() {
   update();
   newMatch();
 }
-    
+
+function normalizeCategory(cat) {
+  if (!cat) return null;
+
+  return cat
+    .trim()
+    .toLowerCase()
+    .replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function addCategory() {
+  let input = document.getElementById("newCategoryInput").value;
+  let cat = normalizeCategory(input);
+
+  if (!cat) return;
+
+  if (!categories.includes(cat)) {
+    categories.push(cat);
+    save();
+    renderCategories();
+  }
+
+  document.getElementById("newCategoryInput").value = "";
+}
+
+function renderCategories() {
+  let container = document.getElementById("categoryContainer");
+
+  container.innerHTML = categories.map(cat => `
+    <label style="display:block; text-align:left; margin:4px 0;">
+      <input type="checkbox" value="${cat}">
+      ${cat}
+    </label>
+  `).join("");
+}
+
+renderCategories();
 update();
 newMatch();
     document.getElementById("newItem").addEventListener("keydown", function(e) {
