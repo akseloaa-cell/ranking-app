@@ -72,43 +72,64 @@
       margin: 10px 0;
     }
 
-    .dropdown-btn {
-      width: 100%;
-      padding: 12px;
-      background: #1f1f1f;
-      border-radius: 12px;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
+  .dropdown-btn {
+  width: 100%;
+  padding: 12px;
+  background: #1f1f1f;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dropdown-btn:hover {
+  background: #262626;
+}
 
     .dropdown-content {
-      display: none;
-      position: absolute;
-      background: #1a1a1a;
-      width: 100%;
-      max-height: 180px;
-      overflow-y: auto;
-      border-radius: 10px;
-      margin-top: 6px;
-      padding: 10px;
-      z-index: 10;
-    }
+  display: none;
+  position: absolute;
+  background: #1a1a1a;
+  width: 100%;
+  max-height: 220px;
+  overflow-y: auto;
+  border-radius: 14px;
+  margin-top: 8px;
+  padding: 8px;
+  z-index: 10;
 
-    .dropdown-content.show {
-      display: block;
-    }
+  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+  border: 1px solid #2a2a2a;
+}
 
-    .category-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px;
-    }
+.dropdown-content.show {
+  display: block;
+}
 
-    .category-item input {
-      accent-color: #4f8cff;
-    }
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.15s;
+  font-size: 14px;
+}
+
+.category-item:hover {
+  background: #2a2a2a;
+}
+
+.category-item input {
+  accent-color: #4f8cff;
+  transform: scale(1.15);
+}
+
   </style>
 </head>
 
@@ -120,10 +141,11 @@
 
   <input id="newItem" placeholder="Legg til noe">
 
-  <div class="dropdown">
-    <div class="dropdown-btn" onclick="toggleDropdown()">
-      Velg kategorier
-    </div>
+ <div class="dropdown">
+  <div class="dropdown-btn" onclick="toggleDropdown()">
+    <span id="dropdownLabel">Velg kategorier</span>
+    ⬇️
+  </div>
 
     <div id="categoryDropdown" class="dropdown-content"></div>
   </div>
@@ -364,6 +386,33 @@ newMatch();
 document.getElementById("newItem").addEventListener("keydown", e => {
   if (e.key === "Enter") addItem();
 });
+
+document.addEventListener("click", function (e) {
+  const dropdown = document.getElementById("categoryDropdown");
+  const btn = document.querySelector(".dropdown-btn");
+
+  if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
+    dropdown.classList.remove("show");
+  }
+});
+
+function updateDropdownLabel() {
+  const checked = [...document.querySelectorAll("#categoryDropdown input:checked")]
+    .map(cb => cb.value);
+
+  const label = document.getElementById("dropdownLabel");
+
+  if (!label) return;
+
+  if (checked.length === 0) {
+    label.innerText = "Velg kategorier";
+  } else if (checked.length <= 2) {
+    label.innerText = checked.join(", ");
+  } else {
+    label.innerText = `${checked.length} valgt`;
+  }
+}
+onchange="updateDropdownLabel()"
 
 </script>
 
