@@ -226,6 +226,11 @@ body.tournament-mode {
 
       <input id="newItem" placeholder="Legg til noe">
 
+      <div style="margin-bottom:10px;">
+  <input id="newCategoryInput" placeholder="Ny kategori">
+  <button onclick="addCategory()">+ Legg til kategori</button>
+</div>
+
       <div class="dropdown">
         <div class="dropdown-btn" onclick="toggleDropdown()">
           <span id="dropdownLabel">Velg kategorier</span>
@@ -322,15 +327,16 @@ function getCategories() {
 }
 
 function addCategory() {
-  const input = document.getElementById("newCategoryInput").value;
+  const el = document.getElementById("newCategoryInput");
+  if (!el) return;
+
+  const input = el.value;
   const cat = normalizeCategory(input);
 
   if (!cat) return;
 
-  // legg til "dummy item system" for å holde det robust
-  let exists = items.some(item =>
-    (item.categories || []).includes(cat)
-  );
+  // legg til som “ekte kategori”
+  let exists = getCategories().includes(cat);
 
   if (!exists) {
     items.push({
@@ -340,6 +346,14 @@ function addCategory() {
       rating: 1000
     });
   }
+
+  el.value = "";
+
+  save();
+  renderCategories();
+  updateDropdownLabel();
+}
+
 
   document.getElementById("newCategoryInput").value = "";
 
@@ -366,6 +380,7 @@ function renderCategories() {
     </label>
   `).join("");
 }
+
 
 /* ---------------- ADD ITEM ---------------- */
 
