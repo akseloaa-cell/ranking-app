@@ -6,90 +6,99 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    body {
-      font-family: system-ui, Arial;
-      background: linear-gradient(180deg, #0f0f0f, #1a1a1a);
-      color: white;
-      text-align: center;
-      margin: 0;
-      -webkit-text-size-adjust: 100%;
-    }
-
-    .container {
-      max-width: 420px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    h1 {
-      margin-bottom: 20px;
-    }
-
-    input {
-      width: 80%;
-      padding: 12px;
-      margin: 6px;
-      border-radius: 12px;
-      border: none;
-      background: #222;
-      color: white;
-    }
-
-    input:hover {
-      background: #262626;
-    }
     
-    button {
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: none;
-      margin: 6px;
-      background: #4f8cff;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
+   body {
+  font-family: system-ui, Arial;
+  background: linear-gradient(180deg, #0f0f0f, #1a1a1a);
+  color: white;
+  text-align: center;
+  margin: 0;
+  -webkit-text-size-adjust: 100%;
+}
 
-    .vs {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .choice {
-      flex: 1;
-      padding: 25px;
-      background: #1f1f1f;
-      border-radius: 16px;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    #ranking {
-      margin-top: 20px;
-      text-align: left;
-      background: #151515;
-      padding: 10px;
-      border-radius: 10px;
-    }
-
-    /* dropdown */
-    .dropdown {
-      position: relative;
-      margin: 10px 0;
-    }
-
-  .dropdown-btn {
-  width: 80%;
+.container {
+  max-width: 420px;
+  margin: auto;
   padding: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+/* 🔥 Felles 80% layout */
+input,
+button,
+.dropdown-btn {
+  width: 80%;
+  margin: 6px auto;
+  display: block;
+  box-sizing: border-box;
+}
+
+/* INPUT */
+input {
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: #222;
+  color: white;
+}
+
+/* BUTTON */
+button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background: #4f8cff;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* VS */
+.vs {
+  width: 80%;
+  margin: 20px auto;
+  display: flex;
+  gap: 10px;
+}
+
+.choice {
+  flex: 1;
+  padding: 25px;
+  background: #1f1f1f;
+  border-radius: 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* RANKING */
+#ranking {
+  width: 80%;
+  margin: 20px auto;
+  text-align: left;
+  background: #151515;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+/* DROPDOWN */
+.dropdown {
+  position: relative;
+}
+
+/* KNAPP */
+.dropdown-btn {
+  padding: 12px;
   background: #1f1f1f;
   border-radius: 12px;
   color: white;
   font-weight: 600;
   font-size: 16px;
   cursor: pointer;
-  margin: 0 auto;
-  display: block;
+
+  display: flex;
   justify-content: space-between;
   align-items: center;
 }
@@ -98,11 +107,16 @@
   background: #262626;
 }
 
-    .dropdown-content {
+/* LISTE */
+.dropdown-content {
   display: none;
   position: absolute;
+
+  width: 80%;
+  left: 50%;
+  transform: translateX(-50%);
+
   background: #1a1a1a;
-  width: 100%;
   max-height: 220px;
   overflow-y: auto;
   border-radius: 14px;
@@ -118,18 +132,15 @@
   display: block;
 }
 
+/* CATEGORY ITEMS */
 .category-item {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   gap: 8px;
-
-  padding: 10px 10px;
+  padding: 10px;
   border-radius: 10px;
-
   cursor: pointer;
   font-size: 14px;
-
   transition: 0.15s;
 }
 
@@ -146,14 +157,11 @@
   width: 16px;
   height: 16px;
   margin: 0;
-
   accent-color: #4f8cff;
-
-  cursor: pointer;
 }
 
+/* 📱 MOBIL */
 @media (max-width: 600px) {
-
   .container {
     padding: 12px;
   }
@@ -162,14 +170,20 @@
     font-size: 22px;
   }
 
-  input {
+  input,
+  button,
+  .dropdown-btn {
     width: 100%;
     font-size: 16px;
   }
 
-  button {
+  .vs {
     width: 100%;
-    font-size: 16px;
+  }
+
+  #ranking {
+    width: 100%;
+    font-size: 14px;
   }
 
   .choice {
@@ -177,13 +191,17 @@
     font-size: 16px;
   }
 
-  #ranking {
-    font-size: 14px;
+  .dropdown-content {
+    width: 100%;
+    left: 0;
+    transform: none;
   }
 }
 
+/* TOURNAMENT */
 .tournament-box {
-  margin-top: 15px;
+  width: 80%;
+  margin: 15px auto;
   padding: 12px;
   background: #121212;
   border-radius: 12px;
