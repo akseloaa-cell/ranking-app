@@ -138,8 +138,33 @@ function update() {
   document.getElementById("ranking").innerHTML =
     "<h3>🏆 Ranking</h3>" +
     sorted.map((x,i)=>
-  `${i+1}. ${x.name} [${x.category}] (${Math.round(x.rating)})`
+  `${i+1}. ${x.name} <span onclick="editCategory(${x.id}, '${x.category || ""}')" style="cursor:pointer; color:#4f8cff;">
+  [${x.category || "ingen kategori"}]
+</span> (${Math.round(x.rating)})`
 ).join("<br>");
+}
+
+function normalizeCategory(cat) {
+  if (!cat) return "ukjent";
+
+  return cat
+    .trim()
+    .toLowerCase()
+    .replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function editCategory(id, currentCategory) {
+  let item = items.find(x => x.id === id);
+  if (!item) return;
+
+  let newCategory = prompt("Ny kategori:", currentCategory);
+
+  if (newCategory === null) return;
+
+  item.category = normalizeCategory(newCategory);
+
+  save();
+  update();
 }
 
 update();
