@@ -242,20 +242,11 @@ button:hover {
 
   <script>
     let items = JSON.parse(localStorage.getItem("items")) || [];
-    let categories = JSON.parse(localStorage.getItem("categories")) || [];
+if (!Array.isArray(items)) items = [];
 
-// 🔥 hent kategorier fra gamle items også
-items.forEach(item => {
-  let cats = item.categories || (item.category ? [item.category] : []);
+let categories = JSON.parse(localStorage.getItem("categories")) || [];
+if (!Array.isArray(categories)) categories = [];
 
-  cats.forEach(c => {
-    let norm = normalizeCategory(c);
-    if (norm && !categories.includes(norm)) {
-      categories.push(norm);
-    }
-  });
-});
-categories = [...new Set(categories)];
     items = items.map(item => ({
   id: item.id || Date.now() + Math.random(),
   name: item.name,
@@ -264,9 +255,6 @@ categories = [...new Set(categories)];
 }));
 
 let current = [];
-    
-let categories = JSON.parse(localStorage.getItem("categories")) || [];
-categories = [...new Set(categories)];
     
 function save() {
   localStorage.setItem("items", JSON.stringify(items));
@@ -368,6 +356,21 @@ function normalizeCategory(cat) {
     .replace(/\b\w/g, c => c.toUpperCase());
 }
 
+function rebuildCategoriesFromItems() {
+  items.forEach(item => {
+    let cats = item.categories || (item.category ? [item.category] : []);
+
+    cats.forEach(c => {
+      let norm = normalizeCategory(c);
+      if (norm && !categories.includes(norm)) {
+        categories.push(norm);
+      }
+    });
+  });
+
+  categories = [...new Set(categories)];
+}
+
 function editCategory(id) {
   let item = items.find(x => x.id === id);
   if (!item) return;
@@ -449,6 +452,7 @@ function renderCategories() {
   `).join("");
 }
 
+rebuildCategoriesFromItems();    
 renderCategories();
 updateDropdownLabel();
 update();
