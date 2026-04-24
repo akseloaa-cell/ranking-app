@@ -113,12 +113,21 @@
 .category-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px;
+  justify-content: flex-start;
+  gap: 8px;
+
+  padding: 10px 10px;
   border-radius: 10px;
+
   cursor: pointer;
-  transition: 0.15s;
   font-size: 14px;
+
+  transition: 0.15s;
+}
+
+.category-item span {
+  flex: 1;
+  text-align: left;
 }
 
 .category-item:hover {
@@ -126,8 +135,13 @@
 }
 
 .category-item input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+
   accent-color: #4f8cff;
-  transform: scale(1.15);
+
+  cursor: pointer;
 }
 
   </style>
