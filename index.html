@@ -146,6 +146,13 @@
 let items = JSON.parse(localStorage.getItem("items")) || [];
 if (!Array.isArray(items)) items = [];
 
+items = items.map(item => ({
+  id: item.id || Date.now() + Math.random(),
+  name: item.name,
+  categories: item.categories || (item.category ? [item.category] : []),
+  rating: item.rating || 1000
+}));
+
 /* ---------------- HELPERS ---------------- */
 
 function save() {
@@ -290,8 +297,31 @@ function update() {
   document.getElementById("ranking").innerHTML =
     "<h3>🏆 Ranking</h3>" +
     sorted.map((x, i) =>
-      `${i + 1}. ${x.name} [${(x.categories || []).join(", ")}] (${Math.round(x.rating)})`
+      `${i + 1}. ${x.name} 
+<span onclick="editItemCategories(${x.id})" style="cursor:pointer; color:#4f8cff;">
+[${(x.categories || []).join(", ") || "ingen"}]
+</span>
+ (${Math.round(x.rating)})`
     ).join("<br>");
+}
+
+function editItemCategories(id) {
+  let item = items.find(x => x.id === id);
+  if (!item) return;
+
+  let current = (item.categories || []).join(", ");
+
+  let input = prompt("Rediger kategorier (kommaseparert):", current);
+
+  if (input === null) return;
+
+  item.categories = input
+    .split(",")
+    .map(c => normalizeCategory(c))
+    .filter(Boolean);
+
+  save();
+  update();
 }
 
 /* ---------------- INIT ---------------- */
