@@ -108,6 +108,17 @@ button:hover {
 .choice {
   -webkit-tap-highlight-color: transparent;
 }
+
+.choice {
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.choice:active,
+.choice:focus {
+  background: #1f1f1f !important;
+}
+
   </style>
 </head>
 <body>
@@ -186,6 +197,19 @@ function newMatch() {
     document.getElementById("a").blur?.();
     document.getElementById("b").blur?.();
     document.activeElement.blur();
+    let aEl = document.getElementById("a");
+let bEl = document.getElementById("b");
+
+aEl.innerText = current[0].name;
+bEl.innerText = current[1].name;
+
+// 🔥 RESET VISUAL STATE
+aEl.classList.remove("active");
+bEl.classList.remove("active");
+
+// force repaint (liten hack som løser rare UI bugs)
+aEl.offsetHeight;
+bEl.offsetHeight;
   }
 
   let a = Math.floor(Math.random() * items.length);
