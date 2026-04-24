@@ -247,6 +247,15 @@ if (!Array.isArray(items)) items = [];
 let categories = JSON.parse(localStorage.getItem("categories")) || [];
 if (!Array.isArray(categories)) categories = [];
 
+function normalizeCategory(cat) {
+  if (!cat) return "ukjent";
+
+  return cat
+    .trim()
+    .toLowerCase()
+    .replace(/\b\w/g, c => c.toUpperCase());
+}
+
     items = items.map(item => ({
   id: item.id || Date.now() + Math.random(),
   name: item.name,
@@ -345,15 +354,6 @@ function update() {
   [${x.categories ? x.categories.join(", ") : "ingen kategori"}]
 </span> (${Math.round(x.rating)})`
 ).join("<br>");
-}
-
-function normalizeCategory(cat) {
-  if (!cat) return "ukjent";
-
-  return cat
-    .trim()
-    .toLowerCase()
-    .replace(/\b\w/g, c => c.toUpperCase());
 }
 
 function rebuildCategoriesFromItems() {
