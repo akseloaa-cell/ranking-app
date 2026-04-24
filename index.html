@@ -104,6 +104,10 @@ button:hover {
 .choice:focus {
   outline: none;
 }
+
+.choice {
+  -webkit-tap-highlight-color: transparent;
+}
   </style>
 </head>
 <body>
@@ -177,6 +181,11 @@ function newMatch() {
     document.getElementById("a").innerText = "Legg til flere items";
     document.getElementById("b").innerText = "";
     return;
+    document.getElementById("a").style.background = "#1f1f1f";
+    document.getElementById("b").style.background = "#1f1f1f";
+    document.getElementById("a").blur?.();
+    document.getElementById("b").blur?.();
+    document.activeElement.blur();
   }
 
   let a = Math.floor(Math.random() * items.length);
