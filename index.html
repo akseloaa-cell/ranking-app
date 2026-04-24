@@ -130,6 +130,9 @@
 
   <button onclick="addItem()">Legg til</button>
 
+  <input id="newCategoryInput" placeholder="Ny kategori">
+<button onclick="addCategory()">+ Kategori</button>
+
   <div class="vs">
     <div class="choice" onclick="choose(0)" id="a">-</div>
     <div class="choice" onclick="choose(1)" id="b">-</div>
@@ -179,6 +182,34 @@ function getCategories() {
   });
 
   return [...new Set(cats)];
+}
+
+function addCategory() {
+  const input = document.getElementById("newCategoryInput").value;
+  const cat = normalizeCategory(input);
+
+  if (!cat) return;
+
+  // legg til "dummy item system" for å holde det robust
+  let exists = items.some(item =>
+    (item.categories || []).includes(cat)
+  );
+
+  if (!exists) {
+    items.push({
+      id: Date.now() + Math.random(),
+      name: "__category_seed__",
+      categories: [cat],
+      rating: 1000
+    });
+  }
+
+  document.getElementById("newCategoryInput").value = "";
+
+  save();
+  update();
+  newMatch();
+  renderCategories();
 }
 
 /* ---------------- UI ---------------- */
