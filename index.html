@@ -84,6 +84,18 @@ button:hover {
 #ranking div {
   padding: 6px 0;
 }
+
+button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
   </style>
 </head>
 <body>
@@ -96,9 +108,11 @@ button:hover {
 <button onclick="addItem()">Legg til</button>
 
   <div class="vs">
-    <div class="choice" onclick="choose(0)" id="a">-</div>
-    <div class="choice" onclick="choose(1)" id="b">-</div>
-  </div>
+  <div class="choice" onclick="choose(0)" id="a">-</div>
+  <div class="choice" onclick="choose(1)" id="b">-</div>
+</div>
+
+<button onclick="draw()">🤝 Uavgjort</button>
 
   <div id="ranking"></div>
   </div>
@@ -213,6 +227,26 @@ function editCategory(id) {
   update();
 }
 
+function draw() {
+  if (!current || current.length < 2) return;
+
+  const a = current[0];
+  const b = current[1];
+
+  // Elo for uavgjort
+  const K = 32;
+
+  let Ea = expected(a.rating, b.rating);
+  let Eb = expected(b.rating, a.rating);
+
+  a.rating += K * (0.5 - Ea);
+  b.rating += K * (0.5 - Eb);
+
+  save();
+  update();
+  newMatch();
+}
+    
 update();
 newMatch();
     document.getElementById("newItem").addEventListener("keydown", function(e) {
