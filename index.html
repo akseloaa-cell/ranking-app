@@ -250,8 +250,9 @@ button:hover {
 }));
 
 let current = [];
+    
 let categories = JSON.parse(localStorage.getItem("categories")) || [];
-
+categories = [...new Set(categories)];
     
 function save() {
   localStorage.setItem("items", JSON.stringify(items));
@@ -278,6 +279,8 @@ document.querySelectorAll("#categoryDropdown input:checked")
   document.querySelectorAll("#categoryDropdown input")
   .forEach(cb => cb.checked = false);
 
+  updateDropdownLabel();
+  renderCategories();
   save();
   update();
   newMatch();
@@ -395,9 +398,11 @@ function addCategory() {
   if (!cat) return;
 
   if (!categories.includes(cat)) {
-    categories.push(cat);
-    save();
-    renderCategories();
+  categories.push(cat);
+  categories = [...new Set(categories)];
+  save();
+  renderCategories();
+  updateDropdownLabel();
   }
 
   document.getElementById("newCategoryInput").value = "";
@@ -431,6 +436,7 @@ function renderCategories() {
 }
 
 renderCategories();
+updateDropdownLabel();
 update();
 newMatch();
     document.getElementById("newItem").addEventListener("keydown", function(e) {
