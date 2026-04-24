@@ -126,6 +126,35 @@ button:hover {
   background: #1f1f1f !important;
 }
 
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.dropdown {
+  position: relative;
+  margin: 10px 0;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background: #1a1a1a;
+  border-radius: 10px;
+  padding: 10px;
+  width: 100%;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.dropdown-content.show {
+  display: block;
+}
+
   </style>
 </head>
 <body>
@@ -134,7 +163,10 @@ button:hover {
   <h1>⚔️ The Ultimate Ranking</h1>
 
   <input id="newItem" placeholder="Legg til noe">
-<div id="categoryContainer"></div>
+<div class="dropdown">
+  <button onclick="toggleDropdown()">Velg kategorier ⬇️</button>
+  <div id="categoryDropdown" class="dropdown-content"></div>
+</div>
 
 <input id="newCategoryInput" placeholder="Ny kategori">
 <button onclick="addCategory()">+ kategori</button>
@@ -172,7 +204,7 @@ function save() {
 function addItem() {
   const name = document.getElementById("newItem").value;
   const selectedCategories = Array.from(
-  document.querySelectorAll("#categoryContainer input:checked")
+document.querySelectorAll("#categoryDropdown input:checked")
 ).map(cb => cb.value);
 
 
@@ -186,13 +218,17 @@ function addItem() {
 });
 
   document.getElementById("newItem").value = "";
-  document.querySelectorAll("#categoryContainer input")
+  document.querySelectorAll("#categoryDropdown input")
   .forEach(cb => cb.checked = false);
-
 
   save();
   update();
   newMatch();
+}
+
+function toggleDropdown() {
+  document.getElementById("categoryDropdown")
+    .classList.toggle("show");
 }
 
 function expected(a, b) {
@@ -311,12 +347,12 @@ function addCategory() {
 }
 
 function renderCategories() {
-  let container = document.getElementById("categoryContainer");
+  let container = document.getElementById("categoryDropdown");
 
   container.innerHTML = categories.map(cat => `
-    <label style="display:block; text-align:left; margin:4px 0;">
+    <label class="category-item">
       <input type="checkbox" value="${cat}">
-      ${cat}
+      <span>${cat}</span>
     </label>
   `).join("");
 }
