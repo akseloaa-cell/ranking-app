@@ -1,894 +1,302 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Ranking App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ranking App V2</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    
-   body {
-  font-family: system-ui, Arial;
-  background: linear-gradient(180deg, #0f0f0f, #1a1a1a);
-  color: white;
-  text-align: center;
-  margin: 0;
-  -webkit-text-size-adjust: 100%;
+<style>
+body {
+  font-family: system-ui;
+  background: linear-gradient(180deg,#0f0f0f,#1a1a1a);
+  color:white;
+  margin:0;
+  text-align:center;
 }
 
 .container {
-  max-width: 420px;
-  margin: auto;
-  padding: 20px;
+  max-width:420px;
+  margin:auto;
+  padding:16px;
 }
 
-h1 {
-  margin-bottom: 20px;
+input, button {
+  width:80%;
+  margin:6px auto;
+  display:block;
+  padding:12px;
+  border-radius:10px;
+  border:none;
 }
 
-/* 🔥 Felles 80% layout */
-input,
-button,
-.dropdown-btn {
-  width: 80%;
-  margin: 6px auto;
-  display: block;
-  box-sizing: border-box;
-}
+input { background:#222; color:white; }
 
-/* INPUT */
-input {
-  padding: 12px;
-  border-radius: 12px;
-  border: none;
-  background: #222;
-  color: white;
-}
-
-/* BUTTON */
 button {
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: none;
-  background: #4f8cff;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
+  background:#4f8cff;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* CHIPS */
+.chip-container {
+  width:80%;
+  margin:auto;
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+
+.chip {
+  padding:6px 10px;
+  background:#222;
+  border-radius:999px;
+  cursor:pointer;
+  font-size:13px;
+}
+
+.chip.active {
+  background:#4f8cff;
 }
 
 /* VS */
 .vs {
-  width: 80%;
-  margin: 20px auto;
-  display: flex;
-  gap: 10px;
+  display:flex;
+  gap:10px;
+  width:80%;
+  margin:20px auto;
 }
 
 .choice {
-  flex: 1;
-  padding: 25px;
-  background: #1f1f1f;
-  border-radius: 16px;
-  cursor: pointer;
-  user-select: none;
+  flex:1;
+  padding:25px;
+  background:#1f1f1f;
+  border-radius:12px;
+  cursor:pointer;
 }
 
-/* RANKING */
-#ranking {
-  width: 80%;
-  margin: 20px auto;
-  text-align: left;
-  background: #151515;
-  padding: 10px;
-  border-radius: 10px;
-}
-
-/* DROPDOWN */
-.dropdown {
-  position: relative;
-}
-
-/* KNAPP */
-.dropdown-btn {
-  padding: 12px;
-  background: #1f1f1f;
-  border-radius: 12px;
-  color: white;
-  font-weight: 600;
-  font-size: 16px;
-  cursor: pointer;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.dropdown-btn:hover {
-  background: #262626;
-}
-
-/* LISTE */
-.dropdown-content {
-  display: none;
-  position: absolute;
-
-  width: 80%;
-  left: 50%;
-  transform: translateX(-50%);
-
-  background: #1a1a1a;
-  max-height: 220px;
-  overflow-y: auto;
-  border-radius: 14px;
-  margin-top: 8px;
-  padding: 8px;
-  z-index: 10;
-
-  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
-  border: 1px solid #2a2a2a;
-}
-
-.dropdown-content.show {
-  display: block;
-}
-
-/* CATEGORY ITEMS */
-.category-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: 0.15s;
-}
-
-.category-item span {
-  flex: 1;
-  text-align: left;
-}
-
-.category-item:hover {
-  background: #2a2a2a;
-}
-
-.category-item input {
-  width: 16px;
-  height: 16px;
-  margin: 0;
-  accent-color: #4f8cff;
-}
-
-/* 📱 MOBIL */
-@media (max-width: 600px) {
-  .container {
-    padding: 12px;
-  }
-
-  h1 {
-    font-size: 22px;
-  }
-
-  input,
-  button,
-  .dropdown-btn {
-    width: 100%;
-    font-size: 16px;
-  }
-
-  .vs {
-    width: 100%;
-  }
-
-  #ranking {
-    width: 100%;
-    font-size: 14px;
-  }
-
-  .choice {
-    padding: 20px;
-    font-size: 16px;
-  }
-
-  .dropdown-content {
-    width: 100%;
-    left: 0;
-    transform: none;
-  }
-}
-
-/* TOURNAMENT */
-.tournament-box {
-  width: 80%;
-  margin: 15px auto;
-  padding: 12px;
-  background: #121212;
-  border-radius: 12px;
-  border: 1px solid #2a2a2a;
-  text-align: left;
-}
-
-.tournament-title {
-  font-weight: bold;
-  margin-bottom: 6px;
-}
-
-.tournament-badge {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: #4f8cff;
-  font-size: 12px;
-  margin-top: 5px;
-}
-
-body.tournament-mode {
-  background: linear-gradient(180deg, #0f0f0f, #101827);
-}
-
+/* BRACKET */
 .bracket {
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  padding: 10px 0;
+  display:flex;
+  overflow-x:auto;
+  width:80%;
+  margin:auto;
+  gap:20px;
 }
 
 .round {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  min-width: 120px;
+  min-width:120px;
 }
 
 .match {
-  background: #1f1f1f;
-  border-radius: 10px;
-  padding: 8px;
-  margin: 10px 0;
-  font-size: 13px;
-  text-align: left;
-  position: relative;
+  background:#1f1f1f;
+  margin:10px 0;
+  padding:8px;
+  border-radius:10px;
+  font-size:12px;
 }
-
-.match span {
-  display: block;
-  padding: 4px 6px;
-}
-
-.match span.winner {
-  color: #4f8cff;
-  font-weight: bold;
-}
-
-.match::after {
-  content: "";
-  position: absolute;
-  right: -10px;
-  top: 50%;
-  width: 10px;
-  height: 2px;
-  background: #444;
-}
-
-  </style>
+</style>
 </head>
 
 <body>
+<div class="container">
 
-  <div class="container">
+<h2>⚔️ Ranking V2</h2>
 
-    <h1>⚔️ Ranking App</h1>
+<input id="itemInput" placeholder="Legg til item">
 
-    <!-- NAVIGASJON -->
-    <div style="margin-bottom:10px;">
-      <button onclick="showMain()">🏠 Ranking</button>
-      <button onclick="showTournament()">🏆 Turnering</button>
-    </div>
+<div class="chip-container" id="chipBox"></div>
 
-    <!-- ===================== -->
-    <!-- 🏠 MAIN VIEW -->
-    <!-- ===================== -->
-    <div id="mainView">
-
-     <input id="newItem" placeholder="Legg til noe">
-
-<div class="dropdown">
-  <div class="dropdown-btn" onclick="toggleDropdown()">
-    <span id="dropdownLabel">Velg kategorier</span>
-    ⬇️
-  </div>
-
-  <div id="categoryDropdown" class="dropdown-content"></div>
-</div>
+<input id="catInput" placeholder="Ny kategori">
+<button onclick="addCategory()">+ kategori</button>
 
 <button onclick="addItem()">Legg til</button>
 
-<div style="margin-bottom:10px;">
-  <input id="newCategoryInput" placeholder="Ny kategori">
-  <button onclick="addCategory()">+ Legg til kategori</button>
+<div class="vs">
+  <div class="choice" id="a" onclick="pick(0)">-</div>
+  <div class="choice" id="b" onclick="pick(1)">-</div>
 </div>
 
-      <div class="vs">
-        <div class="choice" onclick="choose(0)" id="a">-</div>
-        <div class="choice" onclick="choose(1)" id="b">-</div>
-      </div>
+<button onclick="draw()">Uavgjort</button>
 
-      <button onclick="draw()">🤝 Uavgjort</button>
+<div id="ranking"></div>
 
-      <div id="ranking"></div>
+<hr>
 
-    </div>
+<h3>🏆 Turnering</h3>
+<button onclick="startTournament()">Start turnering</button>
 
-    <!-- ===================== -->
-    <!-- 🏆 TOURNAMENT VIEW -->
-    <!-- ===================== -->
-    <div id="tournamentView" style="display:none;">
+<div id="bracket"></div>
 
-      <div id="tournamentUI" class="tournament-box"></div>
-
-      <div class="vs">
-        <div class="choice" id="tA">-</div>
-        <div class="choice" id="tB">-</div>
-      </div>
-
-      <button onclick="nextTournamentMatch()">Neste kamp</button>
-
-      <div id="tournamentWinner"></div>
-
-    </div>
-
-  </div>
-
-</body>
-
+</div>
 
 <script>
-"use strict";
+/* ================= STATE ================= */
+const state = {
+  items: JSON.parse(localStorage.getItem("items")) || [],
+  categories: JSON.parse(localStorage.getItem("categories")) || [],
+  current: [],
+  tournament: null,
+  bracket: [],
+  round: 0,
+  match: 0
+};
 
-let dailyTournament = JSON.parse(localStorage.getItem("dailyTournament")) || null;
-let tournament = null;
-let tournamentMatch = [];
-let tournamentQueue = [];
-let tournamentWinners = [];
-let bracket = [];
-let currentRound = 0;
-let currentMatch = 0;
-
-let items = JSON.parse(localStorage.getItem("items")) || [];
-if (!Array.isArray(items)) items = [];
-
-items = items.map(item => ({
-  id: item.id || Date.now() + Math.random(),
-  name: item.name,
-  categories: item.categories || (item.category ? [item.category] : []),
-  rating: item.rating || 1000
-}));
-
-/* ---------------- HELPERS ---------------- */
-
-function save() {
-  localStorage.setItem("items", JSON.stringify(items));
+/* ================= SAVE ================= */
+function save(){
+  localStorage.setItem("items", JSON.stringify(state.items));
+  localStorage.setItem("categories", JSON.stringify(state.categories));
 }
 
-function normalizeCategory(cat) {
-  if (!cat) return null;
-  return cat.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+/* ================= CATEGORY ================= */
+function normalize(c){
+  return c.trim().toLowerCase();
 }
 
-/* ---------------- CATEGORIES (DERIVED) ---------------- */
+function addCategory(){
+  let v = document.getElementById("catInput").value;
+  if(!v) return;
 
-function getCategories() {
-  let cats = [];
+  v = normalize(v);
 
-  items.forEach(item => {
-    let itemCats = item.categories || [];
-
-    itemCats.forEach(c => {
-      let norm = normalizeCategory(c);
-      if (norm) cats.push(norm);
-    });
-  });
-
-  return [...new Set(cats)];
-}
-
-function addCategory() {
-  const el = document.getElementById("newCategoryInput");
-  if (!el) return;
-
-  const input = el.value;
-  const cat = normalizeCategory(input);
-
-  if (!cat) return;
-
-  // legg til som “ekte kategori”
-  let exists = getCategories().includes(cat);
-
-  if (!exists) {
-    items.push({
-      id: Date.now() + Math.random(),
-      name: "__category_seed__",
-      categories: [cat],
-      rating: 1000
-    });
+  if(!state.categories.includes(v)){
+    state.categories.push(v);
   }
 
-  el.value = "";
-
+  document.getElementById("catInput").value = "";
+  renderChips();
   save();
-  renderCategories();
-  updateDropdownLabel();
 }
 
-/* ---------------- UI ---------------- */
+function renderChips(){
+  const box = document.getElementById("chipBox");
 
-function toggleDropdown() {
-  document.getElementById("categoryDropdown").classList.toggle("show");
-}
-
-function renderCategories() {
-  const categories = getCategories();
-  const container = document.getElementById("categoryDropdown");
-
-  container.innerHTML = categories.map(cat => `
-    <label class="category-item">
-      <input type="checkbox" value="${cat}">
-      <span>${cat}</span>
-    </label>
+  box.innerHTML = state.categories.map(c => `
+    <div class="chip" onclick="toggleCat('${c}')">${c}</div>
   `).join("");
 }
 
+function toggleCat(cat){
+  let el = event.target;
+  el.classList.toggle("active");
+}
 
-/* ---------------- ADD ITEM ---------------- */
+/* ================= ITEMS ================= */
+function addItem(){
+  let name = document.getElementById("itemInput").value;
+  if(!name) return;
 
-function addItem() {
-  const name = document.getElementById("newItem").value;
+  let selected = [...document.querySelectorAll(".chip.active")]
+    .map(x => x.innerText);
 
-  const selectedCategories = [...document.querySelectorAll("#categoryDropdown input:checked")]
-    .map(cb => cb.value);
-
-  if (!name || selectedCategories.length === 0) return;
-
-  items.push({
-    id: Date.now() + Math.random(),
+  state.items.push({
+    id: Date.now(),
     name,
-    categories: selectedCategories,
+    categories: selected,
     rating: 1000
   });
 
-  document.getElementById("newItem").value = "";
-  document.querySelectorAll("#categoryDropdown input").forEach(cb => cb.checked = false);
-
+  document.getElementById("itemInput").value = "";
   save();
   update();
-  newMatch();
+  nextMatch();
 }
 
-function showMain() {
-  document.getElementById("mainView").style.display = "block";
-  document.getElementById("tournamentView").style.display = "none";
-}
+/* ================= MATCH ================= */
+function nextMatch(){
+  if(state.items.length < 2) return;
 
-function showTournament() {
-  document.getElementById("mainView").style.display = "none";
-  document.getElementById("tournamentView").style.display = "block";
-
-  startTournament();
-}
-
-function startTournament() {
-  const cats = getCategories();
-  const category = cats[Math.floor(Math.random() * cats.length)];
-
-  let players = items.filter(i =>
-    (i.categories || []).includes(category)
-  );
-
-  if (players.length < 4) {
-    alert("Ikke nok items i kategori");
-    return;
-  }
-
-  // shuffle
-  players = players.sort(() => Math.random() - 0.5);
-
-  // make power of 2 (enkelt cut)
-  const size = Math.pow(2, Math.floor(Math.log2(players.length)));
-  players = players.slice(0, size);
-
-  bracket = [];
-  currentRound = 0;
-  currentMatch = 0;
-
-  // lag første runde
-  let round = [];
-  for (let i = 0; i < players.length; i += 2) {
-    round.push([players[i], players[i + 1]]);
-  }
-
-  bracket.push(round);
-
-  renderMatch();
-}
-
-function renderMatch() {
-  const match = bracket[currentRound][currentMatch];
-
-  document.getElementById("tA").innerText = match[0].name;
-  document.getElementById("tB").innerText = match[1].name;
-
-  document.getElementById("tA").onclick = () => pickWinner(0);
-  document.getElementById("tB").onclick = () => pickWinner(1);
-
-  renderBracketUI();
-}
-
-function nextTournamentMatch() {
-  if (tournamentQueue.length < 2) {
-    finishTournament();
-    return;
-  }
-
-  let a = tournamentQueue.shift();
-  let b = tournamentQueue.shift();
-
-  tournamentMatch = [a, b];
-
-  document.getElementById("tA").innerText = a.name;
-  document.getElementById("tB").innerText = b.name;
-
-  document.getElementById("tA").onclick = () => pickWinner(0);
-  document.getElementById("tB").onclick = () => pickWinner(1);
-}
-
-function pickWinner(i) {
-  const match = bracket[currentRound][currentMatch];
-  const winner = match[i];
-  match.winner = winner.id;
-  ${match[0]?.name || "-"}
-</span>
-<span class="${match.winner === match[1]?.id ? 'winner' : ''}">
-  ${match[1]?.name || "-"}
-</span>
-
-  // lag neste runde hvis nødvendig
-  if (!bracket[currentRound + 1]) {
-    bracket.push([]);
-  }
-
-  bracket[currentRound + 1].push(winner);
-
-  currentMatch++;
-
-  if (currentMatch >= bracket[currentRound].length) {
-    currentRound++;
-    currentMatch = 0;
-
-    // ny runde ferdig → lag nye matcher
-    if (bracket[currentRound].length > 1) {
-      let newRound = [];
-
-      for (let i = 0; i < bracket[currentRound].length; i += 2) {
-        newRound.push([
-          bracket[currentRound][i],
-          bracket[currentRound][i + 1]
-        ]);
-      }
-
-      bracket[currentRound] = newRound;
-    }
-  }
-
-  // ferdig turnering
-  if (bracket[currentRound].length === 1 &&
-      currentMatch === 0) {
-
-    finishTournament(winner);
-    return;
-  }
-
-  renderMatch();
-}
-
-function nextRoundCheck() {
-  if (tournamentQueue.length === 0) {
-    tournamentQueue = [...tournamentWinners];
-    tournamentWinners = [];
-  }
-
-  nextTournamentMatch();
-}
-
-function finishTournament(winner) {
-  document.getElementById("tournamentWinner").innerHTML =
-    "🏆 Vinner: " + winner.name;
-
-  winner.rating += 50; // stor boost
-
-  save();
-  update();
-}
-
-function renderBracketUI() {
-  let html = '<div class="bracket">';
-
-  bracket.forEach((round, r) => {
-    html += `<div class="round">`;
-
-    round.forEach(match => {
-      if (!Array.isArray(match)) return;
-
-      html += `
-        <div class="match">
-          <span>${match[0]?.name || "-"}</span>
-          <span>${match[1]?.name || "-"}</span>
-        </div>
-      `;
-    });
-
-    html += `</div>`;
-  });
-
-  html += '</div>';
-
-  document.getElementById("tournamentUI").innerHTML = html;
-}
-
-/* ---------------- ELO ---------------- */
-
-function expected(a, b) {
-  return 1 / (1 + Math.pow(10, (b - a) / 400));
-}
-
-function updateElo(w, l) {
-  const K = 32;
-  const Ew = expected(w.rating, l.rating);
-
-  w.rating += K * (1 - Ew);
-  l.rating += K * (0 - (1 - Ew));
-}
-
-/* ---------------- MATCH ---------------- */
-
-let current = [];
-
-function newMatch() {
-  if (items.length < 2) {
-    document.getElementById("a").innerText = "Legg til flere items";
-    document.getElementById("b").innerText = "";
-    return;
-  }
-
-  let a = Math.floor(Math.random() * items.length);
+  let a = Math.floor(Math.random()*state.items.length);
   let b;
 
-  do { b = Math.floor(Math.random() * items.length); }
-  while (a === b);
+  do { b = Math.floor(Math.random()*state.items.length) }
+  while(a===b);
 
-  current = [items[a], items[b]];
+  state.current = [state.items[a], state.items[b]];
 
-  document.getElementById("a").innerText = current[0].name;
-  document.getElementById("b").innerText = current[1].name;
+  document.getElementById("a").innerText = state.current[0].name;
+  document.getElementById("b").innerText = state.current[1].name;
 }
 
-function choose(i) {
-  if (!current.length) return;
+function pick(i){
+  let w = state.current[i];
+  let l = state.current[1-i];
 
-  updateElo(current[i], current[1 - i]);
+  let Ea = 1/(1+Math.pow(10,(l.rating-w.rating)/400));
+
+  w.rating += 32*(1-Ea);
+  l.rating += 32*(0-(1-Ea));
 
   save();
   update();
-  newMatch();
+  nextMatch();
 }
 
-function draw() {
-  if (!current.length) return;
-
-  const K = 32;
-  let a = current[0];
-  let b = current[1];
-
-  let Ea = expected(a.rating, b.rating);
-  let Eb = expected(b.rating, a.rating);
-
-  a.rating += K * (0.5 - Ea);
-  b.rating += K * (0.5 - Eb);
-
+function draw(){
   save();
   update();
-  newMatch();
+  nextMatch();
 }
 
-function getTodayKey() {
-  const d = new Date();
-  return d.toISOString().split("T")[0];
+/* ================= RANKING ================= */
+function update(){
+  let sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
+
+  document.getElementById("ranking").innerHTML =
+  "<h3>🏆 Ranking</h3>" +
+  sorted.map((x,i)=>
+    `${i+1}. ${x.name} (${Math.round(x.rating)})`
+  ).join("<br>");
 }
 
-function createDailyTournament() {
-  const today = getTodayKey();
+/* ================= TOURNAMENT ================= */
+function startTournament(){
+  let pool = [...state.items];
 
-  // allerede laget i dag?
-  if (dailyTournament && dailyTournament.date === today) return;
-
-  const categories = getCategories();
-  if (categories.length === 0) return;
-
-  const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-
-  const participants = items.filter(i =>
-    (i.categories || []).includes(randomCategory)
-  );
-
-  if (participants.length < 4) return; // må ha nok til turnering
-
-  dailyTournament = {
-    date: today,
-    category: randomCategory,
-    players: participants.map(p => p.id),
-    results: []
-  };
-
-  localStorage.setItem("dailyTournament", JSON.stringify(dailyTournament));
-}
-
-function applyTournamentBoost(rankings) {
-  rankings.forEach((id, index) => {
-    let item = items.find(x => x.id === id);
-    if (!item) return;
-
-    if (index === 0) item.rating += 50;   // 🥇
-    if (index === 1) item.rating += 25;   // 🥈
-    if (index === 2) item.rating += 10;   // 🥉
-  });
-
-  save();
-}
-
-function runDailyTournament() {
-  if (!dailyTournament) return;
-
-  let players = dailyTournament.players
-    .map(id => items.find(i => i.id === id))
-    .filter(Boolean);
-
-  while (players.length > 1) {
-    let nextRound = [];
-
-    for (let i = 0; i < players.length; i += 2) {
-      let a = players[i];
-      let b = players[i + 1];
-
-      if (!b) {
-        nextRound.push(a);
-        continue;
-      }
-
-      // tilfeldig vinner (kan senere bruke Elo probability)
-      let winner = Math.random() < 0.5 ? a : b;
-
-      nextRound.push(winner);
-    }
-
-    players = nextRound;
-  }
-
-  // topp 3 approx (enkelt)
-  let rankings = dailyTournament.players.slice(0, 3);
-
-  applyTournamentBoost(rankings);
-
-  dailyTournament.done = true;
-  localStorage.setItem("dailyTournament", JSON.stringify(dailyTournament));
-}
-
-function renderTournamentUI() {
-  const el = document.getElementById("tournamentUI");
-
-  if (!dailyTournament || dailyTournament.done) {
-    el.innerHTML = "";
+  if(pool.length < 4){
+    alert("Trenger flere items");
     return;
   }
 
-  el.innerHTML = `
-    <div class="tournament-title">🏆 Daglig turnering</div>
-    <div>Kategori: <span class="tournament-badge">${dailyTournament.category}</span></div>
-  `;
+  pool = pool.sort(()=>Math.random()-0.5);
 
-  document.body.classList.add("tournament-mode");
+  let round = [];
+  for(let i=0;i<pool.length;i+=2){
+    round.push({a:pool[i], b:pool[i+1], winner:null});
+  }
+
+  state.bracket = [round];
+  state.round = 0;
+  state.match = 0;
+
+  renderBracket();
 }
 
-/* ---------------- RANKING ---------------- */
+function renderBracket(){
+  let html = "<div class='bracket'>";
 
-function update() {
-  const sorted = [...items].sort((a, b) => b.rating - a.rating);
-  sorted = sorted.filter(x => x.name !== "__category_seed__");
+  state.bracket.forEach((r,ri)=>{
+    html += "<div class='round'>";
 
+    r.forEach(m=>{
+      html += `<div class="match">
+        ${m.a.name}<br>
+        ${m.b.name}
+      </div>`;
+    });
 
-  document.getElementById("ranking").innerHTML =
-    "<h3>🏆 Ranking</h3>" +
-    sorted.map((x, i) =>
-      `${i + 1}. ${x.name} 
-<span onclick="editItemCategories(${x.id})" style="cursor:pointer; color:#4f8cff;">
-[${(x.categories || []).join(", ") || "ingen"}]
-</span>
- (${Math.round(x.rating)})`
-    ).join("<br>");
-  
-renderTournamentUI();
+    html += "</div>";
+  });
+
+  html += "</div>";
+
+  document.getElementById("bracket").innerHTML = html;
 }
 
-function editItemCategories(id) {
-  let item = items.find(x => x.id === id);
-  if (!item) return;
-
-  let current = (item.categories || []).join(", ");
-
-  let input = prompt("Rediger kategorier (kommaseparert):", current);
-
-  if (input === null) return;
-
-  item.categories = input
-    .split(",")
-    .map(c => normalizeCategory(c))
-    .filter(Boolean);
-
-  save();
-  update();
-}
-
-function renderCategories() {
-  const categories = getCategories();
-  const container = document.getElementById("categoryDropdown");
-
-  container.innerHTML = categories.map(cat => `
-    <label class="category-item">
-      <input type="checkbox" value="${cat}" onchange="updateDropdownLabel()">
-      <span>${cat}</span>
-    </label>
-  `).join("");
-}
-
-/* ---------------- INIT ---------------- */
-
-renderCategories();
+/* INIT */
+renderChips();
 update();
-newMatch();
-
-document.getElementById("newItem").addEventListener("keydown", e => {
-  if (e.key === "Enter") addItem();
-});
-
-document.addEventListener("click", function (e) {
-  const dropdown = document.getElementById("categoryDropdown");
-  const btn = document.querySelector(".dropdown-btn");
-
-  if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
-    dropdown.classList.remove("show");
-  }
-});
-
-function updateDropdownLabel() {
-  const checked = [...document.querySelectorAll("#categoryDropdown input:checked")]
-    .map(cb => cb.value);
-
-  const label = document.getElementById("dropdownLabel");
-
-  if (!label) return;
-
-  if (checked.length === 0) {
-    label.innerText = "Velg kategorier";
-  } else if (checked.length <= 2) {
-    label.innerText = checked.join(", ");
-  } else {
-    label.innerText = `${checked.length} valgt`;
-  }
-}
-
-showMain()
-
+nextMatch();
 
 </script>
-
 </body>
 </html>
