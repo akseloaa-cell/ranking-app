@@ -143,6 +143,14 @@ if (!Array.isArray(items)) items = [];
 
 let categories = JSON.parse(localStorage.getItem("categories")) || [];
 if (!Array.isArray(categories)) categories = [];
+categories = [...new Set(categories)];
+  
+items = items.map(item => ({
+  id: item.id || Date.now() + Math.random(),
+  name: item.name,
+  categories: item.categories || (item.category ? [item.category] : []),
+  rating: item.rating || 1000
+}));
 
 /* ---------------- HELPERS ---------------- */
 
