@@ -68,8 +68,15 @@ button:hover {
   font-weight: bold;
 }
 
-.choice:hover {
-  transform: scale(1.03);
+@media (hover: hover) {
+  .choice:hover {
+    transform: scale(1.03);
+    background: #2a2a2a;
+  }
+}
+
+.choice:active {
+  transform: scale(0.97);
   background: #2a2a2a;
 }
 
