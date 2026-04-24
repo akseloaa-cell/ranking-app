@@ -227,6 +227,50 @@ body.tournament-mode {
   background: linear-gradient(180deg, #0f0f0f, #101827);
 }
 
+.bracket {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+
+.round {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  min-width: 120px;
+}
+
+.match {
+  background: #1f1f1f;
+  border-radius: 10px;
+  padding: 8px;
+  margin: 10px 0;
+  font-size: 13px;
+  text-align: left;
+  position: relative;
+}
+
+.match span {
+  display: block;
+  padding: 4px 6px;
+}
+
+.match span.winner {
+  color: #4f8cff;
+  font-weight: bold;
+}
+
+.match::after {
+  content: "";
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  width: 10px;
+  height: 2px;
+  background: #444;
+}
+
   </style>
 </head>
 
@@ -501,6 +545,13 @@ function nextTournamentMatch() {
 function pickWinner(i) {
   const match = bracket[currentRound][currentMatch];
   const winner = match[i];
+  match.winner = winner.id;
+  <span class="${match.winner === match[0]?.id ? 'winner' : ''}">
+  ${match[0]?.name || "-"}
+</span>
+<span class="${match.winner === match[1]?.id ? 'winner' : ''}">
+  ${match[1]?.name || "-"}
+</span>
 
   // lag neste runde hvis nødvendig
   if (!bracket[currentRound + 1]) {
@@ -561,21 +612,26 @@ function finishTournament(winner) {
 }
 
 function renderBracketUI() {
-  let html = "<h3>Bracket</h3>";
+  let html = '<div class="bracket">';
 
   bracket.forEach((round, r) => {
-    html += `<div style="margin-top:10px;">Runde ${r + 1}</div>`;
+    html += `<div class="round">`;
 
     round.forEach(match => {
       if (!Array.isArray(match)) return;
 
       html += `
-        <div style="opacity:${r === currentRound ? 1 : 0.4}">
-          ${match[0].name} vs ${match[1].name}
+        <div class="match">
+          <span>${match[0]?.name || "-"}</span>
+          <span>${match[1]?.name || "-"}</span>
         </div>
       `;
     });
+
+    html += `</div>`;
   });
+
+  html += '</div>';
 
   document.getElementById("tournamentUI").innerHTML = html;
 }
