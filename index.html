@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Ranking App</title>
+
   <style>
     body {
       font-family: system-ui, Arial;
@@ -15,6 +16,10 @@
       max-width: 420px;
       margin: auto;
       padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
     }
 
     input {
@@ -50,6 +55,7 @@
       background: #1f1f1f;
       border-radius: 16px;
       cursor: pointer;
+      user-select: none;
     }
 
     #ranking {
@@ -60,6 +66,7 @@
       border-radius: 10px;
     }
 
+    /* dropdown */
     .dropdown {
       position: relative;
       margin: 10px 0;
@@ -72,6 +79,7 @@
       border-radius: 12px;
       color: white;
       font-weight: bold;
+      cursor: pointer;
     }
 
     .dropdown-content {
@@ -98,10 +106,6 @@
       padding: 6px;
     }
 
-    .category-item:hover {
-      background: #2a2a2a;
-    }
-
     .category-item input {
       accent-color: #4f8cff;
     }
@@ -109,22 +113,21 @@
 </head>
 
 <body>
+
 <div class="container">
 
-  <h1>⚔️ Ranking</h1>
+  <h1>⚔️ Ranking App</h1>
 
   <input id="newItem" placeholder="Legg til noe">
 
   <div class="dropdown">
-    <button class="dropdown-btn" onclick="toggleDropdown()">
-      <span id="dropdownLabel">Velg kategorier</span>
-      ⬇️
-    </button>
+    <div class="dropdown-btn" onclick="toggleDropdown()">
+      Velg kategorier
+    </div>
+
     <div id="categoryDropdown" class="dropdown-content"></div>
   </div>
 
-  <input id="newCategoryInput" placeholder="Ny kategori">
-  <button onclick="addCategory()">+ kategori</button>
   <button onclick="addItem()">Legg til</button>
 
   <div class="vs">
@@ -135,6 +138,7 @@
   <button onclick="draw()">🤝 Uavgjort</button>
 
   <div id="ranking"></div>
+
 </div>
 
 <script>
@@ -142,22 +146,10 @@
 let items = JSON.parse(localStorage.getItem("items")) || [];
 if (!Array.isArray(items)) items = [];
 
-let categories = JSON.parse(localStorage.getItem("categories")) || [];
-if (!Array.isArray(categories)) categories = [];
-categories = [...new Set(categories)];
-  
-items = items.map(item => ({
-  id: item.id || Date.now() + Math.random(),
-  name: item.name,
-  categories: item.categories || (item.category ? [item.category] : []),
-  rating: item.rating || 1000
-}));
-
 /* ---------------- HELPERS ---------------- */
 
 function save() {
   localStorage.setItem("items", JSON.stringify(items));
-  localStorage.setItem("categories", JSON.stringify(categories));
 }
 
 function normalizeCategory(cat) {
@@ -165,51 +157,42 @@ function normalizeCategory(cat) {
   return cat.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
 }
 
-/* ---------------- CATEGORY UI ---------------- */
+/* ---------------- CATEGORIES (DERIVED) ---------------- */
+
+function getCategories() {
+  let cats = [];
+
+  items.forEach(item => {
+    let itemCats = item.categories || [];
+
+    itemCats.forEach(c => {
+      let norm = normalizeCategory(c);
+      if (norm) cats.push(norm);
+    });
+  });
+
+  return [...new Set(cats)];
+}
+
+/* ---------------- UI ---------------- */
 
 function toggleDropdown() {
   document.getElementById("categoryDropdown").classList.toggle("show");
 }
 
 function renderCategories() {
+  const categories = getCategories();
   const container = document.getElementById("categoryDropdown");
 
   container.innerHTML = categories.map(cat => `
     <label class="category-item">
-      <input type="checkbox" value="${cat}" onchange="updateDropdownLabel()">
+      <input type="checkbox" value="${cat}">
       <span>${cat}</span>
     </label>
   `).join("");
 }
 
-function updateDropdownLabel() {
-  const checked = [...document.querySelectorAll("#categoryDropdown input:checked")]
-    .map(cb => cb.value);
-
-  const label = document.getElementById("dropdownLabel");
-
-  if (checked.length === 0) label.innerText = "Velg kategorier";
-  else if (checked.length === 1) label.innerText = checked[0];
-  else label.innerText = `${checked.length} valgt`;
-}
-
-function addCategory() {
-  const input = document.getElementById("newCategoryInput").value;
-  const cat = normalizeCategory(input);
-
-  if (!cat) return;
-
-  if (!categories.includes(cat)) {
-    categories.push(cat);
-    categories = [...new Set(categories)];
-    save();
-    renderCategories();
-  }
-
-  document.getElementById("newCategoryInput").value = "";
-}
-
-/* ---------------- ITEMS ---------------- */
+/* ---------------- ADD ITEM ---------------- */
 
 function addItem() {
   const name = document.getElementById("newItem").value;
@@ -229,7 +212,6 @@ function addItem() {
   document.getElementById("newItem").value = "";
   document.querySelectorAll("#categoryDropdown input").forEach(cb => cb.checked = false);
 
-  updateDropdownLabel();
   save();
   update();
   newMatch();
@@ -286,7 +268,6 @@ function draw() {
   if (!current.length) return;
 
   const K = 32;
-
   let a = current[0];
   let b = current[1];
 
@@ -309,7 +290,7 @@ function update() {
   document.getElementById("ranking").innerHTML =
     "<h3>🏆 Ranking</h3>" +
     sorted.map((x, i) =>
-      `${i + 1}. ${x.name} [${x.categories?.join(", ") || "ingen"}] (${Math.round(x.rating)})`
+      `${i + 1}. ${x.name} [${(x.categories || []).join(", ")}] (${Math.round(x.rating)})`
     ).join("<br>");
 }
 
@@ -324,5 +305,6 @@ document.getElementById("newItem").addEventListener("keydown", e => {
 });
 
 </script>
+
 </body>
 </html>
