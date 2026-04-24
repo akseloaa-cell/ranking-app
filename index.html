@@ -3,6 +3,8 @@
 <head>
   <title>Ranking App</title>
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
       font-family: system-ui, Arial;
@@ -10,6 +12,7 @@
       color: white;
       text-align: center;
       margin: 0;
+      -webkit-text-size-adjust: 100%;
     }
 
     .container {
@@ -142,6 +145,36 @@
   accent-color: #4f8cff;
 
   cursor: pointer;
+}
+
+@media (max-width: 600px) {
+
+  .container {
+    padding: 12px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  input {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  button {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .choice {
+    padding: 20px;
+    font-size: 16px;
+  }
+
+  #ranking {
+    font-size: 14px;
+  }
 }
 
   </style>
