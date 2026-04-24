@@ -242,6 +242,20 @@ button:hover {
 
   <script>
     let items = JSON.parse(localStorage.getItem("items")) || [];
+    let categories = JSON.parse(localStorage.getItem("categories")) || [];
+
+// 🔥 hent kategorier fra gamle items også
+items.forEach(item => {
+  let cats = item.categories || (item.category ? [item.category] : []);
+
+  cats.forEach(c => {
+    let norm = normalizeCategory(c);
+    if (norm && !categories.includes(norm)) {
+      categories.push(norm);
+    }
+  });
+});
+categories = [...new Set(categories)];
     items = items.map(item => ({
   id: item.id || Date.now() + Math.random(),
   name: item.name,
