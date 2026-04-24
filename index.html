@@ -272,6 +272,7 @@ body.tournament-mode {
 
 
 <script>
+"use strict";
 
 let dailyTournament = JSON.parse(localStorage.getItem("dailyTournament")) || null;
 let tournament = null;
@@ -448,17 +449,6 @@ function renderMatch() {
   document.getElementById("tB").onclick = () => pickWinner(1);
 
   renderBracketUI();
-}
-
-  tournament = {
-    category,
-    players
-  };
-
-  tournamentQueue = [...players];
-  tournamentWinners = [];
-
-  nextTournamentMatch();
 }
 
 function nextTournamentMatch() {
@@ -800,8 +790,7 @@ onchange="updateDropdownLabel()"
 
 showMain()
 showTournament()
-createDailyTournament();
-runDailyTournament();
+
 
 </script>
 
