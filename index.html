@@ -225,22 +225,22 @@ body.tournament-mode {
     <div id="mainView">
 
       <input id="newItem" placeholder="Legg til noe">
-
-      <div style="margin-bottom:10px;">
-  <input id="newCategoryInput" placeholder="Ny kategori">
-  <button onclick="addCategory()">+ Legg til kategori</button>
-</div>
-
+      
+         <button onclick="addItem()">Legg til</button>
+      
       <div class="dropdown">
         <div class="dropdown-btn" onclick="toggleDropdown()">
           <span id="dropdownLabel">Velg kategorier</span>
           ⬇️
         </div>
+        
+      <div style="margin-bottom:10px;">
+  <input id="newCategoryInput" placeholder="Ny kategori">
+  <button onclick="addCategory()">+ Legg til kategori</button>
+</div>
 
         <div id="categoryDropdown" class="dropdown-content"></div>
       </div>
-
-      <button onclick="addItem()">Legg til</button>
 
       <div class="vs">
         <div class="choice" onclick="choose(0)" id="a">-</div>
