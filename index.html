@@ -546,7 +546,6 @@ function pickWinner(i) {
   const match = bracket[currentRound][currentMatch];
   const winner = match[i];
   match.winner = winner.id;
-  <span class="${match.winner === match[0]?.id ? 'winner' : ''}">
   ${match[0]?.name || "-"}
 </span>
 <span class="${match.winner === match[1]?.id ? 'winner' : ''}">
