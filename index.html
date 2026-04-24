@@ -177,6 +177,33 @@
   }
 }
 
+.tournament-box {
+  margin-top: 15px;
+  padding: 12px;
+  background: #121212;
+  border-radius: 12px;
+  border: 1px solid #2a2a2a;
+  text-align: left;
+}
+
+.tournament-title {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.tournament-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #4f8cff;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+body.tournament-mode {
+  background: linear-gradient(180deg, #0f0f0f, #101827);
+}
+
   </style>
 </head>
 
@@ -185,6 +212,8 @@
 <div class="container">
 
   <h1>⚔️ Ranking App</h1>
+
+<div id="tournamentUI" class="tournament-box"></div>
 
   <input id="newItem" placeholder="Legg til noe">
 
@@ -473,6 +502,22 @@ function runDailyTournament() {
   localStorage.setItem("dailyTournament", JSON.stringify(dailyTournament));
 }
 
+function renderTournamentUI() {
+  const el = document.getElementById("tournamentUI");
+
+  if (!dailyTournament || dailyTournament.done) {
+    el.innerHTML = "";
+    return;
+  }
+
+  el.innerHTML = `
+    <div class="tournament-title">🏆 Daglig turnering</div>
+    <div>Kategori: <span class="tournament-badge">${dailyTournament.category}</span></div>
+  `;
+
+  document.body.classList.add("tournament-mode");
+}
+
 /* ---------------- RANKING ---------------- */
 
 function update() {
@@ -487,6 +532,8 @@ function update() {
 </span>
  (${Math.round(x.rating)})`
     ).join("<br>");
+  
+renderTournamentUI();
 }
 
 function editItemCategories(id) {
