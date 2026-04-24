@@ -278,7 +278,10 @@ let tournament = null;
 let tournamentMatch = [];
 let tournamentQueue = [];
 let tournamentWinners = [];
- 
+let bracket = [];
+let currentRound = 0;
+let currentMatch = 0;
+
 let items = JSON.parse(localStorage.getItem("items")) || [];
 if (!Array.isArray(items)) items = [];
 
@@ -404,7 +407,7 @@ function startTournament() {
   const cats = getCategories();
   const category = cats[Math.floor(Math.random() * cats.length)];
 
-  const players = items.filter(i =>
+  let players = items.filter(i =>
     (i.categories || []).includes(category)
   );
 
@@ -412,6 +415,40 @@ function startTournament() {
     alert("Ikke nok items i kategori");
     return;
   }
+
+  // shuffle
+  players = players.sort(() => Math.random() - 0.5);
+
+  // make power of 2 (enkelt cut)
+  const size = Math.pow(2, Math.floor(Math.log2(players.length)));
+  players = players.slice(0, size);
+
+  bracket = [];
+  currentRound = 0;
+  currentMatch = 0;
+
+  // lag første runde
+  let round = [];
+  for (let i = 0; i < players.length; i += 2) {
+    round.push([players[i], players[i + 1]]);
+  }
+
+  bracket.push(round);
+
+  renderMatch();
+}
+
+function renderMatch() {
+  const match = bracket[currentRound][currentMatch];
+
+  document.getElementById("tA").innerText = match[0].name;
+  document.getElementById("tB").innerText = match[1].name;
+
+  document.getElementById("tA").onclick = () => pickWinner(0);
+  document.getElementById("tB").onclick = () => pickWinner(1);
+
+  renderBracketUI();
+}
 
   tournament = {
     category,
@@ -443,11 +480,46 @@ function nextTournamentMatch() {
 }
 
 function pickWinner(i) {
-  const winner = tournamentMatch[i];
+  const match = bracket[currentRound][currentMatch];
+  const winner = match[i];
 
-  tournamentWinners.push(winner);
+  // lag neste runde hvis nødvendig
+  if (!bracket[currentRound + 1]) {
+    bracket.push([]);
+  }
 
-  nextRoundCheck();
+  bracket[currentRound + 1].push(winner);
+
+  currentMatch++;
+
+  if (currentMatch >= bracket[currentRound].length) {
+    currentRound++;
+    currentMatch = 0;
+
+    // ny runde ferdig → lag nye matcher
+    if (bracket[currentRound].length > 1) {
+      let newRound = [];
+
+      for (let i = 0; i < bracket[currentRound].length; i += 2) {
+        newRound.push([
+          bracket[currentRound][i],
+          bracket[currentRound][i + 1]
+        ]);
+      }
+
+      bracket[currentRound] = newRound;
+    }
+  }
+
+  // ferdig turnering
+  if (bracket[currentRound].length === 1 &&
+      currentMatch === 0) {
+
+    finishTournament(winner);
+    return;
+  }
+
+  renderMatch();
 }
 
 function nextRoundCheck() {
@@ -459,9 +531,7 @@ function nextRoundCheck() {
   nextTournamentMatch();
 }
 
-function finishTournament() {
-  let winner = tournamentWinners[0] || tournamentQueue[0];
-
+function finishTournament(winner) {
   document.getElementById("tournamentWinner").innerHTML =
     "🏆 Vinner: " + winner.name;
 
@@ -469,6 +539,26 @@ function finishTournament() {
 
   save();
   update();
+}
+
+function renderBracketUI() {
+  let html = "<h3>Bracket</h3>";
+
+  bracket.forEach((round, r) => {
+    html += `<div style="margin-top:10px;">Runde ${r + 1}</div>`;
+
+    round.forEach(match => {
+      if (!Array.isArray(match)) return;
+
+      html += `
+        <div style="opacity:${r === currentRound ? 1 : 0.4}">
+          ${match[0].name} vs ${match[1].name}
+        </div>
+      `;
+    });
+  });
+
+  document.getElementById("tournamentUI").innerHTML = html;
 }
 
 /* ---------------- ELO ---------------- */
