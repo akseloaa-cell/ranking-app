@@ -194,17 +194,32 @@ function addItem(){
   let selected = [...document.querySelectorAll(".chip.active")]
     .map(x => x.innerText);
 
-  state.items.push({
-    id: Date.now(),
-    name,
-    categories: selected,
-    rating: 1000
-  });
+ state.items.push({
+  id: Date.now(),
+  name,
+  categories: selected,
+  rating: 1000,
+
+  // NEW V3 STATS
+  history: [1000],
+  tournamentsPlayed: 0,
+  tournamentWins: 0,
+  top3: 0
+});
 
   document.getElementById("itemInput").value = "";
   save();
   update();
   nextMatch();
+}
+
+function updateHistory(item){
+  if(!item.history) item.history = [];
+  item.history.push(item.rating);
+
+  if(item.history.length > 30){
+    item.history.shift();
+  }
 }
 
 /* ================= MATCH ================= */
@@ -231,6 +246,8 @@ function pick(i){
 
   w.rating += 32*(1-Ea);
   l.rating += 32*(0-(1-Ea));
+  updateHistory(w);
+  updateHistory(l);
 
   save();
   update();
@@ -238,6 +255,9 @@ function pick(i){
 }
 
 function draw(){
+  updateHistory(a);
+  updateHistory(b);
+
   save();
   update();
   nextMatch();
@@ -250,8 +270,10 @@ function update(){
   document.getElementById("ranking").innerHTML =
   "<h3>🏆 Ranking</h3>" +
   sorted.map((x,i)=>
-    `${i+1}. ${x.name} (${Math.round(x.rating)})`
-  ).join("<br>");
+  `<div onclick="showStats(${x.id})" style="cursor:pointer">
+    ${i+1}. ${x.name} (${Math.round(x.rating)})
+  </div>`
+).join("<br>");
 }
 
 /* ================= TOURNAMENT ================= */
@@ -412,6 +434,13 @@ function pickTournamentWinner(i){
 
 function advanceRound(){
   const t = state.tournament;
+  winners.forEach(w => {
+  if(!w) return;
+  w.tournamentsPlayed = (w.tournamentsPlayed || 0) + 1;
+});
+  sorted.slice(0,3).forEach((x,i)=>{
+  x.top3 = (x.top3 || 0) + 1;
+});
 
   let winners = t.rounds[t.currentRound]
     .map(m => m.winner ? state.items.find(x => x.id === m.winner) : null)
@@ -435,6 +464,7 @@ function advanceRound(){
 
 function finishTournament(winner){
   state.tournament.done = true;
+  winner.tournamentWins = (winner.tournamentWins || 0) + 1;
 
   let sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
 
@@ -448,6 +478,35 @@ function finishTournament(winner){
   saveTournament();
   update();
   renderTournament();
+}
+
+function showStats(id){
+  const item = state.items.find(x => x.id === id);
+  if(!item) return;
+
+  const rank = [...state.items]
+    .sort((a,b)=>b.rating-a.rating)
+    .findIndex(x => x.id === id) + 1;
+
+  const trend = item.history?.slice(-5) || [];
+
+  alert(
+`📊 ${item.name}
+
+🏆 Ranking: ${rank}
+⭐ ELO: ${Math.round(item.rating)}
+
+📂 Kategorier:
+${item.categories.join(", ")}
+
+📈 Trend (siste 5):
+${trend.join(" → ")}
+
+🏆 Turnering:
+Seire: ${item.tournamentWins || 0}
+Top 3: ${item.top3 || 0}
+Deltatt: ${item.tournamentsPlayed || 0}`
+  );
 }
 
 renderChips();
