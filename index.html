@@ -65,6 +65,12 @@ button {
 
   <script>
     let items = JSON.parse(localStorage.getItem("items")) || [];
+    items = items.map(item => ({
+  id: item.id || Date.now() + Math.random(),
+  name: item.name,
+  category: item.category || "ukjent",
+  rating: item.rating
+}));
 let current = [];
 
 function save() {
@@ -78,7 +84,7 @@ function addItem() {
   if (!name || !category) return;
 
   items.push({
-    id: Date.now(),
+    id: Date.now() + Math.random(),
     name,
     category,
     rating: 1000
@@ -138,7 +144,7 @@ function update() {
   document.getElementById("ranking").innerHTML =
     "<h3>🏆 Ranking</h3>" +
     sorted.map((x,i)=>
-  `${i+1}. ${x.name} <span onclick="editCategory(${x.id}, '${x.category || ""}')" style="cursor:pointer; color:#4f8cff;">
+  `${i+1}. ${x.name} <span onclick="editCategory(${x.id})" style="cursor:pointer; color:#4f8cff;">
   [${x.category || "ingen kategori"}]
 </span> (${Math.round(x.rating)})`
 ).join("<br>");
@@ -153,11 +159,11 @@ function normalizeCategory(cat) {
     .replace(/\b\w/g, c => c.toUpperCase());
 }
 
-function editCategory(id, currentCategory) {
+function editCategory(id) {
   let item = items.find(x => x.id === id);
   if (!item) return;
 
-  let newCategory = prompt("Ny kategori:", currentCategory);
+  let newCategory = prompt("Ny kategori:", item.category || "");
 
   if (newCategory === null) return;
 
