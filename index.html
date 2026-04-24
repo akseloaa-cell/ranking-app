@@ -52,7 +52,8 @@ button {
   <h1>🔥 Ranking</h1>
 
   <input id="newItem" placeholder="Legg til noe">
-  <button onclick="addItem()">Legg til</button>
+<input id="newCategory" placeholder="Kategori (f.eks mat, musikk)">
+<button onclick="addItem()">Legg til</button>
 
   <div class="vs">
     <div class="choice" onclick="choose(0)" id="a">-</div>
@@ -72,10 +73,19 @@ function save() {
 
 function addItem() {
   const name = document.getElementById("newItem").value;
-  if (!name) return;
+  const category = document.getElementById("newCategory").value;
 
-  items.push({ name, rating: 1000 });
+  if (!name || !category) return;
+
+  items.push({
+    id: Date.now(),
+    name,
+    category,
+    rating: 1000
+  });
+
   document.getElementById("newItem").value = "";
+  document.getElementById("newCategory").value = "";
 
   save();
   update();
@@ -128,8 +138,8 @@ function update() {
   document.getElementById("ranking").innerHTML =
     "<h3>🏆 Ranking</h3>" +
     sorted.map((x,i)=>
-      `${i+1}. ${x.name} (${Math.round(x.rating)})`
-    ).join("<br>");
+  `${i+1}. ${x.name} [${x.category}] (${Math.round(x.rating)})`
+).join("<br>");
 }
 
 update();
