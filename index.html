@@ -215,6 +215,8 @@
 
 <script>
 
+let dailyTournament = JSON.parse(localStorage.getItem("dailyTournament")) || null;
+  
 let items = JSON.parse(localStorage.getItem("items")) || [];
 if (!Array.isArray(items)) items = [];
 
@@ -389,6 +391,88 @@ function draw() {
   newMatch();
 }
 
+function getTodayKey() {
+  const d = new Date();
+  return d.toISOString().split("T")[0];
+}
+
+function createDailyTournament() {
+  const today = getTodayKey();
+
+  // allerede laget i dag?
+  if (dailyTournament && dailyTournament.date === today) return;
+
+  const categories = getCategories();
+  if (categories.length === 0) return;
+
+  const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+
+  const participants = items.filter(i =>
+    (i.categories || []).includes(randomCategory)
+  );
+
+  if (participants.length < 4) return; // må ha nok til turnering
+
+  dailyTournament = {
+    date: today,
+    category: randomCategory,
+    players: participants.map(p => p.id),
+    results: []
+  };
+
+  localStorage.setItem("dailyTournament", JSON.stringify(dailyTournament));
+}
+
+function applyTournamentBoost(rankings) {
+  rankings.forEach((id, index) => {
+    let item = items.find(x => x.id === id);
+    if (!item) return;
+
+    if (index === 0) item.rating += 50;   // 🥇
+    if (index === 1) item.rating += 25;   // 🥈
+    if (index === 2) item.rating += 10;   // 🥉
+  });
+
+  save();
+}
+
+function runDailyTournament() {
+  if (!dailyTournament) return;
+
+  let players = dailyTournament.players
+    .map(id => items.find(i => i.id === id))
+    .filter(Boolean);
+
+  while (players.length > 1) {
+    let nextRound = [];
+
+    for (let i = 0; i < players.length; i += 2) {
+      let a = players[i];
+      let b = players[i + 1];
+
+      if (!b) {
+        nextRound.push(a);
+        continue;
+      }
+
+      // tilfeldig vinner (kan senere bruke Elo probability)
+      let winner = Math.random() < 0.5 ? a : b;
+
+      nextRound.push(winner);
+    }
+
+    players = nextRound;
+  }
+
+  // topp 3 approx (enkelt)
+  let rankings = dailyTournament.players.slice(0, 3);
+
+  applyTournamentBoost(rankings);
+
+  dailyTournament.done = true;
+  localStorage.setItem("dailyTournament", JSON.stringify(dailyTournament));
+}
+
 /* ---------------- RANKING ---------------- */
 
 function update() {
@@ -460,6 +544,9 @@ function updateDropdownLabel() {
   }
 }
 onchange="updateDropdownLabel()"
+
+createDailyTournament();
+runDailyTournament();
 
 </script>
 
