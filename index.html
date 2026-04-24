@@ -2,305 +2,231 @@
 <html>
 <head>
   <title>Ranking App</title>
-  <link rel="icon" href="file_000000006acc720aabe74bd60fd54078.png">
-<link rel="apple-touch-icon" href="file_000000006acc720aabe74bd60fd54078.png">
-<link rel="manifest" href="manifest.json">
   <style>
     body {
-  font-family: system-ui, Arial;
-  background: linear-gradient(180deg, #0f0f0f, #1a1a1a);
-  color: white;
-  text-align: center;
-  margin: 0;
-}
+      font-family: system-ui, Arial;
+      background: linear-gradient(180deg, #0f0f0f, #1a1a1a);
+      color: white;
+      text-align: center;
+      margin: 0;
+    }
 
-.container {
-  max-width: 420px;
-  margin: auto;
-  padding: 20px;
-}
+    .container {
+      max-width: 420px;
+      margin: auto;
+      padding: 20px;
+    }
 
-h1 {
-  font-size: 28px;
-  margin-bottom: 20px;
-}
+    input {
+      width: 80%;
+      padding: 12px;
+      margin: 6px;
+      border-radius: 12px;
+      border: none;
+      background: #222;
+      color: white;
+    }
 
-input {
-  width: 80%;
-  padding: 12px;
-  margin: 6px;
-  border-radius: 12px;
-  border: none;
-  background: #222;
-  color: white;
-  outline: none;
-}
+    button {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: none;
+      margin: 6px;
+      background: #4f8cff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-button {
-  padding: 12px 16px;
-  margin: 6px;
-  border-radius: 12px;
-  border: none;
-  background: #4f8cff;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
+    .vs {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
 
-button:hover {
-  background: #3b78ff;
-}
+    .choice {
+      flex: 1;
+      padding: 25px;
+      background: #1f1f1f;
+      border-radius: 16px;
+      cursor: pointer;
+    }
 
-.vs {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
+    #ranking {
+      margin-top: 20px;
+      text-align: left;
+      background: #151515;
+      padding: 10px;
+      border-radius: 10px;
+    }
 
-.choice {
-  flex: 1;
-  padding: 30px;
-  background: #1f1f1f;
-  border-radius: 16px;
-  cursor: pointer;
-  transition: 0.2s;
-  font-size: 18px;
-  font-weight: bold;
-}
+    .dropdown {
+      position: relative;
+      margin: 10px 0;
+    }
 
-@media (hover: hover) {
-  .choice:hover {
-    transform: scale(1.03);
-    background: #2a2a2a;
-  }
-}
+    .dropdown-btn {
+      width: 100%;
+      padding: 12px;
+      background: #1f1f1f;
+      border-radius: 12px;
+      color: white;
+      font-weight: bold;
+    }
 
-.choice:active {
-  transform: scale(0.97);
-  background: #2a2a2a;
-}
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background: #1a1a1a;
+      width: 100%;
+      max-height: 180px;
+      overflow-y: auto;
+      border-radius: 10px;
+      margin-top: 6px;
+      padding: 10px;
+      z-index: 10;
+    }
 
-#ranking {
-  margin-top: 25px;
-  text-align: left;
-  background: #151515;
-  padding: 15px;
-  border-radius: 12px;
-}
+    .dropdown-content.show {
+      display: block;
+    }
 
-#ranking div {
-  padding: 6px 0;
-}
+    .category-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px;
+    }
 
-button {
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: none;
-  margin-top: 10px;
-  cursor: pointer;
-}
+    .category-item:hover {
+      background: #2a2a2a;
+    }
 
-button:hover {
-  opacity: 0.9;
-}
-
-.choice {
-  outline: none;
-}
-
-.choice:focus {
-  outline: none;
-}
-
-.choice {
-  -webkit-tap-highlight-color: transparent;
-}
-
-.choice {
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-}
-
-.choice:active,
-.choice:focus {
-  background: #1f1f1f !important;
-}
-
-.category-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 4px 0;
-  font-size: 14px;
-}
-
-.dropdown {
-  position: relative;
-  margin: 10px 0;
-}
-
-/* KNAPP */
-.dropdown-btn {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #1f1f1f;
-  border-radius: 12px;
-  padding: 12px;
-  font-weight: bold;
-}
-
-/* DROPDOWN */
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background: #1a1a1a;
-  border-radius: 12px;
-  padding: 10px;
-  width: 100%;
-  max-height: 180px;
-  overflow-y: auto;
-  z-index: 10;
-
-  margin-top: 6px;
-
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-  animation: fadeIn 0.15s ease;
-}
-
-.dropdown-content.show {
-  display: block;
-}
-
-/* CHECKBOX ITEMS */
-.category-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.category-item:hover {
-  background: #2a2a2a;
-}
-
-/* CHECKBOX */
-.category-item input {
-  accent-color: #4f8cff;
-  transform: scale(1.2);
-}
-
-/* ANIMASJON */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
+    .category-item input {
+      accent-color: #4f8cff;
+    }
   </style>
 </head>
-<body>
 
-  <div class="container">
-  <h1>⚔️ The Ultimate Ranking</h1>
+<body>
+<div class="container">
+
+  <h1>⚔️ Ranking</h1>
 
   <input id="newItem" placeholder="Legg til noe">
-    
-<div class="dropdown">
-  <button class="dropdown-btn" onclick="toggleDropdown()">
-    <span id="dropdownLabel">Velg kategorier</span>
-    ⬇️
-  </button>
 
-  <div id="categoryDropdown" class="dropdown-content"></div>
-</div>
-
-
-<input id="newCategoryInput" placeholder="Ny kategori">
-<button onclick="addCategory()">+ Kategori</button>
-
-<button onclick="addItem()">Legg til</button>
-
-  <div class="vs">
-  <div class="choice" onclick="choose(0)" id="a">-</div>
-  <div class="choice" onclick="choose(1)" id="b">-</div>
-</div>
-
-<button onclick="draw()">🤝 Uavgjort</button>
-
-  <div id="ranking"></div>
+  <div class="dropdown">
+    <button class="dropdown-btn" onclick="toggleDropdown()">
+      <span id="dropdownLabel">Velg kategorier</span>
+    </button>
+    <div id="categoryDropdown" class="dropdown-content"></div>
   </div>
 
-  <script>
-    let items = JSON.parse(localStorage.getItem("items")) || [];
+  <input id="newCategoryInput" placeholder="Ny kategori">
+  <button onclick="addCategory()">+ kategori</button>
+  <button onclick="addItem()">Legg til</button>
+
+  <div class="vs">
+    <div class="choice" onclick="choose(0)" id="a">-</div>
+    <div class="choice" onclick="choose(1)" id="b">-</div>
+  </div>
+
+  <button onclick="draw()">🤝 Uavgjort</button>
+
+  <div id="ranking"></div>
+</div>
+
+<script>
+
+let items = JSON.parse(localStorage.getItem("items")) || [];
 if (!Array.isArray(items)) items = [];
 
 let categories = JSON.parse(localStorage.getItem("categories")) || [];
 if (!Array.isArray(categories)) categories = [];
 
-function normalizeCategory(cat) {
-  if (!cat) return "ukjent";
+/* ---------------- HELPERS ---------------- */
 
-  return cat
-    .trim()
-    .toLowerCase()
-    .replace(/\b\w/g, c => c.toUpperCase());
-}
-
-    items = items.map(item => ({
-  id: item.id || Date.now() + Math.random(),
-  name: item.name,
-  categories: item.categories || [item.category || "ukjent"],
-  rating: item.rating
-}));
-
-let current = [];
-    
 function save() {
   localStorage.setItem("items", JSON.stringify(items));
   localStorage.setItem("categories", JSON.stringify(categories));
 }
 
+function normalizeCategory(cat) {
+  if (!cat) return null;
+  return cat.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+}
+
+/* ---------------- CATEGORY UI ---------------- */
+
+function toggleDropdown() {
+  document.getElementById("categoryDropdown").classList.toggle("show");
+}
+
+function renderCategories() {
+  const container = document.getElementById("categoryDropdown");
+
+  container.innerHTML = categories.map(cat => `
+    <label class="category-item">
+      <input type="checkbox" value="${cat}" onchange="updateDropdownLabel()">
+      <span>${cat}</span>
+    </label>
+  `).join("");
+}
+
+function updateDropdownLabel() {
+  const checked = [...document.querySelectorAll("#categoryDropdown input:checked")]
+    .map(cb => cb.value);
+
+  const label = document.getElementById("dropdownLabel");
+
+  if (checked.length === 0) label.innerText = "Velg kategorier";
+  else if (checked.length === 1) label.innerText = checked[0];
+  else label.innerText = `${checked.length} valgt`;
+}
+
+function addCategory() {
+  const input = document.getElementById("newCategoryInput").value;
+  const cat = normalizeCategory(input);
+
+  if (!cat) return;
+
+  if (!categories.includes(cat)) {
+    categories.push(cat);
+    categories = [...new Set(categories)];
+    save();
+    renderCategories();
+  }
+
+  document.getElementById("newCategoryInput").value = "";
+}
+
+/* ---------------- ITEMS ---------------- */
+
 function addItem() {
   const name = document.getElementById("newItem").value;
-  const selectedCategories = Array.from(
-document.querySelectorAll("#categoryDropdown input:checked")
-).map(cb => cb.value);
 
+  const selectedCategories = [...document.querySelectorAll("#categoryDropdown input:checked")]
+    .map(cb => cb.value);
 
   if (!name || selectedCategories.length === 0) return;
 
- items.push({
-  id: Date.now() + Math.random(),
-  name,
-  categories: selectedCategories,
-  rating: 1000
-});
+  items.push({
+    id: Date.now() + Math.random(),
+    name,
+    categories: selectedCategories,
+    rating: 1000
+  });
 
   document.getElementById("newItem").value = "";
-  document.querySelectorAll("#categoryDropdown input")
-  .forEach(cb => cb.checked = false);
+  document.querySelectorAll("#categoryDropdown input").forEach(cb => cb.checked = false);
 
   updateDropdownLabel();
-  renderCategories();
   save();
   update();
   newMatch();
 }
 
-function toggleDropdown() {
-  document.getElementById("categoryDropdown")
-    .classList.toggle("show");
-}
+/* ---------------- ELO ---------------- */
 
 function expected(a, b) {
   return 1 / (1 + Math.pow(10, (b - a) / 400));
@@ -308,11 +234,15 @@ function expected(a, b) {
 
 function updateElo(w, l) {
   const K = 32;
-  let Ew = expected(w.rating, l.rating);
+  const Ew = expected(w.rating, l.rating);
 
   w.rating += K * (1 - Ew);
   l.rating += K * (0 - (1 - Ew));
 }
+
+/* ---------------- MATCH ---------------- */
+
+let current = [];
 
 function newMatch() {
   if (items.length < 2) {
@@ -323,6 +253,7 @@ function newMatch() {
 
   let a = Math.floor(Math.random() * items.length);
   let b;
+
   do { b = Math.floor(Math.random() * items.length); }
   while (a === b);
 
@@ -333,9 +264,7 @@ function newMatch() {
 }
 
 function choose(i) {
-  document.activeElement.blur();
-  
-  if (!current || current.length < 2) return;
+  if (!current.length) return;
 
   updateElo(current[i], current[1 - i]);
 
@@ -344,58 +273,13 @@ function choose(i) {
   newMatch();
 }
 
-function update() {
-  let sorted = [...items].sort((a,b)=>b.rating-a.rating);
-
-  document.getElementById("ranking").innerHTML =
-    "<h3>🏆 Ranking</h3>" +
-    sorted.map((x,i)=>
-  `${i+1}. ${x.name} <span onclick="editCategory(${x.id})" style="cursor:pointer; color:#4f8cff;">
-  [${x.categories ? x.categories.join(", ") : "ingen kategori"}]
-</span> (${Math.round(x.rating)})`
-).join("<br>");
-}
-
-function rebuildCategoriesFromItems() {
-  items.forEach(item => {
-    let cats = item.categories || (item.category ? [item.category] : []);
-
-    cats.forEach(c => {
-      let norm = normalizeCategory(c);
-      if (norm && !categories.includes(norm)) {
-        categories.push(norm);
-      }
-    });
-  });
-
-  categories = [...new Set(categories)];
-}
-
-function editCategory(id) {
-  let item = items.find(x => x.id === id);
-  if (!item) return;
-
-  let newCategory = prompt("Skriv kategorier (kommaseparert):", item.categories.join(", "));
-
-  if (newCategory === null) return;
-
-  item.categories = newCategory
-    .split(",")
-    .map(c => normalizeCategory(c))
-    .filter(Boolean);
-
-  save();
-  update();
-}
-
 function draw() {
-  if (!current || current.length < 2) return;
+  if (!current.length) return;
 
-  const a = current[0];
-  const b = current[1];
-
-  // Elo for uavgjort
   const K = 32;
+
+  let a = current[0];
+  let b = current[1];
 
   let Ea = expected(a.rating, b.rating);
   let Eb = expected(b.rating, a.rating);
@@ -408,59 +292,28 @@ function draw() {
   newMatch();
 }
 
-function addCategory() {
-  let input = document.getElementById("newCategoryInput").value;
-  let cat = normalizeCategory(input);
+/* ---------------- RANKING ---------------- */
 
-  if (!cat) return;
+function update() {
+  const sorted = [...items].sort((a, b) => b.rating - a.rating);
 
-  if (!categories.includes(cat)) {
-  categories.push(cat);
-  categories = [...new Set(categories)];
-  save();
-  renderCategories();
-  updateDropdownLabel();
-  }
-
-  document.getElementById("newCategoryInput").value = "";
+  document.getElementById("ranking").innerHTML =
+    "<h3>🏆 Ranking</h3>" +
+    sorted.map((x, i) =>
+      `${i + 1}. ${x.name} [${x.categories?.join(", ") || "ingen"}] (${Math.round(x.rating)})`
+    ).join("<br>");
 }
 
-function updateDropdownLabel() {
-  const checked = Array.from(
-    document.querySelectorAll("#categoryDropdown input:checked")
-  ).map(cb => cb.value);
+/* ---------------- INIT ---------------- */
 
-  const label = document.getElementById("dropdownLabel");
-
-  if (checked.length === 0) {
-    label.innerText = "Velg kategorier";
-  } else if (checked.length === 1) {
-    label.innerText = checked[0];
-  } else {
-    label.innerText = `${checked.length} valgt`;
-  }
-}
-
-function renderCategories() {
-  let container = document.getElementById("categoryDropdown");
-
-  container.innerHTML = categories.map(cat => `
-    <label class="category-item">
-      <input type="checkbox" value="${cat}" onchange="updateDropdownLabel()">
-      <span>${cat}</span>
-    </label>
-  `).join("");
-}
-
-rebuildCategoriesFromItems();    
 renderCategories();
-updateDropdownLabel();
 update();
 newMatch();
-    document.getElementById("newItem").addEventListener("keydown", function(e) {
+
+document.getElementById("newItem").addEventListener("keydown", e => {
   if (e.key === "Enter") addItem();
 });
-  </script>
 
+</script>
 </body>
 </html>
