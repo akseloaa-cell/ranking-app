@@ -96,6 +96,14 @@ button {
 button:hover {
   opacity: 0.9;
 }
+
+.choice {
+  outline: none;
+}
+
+.choice:focus {
+  outline: none;
+}
   </style>
 </head>
 <body>
@@ -183,6 +191,8 @@ function newMatch() {
 }
 
 function choose(i) {
+  document.activeElement.blur();
+  
   if (!current || current.length < 2) return;
 
   updateElo(current[i], current[1 - i]);
