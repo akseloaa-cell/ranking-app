@@ -95,7 +95,11 @@ function updateElo(w, l) {
 }
 
 function newMatch() {
-  if (items.length < 2) return;
+  if (items.length < 2) {
+    document.getElementById("a").innerText = "Legg til flere items";
+    document.getElementById("b").innerText = "";
+    return;
+  }
 
   let a = Math.floor(Math.random() * items.length);
   let b;
