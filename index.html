@@ -224,23 +224,23 @@ body.tournament-mode {
     <!-- ===================== -->
     <div id="mainView">
 
-      <input id="newItem" placeholder="Legg til noe">
-      
-      <div class="dropdown">
-        <div class="dropdown-btn" onclick="toggleDropdown()">
-          <span id="dropdownLabel">Velg kategorier</span>
-          ⬇️
-        </div>
-        
-          <button onclick="addItem()">Legg til</button>
-        
-      <div style="margin-bottom:10px;">
+     <input id="newItem" placeholder="Legg til noe">
+
+<div class="dropdown">
+  <div class="dropdown-btn" onclick="toggleDropdown()">
+    <span id="dropdownLabel">Velg kategorier</span>
+    ⬇️
+  </div>
+
+  <div id="categoryDropdown" class="dropdown-content"></div>
+</div>
+
+<button onclick="addItem()">Legg til</button>
+
+<div style="margin-bottom:10px;">
   <input id="newCategoryInput" placeholder="Ny kategori">
   <button onclick="addCategory()">+ Legg til kategori</button>
 </div>
-
-        <div id="categoryDropdown" class="dropdown-content"></div>
-      </div>
 
       <div class="vs">
         <div class="choice" onclick="choose(0)" id="a">-</div>
@@ -352,15 +352,6 @@ function addCategory() {
   save();
   renderCategories();
   updateDropdownLabel();
-}
-
-
-  document.getElementById("newCategoryInput").value = "";
-
-  save();
-  update();
-  newMatch();
-  renderCategories();
 }
 
 /* ---------------- UI ---------------- */
@@ -733,6 +724,8 @@ function renderTournamentUI() {
 
 function update() {
   const sorted = [...items].sort((a, b) => b.rating - a.rating);
+  sorted = sorted.filter(x => x.name !== "__category_seed__");
+
 
   document.getElementById("ranking").innerHTML =
     "<h3>🏆 Ranking</h3>" +
@@ -814,29 +807,7 @@ function updateDropdownLabel() {
   }
 }
 
-function addCategory() {
-  const input = document.getElementById("newCategoryInput").value;
-  const cat = normalizeCategory(input);
-
-  if (!cat) return;
-
-  // legg til i items (robust lagring)
-  items.push({
-    id: Date.now() + Math.random(),
-    name: "__category_seed__",
-    categories: [cat],
-    rating: 1000
-  });
-
-  document.getElementById("newCategoryInput").value = "";
-
-  save();
-  renderCategories();
-  updateDropdownLabel();
-}
-
 showMain()
-showTournament()
 
 
 </script>
