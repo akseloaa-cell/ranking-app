@@ -704,7 +704,7 @@ function showStats(id){
       <h2>${item.name}</h2>
 
       <p>🏆 Rank: ${rank}</p>
-      <p>⭐ ELO: ${Math.round(item.rating)}</p>
+      <p>⭐ ELO: ${Math.floor(item.rating)}</p>
 
       <p>📂 ${item.categories.join(", ")}</p>
 
