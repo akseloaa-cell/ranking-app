@@ -207,7 +207,7 @@ button:active {
   width: 100%;
   max-width: 460px;
   height: 90%;
-
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.6);
   background: #0b0f1a;
   border-radius: 20px 20px 0 0;
 
@@ -215,6 +215,10 @@ button:active {
 
   transform: translateY(100%);
   transition: 0.3s ease;
+}
+
+#rankingView {
+  transform: translateY(100%);
 }
 
 /* TOUCH OPTIMIZED */
@@ -235,7 +239,10 @@ button:active {
 <div id="statsBox"></div>
 
 <div id="rankingOverlay">
-  <div id="rankingView"></div>
+  <div id="rankingView">
+    <button onclick="closeRankingView()">⬅️ Tilbake</button>
+    <div id="rankingViewList"></div>
+  </div>
 </div>
 
 <div class="chip-container" id="chipBox"></div>
@@ -266,18 +273,6 @@ button:active {
 <h3>Daglig turnering</h3>
 <div id="tournament"></div>
 
-<div id="rankingView" style="
-  display:none;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:#0b0f1a;
-  overflow-y:auto;
-  z-index:999;
-"></div>
-
 </div>
 
 <button onclick="scrollToTop()" style="
@@ -291,26 +286,6 @@ button:active {
 " id="scrollBtn">
   ⬆
 </button>
-
-<div id="rankingView" style="
-  display:none;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.85);
-  backdrop-filter: blur(8px);
-  z-index:999;
-  overflow-y:auto;
-  padding:20px;
-">
-
-  <button onclick="closeRankingView()">⬅️ Tilbake</button>
-
-  <div id="rankingViewList" style="margin-top:20px;"></div>
-
-</div>
 
 <script>
 /* ================= STATE ================= */
@@ -736,21 +711,6 @@ function closeRankingView(){
   }, 300);
 }
 
-document.getElementById("rankingOverlay").addEventListener("click", (e)=>{
-  if(e.target.id === "rankingOverlay"){
-    closeRankingView();
-  }
-});
-
-function openRankingView(){
-  document.getElementById("rankingView").style.display = "block";
-  renderRankingView();
-}
-
-function closeRankingView(){
-  document.getElementById("rankingView").style.display = "none";
-}
-
 function renderRankingView(){
   let sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
 
@@ -786,11 +746,10 @@ function scrollToTop(){
   });
 }
 
-// vis/skjul knapp
-window.addEventListener("scroll", () => {
+document.getElementById("rankingView").addEventListener("scroll", () => {
   const btn = document.getElementById("scrollBtn");
 
-  if(window.scrollY > 200){
+  if(document.getElementById("rankingView").scrollTop > 200){
     btn.style.display = "block";
   } else {
     btn.style.display = "none";
