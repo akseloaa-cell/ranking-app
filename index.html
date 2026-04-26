@@ -711,15 +711,17 @@ function showStats(id){
         </span>
       `).join(" ")}</p>
 
+      <div style="margin-top:10px;">
+        <input id="newCatInput" placeholder="Legg til kategori"
+          style="width:70%; padding:8px; border-radius:8px; border:none;">
+
+
         <button onclick="addCatToItem(${item.id})" style="width:25%;">
           +
         </button>
       </div>
 
-
-      <div style="margin-top:10px;">
-        <input id="newCatInput" placeholder="Legg til kategori"
-          style="width:70%; padding:8px; border-radius:8px; border:none;">
+          
         <div style="margin-top:10px;">
   <p style="opacity:0.7; margin-bottom:6px;">Velg eksisterende kategori:</p>
 
