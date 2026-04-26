@@ -320,7 +320,7 @@ const state = {
   items: JSON.parse(localStorage.getItem("items")) || [],
   categories: JSON.parse(localStorage.getItem("categories")) || [],
   current: [],
-  tournament: JSON.parse(localStorage.getItem("dailyTournament")) || null, // NEW
+  tournament: JSON.parse(localStorage.getItem("dailyTournament")) || null,
   bracket: [],
   round: 0,
   match: 0,
@@ -328,14 +328,31 @@ const state = {
   rankingFilter: "all",
   rankingSort: "elo"
 };
-// 🔥 Rydd categories
-state.categories = state.categories
-  .filter(c => c && typeof c === "string" && c.trim() !== "")
-  .map(c => c.trim());
 
+// ==============================
+// 🔥 CLEANUP / NORMALISERING
+// ==============================
+
+// fjern tomme / ugyldige categories + normaliser
+state.categories = [...new Set(
+  state.categories
+    .filter(c => typeof c === "string" && c.trim() !== "")
+    .map(c => c.trim().toLowerCase())
+)];
+
+// sørg for at items alltid har riktig struktur
 state.items.forEach(i => {
-  if(!i.history) i.history = [];
-  if(i.history.length === 0) i.history.push(i.rating || 1000);
+  if (!i.history) i.history = [];
+  if (i.history.length === 0) i.history.push(i.rating || 1000);
+
+  if (!i.categories) i.categories = [];
+
+  // normaliser categories på items også
+  i.categories = [...new Set(
+    i.categories
+      .filter(c => typeof c === "string" && c.trim() !== "")
+      .map(c => c.trim().toLowerCase())
+  )];
 });
 
 /* ================= SAVE ================= */
@@ -354,7 +371,7 @@ function addCategory(){
 
   if(!v || !v.trim()) return;
 
-  v = normalize(v);
+  v = v.trim().toLowerCase(); // 🔥 viktig
 
   if(!state.categories.includes(v)){
     state.categories.push(v);
@@ -761,10 +778,16 @@ function addCatToItem(id, valOverride){
   let val = valOverride || document.getElementById("newCatInput").value;
   if(!val || !val.trim()) return;
 
-  val = val.trim().toLowerCase();
+  val = val.trim().toLowerCase(); // 🔥 viktig
 
-  if(!item.categories.includes(val)){
+  // 🔥 hindrer duplicates uansett case
+  if(!item.categories.some(c => c.toLowerCase() === val)){
     item.categories.push(val);
+  }
+
+  // 🔥 også legg til global category-list hvis den ikke finnes
+  if(!state.categories.includes(val)){
+    state.categories.push(val);
   }
 
   save();
