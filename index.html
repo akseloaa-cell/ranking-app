@@ -210,15 +210,9 @@ button:active {
   box-shadow: 0 -10px 40px rgba(0,0,0,0.6);
   background: #0b0f1a;
   border-radius: 20px 20px 0 0;
-
   overflow-y: auto;
-
   transform: translateY(100%);
   transition: 0.3s ease;
-}
-
-#rankingView {
-  transform: translateY(100%);
 }
 
 /* TOUCH OPTIMIZED */
@@ -236,20 +230,22 @@ button:active {
 
 <input id="itemInput" placeholder="Legg til item">
   
-<div id="rankingView">
-  <button onclick="closeRankingView()">⬅️ Tilbake</button>
+<div id="rankingOverlay">
+  <div id="rankingView">
+    <button onclick="closeRankingView()">⬅️ Tilbake</button>
 
-  <!-- SORTERING -->
-  <div style="margin:10px 0;">
-    <button onclick="setSort('elo')">⭐ ELO</button>
-    <button onclick="setSort('wins')">🏆 Wins</button>
-    <button onclick="setSort('top3')">🥇 Top 3</button>
+    <!-- SORTERING -->
+    <div style="margin:10px 0;">
+      <button onclick="setSort('elo')">⭐ ELO</button>
+      <button onclick="setSort('wins')">🏆 Wins</button>
+      <button onclick="setSort('top3')">🥇 Top 3</button>
+    </div>
+
+    <!-- FILTER -->
+    <div id="rankingFilters" style="margin-bottom:10px;"></div>
+
+    <div id="rankingViewList"></div>
   </div>
-
-  <!-- FILTER -->
-  <div id="rankingFilters" style="margin-bottom:10px;"></div>
-
-  <div id="rankingViewList"></div>
 </div>
 
 <div class="chip-container" id="chipBox"></div>
@@ -306,8 +302,7 @@ const state = {
   match: 0,
   showAll: false,
   rankingFilter: "all",
-  rankingSort: "elo",
-  rankingFilter: "all"
+  rankingSort: "elo"
 };
 // 🔥 Rydd categories
 state.categories = state.categories
