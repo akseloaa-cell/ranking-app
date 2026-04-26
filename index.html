@@ -94,6 +94,23 @@ button {
   border-radius:10px;
   font-size:12px;
 }
+
+.chip:active {
+  transform: scale(0.95);
+}
+
+.choice:active {
+  transform: scale(0.97);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 </style>
 </head>
 
@@ -182,12 +199,11 @@ function renderChips(){
   const box = document.getElementById("chipBox");
 
   box.innerHTML = state.categories.map(c => `
-    <div class="chip" onclick="toggleCat('${c}')">${c}</div>
+    <div class="chip" onclick="toggleCat(this)"${c}</div>
   `).join("");
 }
 
-function toggleCat(cat){
-  let el = event.target;
+function toggleCat(el){
   el.classList.toggle("active");
 }
 
@@ -281,7 +297,8 @@ function update(){
   document.getElementById("ranking").innerHTML =
   "<h3>🏆 Ranking</h3>" +
   sorted.map((x,i)=>
-  `<div onclick="showStats(${x.id})" style="cursor:pointer">
+  `<div onclick="showStats(${x.id})" 
+     style="cursor:pointer; padding:10px; background:#1f1f1f; margin:5px 0; border-radius:10px;">
     ${i+1}. ${x.name} (${Math.round(x.rating)})
   </div>`
 ).join("<br>");
