@@ -714,6 +714,24 @@ function showStats(id){
       <div style="margin-top:10px;">
         <input id="newCatInput" placeholder="Legg til kategori"
           style="width:70%; padding:8px; border-radius:8px; border:none;">
+        <div style="margin-top:10px;">
+  <p style="opacity:0.7; margin-bottom:6px;">Velg eksisterende kategori:</p>
+
+  <div style="display:flex; flex-wrap:wrap; gap:6px;">
+    ${state.categories.map(c => `
+      <span onclick="addCatToItem(${item.id}, '${c}')"
+        style="
+          background:#222;
+          padding:6px 10px;
+          border-radius:999px;
+          cursor:pointer;
+          font-size:12px;
+        ">
+        ${c}
+      </span>
+    `).join("")}
+  </div>
+</div>
 
         <button onclick="addCatToItem(${item.id})" style="width:25%;">
           +
@@ -733,11 +751,11 @@ function showStats(id){
   openStats();
 }
 
-function addCatToItem(id){
+function addCatToItem(id, valOverride){
   const item = state.items.find(x => x.id === id);
   if(!item) return;
 
-  let val = document.getElementById("newCatInput").value;
+  let val = valOverride || document.getElementById("newCatInput").value;
   if(!val || !val.trim()) return;
 
   val = val.trim().toLowerCase();
@@ -747,8 +765,8 @@ function addCatToItem(id){
   }
 
   save();
-  showStats(id); // refresh view
-  renderChips(); // oppdater chips også
+  showStats(id);
+  renderChips();
 }
 
 function removeCatFromItem(id, cat){
