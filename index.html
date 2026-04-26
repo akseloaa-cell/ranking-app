@@ -165,19 +165,6 @@ button:active {
   font-size: 12px;
 }
 
-/* STATS */
-#statsBox {
-  width: 80%;
-  margin: 10px auto;
-}
-
-#statsBox div {
-  background: #141a26;
-  border: 1px solid #2a3142;
-  padding: 12px;
-  border-radius: 12px;
-}
-
 #scrollBtn {
   background: #4f8cff;
   color: white;
@@ -215,6 +202,37 @@ button:active {
   transition: 0.3s ease;
 }
 
+#statsOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(6px);
+
+  display: none;
+  justify-content: center;
+  align-items: flex-end;
+
+  z-index: 1000;
+}
+
+#statsView {
+  width: 100%;
+  max-width: 460px;
+  height: 75%;
+
+  background: #0b0f1a;
+  border-radius: 20px 20px 0 0;
+
+  overflow-y: auto;
+
+  transform: translateY(100%);
+  transition: 0.3s ease;
+}
+
 /* TOUCH OPTIMIZED */
 * {
   -webkit-tap-highlight-color: transparent;
@@ -245,6 +263,14 @@ button:active {
     <div id="rankingFilters" style="margin-bottom:10px;"></div>
 
     <div id="rankingViewList"></div>
+  </div>
+</div>
+
+<div id="statsOverlay">
+  <div id="statsView">
+    <button onclick="closeStats()">⬅️ Tilbake</button>
+
+    <div id="statsContent"></div>
   </div>
 </div>
 
@@ -673,22 +699,26 @@ function showStats(id){
 
   const trend = item.history?.slice(-5) || [];
 
-  document.getElementById("statsBox").innerHTML = `
-    <div style="background:#111;padding:10px;border-radius:10px;margin-top:10px;">
-      <b>${item.name}</b><br><br>
+  document.getElementById("statsContent").innerHTML = `
+    <div style="padding:20px; text-align:left;">
+      <h2>${item.name}</h2>
 
-      🏆 Rank: ${rank}<br>
-      ⭐ ELO: ${Math.round(item.rating)}<br><br>
+      <p>🏆 Rank: ${rank}</p>
+      <p>⭐ ELO: ${Math.round(item.rating)}</p>
 
-      📂 ${item.categories.join(", ")}<br><br>
+      <p>📂 ${item.categories.join(", ")}</p>
 
-      📈 ${trend.join(" → ")}<br><br>
+      <p>📈 ${trend.join(" → ")}</p>
 
-      🏆 Wins: ${item.tournamentWins || 0}<br>
-      🥇 Top3: ${item.top3 || 0}<br>
-      🎮 Played: ${item.tournamentsPlayed || 0}
+      <hr>
+
+      <p>🏆 Wins: ${item.tournamentWins || 0}</p>
+      <p>🥇 Top 3: ${item.top3 || 0}</p>
+      <p>🎮 Played: ${item.tournamentsPlayed || 0}</p>
     </div>
   `;
+
+  openStats();
 }
 
 function openRankingView(){
@@ -806,6 +836,35 @@ function setSort(type){
   state.rankingSort = type;
   renderRankingView();
 }
+
+function openStats(){
+  const overlay = document.getElementById("statsOverlay");
+  const view = document.getElementById("statsView");
+
+  overlay.style.display = "flex";
+
+  setTimeout(() => {
+    view.style.transform = "translateY(0)";
+  }, 10);
+}
+
+function closeStats(){
+  const overlay = document.getElementById("statsOverlay");
+  const view = document.getElementById("statsView");
+
+  view.style.transform = "translateY(100%)";
+
+  setTimeout(() => {
+    overlay.style.display = "none";
+  }, 300);
+}
+
+// klikk utenfor lukker
+document.getElementById("statsOverlay").addEventListener("click", (e)=>{
+  if(e.target.id === "statsOverlay"){
+    closeStats();
+  }
+});
 
 renderChips();
 update();
