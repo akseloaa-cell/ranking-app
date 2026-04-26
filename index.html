@@ -708,7 +708,7 @@ function showStats(id){
 
       <p>📂 ${item.categories.join(", ")}</p>
 
-      <p>📈 ${trend.join(" → ")}</p>
+      <p>📈 ${trend.map(x => Math.round(x)).join(" → ")}
 
       <hr>
 
