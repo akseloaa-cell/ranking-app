@@ -103,6 +103,8 @@ button {
 <h2>⚔️ Ranking V2</h2>
 
 <input id="itemInput" placeholder="Legg til item">
+  
+<div id="statsBox"></div>
 
 <div class="chip-container" id="chipBox"></div>
 
@@ -145,7 +147,10 @@ const state = {
   match: 0
 };
 
-  
+state.items.forEach(i => {
+  if(!i.history) i.history = [];
+  if(i.history.length === 0) i.history.push(i.rating || 1000);
+});
 
 /* ================= SAVE ================= */
 function save(){
@@ -255,6 +260,11 @@ function pick(i){
 }
 
 function draw(){
+  if(!state.current.length) return;
+
+  let a = state.current[0];
+  let b = state.current[1];
+
   updateHistory(a);
   updateHistory(b);
 
@@ -262,6 +272,7 @@ function draw(){
   update();
   nextMatch();
 }
+
 
 /* ================= RANKING ================= */
 function update(){
@@ -434,18 +445,17 @@ function pickTournamentWinner(i){
 
 function advanceRound(){
   const t = state.tournament;
-  winners.forEach(w => {
-  if(!w) return;
-  w.tournamentsPlayed = (w.tournamentsPlayed || 0) + 1;
-});
-  sorted.slice(0,3).forEach((x,i)=>{
-  x.top3 = (x.top3 || 0) + 1;
-});
 
   let winners = t.rounds[t.currentRound]
     .map(m => m.winner ? state.items.find(x => x.id === m.winner) : null)
     .filter(Boolean);
 
+  // 📊 stats: alle som vant en kamp = deltatt
+  winners.forEach(w => {
+    w.tournamentsPlayed = (w.tournamentsPlayed || 0) + 1;
+  });
+
+  // ferdig turnering
   if(winners.length === 1){
     finishTournament(winners[0]);
     return;
@@ -462,13 +472,27 @@ function advanceRound(){
   t.currentMatch = 0;
 }
 
+  let next = [];
+
+  for(let i=0;i<winners.length;i+=2){
+    next.push({a:winners[i], b:winners[i+1], winner:null});
+  }
+
+  t.rounds.push(next);
+  t.currentRound++;
+  t.currentMatch = 0;
+}
+
 function finishTournament(winner){
   state.tournament.done = true;
+
   winner.tournamentWins = (winner.tournamentWins || 0) + 1;
 
   let sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
 
   sorted.slice(0,3).forEach((x,i)=>{
+    x.top3 = (x.top3 || 0) + 1;
+
     if(i===0) x.rating += 50;
     if(i===1) x.rating += 25;
     if(i===2) x.rating += 10;
@@ -490,24 +514,24 @@ function showStats(id){
 
   const trend = item.history?.slice(-5) || [];
 
-  alert(
-`📊 ${item.name}
+  document.getElementById("statsBox").innerHTML = `
+    <div style="background:#111;padding:10px;border-radius:10px;margin-top:10px;">
+      <b>${item.name}</b><br><br>
 
-🏆 Ranking: ${rank}
-⭐ ELO: ${Math.round(item.rating)}
+      🏆 Rank: ${rank}<br>
+      ⭐ ELO: ${Math.round(item.rating)}<br><br>
 
-📂 Kategorier:
-${item.categories.join(", ")}
+      📂 ${item.categories.join(", ")}<br><br>
 
-📈 Trend (siste 5):
-${trend.join(" → ")}
+      📈 ${trend.join(" → ")}<br><br>
 
-🏆 Turnering:
-Seire: ${item.tournamentWins || 0}
-Top 3: ${item.top3 || 0}
-Deltatt: ${item.tournamentsPlayed || 0}`
-  );
+      🏆 Wins: ${item.tournamentWins || 0}<br>
+      🥇 Top3: ${item.top3 || 0}<br>
+      🎮 Played: ${item.tournamentsPlayed || 0}
+    </div>
+  `;
 }
+
 
 renderChips();
 update();
