@@ -717,6 +717,11 @@ function showStats(id){
         <div style="margin-top:10px;">
   <p style="opacity:0.7; margin-bottom:6px;">Velg eksisterende kategori:</p>
 
+        <button onclick="addCatToItem(${item.id})" style="width:25%;">
+          +
+        </button>
+      </div>
+
   <div style="display:flex; flex-wrap:wrap; gap:6px;">
     ${state.categories.map(c => `
       <span onclick="addCatToItem(${item.id}, '${c}')"
@@ -732,11 +737,6 @@ function showStats(id){
     `).join("")}
   </div>
 </div>
-
-        <button onclick="addCatToItem(${item.id})" style="width:25%;">
-          +
-        </button>
-      </div>
 
       <p>📈 ${trend.map(x => Math.round(x)).join(" → ")}</p>
 
