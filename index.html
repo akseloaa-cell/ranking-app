@@ -310,26 +310,27 @@ function update(){
 
   let list = state.showAll ? sorted : sorted.slice(0,10);
 
+  const toggleBtn = `
+    <button onclick="toggleRankingView()">
+      ${state.showAll ? "⬆️ Tilbake til top 10" : "Se hele ranking"}
+    </button>
+  `;
+
   document.getElementById("ranking").innerHTML =
-  "<h3>🏆 Ranking</h3>" +
+    "<h3>🏆 Ranking</h3>" +
 
-  list.map((x,i)=>
-  `<div onclick="showStats(${x.id})"
-        style="cursor:pointer; padding:10px; background:#1f1f1f; margin:5px 0; border-radius:10px;">
-    ${i+1}. ${x.name} (${Math.round(x.rating)})
-  </div>`
-  ).join("")
+    toggleBtn +  // 🔥 TOPP
 
-  +
+    list.map((x,i)=>
+      `<div onclick="showStats(${x.id})"
+            style="cursor:pointer; padding:10px; background:#1f1f1f; margin:5px 0; border-radius:10px;">
+        ${i+1}. ${x.name} (${Math.round(x.rating)})
+      </div>`
+    ).join("")
 
-  `<button onclick="toggleRankingView()">
-    ${state.showAll ? "Vis top 10" : "Se hele ranking"}
-  </button>`;
-}
+    +
 
-function toggleRankingView(){
-  state.showAll = !state.showAll;
-  update();
+    toggleBtn; // 🔥 BUNN
 }
 
 /* ================= TOURNAMENT ================= */
