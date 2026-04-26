@@ -161,7 +161,6 @@ button:active {
 <script>
 /* ================= STATE ================= */
 const state = {
-  console.log("CATEGORIES:", state.categories);
   items: JSON.parse(localStorage.getItem("items")) || [],
   categories: JSON.parse(localStorage.getItem("categories")) || [],
   current: [],
@@ -170,6 +169,10 @@ const state = {
   round: 0,
   match: 0
 };
+// 🔥 Rydd categories
+state.categories = state.categories
+  .filter(c => c && typeof c === "string" && c.trim() !== "")
+  .map(c => c.trim());
 
 state.items.forEach(i => {
   if(!i.history) i.history = [];
@@ -189,6 +192,7 @@ function normalize(c){
 
 function addCategory(){
   let v = document.getElementById("catInput").value;
+
   if(!v || !v.trim()) return;
 
   v = normalize(v);
@@ -205,9 +209,11 @@ function addCategory(){
 function renderChips(){
   const box = document.getElementById("chipBox");
 
-  box.innerHTML = state.categories.map(c => `
-    <div class="chip" onclick="toggleCat(this)"${c}</div>
-  `).join("");
+  box.innerHTML = state.categories
+    .filter(c => c && c.trim() !== "")
+    .map(c => `
+      <div class="chip" onclick="toggleCat(this)">${c}</div>
+    `).join("");
 }
 
 function toggleCat(el){
