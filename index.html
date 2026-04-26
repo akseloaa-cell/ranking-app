@@ -178,6 +178,12 @@ button:active {
   border-radius: 12px;
 }
 
+#scrollBtn {
+  background: #4f8cff;
+  color: white;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+}
+
 /* TOUCH OPTIMIZED */
 * {
   -webkit-tap-highlight-color: transparent;
@@ -223,8 +229,31 @@ button:active {
 <h3>Daglig turnering</h3>
 <div id="tournament"></div>
 
+<div id="rankingView" style="
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:#0b0f1a;
+  overflow-y:auto;
+  z-index:999;
+"></div>
 
 </div>
+
+<button onclick="scrollToTop()" style="
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:auto;
+  padding:10px 12px;
+  border-radius:50%;
+  display:none;
+" id="scrollBtn">
+  ⬆
+</button>
 
 <script>
 /* ================= STATE ================= */
@@ -375,29 +404,21 @@ function draw(){
 
 /* ================= RANKING ================= */
 function update(){
-  let sorted = [...state.items]
-    .sort((a,b)=>b.rating-a.rating);
+  let sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
 
-  let list = state.showAll ? sorted : sorted.slice(0,10);
-
-  const btn = `
-    <button onclick="toggleRankingView()">
-      ${state.showAll ? "⬆️ Vis top 10" : "📜 Se hele ranking"}
-    </button>
-  `;
+  let list = sorted.slice(0,10); // 🔥 kun top 10 nå
 
   document.getElementById("ranking").innerHTML =
     "<h3>🏆 Ranking</h3>" +
-    btn +
+
+    `<button onclick="openRankingView()">📊 Full ranking</button>` +
 
     list.map((x,i)=>
       `<div onclick="showStats(${x.id})"
-        style="cursor:pointer; padding:10px; background:#1f1f1f; margin:5px 0; border-radius:10px;">
-        ${state.showAll ? i+1 : i+1}. ${x.name} (${Math.round(x.rating)})
+            style="cursor:pointer; padding:10px; background:#1f1f1f; margin:5px 0; border-radius:10px;">
+        ${i+1}. ${x.name} (${Math.round(x.rating)})
       </div>`
-    ).join("")
-    +
-    btn;
+    ).join("");
 }
 
 /* ================= TOURNAMENT ================= */
@@ -634,11 +655,6 @@ function showStats(id){
   `;
 }
 
-function toggleRankingView(){
-  state.showAll = !state.showAll;
-  update();
-}
-
 function openRankingView(){
   document.getElementById("rankingView").style.display = "block";
   renderRankingView();
@@ -649,7 +665,10 @@ function closeRankingView(){
 }
 
 function scrollToTop(){
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  document.getElementById("rankingView").scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 }
 
 function renderRankingView(){
@@ -657,7 +676,7 @@ function renderRankingView(){
     .sort((a,b)=>b.rating-a.rating);
 
   // FILTER
-  if(state.rankingFilter !== "all"){
+  if(state.rankingFilter && state.rankingFilter !== "all"){
     sorted = sorted.filter(x =>
       (x.categories || []).includes(state.rankingFilter)
     );
@@ -666,28 +685,70 @@ function renderRankingView(){
   const cats = ["all", ...new Set(state.categories)];
 
   document.getElementById("rankingView").innerHTML = `
+    <div style="
+      position:sticky;
+      top:0;
+      background:#0b0f1a;
+      padding:12px;
+      z-index:10;
+      border-bottom:1px solid #2a3142;
+    ">
 
-    <div style="position:sticky;top:0;background:#0f0f0f;padding:10px;z-index:10;">
-      
-      <button onclick="closeRankingView()">✖ Lukk</button>
-      <button onclick="scrollToTop()">⬆ Top</button>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
 
-      <br><br>
-
-      ${cats.map(c => `
-        <button onclick="setRankingFilter('${c}')"
-          style="margin:3px; ${state.rankingFilter===c?'background:#4f8cff':''}">
-          ${c}
+        <button onclick="closeRankingView()" style="width:auto;padding:8px 12px;">
+          ✖ Lukk
         </button>
-      `).join("")}
+
+        <button onclick="scrollToTop()" style="width:auto;padding:8px 12px;">
+          ⬆ Top
+        </button>
+
+      </div>
+
+      <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;">
+        ${cats.map(c => `
+          <button onclick="setRankingFilter('${c}')"
+            style="
+              width:auto;
+              padding:6px 10px;
+              font-size:12px;
+              background:${state.rankingFilter===c?'#4f8cff':'#141a26'};
+              border:1px solid #2a3142;
+            ">
+            ${c}
+          </button>
+        `).join("")}
+      </div>
 
     </div>
 
     <div style="padding:10px;">
       ${sorted.map((x,i)=>`
         <div onclick="showStats(${x.id})"
-          style="padding:10px;margin:5px 0;background:#1f1f1f;border-radius:10px;">
-          ${i+1}. ${x.name} (${Math.round(x.rating)})
+          style="
+            padding:12px;
+            margin:8px 0;
+            background:#141a26;
+            border:1px solid #2a3142;
+            border-radius:12px;
+            cursor:pointer;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+          ">
+
+          <div>
+            <b>${i+1}. ${x.name}</b><br>
+            <span style="font-size:12px;opacity:0.7;">
+              ${(x.categories||[]).join(", ")}
+            </span>
+          </div>
+
+          <div style="font-weight:bold;">
+            ${Math.round(x.rating)}
+          </div>
+
         </div>
       `).join("")}
     </div>
@@ -698,6 +759,21 @@ function setRankingFilter(cat){
   state.rankingFilter = cat;
   renderRankingView();
 }
+
+function scrollToTop(){
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// vis/skjul knapp
+window.addEventListener("scroll", () => {
+  const btn = document.getElementById("scrollBtn");
+
+  if(window.scrollY > 200){
+    btn.style.display = "block";
+  } else {
+    btn.style.display = "none";
+  }
+});
 
 renderChips();
 update();
