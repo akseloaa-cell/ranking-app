@@ -47,11 +47,17 @@ button {
 }
 
 .chip {
-  padding:6px 10px;
+  padding:8px 12px;
   background:#222;
   border-radius:999px;
   cursor:pointer;
-  font-size:13px;
+  font-size:14px;
+  color:white; /* 🔥 viktig */
+  white-space:nowrap; /* 🔥 hindrer tekst i å brytes */
+}
+
+.chip-container {
+  justify-content: center;
 }
 
 .chip.active {
@@ -182,7 +188,7 @@ function normalize(c){
 
 function addCategory(){
   let v = document.getElementById("catInput").value;
-  if(!v) return;
+  if(!v || !v.trim()) return;
 
   v = normalize(v);
 
