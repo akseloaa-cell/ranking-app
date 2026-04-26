@@ -1,4 +1,4 @@
-<script>
+
 /* ================= STATE ================= */
 const state = {
   items: JSON.parse(localStorage.getItem("items")) || [],
@@ -640,5 +640,3 @@ update();
 nextMatch();
 initDailyTournament();
 renderTournament();
-
-</script>
