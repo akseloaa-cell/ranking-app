@@ -704,9 +704,23 @@ function showStats(id){
       <p>🏆 Rank: ${rank}</p>
       <p>⭐ ELO: ${Math.floor(item.rating)}</p>
 
-      <p>📂 ${item.categories.join(", ")}</p>
+      <p>📂 ${item.categories.map(c => `
+        <span onclick="removeCatFromItem(${item.id}, '${c}')"
+          style="background:#222;padding:4px 8px;margin:2px;border-radius:999px;display:inline-block;cursor:pointer;">
+          ${c} ✕
+        </span>
+      `).join(" ")}</p>
 
-      <p>📈 ${trend.map(x => Math.round(x)).join(" → ")}
+      <div style="margin-top:10px;">
+        <input id="newCatInput" placeholder="Legg til kategori"
+          style="width:70%; padding:8px; border-radius:8px; border:none;">
+
+        <button onclick="addCatToItem(${item.id})" style="width:25%;">
+          +
+        </button>
+      </div>
+
+      <p>📈 ${trend.map(x => Math.round(x)).join(" → ")}</p>
 
       <hr>
 
@@ -717,6 +731,35 @@ function showStats(id){
   `;
 
   openStats();
+}
+
+function addCatToItem(id){
+  const item = state.items.find(x => x.id === id);
+  if(!item) return;
+
+  let val = document.getElementById("newCatInput").value;
+  if(!val || !val.trim()) return;
+
+  val = val.trim().toLowerCase();
+
+  if(!item.categories.includes(val)){
+    item.categories.push(val);
+  }
+
+  save();
+  showStats(id); // refresh view
+  renderChips(); // oppdater chips også
+}
+
+function removeCatFromItem(id, cat){
+  const item = state.items.find(x => x.id === id);
+  if(!item) return;
+
+  item.categories = item.categories.filter(c => c !== cat);
+
+  save();
+  showStats(id);
+  renderChips();
 }
 
 function openRankingView(){
