@@ -161,6 +161,7 @@ button:active {
 <script>
 /* ================= STATE ================= */
 const state = {
+  console.log("CATEGORIES:", state.categories);
   items: JSON.parse(localStorage.getItem("items")) || [],
   categories: JSON.parse(localStorage.getItem("categories")) || [],
   current: [],
