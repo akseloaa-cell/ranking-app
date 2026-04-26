@@ -472,17 +472,6 @@ function advanceRound(){
   t.currentMatch = 0;
 }
 
-  let next = [];
-
-  for(let i=0;i<winners.length;i+=2){
-    next.push({a:winners[i], b:winners[i+1], winner:null});
-  }
-
-  t.rounds.push(next);
-  t.currentRound++;
-  t.currentMatch = 0;
-}
-
 function finishTournament(winner){
   state.tournament.done = true;
 
