@@ -1,5 +1,3 @@
-
-/* ================= STATE ================= */
 const state = {
   items: JSON.parse(localStorage.getItem("items")) || [],
   categories: JSON.parse(localStorage.getItem("categories")) || [],
