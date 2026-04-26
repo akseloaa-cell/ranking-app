@@ -128,6 +128,7 @@ button:active {
 <input id="itemInput" placeholder="Legg til item">
   
 <div id="statsBox"></div>
+<div id="rankingView" style="display:none;"></div>
 
 <div class="chip-container" id="chipBox"></div>
 
@@ -143,6 +144,7 @@ button:active {
 
 <button onclick="draw()">Uavgjort</button>
 
+<button onclick="openRankingView()">📊 Åpne full ranking</button>
 <div id="ranking"></div>
 
 <hr>
@@ -168,7 +170,8 @@ const state = {
   bracket: [],
   round: 0,
   match: 0,
-  showAll: false
+  showAll: false,
+  rankingFilter: "all"
 };
 // 🔥 Rydd categories
 state.categories = state.categories
@@ -568,6 +571,66 @@ function showStats(id){
 function toggleRankingView(){
   state.showAll = !state.showAll;
   update();
+}
+
+function openRankingView(){
+  document.getElementById("rankingView").style.display = "block";
+  renderRankingView();
+}
+
+function closeRankingView(){
+  document.getElementById("rankingView").style.display = "none";
+}
+
+function scrollToTop(){
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderRankingView(){
+  let sorted = [...state.items]
+    .sort((a,b)=>b.rating-a.rating);
+
+  // FILTER
+  if(state.rankingFilter !== "all"){
+    sorted = sorted.filter(x =>
+      (x.categories || []).includes(state.rankingFilter)
+    );
+  }
+
+  const cats = ["all", ...new Set(state.categories)];
+
+  document.getElementById("rankingView").innerHTML = `
+
+    <div style="position:sticky;top:0;background:#0f0f0f;padding:10px;z-index:10;">
+      
+      <button onclick="closeRankingView()">✖ Lukk</button>
+      <button onclick="scrollToTop()">⬆ Top</button>
+
+      <br><br>
+
+      ${cats.map(c => `
+        <button onclick="setRankingFilter('${c}')"
+          style="margin:3px; ${state.rankingFilter===c?'background:#4f8cff':''}">
+          ${c}
+        </button>
+      `).join("")}
+
+    </div>
+
+    <div style="padding:10px;">
+      ${sorted.map((x,i)=>`
+        <div onclick="showStats(${x.id})"
+          style="padding:10px;margin:5px 0;background:#1f1f1f;border-radius:10px;">
+          ${i+1}. ${x.name} (${Math.round(x.rating)})
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function setRankingFilter(cat){
+  state.rankingFilter = cat;
+  renderRankingView();
 }
 
 renderChips();
