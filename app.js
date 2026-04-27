@@ -530,27 +530,17 @@ function showStats(id){
         </button>
       </div>
 
-          
-        <div style="margin-top:10px;">
+<div style="margin-top:10px;">
 
-  placeholder="Søk kategori..."
-  style="width:100%; padding:8px; margin-bottom:8px; border-radius:8px; border:none;"
-  oninput="renderStatsChips(${item.id}, this.value)">
+  <p style="opacity:0.7; margin-bottom:6px;">Velg eksisterende kategori:</p>
 
-  placeholder="Søk kategori..."
-  style="width:100%; padding:8px; margin-bottom:8px; border-radius:8px; border:none;"
-  oninput="renderStatsChips(${item.id}, this.value)">
+  <input id="statsCatSearch"
+    placeholder="Søk kategori..."
+    style="width:100%; padding:8px; margin-bottom:8px; border-radius:8px; border:none;"
+    oninput="renderStatsChips(${item.id}, this.value)">
 
-<p style="opacity:0.7; margin-bottom:6px;">Velg eksisterende kategori:</p>
+  <div id="statsChipBox"></div>
 
-<input id="statsCatSearch"
-  placeholder="Søk kategori..."
-  style="width:100%; padding:8px; margin-bottom:8px; border-radius:8px; border:none;"
-  oninput="renderStatsChips(${item.id}, this.value)">
-
-<div id="statsChipBox"></div>
-
-  </div>
 </div>
 
       <p>📈 ${trend.map(x => Math.floor(x)).join(" → ")}</p>
