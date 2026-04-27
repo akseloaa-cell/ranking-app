@@ -532,15 +532,16 @@ function showStats(id){
 
           
         <div style="margin-top:10px;">
-<p style="opacity:0.7; margin-bottom:6px;">Velg eksisterende kategori:</p>
 
-<input id="statsCatSearch"
   placeholder="Søk kategori..."
   style="width:100%; padding:8px; margin-bottom:8px; border-radius:8px; border:none;"
   oninput="renderStatsChips(${item.id}, this.value)">
 
+  placeholder="Søk kategori..."
+  style="width:100%; padding:8px; margin-bottom:8px; border-radius:8px; border:none;"
+  oninput="renderStatsChips(${item.id}, this.value)">
 
- <p style="opacity:0.7; margin-bottom:6px;">Velg eksisterende kategori:</p>
+<p style="opacity:0.7; margin-bottom:6px;">Velg eksisterende kategori:</p>
 
 <input id="statsCatSearch"
   placeholder="Søk kategori..."
@@ -549,16 +550,6 @@ function showStats(id){
 
 <div id="statsChipBox"></div>
 
-        style="
-          background:#222;
-          padding:6px 10px;
-          border-radius:999px;
-          cursor:pointer;
-          font-size:12px;
-        ">
-        ${c}
-      </span>
-    `).join("")}
   </div>
 </div>
 
