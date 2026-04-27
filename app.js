@@ -449,10 +449,19 @@ function showStats(id){
 </h2>
 
 <button onclick="deleteItem(${item.id})"
-  style="background:#f44336; margin-top:10px;">
-  🗑️ Slett
+  style="
+    background:#1f1f1f;
+    border:1px solid #f44336;
+    color:#f44336;
+    font-size:12px;
+    padding:4px 8px;
+    border-radius:8px;
+    margin-top:8px;
+    cursor:pointer;
+    opacity:0.8;
+  ">
+  🗑️
 </button>
-
 
       <p>🏆 Rank: ${rank}</p>
       <p>⭐ ELO: ${Math.floor(item.rating)}</p>
