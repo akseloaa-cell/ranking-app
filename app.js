@@ -136,33 +136,23 @@ function formatChoice(item, opponent){
   const rank = getRank(item.id);
   const elo = Math.round(item.rating);
 
-  // forventet score
   const Ea = 1/(1+Math.pow(10,(opponent.rating-item.rating)/400));
+  const gain = Math.round(32*(1-Ea));
+  const loss = Math.round(32*(0-Ea));
+  const highlight = gain >= 16 ? "#4caf50" : "#aaa";
 
-  // hva du får hvis du vinner
-  const gain = 32*(1-Ea);
-  const loss = 32*(0-Ea);
-  
-return `
-  <div style="font-size:16px; margin-bottom:6px;">
-    ${item.name}
-  </div>
+  return `
+    <div style="font-size:18px; font-weight:600; margin-bottom:4px;">
+      ${item.name}
+    </div>
 
-  <div style="font-size:11px; opacity:0.6;">
-    #${rank} • ⭐ ${elo}
-  </div>
-
-  <div style="font-size:12px; margin-top:6px;">
-    <span style="color:#4caf50;">
-      +${Math.round(gain)}
-    </span>
-    /
-    <span style="color:#f44336;">
-      ${Math.round(loss)}
-    </span>
-  </div>
-`;
-
+    <div style="font-size:11px; opacity:0.6;">
+      #${rank} • ⭐ ${elo} • 
+      <span style="color:${highlight};">+${gain}</span>
+      /
+      <span style="color:#f44336;">${loss}</span>
+    </div>
+  `;
 }
 
 const itemA = state.current[0];
