@@ -64,13 +64,17 @@ function addCategory(){
   save();
 }
 
-function renderChips(){
+function renderChips(filter=""){
   const box = document.getElementById("chipBox");
 
+  const f = filter.toLowerCase();
+
   box.innerHTML = state.categories
-    .filter(c => c && c.trim() !== "")
+    .filter(c => c.includes(f))
     .map(c => `
-      <div class="chip" onclick="toggleCat(this)">${c}</div>
+      <div class="chip" onclick="toggleCat(this)">
+        ${c}
+      </div>
     `).join("");
 }
 
@@ -112,6 +116,30 @@ function updateHistory(item){
   if(item.history.length > 30){
     item.history.shift();
   }
+}
+
+function openAddItem(){
+  const overlay = document.getElementById("addOverlay");
+  const view = document.getElementById("addView");
+
+  overlay.style.display = "flex";
+
+  setTimeout(() => {
+    view.style.transform = "translateY(0)";
+  }, 10);
+
+  renderChips(); // viktig
+}
+
+function closeAddItem(){
+  const overlay = document.getElementById("addOverlay");
+  const view = document.getElementById("addView");
+
+  view.style.transform = "translateY(100%)";
+
+  setTimeout(() => {
+    overlay.style.display = "none";
+  }, 300);
 }
 
 /* ================= MATCH ================= */
