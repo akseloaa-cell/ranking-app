@@ -20,6 +20,9 @@ state.categories = [...new Set(
   state.categories
     .filter(c => typeof c === "string" && c.trim() !== "")
     .map(c => c.trim().toLowerCase())
+  showAllChips: false,
+showAllStatsChips: false,
+
 )];
 
 // sørg for at items alltid har riktig struktur
@@ -69,14 +72,22 @@ function renderChips(filter=""){
 
   const f = filter.toLowerCase();
 
-  box.innerHTML = state.categories
-    .filter(c => c.includes(f))
-    .map(c => `
-      <div class="chip" onclick="toggleCat(this)">
-        ${c}
-      </div>
-    `).join("");
+ let list = state.categories;
+
+if(!state.showAllChips){
+  list = list.slice(0, 4); // 👈 antall synlige chips
 }
+
+box.innerHTML =
+  list.map(c => `
+    <div class="chip" onclick="toggleCat(this)">${c}</div>
+  `).join("") +
+
+  (state.categories.length > 4 ? `
+    <div class="chip" onclick="toggleAllChips()" style="opacity:0.6;">
+      ${state.showAllChips ? "-" : "+"}
+    </div>
+  ` : "");
 
 function toggleCat(el){
   el.classList.toggle("active");
@@ -775,9 +786,16 @@ const selected = item?.categories || [];
 
   const f = filter.toLowerCase();
 
-  box.innerHTML = state.categories
-  .filter(c => c.includes(f))
-  .map(c => `
+  let list = state.categories
+  .filter(c => c.includes(f));
+
+// 👇 begrens hvis ikke expanded
+if(!state.showAllStatsChips){
+  list = list.slice(0, 6);
+}
+
+box.innerHTML =
+  list.map(c => `
     <span onclick="addCatToItem(${itemId}, '${c}')"
       style="
         background:${selected.includes(c) ? '#4f8cff' : '#222'};
@@ -790,8 +808,34 @@ const selected = item?.categories || [];
       ">
       ${c}
     </span>
-  `).join("");
+  `).join("") +
 
+  (state.categories.length > 4 ? `
+    <span onclick="toggleStatsChips(${itemId})"
+      style="
+        background:#111;
+        padding:6px 10px;
+        border-radius:999px;
+        cursor:pointer;
+        font-size:12px;
+        opacity:0.6;
+        display:inline-block;
+        margin:3px;
+      ">
+      ${state.showAllStatsChips ? "-" : "+"}
+    </span>
+  ` : "");
+
+}
+
+function toggleAllChips(){
+  state.showAllChips = !state.showAllChips;
+  renderChips();
+}
+
+function toggleStatsChips(id){
+  state.showAllStatsChips = !state.showAllStatsChips;
+  renderStatsChips(id, document.getElementById("statsCatSearch")?.value || "");
 }
 
 renderChips();
