@@ -126,8 +126,30 @@ function nextMatch(){
 
   state.current = [state.items[a], state.items[b]];
 
-  document.getElementById("a").innerText = state.current[0].name;
-  document.getElementById("b").innerText = state.current[1].name;
+  function getRank(id){
+  return [...state.items]
+    .sort((a,b)=>b.rating-a.rating)
+    .findIndex(x => x.id === id) + 1;
+}
+
+function formatChoice(item){
+  const rank = getRank(item.id);
+  const elo = Math.round(item.rating);
+
+  return `
+    <div style="font-size:16px; margin-bottom:6px;">
+      ${item.name}
+    </div>
+   <div style="font-size:11px; opacity:0.5;">
+  🥇 #3 • ⭐ 1245
+</div>
+
+  `;
+}
+
+document.getElementById("a").innerHTML = formatChoice(state.current[0]);
+document.getElementById("b").innerHTML = formatChoice(state.current[1]);
+
 }
 
 function pick(i){
