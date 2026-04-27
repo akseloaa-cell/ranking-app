@@ -7,6 +7,10 @@ const state = {
   round: 0,
   match: 0,
   showAll: false,
+
+  showAllChips: false,
+  showAllStatsChips: false,
+
   rankingFilter: "all",
   rankingSort: "elo"
 };
@@ -20,8 +24,6 @@ state.categories = [...new Set(
   state.categories
     .filter(c => typeof c === "string" && c.trim() !== "")
     .map(c => c.trim().toLowerCase())
-  showAllChips: false,
-showAllStatsChips: false,
 
 )];
 
@@ -88,7 +90,8 @@ box.innerHTML =
       ${state.showAllChips ? "-" : "+"}
     </div>
   ` : "");
-
+}
+  
 function toggleCat(el){
   el.classList.toggle("active");
 }
@@ -525,7 +528,7 @@ function showStats(id){
       <p>⭐ ELO: ${Math.floor(item.rating)}</p>
 
       <p>📂 ${item.categories.map(c => `
-        <span onclick="removeCatFromItem(${item.id}, "${c}")'
+        <span onclick="removeCatFromItem(${item.id}, '${c}')"
           style="background:#222;padding:4px 8px;margin:2px;border-radius:999px;display:inline-block;cursor:pointer;">
           ${c} ✕
         </span>
@@ -796,7 +799,7 @@ if(!state.showAllStatsChips){
 
 box.innerHTML =
   list.map(c => `
-    <span onclick="addCatToItem(${itemId}, "${c}")'
+    <span onclick="addCatToItem(${itemId}, '${c}')"
       style="
         background:${selected.includes(c) ? '#4f8cff' : '#222'};
         padding:6px 10px;
