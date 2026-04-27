@@ -115,40 +115,6 @@ function updateHistory(item){
 }
 
 /* ================= MATCH ================= */
-function getRank(id){
-  const sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
-
-  return sorted.findIndex(x => x.id === id) + 1;
-}
-
-function formatChoice(item, opponent){
-  const rank = getRank(item.id);
-  const elo = Math.floor(item.rating);
-
-  const Ea = 1/(1+Math.pow(10,(opponent.rating-item.rating)/400));
-  const gain = Math.floor(32*(1-Ea));
-  const loss = Math.floor(32*(0-Ea));
-
-  const gainColor = gain >= 16 ? "#4caf50" : "#aaa";
-  const lossColor = Math.abs(loss) >= 16 ? "#f44336" : "#aaa";
-
-  return `
-    <div style="font-size:18px; font-weight:600; margin-bottom:4px;">
-      ${item.name}
-    </div>
-
-    <div style="font-size:11px; opacity:0.6;">
-      #${rank} • ⭐ ${elo}
-    </div>
-
-    <div style="font-size:10px; opacity:0.5; margin-top:4px;">
-      <span style="color:${gainColor};">+${gain}</span>
-      /
-      <span style="color:${lossColor};">${loss}</span>
-    </div>
-  `;
-}
-
 function nextMatch(){
   if(state.items.length < 2) return;
 
@@ -160,20 +126,42 @@ function nextMatch(){
 
   state.current = [state.items[a], state.items[b]];
 
-function pick(i){
-  let w = state.current[i];
-  let l = state.current[1-i];
+  document.getElementById("a").innerText = state.current[0].name;
+  document.getElementById("b").innerText = state.current[1].name;
+}   // 👈 DENNE MÅ VÆRE HER
 
-  let Ea = 1/(1+Math.pow(10,(l.rating-w.rating)/400));
+function getRank(id){
+  return [...state.items]
+    .sort((a,b)=>b.rating-a.rating)
+    .findIndex(x => x.id === id) + 1;
+}
 
-  w.rating += 32*(1-Ea);
-  l.rating += 32*(0-(1-Ea));
-  updateHistory(w);
-  updateHistory(l);
+function formatChoice(item, opponent){
+  const rank = getRank(item.id);
+  const elo = Math.round(item.rating);
 
-  save();
-  update();
-  nextMatch();
+  const Ea = 1/(1+Math.pow(10,(opponent.rating-item.rating)/400));
+  const gain = Math.round(32*(1-Ea));
+  const loss = Math.round(32*(0-Ea));
+
+  const gainColor = gain >= 16 ? "#4caf50" : "#aaa";
+  const lossColor = Math.abs(loss) >= 16 ? "#f44336" : "#aaa";
+
+  return `
+    <div style="font-size:18px; font-weight:600;">
+      ${item.name}
+    </div>
+
+    <div style="font-size:11px; opacity:0.6;">
+      #${rank} • ⭐ ${elo}
+    </div>
+
+    <div style="font-size:10px; opacity:0.5;">
+      <span style="color:${gainColor};">+${gain}</span>
+      /
+      <span style="color:${lossColor};">${loss}</span>
+    </div>
+  `;
 }
 
 function draw(){
