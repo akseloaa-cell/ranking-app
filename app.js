@@ -160,7 +160,7 @@ function formatChoice(item, opponent){
       #${rank} • ⭐ ${elo}
     </div>
 
-    <div style="font-size:10px; opacity:0.5;">
+    <div style="font-size:14px; opacity:0.8;">
       <span style="color:${gainColor};">+${gain}</span>
       /
       <span style="color:${lossColor};">${loss}</span>
