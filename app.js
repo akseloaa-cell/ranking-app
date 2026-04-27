@@ -139,6 +139,7 @@ function formatChoice(item, opponent){
   const Ea = 1/(1+Math.pow(10,(opponent.rating-item.rating)/400));
   const gain = Math.round(32*(1-Ea));
   const loss = Math.round(32*(0-Ea));
+
   const gainColor = gain >= 16 ? "#4caf50" : "#aaa";
   const lossColor = Math.abs(loss) >= 16 ? "#f44336" : "#aaa";
 
@@ -148,22 +149,15 @@ function formatChoice(item, opponent){
     </div>
 
     <div style="font-size:11px; opacity:0.6;">
-      #${rank} • ⭐ ${elo} 
-      </div>
-      
-     <div <span style="color:${gainColor};">+${gain}</span>
-/
-<span style="color:${lossColor};">${loss}</span>
+      #${rank} • ⭐ ${elo}
+    </div>
+
+    <div style="font-size:10px; opacity:0.5; margin-top:4px;">
+      <span style="color:${gainColor};">+${gain}</span>
+      /
+      <span style="color:${lossColor};">${loss}</span>
     </div>
   `;
-}
-
-const itemA = state.current[0];
-const itemB = state.current[1];
-
-document.getElementById("a").innerHTML = formatChoice(itemA, itemB);
-document.getElementById("b").innerHTML = formatChoice(itemB, itemA);
-
 }
 
 function pick(i){
