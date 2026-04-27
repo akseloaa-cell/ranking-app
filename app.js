@@ -72,7 +72,7 @@ function addCategory(){
 function renderChips(filter=""){
   const box = document.getElementById("chipBox");
 
-  const f = filter.toLowerCase();
+let list = state.categories.filter(c => c.includes(f));
 
  let list = state.categories;
 
@@ -820,20 +820,21 @@ box.innerHTML =
     </span>
   `).join("") +
 
-  <span onclick="toggleStatsChips(${itemId})"
-  style="
-    background:#4f8cff;
-    color:white;
-    font-weight:bold;
-    padding:6px 10px;
-    border-radius:999px;
-    cursor:pointer;
-    font-size:12px;
-    display:inline-block;
-    margin:3px;
-  ">
-  ${state.showAllStatsChips ? "−" : "+"}
-</span>
+  (state.categories.length > 6 ? `
+    <span onclick="toggleStatsChips(${itemId})"
+      style="
+        background:#4f8cff;
+        color:white;
+        font-weight:bold;
+        padding:6px 10px;
+        border-radius:999px;
+        cursor:pointer;
+        font-size:12px;
+        display:inline-block;
+        margin:3px;
+      ">
+      ${state.showAllStatsChips ? "−" : "+"}
+    </span>
   ` : "");
 
 }
