@@ -129,8 +129,15 @@ function nextMatch(){
   const itemA = state.current[0];
 const itemB = state.current[1];
 
-document.getElementById("a").innerHTML = formatChoice(itemA, itemB);
-document.getElementById("b").innerHTML = formatChoice(itemB, itemA);
+const elA = document.getElementById("a");
+const elB = document.getElementById("b");
+
+elA.innerHTML = formatChoice(itemA, itemB);
+elB.innerHTML = formatChoice(itemB, itemA);
+
+// VIKTIG: legg tilbake klikkene
+elA.onclick = () => pick(0);
+elB.onclick = () => pick(1);
 
 }   // 👈 DENNE MÅ VÆRE HER
 
