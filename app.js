@@ -444,7 +444,15 @@ function showStats(id){
 
   document.getElementById("statsContent").innerHTML = `
     <div style="padding:20px; text-align:left;">
-      <h2>${item.name}</h2>
+      <h2 contenteditable="true" onblur="renameItem(${item.id}, this.innerText)">
+  ${item.name}
+</h2>
+
+<button onclick="deleteItem(${item.id})"
+  style="background:#f44336; margin-top:10px;">
+  🗑️ Slett
+</button>
+
 
       <p>🏆 Rank: ${rank}</p>
       <p>⭐ ELO: ${Math.floor(item.rating)}</p>
@@ -678,6 +686,36 @@ document.getElementById("statsOverlay").addEventListener("click", (e)=>{
     closeStats();
   }
 });
+
+function renameItem(id, newName){
+  const item = state.items.find(x => x.id === id);
+  if(!item) return;
+
+  newName = newName.trim();
+
+  if(!newName){
+    alert("Navn kan ikke være tomt");
+    return;
+  }
+
+  item.name = newName;
+
+  save();
+  update();
+}
+
+function deleteItem(id){
+  const confirmDelete = confirm("Er du sikker?");
+  if(!confirmDelete) return;
+
+  state.items = state.items.filter(x => x.id !== id);
+
+  save();
+  update();
+  nextMatch();
+
+  closeStats();
+}
 
 renderChips();
 update();
