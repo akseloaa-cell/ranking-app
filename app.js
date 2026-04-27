@@ -175,6 +175,23 @@ function formatChoice(item, opponent){
   `;
 }
 
+function pick(i){
+  let w = state.current[i];
+  let l = state.current[1 - i];
+
+  let Ea = 1 / (1 + Math.pow(10, (l.rating - w.rating) / 400));
+
+  w.rating += 32 * (1 - Ea);
+  l.rating += 32 * (0 - Ea);
+
+  updateHistory(w);
+  updateHistory(l);
+
+  save();
+  update();
+  nextMatch();
+}
+
 function draw(){
   if(!state.current.length) return;
 
