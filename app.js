@@ -115,30 +115,19 @@ function updateHistory(item){
 }
 
 /* ================= MATCH ================= */
-function nextMatch(){
-  if(state.items.length < 2) return;
+function getRank(id){
+  const sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
 
-  let a = Math.floor(Math.random()*state.items.length);
-  let b;
-
-  do { b = Math.floor(Math.random()*state.items.length) }
-  while(a===b);
-
-  state.current = [state.items[a], state.items[b]];
-
-  function getRank(id){
-  return [...state.items]
-    .sort((a,b)=>b.rating-a.rating)
-    .findIndex(x => x.id === id) + 1;
+  return sorted.findIndex(x => x.id === id) + 1;
 }
 
 function formatChoice(item, opponent){
   const rank = getRank(item.id);
-  const elo = Math.round(item.rating);
+  const elo = Math.floor(item.rating);
 
   const Ea = 1/(1+Math.pow(10,(opponent.rating-item.rating)/400));
-  const gain = Math.round(32*(1-Ea));
-  const loss = Math.round(32*(0-Ea));
+  const gain = Math.floor(32*(1-Ea));
+  const loss = Math.floor(32*(0-Ea));
 
   const gainColor = gain >= 16 ? "#4caf50" : "#aaa";
   const lossColor = Math.abs(loss) >= 16 ? "#f44336" : "#aaa";
@@ -159,6 +148,17 @@ function formatChoice(item, opponent){
     </div>
   `;
 }
+
+function nextMatch(){
+  if(state.items.length < 2) return;
+
+  let a = Math.floor(Math.random()*state.items.length);
+  let b;
+
+  do { b = Math.floor(Math.random()*state.items.length) }
+  while(a===b);
+
+  state.current = [state.items[a], state.items[b]];
 
 function pick(i){
   let w = state.current[i];
@@ -205,7 +205,7 @@ function update(){
     list.map((x,i)=>
       `<div onclick="showStats(${x.id})"
             style="cursor:pointer; padding:10px; background:#1f1f1f; margin:5px 0; border-radius:10px;">
-        ${i+1}. ${x.name} (${Math.round(x.rating)})
+        ${i+1}. ${x.name} (${Math.floor(x.rating)})
       </div>`
     ).join("");
 }
@@ -470,7 +470,7 @@ function showStats(id){
   </div>
 </div>
 
-      <p>📈 ${trend.map(x => Math.round(x)).join(" → ")}</p>
+      <p>📈 ${trend.map(x => Math.floor(x)).join(" → ")}</p>
 
       <hr>
 
@@ -576,7 +576,7 @@ function renderRankingView(){
       ">
       <b>#${i+1}</b> ${x.name}
       <span style="float:right; opacity:0.7;">
-        ${Math.round(x.rating)}
+        ${Math.floor(x.rating)}
       </span>
     </div>
   `).join("");
