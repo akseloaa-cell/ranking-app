@@ -72,7 +72,7 @@ function addCategory(){
 function renderChips(filter=""){
   const box = document.getElementById("chipBox");
 
-let list = state.categories.filter(c => c.includes(f));
+const f = filter.toLowerCase();
 
  let list = state.categories;
 
