@@ -789,21 +789,22 @@ const selected = item?.categories || [];
   const f = filter.toLowerCase();
 
   box.innerHTML = state.categories
-    .filter(c => c.includes(f))
-    .map(c => `
-      <span onclick="addCatToItem(${itemId}, '${c}')"
-        style="
-          background:#222;
-          padding:6px 10px;
-          border-radius:999px;
-          cursor:pointer;
-          font-size:12px;
-          display:inline-block;
-          margin:3px;
-        ">
-        ${c}
-      </span>
-    `).join("");
+  .filter(c => c.includes(f))
+  .map(c => `
+    <span onclick="addCatToItem(${itemId}, '${c}')"
+      style="
+        background:${selected.includes(c) ? '#4f8cff' : '#222'};
+        padding:6px 10px;
+        border-radius:999px;
+        cursor:pointer;
+        font-size:12px;
+        display:inline-block;
+        margin:3px;
+      ">
+      ${c}
+    </span>
+  `).join("");
+
 }
 
 renderChips();
