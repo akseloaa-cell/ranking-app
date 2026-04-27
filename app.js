@@ -142,24 +142,27 @@ function formatChoice(item, opponent){
   // hva du får hvis du vinner
   const gain = 32*(1-Ea);
   const loss = 32*(0-Ea);
+  
+return `
+  <div style="font-size:16px; margin-bottom:6px;">
+    ${item.name}
+  </div>
 
-  return `
-    <div style="font-size:16px; margin-bottom:6px;">
-      ${item.name}
-    </div>
+  <div style="font-size:11px; opacity:0.6;">
+    #${rank} • ⭐ ${elo}
+  </div>
 
-    <div style="font-size:11px; opacity:0.6;">
-      #${rank} • ⭐ ${elo}
-    </div>
+  <div style="font-size:12px; margin-top:6px;">
+    <span style="color:#4caf50;">
+      +${Math.round(gain)}
+    </span>
+    /
+    <span style="color:#f44336;">
+      ${Math.round(loss)}
+    </span>
+  </div>
+`;
 
-    <div style="font-size:12px; margin-top:6px; color:#4caf50;">
-      +${Math.round(gain)} win
-    </div>
-    <div style="color:#f44336; font-size:11px;">
-  ${Math.round(loss)} loss
-</div>
-
-  `;
 }
 
 const a = state.current[0];
