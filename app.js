@@ -532,10 +532,16 @@ function showStats(id){
 
           
         <div style="margin-top:10px;">
-  <p style="opacity:0.7; margin-bottom:6px;">Velg eksisterende kategori:</p>
+<p style="opacity:0.7; margin-bottom:6px;">Velg eksisterende kategori:</p>
+
+<input id="statsCatSearch"
+  placeholder="Søk kategori..."
+  style="width:100%; padding:8px; margin-bottom:8px; border-radius:8px; border:none;"
+  oninput="renderStatsChips(${item.id}, this.value)">
+
 
   <div style="display:flex; flex-wrap:wrap; gap:6px;">
-    ${state.categories.map(c => `
+   <div id="statsChipBox"></div>
       <span onclick="addCatToItem(${item.id}, '${c}')"
         style="
           background:#222;
@@ -561,6 +567,7 @@ function showStats(id){
   `;
 
   openStats();
+  renderStatsChips(id);
 }
 
 function addCatToItem(id, valOverride){
@@ -771,6 +778,32 @@ function deleteItem(id){
   nextMatch();
 
   closeStats();
+}
+
+function renderStatsChips(itemId, filter=""){
+  const box = document.getElementById("statsChipBox");
+  if(!box) return;
+  const item = state.items.find(x => x.id === itemId);
+const selected = item?.categories || [];
+
+  const f = filter.toLowerCase();
+
+  box.innerHTML = state.categories
+    .filter(c => c.includes(f))
+    .map(c => `
+      <span onclick="addCatToItem(${itemId}, '${c}')"
+        style="
+          background:#222;
+          padding:6px 10px;
+          border-radius:999px;
+          cursor:pointer;
+          font-size:12px;
+          display:inline-block;
+          margin:3px;
+        ">
+        ${c}
+      </span>
+    `).join("");
 }
 
 renderChips();
