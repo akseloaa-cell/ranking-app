@@ -132,23 +132,41 @@ function nextMatch(){
     .findIndex(x => x.id === id) + 1;
 }
 
-function formatChoice(item){
+function formatChoice(item, opponent){
   const rank = getRank(item.id);
   const elo = Math.round(item.rating);
+
+  // forventet score
+  const Ea = 1/(1+Math.pow(10,(opponent.rating-item.rating)/400));
+
+  // hva du får hvis du vinner
+  const gain = 32*(1-Ea);
+  const loss = 32*(0-Ea);
 
   return `
     <div style="font-size:16px; margin-bottom:6px;">
       ${item.name}
     </div>
-   <div style="font-size:11px; opacity:0.5;">
-    #${rank} • ⭐ ${elo}
+
+    <div style="font-size:11px; opacity:0.6;">
+      #${rank} • ⭐ ${elo}
+    </div>
+
+    <div style="font-size:12px; margin-top:6px; color:#4caf50;">
+      +${Math.round(gain)} win
+    </div>
+    <div style="color:#f44336; font-size:11px;">
+  ${Math.round(loss)} loss
 </div>
 
   `;
 }
 
-document.getElementById("a").innerHTML = formatChoice(state.current[0]);
-document.getElementById("b").innerHTML = formatChoice(state.current[1]);
+const a = state.current[0];
+const b = state.current[1];
+
+document.getElementById("a").innerHTML = formatChoice(a, b);
+document.getElementById("b").innerHTML = formatChoice(b, a);
 
 }
 
