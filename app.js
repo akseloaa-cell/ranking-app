@@ -251,14 +251,18 @@ function update(){
     📊 Full ranking
   </button>
 
-  <button onclick="openAddItem()" style="
-    width:50px;
-    border-radius:50%;
-    font-size:20px;
-    padding:0;
-  ">
-    +
-  </button>
+ <button onclick="openAddItem()" style="
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  font-size:22px;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+">
+  +
+</button>
 
 </div>
 `
