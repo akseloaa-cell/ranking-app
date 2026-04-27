@@ -244,7 +244,25 @@ function update(){
   document.getElementById("ranking").innerHTML =
     "<h3>🏆 Ranking</h3>" +
 
-    `<button onclick="openRankingView()">📊 Full ranking</button>` +
+    `
+<div style="display:flex; gap:8px; margin-bottom:10px;">
+  
+  <button onclick="openRankingView()" style="flex:1;">
+    📊 Full ranking
+  </button>
+
+  <button onclick="openAddItem()" style="
+    width:50px;
+    border-radius:50%;
+    font-size:20px;
+    padding:0;
+  ">
+    +
+  </button>
+
+</div>
+`
++
 
     list.map((x,i)=>
       `<div onclick="showStats(${x.id})"
