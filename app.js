@@ -165,11 +165,11 @@ return `
 
 }
 
-const a = state.current[0];
-const b = state.current[1];
+const itemA = state.current[0];
+const itemB = state.current[1];
 
-document.getElementById("a").innerHTML = formatChoice(a, b);
-document.getElementById("b").innerHTML = formatChoice(b, a);
+document.getElementById("a").innerHTML = formatChoice(itemA, itemB);
+document.getElementById("b").innerHTML = formatChoice(itemB, itemA);
 
 }
 
