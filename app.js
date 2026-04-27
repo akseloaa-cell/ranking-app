@@ -148,8 +148,10 @@ function formatChoice(item, opponent){
     </div>
 
     <div style="font-size:11px; opacity:0.6;">
-      #${rank} • ⭐ ${elo} • 
-      <span style="color:${gainColor};">+${gain}</span>
+      #${rank} • ⭐ ${elo} 
+      </div>
+      
+     <div <span style="color:${gainColor};">+${gain}</span>
 /
 <span style="color:${lossColor};">${loss}</span>
     </div>
