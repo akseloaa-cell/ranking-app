@@ -14,7 +14,6 @@
 
 <h2>⚔️ Ranking V2</h2>
 
-<input id="itemInput" placeholder="Legg til item">
   
 <div id="rankingOverlay">
   <div id="rankingView">
@@ -43,11 +42,6 @@
 </div>
 
 <div class="chip-container" id="chipBox"></div>
-
-<input id="catInput" placeholder="Ny kategori">
-<button onclick="addCategory()">+ Kategori</button>
-
-<button onclick="addItem()">Legg til</button>
 
 <div class="vs">
   <div class="choice" id="a"></div>
@@ -82,6 +76,34 @@
   ⬆
 </button>
 
+<button onclick="openAddItem()" id="addBtn">
+  ➕ Legg til item
+</button>
+
+ <div id="addOverlay">
+  <div id="addView">
+
+    <button onclick="closeAddItem()">⬇️ Lukk</button>
+
+    <h3>Legg til item</h3>
+
+    <input id="itemInput" placeholder="Navn">
+
+    <!-- SØK -->
+    <input id="catSearch" placeholder="Søk kategori..."
+      oninput="renderChips(this.value)">
+
+    <!-- CHIPS -->
+    <div class="chip-container" id="chipBox"></div>
+
+    <!-- NY CATEGORY -->
+    <input id="catInput" placeholder="Ny kategori">
+    <button onclick="addCategory()">+ Kategori</button>
+
+    <button onclick="addItem()">Legg til</button>
+
+  </div>
+</div>
 
 </body>
 </html>
