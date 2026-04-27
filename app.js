@@ -141,7 +141,7 @@ function formatChoice(item){
       ${item.name}
     </div>
    <div style="font-size:11px; opacity:0.5;">
-  🥇 #3 • ⭐ 1245
+  🥇 Rank • ⭐ ELO
 </div>
 
   `;
