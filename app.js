@@ -525,7 +525,7 @@ function showStats(id){
       <p>⭐ ELO: ${Math.floor(item.rating)}</p>
 
       <p>📂 ${item.categories.map(c => `
-        <span onclick="removeCatFromItem(${item.id}, '${c}')"
+        <span onclick="removeCatFromItem(${item.id}, "${c}")'
           style="background:#222;padding:4px 8px;margin:2px;border-radius:999px;display:inline-block;cursor:pointer;">
           ${c} ✕
         </span>
@@ -796,7 +796,7 @@ if(!state.showAllStatsChips){
 
 box.innerHTML =
   list.map(c => `
-    <span onclick="addCatToItem(${itemId}, '${c}')"
+    <span onclick="addCatToItem(${itemId}, "${c}")'
       style="
         background:${selected.includes(c) ? '#4f8cff' : '#222'};
         padding:6px 10px;
