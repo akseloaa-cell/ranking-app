@@ -86,10 +86,17 @@ box.innerHTML =
   `).join("") +
 
   (state.categories.length > 4 ? `
-    <div class="chip" onclick="toggleAllChips()" style="opacity:0.6;">
-      ${state.showAllChips ? "-" : "+"}
-    </div>
-  ` : "");
+  <div class="chip"
+       onclick="toggleAllChips()"
+       style="
+         background:#4f8cff;
+         color:white;
+         font-weight:bold;
+       ">
+    ${state.showAllChips ? "−" : "+"}
+  </div>
+` : "");
+
 }
   
 function toggleCat(el){
@@ -813,20 +820,20 @@ box.innerHTML =
     </span>
   `).join("") +
 
-  (state.categories.length > 4 ? `
-    <span onclick="toggleStatsChips(${itemId})"
-      style="
-        background:#111;
-        padding:6px 10px;
-        border-radius:999px;
-        cursor:pointer;
-        font-size:12px;
-        opacity:0.6;
-        display:inline-block;
-        margin:3px;
-      ">
-      ${state.showAllStatsChips ? "-" : "+"}
-    </span>
+  <span onclick="toggleStatsChips(${itemId})"
+  style="
+    background:#4f8cff;
+    color:white;
+    font-weight:bold;
+    padding:6px 10px;
+    border-radius:999px;
+    cursor:pointer;
+    font-size:12px;
+    display:inline-block;
+    margin:3px;
+  ">
+  ${state.showAllStatsChips ? "−" : "+"}
+</span>
   ` : "");
 
 }
