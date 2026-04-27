@@ -139,7 +139,8 @@ function formatChoice(item, opponent){
   const Ea = 1/(1+Math.pow(10,(opponent.rating-item.rating)/400));
   const gain = Math.round(32*(1-Ea));
   const loss = Math.round(32*(0-Ea));
-  const highlight = gain >= 16 ? "#4caf50" : "#aaa";
+  const gainColor = gain >= 16 ? "#4caf50" : "#aaa";
+  const lossColor = Math.abs(loss) >= 16 ? "#f44336" : "#aaa";
 
   return `
     <div style="font-size:18px; font-weight:600; margin-bottom:4px;">
@@ -148,9 +149,9 @@ function formatChoice(item, opponent){
 
     <div style="font-size:11px; opacity:0.6;">
       #${rank} • ⭐ ${elo} • 
-      <span style="color:${highlight};">+${gain}</span>
-      /
-      <span style="color:#f44336;">${loss}</span>
+      <span style="color:${gainColor};">+${gain}</span>
+/
+<span style="color:${lossColor};">${loss}</span>
     </div>
   `;
 }
