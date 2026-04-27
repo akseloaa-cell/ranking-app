@@ -540,9 +540,15 @@ function showStats(id){
   oninput="renderStatsChips(${item.id}, this.value)">
 
 
-  <div style="display:flex; flex-wrap:wrap; gap:6px;">
-   <div id="statsChipBox"></div>
-      <span onclick="addCatToItem(${item.id}, '${c}')"
+ <p style="opacity:0.7; margin-bottom:6px;">Velg eksisterende kategori:</p>
+
+<input id="statsCatSearch"
+  placeholder="Søk kategori..."
+  style="width:100%; padding:8px; margin-bottom:8px; border-radius:8px; border:none;"
+  oninput="renderStatsChips(${item.id}, this.value)">
+
+<div id="statsChipBox"></div>
+
         style="
           background:#222;
           padding:6px 10px;
