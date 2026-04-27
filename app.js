@@ -126,8 +126,12 @@ function nextMatch(){
 
   state.current = [state.items[a], state.items[b]];
 
-  document.getElementById("a").innerText = state.current[0].name;
-  document.getElementById("b").innerText = state.current[1].name;
+  const itemA = state.current[0];
+const itemB = state.current[1];
+
+document.getElementById("a").innerHTML = formatChoice(itemA, itemB);
+document.getElementById("b").innerHTML = formatChoice(itemB, itemA);
+
 }   // 👈 DENNE MÅ VÆRE HER
 
 function getRank(id){
