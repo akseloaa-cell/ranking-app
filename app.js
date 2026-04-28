@@ -300,34 +300,36 @@ if(mvp){
   const rank = getRank(mvp.item.id);
   const elo = Math.floor(mvp.item.rating);
 
-  mvpHtml = `
-    <div style="
-      background:#1f1f1f;
-      padding:10px;
-      border-radius:10px;
-      margin-bottom:10px;
-    ">
-      🔥 Dagens MVP
+mvpHtml = `
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px 0;
+    margin-bottom:6px;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  ">
 
-      <div style="
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        margin-top:5px;
-      ">
-        <div style="font-size:16px; font-weight:600;">
-          ${mvp.item.name}
-        </div>
-
-        <div style="font-size:11px; opacity:0.8; display:flex; gap:6px;">
-          <span>#${rank}</span>
-          <span>⭐ ${elo}</span>
-          <span style="color:#4caf50;">▲ ${mvp.diff}</span>
-        </div>
-      </div>
+    <div style="font-weight:600; font-size:14px;">
+      🔥 ${mvp.item.name}
     </div>
-  `;
-}
+
+    <div style="
+      display:flex;
+      gap:10px;
+      font-size:12px;
+      opacity:0.75;
+      align-items:center;
+    ">
+      <span>#${rank}</span>
+      <span>⭐ ${elo}</span>
+      <span style="color:#4caf50; font-weight:600;">
+        ▲ ${mvp.diff}
+      </span>
+    </div>
+
+  </div>
+`;
 
   const html =
     list.map((x,i)=>{
