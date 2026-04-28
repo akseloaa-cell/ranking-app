@@ -539,6 +539,16 @@ function showStats(id){
       <p>🏆 Rank: ${rank}</p>
       <p>⭐ ELO: ${Math.floor(item.rating)}</p>
 
+      <p>📈 ${trend.map(x => Math.floor(x)).join(" → ")}</p>
+
+      <hr>
+
+      <p>🏆 Wins: ${item.tournamentWins || 0}</p>
+      <p>🥇 Top 3: ${item.top3 || 0}</p>
+      <p>🎮 Played: ${item.tournamentsPlayed || 0}</p>
+
+      <hr>
+
       <p>📂 ${item.categories.map(c => `
         <span onclick="removeCatFromItem(${item.id}, '${c}')"
           style="background:#222;padding:4px 8px;margin:2px;border-radius:999px;display:inline-block;cursor:pointer;">
@@ -569,13 +579,6 @@ function showStats(id){
 
 </div>
 
-      <p>📈 ${trend.map(x => Math.floor(x)).join(" → ")}</p>
-
-      <hr>
-
-      <p>🏆 Wins: ${item.tournamentWins || 0}</p>
-      <p>🥇 Top 3: ${item.top3 || 0}</p>
-      <p>🎮 Played: ${item.tournamentsPlayed || 0}</p>
     </div>
   `;
 
