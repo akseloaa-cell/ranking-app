@@ -302,34 +302,20 @@ if(mvp){
 
 mvpHtml = `
   <div style="
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:8px 0;
     margin-bottom:6px;
+    padding:6px 0;
     border-bottom:1px solid rgba(255,255,255,0.08);
+    font-size:13px;
+    opacity:0.9;
   ">
-
-    <div style="font-weight:600; font-size:14px;">
-      🔥 ${mvp.item.name}
-    </div>
-
-    <div style="
-      display:flex;
-      gap:10px;
-      font-size:12px;
-      opacity:0.75;
-      align-items:center;
-    ">
-      <span>#${rank}</span>
-      <span>⭐ ${elo}</span>
-      <span style="color:#4caf50; font-weight:600;">
-        ▲ ${mvp.diff}
-      </span>
-    </div>
-
+    🔥 ${mvp.item.name}
+    <span style="opacity:0.6;"> • #${rank} • ⭐ ${elo}</span>
+    <span style="color:#4caf50; font-weight:600;">
+      • ▲ ${mvp.diff}
+    </span>
   </div>
 `;
+
 }
   const html =
     list.map((x,i)=>{
