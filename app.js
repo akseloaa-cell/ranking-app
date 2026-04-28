@@ -3,6 +3,8 @@ const state = {
   categories: JSON.parse(localStorage.getItem("categories")) || [],
   current: [],
   tournament: JSON.parse(localStorage.getItem("dailyTournament")) || null,
+  previousRanking: JSON.parse(localStorage.getItem("previousRanking")) || {},
+  lastRankingDate: localStorage.getItem("lastRankingDate") || null,
   bracket: [],
   round: 0,
   match: 0,
@@ -291,7 +293,46 @@ function update(){
 `
 +
 
-    list.map((x,i)=>
+list.map((x,i)=>{
+  const currentRank = i + 1;
+  const prevRank = state.previousRanking[x.id];
+
+  let indicator = "";
+
+  // 🆕 NY item (fantes ikke i går)
+ if(prevRank === undefined){
+  indicator = `<span style="
+    background:#4f8cff;
+    color:white;
+    padding:2px 6px;
+    border-radius:6px;
+    font-size:11px;
+    font-weight:bold;
+  ">NY</span>`;
+}
+
+  else {
+    const diff = prevRank - currentRank;
+
+    if(diff > 0){
+      indicator = `<span style="color:#4caf50;">▲ ${diff}</span>`;
+    } 
+    else if(diff < 0){
+      indicator = `<span style="color:#f44336;">▼ ${Math.abs(diff)}</span>`;
+    }
+  }
+
+  return `
+    <div onclick="showStats(${x.id})"
+      style="cursor:pointer; padding:10px; background:#1f1f1f; margin:5px 0; border-radius:10px;">
+      ${currentRank}. ${x.name} (${Math.floor(x.rating)})
+      <span style="float:right;">
+        ${indicator}
+      </span>
+    </div>
+  `;
+}).join("")
+
       `<div onclick="showStats(${x.id})"
             style="cursor:pointer; padding:10px; background:#1f1f1f; margin:5px 0; border-radius:10px;">
         ${i+1}. ${x.name} (${Math.floor(x.rating)})
@@ -894,8 +935,29 @@ function toggleCatSection(){
   }
 }
 
+function saveDailyRanking(){
+  const today = new Date().toISOString().split("T")[0];
+
+  if(state.lastRankingDate === today) return;
+
+  const sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
+
+  const rankingMap = {};
+  sorted.forEach((item, i) => {
+    rankingMap[item.id] = i + 1;
+  });
+
+  state.previousRanking = rankingMap;
+  state.lastRankingDate = today;
+
+  localStorage.setItem("previousRanking", JSON.stringify(rankingMap));
+  localStorage.setItem("lastRankingDate", today);
+}
+
 renderChips();
 update();
 nextMatch();
 initDailyTournament();
 renderTournament();
+saveDailyRanking();
+
