@@ -330,7 +330,7 @@ mvpHtml = `
 
   </div>
 `;
-
+}
   const html =
     list.map((x,i)=>{
       const currentRank = i + 1;
