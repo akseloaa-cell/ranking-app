@@ -629,7 +629,7 @@ function showStats(id){
 
       <p>🏆 Rank: ${rank}</p>
       <p>⭐ ELO: ${Math.floor(item.rating)}</p>
-
+      <p>🔥 Streak: ${streakText || "-"}</p>
       <p>📈 ${trend.map(x => Math.floor(x)).join(" → ")}</p>
 
       <hr>
