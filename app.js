@@ -547,39 +547,48 @@ function showStats(id){
       <p>🥇 Top 3: ${item.top3 || 0}</p>
       <p>🎮 Played: ${item.tournamentsPlayed || 0}</p>
 
-      <hr>
+    <hr>
 
-      <p>📂 ${item.categories.map(c => `
-        <span onclick="removeCatFromItem(${item.id}, '${c}')"
-          style="background:#222;padding:4px 8px;margin:2px;border-radius:999px;display:inline-block;cursor:pointer;">
-          ${c} ✕
-        </span>
-      `).join(" ")}</p>
+<button onclick="toggleCatSection()" id="catToggleBtn" style="
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  background:#1f1f1f;
+  border:none;
+  cursor:pointer;
+  margin-top:10px;
+">
+📂 Kategorier +
+</button>
 
-      <div style="margin-top:10px;">
-        <input id="newCatInput" placeholder="Legg til kategori"
-          style="width:70%; padding:8px; border-radius:8px; border:none;">
+<div id="catSection" style="display:none; margin-top:10px;">
 
+  <p>
+    ${item.categories.map(c => `
+      <span onclick="removeCatFromItem(${item.id}, '${c}')"
+        style="background:#222;padding:4px 8px;margin:2px;border-radius:999px;display:inline-block;cursor:pointer;">
+        ${c} ✕
+      </span>
+    `).join(" ")}
+  </p>
 
-        <button onclick="addCatToItem(${item.id})" style="width:25%;">
-          +
-        </button>
-      </div>
+  <div style="margin-top:10px;">
+    <input id="newCatInput" placeholder="Legg til kategori"
+      style="width:70%; padding:8px; border-radius:8px; border:none;">
+    <button onclick="addCatToItem(${item.id})" style="width:25%;">+</button>
+  </div>
 
-<div style="margin-top:10px;">
+  <div style="margin-top:10px;">
+    <input id="statsCatSearch"
+      placeholder="Søk kategori..."
+      style="width:100%; padding:8px; margin-bottom:8px; border-radius:8px; border:none;"
+      oninput="renderStatsChips(${item.id}, this.value)">
 
-  <p style="opacity:0.7; margin-bottom:6px;">Velg eksisterende kategori:</p>
-
-  <input id="statsCatSearch"
-    placeholder="Søk kategori..."
-    style="width:100%; padding:8px; margin-bottom:8px; border-radius:8px; border:none;"
-    oninput="renderStatsChips(${item.id}, this.value)">
-
-  <div id="statsChipBox"></div>
+    <div id="statsChipBox"></div>
+  </div>
 
 </div>
 
-    </div>
   `;
 
   openStats();
@@ -855,6 +864,19 @@ function toggleAllChips(){
 function toggleStatsChips(id){
   state.showAllStatsChips = !state.showAllStatsChips;
   renderStatsChips(id, document.getElementById("statsCatSearch")?.value || "");
+}
+
+function toggleCatSection(){
+  const el = document.getElementById("catSection");
+  const btn = document.getElementById("catToggleBtn");
+
+  if(el.style.display === "none"){
+    el.style.display = "block";
+    btn.innerText = "📂 Kategorier −";
+  } else {
+    el.style.display = "none";
+    btn.innerText = "📂 Kategorier +";
+  }
 }
 
 renderChips();
