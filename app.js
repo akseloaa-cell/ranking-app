@@ -291,6 +291,22 @@ function update(){
   let sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
   let list = sorted.slice(0,10);
 
+  const mvp = getDailyMVP();
+  let mvpHtml = "";
+
+  if(mvp){
+    mvpHtml = `
+      <div style="
+        background:#1f1f1f;
+        padding:10px;
+        border-radius:10px;
+        margin-bottom:10px;
+      ">
+        🔥 Dagens MVP: <b>${mvp.item.name}</b>
+        <span style="color:#4caf50;">▲ ${mvp.diff}</span>
+      </div>
+    `;
+  }
   const html =
     list.map((x,i)=>{
       const currentRank = i + 1;
