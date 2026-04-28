@@ -295,18 +295,33 @@ function update(){
   let mvpHtml = "";
 
   if(mvp){
-    mvpHtml = `
-      <div style="
-        background:#1f1f1f;
-        padding:10px;
-        border-radius:10px;
-        margin-bottom:10px;
-      ">
-        🔥 Dagens MVP: <b>${mvp.item.name}</b>
-        <span style="color:#4caf50;">▲ ${mvp.diff}</span>
+  const rank = getRank(mvp.item.id);
+  const elo = Math.floor(mvp.item.rating);
+
+  mvpHtml = `
+    <div style="
+      background:#1f1f1f;
+      padding:10px;
+      border-radius:10px;
+      margin-bottom:10px;
+    ">
+      🔥 <b>Dagens MVP</b><br>
+
+      <div style="font-size:16px; font-weight:600;">
+        ${mvp.item.name}
       </div>
-    `;
-  }
+
+      <div style="font-size:12px; opacity:0.7;">
+        #${rank} • ⭐ ${elo}
+      </div>
+
+      <div style="color:#4caf50; margin-top:4px;">
+        ▲ ${mvp.diff}
+      </div>
+    </div>
+  `;
+}
+
   const html =
     list.map((x,i)=>{
       const currentRank = i + 1;
