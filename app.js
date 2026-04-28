@@ -74,11 +74,16 @@ function renderChips(filter=""){
 
 const f = filter.toLowerCase();
 
- let list = state.categories;
+let list = state.categories.filter(c => c.includes(f));
 
 if(!state.showAllChips){
   list = list.slice(0, 4); // 👈 antall synlige chips
 }
+  
+<input
+  placeholder="Søk kategori..."
+  oninput="renderChips(this.value)"
+>
 
 box.innerHTML =
   list.map(c => `
