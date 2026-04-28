@@ -754,9 +754,10 @@ function renderRankingView(){
         cursor:pointer;
       ">
       <b>#${currentRank}</b> ${x.name}
-      <span style="float:right;">
-        ${Math.floor(x.rating)} ${indicator}
-      </span>
+<span style="float:right;">
+  ${indicator} ${Math.floor(x.rating)}
+</span>
+
     </div>
   `;
 }).join("");
