@@ -118,6 +118,7 @@ function addItem(){
   categories: selected,
   rating: 1000,
 
+  createdAt: new Date().toISOString(),
   // NEW V3 STATS
   history: [1000],
   tournamentsPlayed: 0,
@@ -276,7 +277,7 @@ function update(){
 
       let indicator = "";
 
-      if(prevRank === undefined){
+      if(isNewToday(x)){
         indicator = `<span style="
           background:#4f8cff;
           color:white;
@@ -723,7 +724,7 @@ function renderRankingView(){
 
   let indicator = "";
 
-  if(prevRank === undefined){
+  if(isNewToday(x)){
     indicator = `<span style="
       background:#4f8cff;
       color:white;
@@ -965,6 +966,15 @@ function saveDailyRanking(){
 
   localStorage.setItem("previousRanking", JSON.stringify(rankingMap));
   localStorage.setItem("lastRankingDate", today);
+}
+
+function isNewToday(item){
+  if(!item.createdAt) return false;
+
+  const today = new Date().toISOString().split("T")[0];
+  const created = item.createdAt.split("T")[0];
+
+  return today === created;
 }
 
 renderChips();
