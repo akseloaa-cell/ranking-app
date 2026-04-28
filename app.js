@@ -517,9 +517,21 @@ function showStats(id){
 
   document.getElementById("statsContent").innerHTML = `
     <div style="padding:20px; text-align:left;">
-      <h2 contenteditable="true" onblur="renameItem(${item.id}, this.innerText)">
-  ${item.name}
+      <h2 contenteditable="true" onblur="renameItem(${item.id}, this.innerText)"
+    style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+
+  <span>${item.name}</span>
+
+  <span style="
+    font-size:12px;
+    opacity:0.6;
+    font-weight:normal;
+  ">
+    ${item.categories.length ? "• " + item.categories.join(", ") : ""}
+  </span>
+
 </h2>
+
 
 <button onclick="deleteItem(${item.id})"
   style="
