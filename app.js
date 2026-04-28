@@ -307,9 +307,10 @@ function update(){
     ">
       🔥 <b>Dagens MVP</b><br>
 
-      <div style="font-size:16px; font-weight:600;">
-        ${mvp.item.name}
-      </div>
+      <div onclick="showStats(${mvp.item.id})"
+     style="cursor:pointer; font-size:16px; font-weight:600;">
+  ${mvp.item.name}
+</div>
 
       <div style="font-size:12px; opacity:0.7;">
         #${rank} • ⭐ ${elo}
