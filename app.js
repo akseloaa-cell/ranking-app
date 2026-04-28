@@ -261,83 +261,67 @@ function draw(){
   save();
   update();
   nextMatch();
+  saveDailyRanking();
 }
 
 /* ================= RANKING ================= */
 function update(){
   let sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
+  let list = sorted.slice(0,10);
 
-  let list = sorted.slice(0,10); // 🔥 kun top 10 nå
+  const html =
+    list.map((x,i)=>{
+      const currentRank = i + 1;
+      const prevRank = state.previousRanking[x.id];
+
+      let indicator = "";
+
+      if(prevRank === undefined){
+        indicator = `<span style="
+          background:#4f8cff;
+          color:white;
+          padding:2px 6px;
+          border-radius:6px;
+          font-size:11px;
+          font-weight:bold;
+        ">NY</span>`;
+      } else {
+        const diff = prevRank - currentRank;
+
+        if(diff > 0){
+          indicator = `<span style="color:#4caf50;">▲ ${diff}</span>`;
+        } else if(diff < 0){
+          indicator = `<span style="color:#f44336;">▼ ${Math.abs(diff)}</span>`;
+        }
+      }
+
+      return `
+        <div onclick="showStats(${x.id})"
+          style="cursor:pointer; padding:10px; background:#1f1f1f; margin:5px 0; border-radius:10px;">
+          ${currentRank}. ${x.name} (${Math.floor(x.rating)})
+          <span style="float:right;">
+            ${indicator}
+          </span>
+        </div>
+      `;
+    }).join("");
 
   document.getElementById("ranking").innerHTML =
     "<h3>🏆 Ranking</h3>" +
+    `
+    <div style="display:flex; gap:8px; margin-bottom:10px;">
+      <button onclick="openRankingView()" style="flex:1;">
+        📊 Full ranking
+      </button>
 
-`
-<div style="display:flex; gap:8px; margin-bottom:10px; background:none; border:none; padding:0;">
-  
-  <button onclick="openRankingView()" style="flex:1;">
-    📊 Full ranking
-  </button>
-
-  <button onclick="openAddItem()" style="
-    width:50px;
-    height:50px;
-    border-radius:50%;
-    font-size:20px;
-    padding:0;
-  ">
-    +
-  </button>
-
-</div>
-`
-+
-
-list.map((x,i)=>{
-  const currentRank = i + 1;
-  const prevRank = state.previousRanking[x.id];
-
-  let indicator = "";
-
-  // 🆕 NY item (fantes ikke i går)
- if(prevRank === undefined){
-  indicator = `<span style="
-    background:#4f8cff;
-    color:white;
-    padding:2px 6px;
-    border-radius:6px;
-    font-size:11px;
-    font-weight:bold;
-  ">NY</span>`;
-}
-
-  else {
-    const diff = prevRank - currentRank;
-
-    if(diff > 0){
-      indicator = `<span style="color:#4caf50;">▲ ${diff}</span>`;
-    } 
-    else if(diff < 0){
-      indicator = `<span style="color:#f44336;">▼ ${Math.abs(diff)}</span>`;
-    }
-  }
-
-  return `
-    <div onclick="showStats(${x.id})"
-      style="cursor:pointer; padding:10px; background:#1f1f1f; margin:5px 0; border-radius:10px;">
-      ${currentRank}. ${x.name} (${Math.floor(x.rating)})
-      <span style="float:right;">
-        ${indicator}
-      </span>
+      <button onclick="openAddItem()" style="
+        width:50px;
+        height:50px;
+        border-radius:50%;
+        font-size:20px;
+      ">+</button>
     </div>
-  `;
-}).join("")
-
-      `<div onclick="showStats(${x.id})"
-            style="cursor:pointer; padding:10px; background:#1f1f1f; margin:5px 0; border-radius:10px;">
-        ${i+1}. ${x.name} (${Math.floor(x.rating)})
-      </div>`
-    ).join("");
+    ` + html;
 }
 
 /* ================= TOURNAMENT ================= */
