@@ -297,6 +297,24 @@ function update(){
         }
       }
 
+      const mvp = getDailyMVP();
+
+let mvpHtml = "";
+
+if(mvp){
+  mvpHtml = `
+    <div style="
+      background:#1f1f1f;
+      padding:10px;
+      border-radius:10px;
+      margin-bottom:10px;
+    ">
+      🔥 Dagens MVP: <b>${mvp.item.name}</b>
+      <span style="color:#4caf50;">▲ ${mvp.diff}</span>
+    </div>
+  `;
+}
+
       return `
         <div onclick="showStats(${x.id})"
           style="cursor:pointer; padding:10px; background:#1f1f1f; margin:5px 0; border-radius:10px;">
@@ -996,6 +1014,31 @@ function saveDailyRanking(){
   localStorage.setItem("previousRanking", JSON.stringify(rankingMap));
   localStorage.setItem("previousRankingByCategory", JSON.stringify(categoryMap));
   localStorage.setItem("lastRankingDate", today);
+}
+
+function getDailyMVP(){
+  if(!state.previousRanking) return null;
+
+  const sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
+
+  let best = null;
+  let bestDiff = 0;
+
+  sorted.forEach((item, i) => {
+    const currentRank = i + 1;
+    const prevRank = state.previousRanking[item.id];
+
+    if(prevRank === undefined) return;
+
+    const diff = prevRank - currentRank;
+
+    if(diff > bestDiff){
+      bestDiff = diff;
+      best = { item, diff };
+    }
+  });
+
+  return best;
 }
 
 function isNewToday(item){
