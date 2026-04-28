@@ -298,6 +298,10 @@ function update(){
   const rank = getRank(mvp.item.id);
   const elo = Math.floor(mvp.item.rating);
 
+if(mvp){
+  const rank = getRank(mvp.item.id);
+  const elo = Math.floor(mvp.item.rating);
+
   mvpHtml = `
     <div style="
       background:#1f1f1f;
@@ -305,19 +309,23 @@ function update(){
       border-radius:10px;
       margin-bottom:10px;
     ">
-      🔥 <b>Dagens MVP</b><br>
+      🔥 Dagens MVP
 
-      <div onclick="showStats(${mvp.item.id})"
-     style="cursor:pointer; font-size:16px; font-weight:600;">
-  ${mvp.item.name}
-</div>
+      <div style="
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        margin-top:5px;
+      ">
+        <div style="font-size:16px; font-weight:600;">
+          ${mvp.item.name}
+        </div>
 
-      <div style="font-size:12px; opacity:0.7;">
-        #${rank} • ⭐ ${elo}
-      </div>
-
-      <div style="color:#4caf50; margin-top:4px;">
-        ▲ ${mvp.diff}
+        <div style="font-size:11px; opacity:0.8; display:flex; gap:6px;">
+          <span>#${rank}</span>
+          <span>⭐ ${elo}</span>
+          <span style="color:#4caf50;">▲ ${mvp.diff}</span>
+        </div>
       </div>
     </div>
   `;
