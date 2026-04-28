@@ -717,7 +717,34 @@ function renderRankingView(){
     list.sort((a,b)=>(b.top3||0)-(a.top3||0));
   }
 
-  const html = list.map((x,i)=>`
+ const html = list.map((x,i)=>{
+  const currentRank = i + 1;
+  const prevRank = state.previousRanking[x.id];
+
+  let indicator = "";
+
+  if(prevRank === undefined){
+    indicator = `<span style="
+      background:#4f8cff;
+      color:white;
+      padding:2px 6px;
+      border-radius:6px;
+      font-size:11px;
+      font-weight:bold;
+    ">NY</span>`;
+  } 
+  else {
+    const diff = prevRank - currentRank;
+
+    if(diff > 0){
+      indicator = `<span style="color:#4caf50;">▲ ${diff}</span>`;
+    } 
+    else if(diff < 0){
+      indicator = `<span style="color:#f44336;">▼ ${Math.abs(diff)}</span>`;
+    }
+  }
+
+  return `
     <div onclick="showStats(${x.id})"
       style="
         padding:12px;
@@ -726,12 +753,13 @@ function renderRankingView(){
         border-radius:12px;
         cursor:pointer;
       ">
-      <b>#${i+1}</b> ${x.name}
-      <span style="float:right; opacity:0.7;">
-        ${Math.floor(x.rating)}
+      <b>#${currentRank}</b> ${x.name}
+      <span style="float:right;">
+        ${Math.floor(x.rating)} ${indicator}
       </span>
     </div>
-  `).join("");
+  `;
+}).join("");
 
   document.getElementById("rankingViewList").innerHTML =
     "<h3>🏆 Full ranking</h3>" + html;
