@@ -236,6 +236,24 @@ function pick(i){
   w.rating += 32 * (1 - Ea);
   l.rating += 32 * (0 - Ea);
 
+  // 🔥 streaks
+if(!w.streak) w.streak = 0;
+if(!l.streak) l.streak = 0;
+
+// winner
+if(w.streak >= 0){
+  w.streak += 1;
+} else {
+  w.streak = 1;
+}
+
+// loser
+if(l.streak <= 0){
+  l.streak -= 1;
+} else {
+  l.streak = -1;
+}
+
   updateHistory(w);
   updateHistory(l);
 
@@ -256,6 +274,8 @@ function draw(){
   // 0.5 = draw
   a.rating += 32 * (0.5 - Ea);
   b.rating += 32 * (0.5 - Eb);
+  a.streak = 0;
+b.streak = 0;
 
   updateHistory(a);
   updateHistory(b);
@@ -327,7 +347,9 @@ if(mvp){
     }).join("");
 
   document.getElementById("ranking").innerHTML =
-    "<h3>🏆 Ranking</h3>" +
+  "<h3>🏆 Ranking</h3>" +
+  mvpHtml +
+
     `
     <div style="display:flex; gap:8px; margin-bottom:10px;">
       <button onclick="openRankingView()" style="flex:1;">
@@ -559,6 +581,15 @@ function showStats(id){
     .findIndex(x => x.id === id) + 1;
 
   const trend = item.history?.slice(-5) || [];
+
+    let streakText = "";
+
+  if(item.streak > 0){
+    streakText = `<span style="color:#4caf50;">W${item.streak}</span>`;
+  }
+  else if(item.streak < 0){
+    streakText = `<span style="color:#f44336;">L${Math.abs(item.streak)}</span>`;
+  }
 
   document.getElementById("statsContent").innerHTML = `
     <div style="padding:20px; text-align:left;">
