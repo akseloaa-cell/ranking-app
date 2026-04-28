@@ -256,6 +256,7 @@ if(l.streak <= 0){
 
   updateHistory(w);
   updateHistory(l);
+  saveDailyRanking();
 
   save();
   update();
@@ -294,9 +295,6 @@ function update(){
   const mvp = getDailyMVP();
   let mvpHtml = "";
 
-  if(mvp){
-  const rank = getRank(mvp.item.id);
-  const elo = Math.floor(mvp.item.rating);
 
 if(mvp){
   const rank = getRank(mvp.item.id);
@@ -1151,5 +1149,4 @@ update();
 nextMatch();
 initDailyTournament();
 renderTournament();
-saveDailyRanking();
-saveCategoryRankings();
+
