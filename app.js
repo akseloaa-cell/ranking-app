@@ -720,7 +720,7 @@ function renderRankingView(){
 
  const html = list.map((x,i)=>{
   const currentRank = i + 1;
-  const prevRank = state.previousRanking[x.id];
+  const prevRank = getPreviousRankInFilter(x.id, state.rankingFilter);
 
   let indicator = "";
 
@@ -975,6 +975,31 @@ function isNewToday(item){
   const created = item.createdAt.split("T")[0];
 
   return today === created;
+}
+
+function getPreviousRankInFilter(itemId, filter){
+  let prev = Object.entries(state.previousRanking);
+
+  // gjør om til array med items
+  let prevItems = prev
+    .map(([id, rank]) => {
+      const item = state.items.find(x => x.id == id);
+      return item ? { ...item, prevRank: rank } : null;
+    })
+    .filter(Boolean);
+
+  // filter på kategori hvis nødvendig
+  if(filter !== "all"){
+    prevItems = prevItems.filter(x =>
+      (x.categories || []).includes(filter)
+    );
+  }
+
+  // sorter etter forrige rank
+  prevItems.sort((a,b)=>a.prevRank - b.prevRank);
+
+  // finn ny plassering i denne lista
+  return prevItems.findIndex(x => x.id === itemId) + 1;
 }
 
 renderChips();
