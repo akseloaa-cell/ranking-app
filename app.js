@@ -517,10 +517,14 @@ function showStats(id){
 
   document.getElementById("statsContent").innerHTML = `
     <div style="padding:20px; text-align:left;">
-      <h2 contenteditable="true" onblur="renameItem(${item.id}, this.innerText)"
-    style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
 
-  <span>${item.name}</span>
+<h2 style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+
+  <span contenteditable="true"
+        onblur="renameItem(${item.id}, this.innerText)"
+        style="font-weight:bold;">
+    ${item.name}
+  </span>
 
   <span style="
     font-size:12px;
@@ -531,7 +535,6 @@ function showStats(id){
   </span>
 
 </h2>
-
 
 <button onclick="deleteItem(${item.id})"
   style="
