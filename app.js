@@ -247,6 +247,13 @@ function draw(){
   let a = state.current[0];
   let b = state.current[1];
 
+  let Ea = 1 / (1 + Math.pow(10, (b.rating - a.rating) / 400));
+  let Eb = 1 / (1 + Math.pow(10, (a.rating - b.rating) / 400));
+
+  // 0.5 = draw
+  a.rating += 32 * (0.5 - Ea);
+  b.rating += 32 * (0.5 - Eb);
+
   updateHistory(a);
   updateHistory(b);
 
@@ -254,7 +261,6 @@ function draw(){
   update();
   nextMatch();
 }
-
 
 /* ================= RANKING ================= */
 function update(){
