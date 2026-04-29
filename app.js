@@ -6,6 +6,7 @@ const state = {
   previousRanking: JSON.parse(localStorage.getItem("previousRanking")) || {},
   lastRankingDate: localStorage.getItem("lastRankingDate") || null,
   previousRankingByCategory: JSON.parse(localStorage.getItem("previousRankingByCategory")) || {},
+  recentMatches: JSON.parse(localStorage.getItem("recentMatches")) || []
   bracket: [],
   round: 0,
   match: 0,
@@ -144,6 +145,10 @@ function updateHistory(item){
   }
 }
 
+function matchKey(a, b){
+  return [a.id, b.id].sort().join("-");
+}
+
 function openAddItem(){
   const overlay = document.getElementById("addOverlay");
   const view = document.getElementById("addView");
@@ -205,6 +210,15 @@ function nextMatch(){
   if(candidates.length === 0){
     candidates = items.filter(x => x.id !== a.id);
   }
+
+  // legg inn tidligere matcher filter
+let recent = state.recentMatches;
+
+candidates = candidates.filter(b => {
+  const key = matchKey(a, b);
+
+  return !recent.includes(key);
+});
 
   // velg b
   const b = candidates[Math.floor(Math.random() * candidates.length)];
@@ -296,6 +310,20 @@ if(l.streak <= 0){
 } else {
   l.streak = -1;
 }
+
+  const a = state.current[0];
+const b = state.current[1];
+
+const key = matchKey(a, b);
+
+state.recentMatches.push(key);
+
+// behold bare siste 10–15 matcher
+if(state.recentMatches.length > 15){
+  state.recentMatches.shift();
+}
+
+localStorage.setItem("recentMatches", JSON.stringify(state.recentMatches));
 
   updateHistory(w);
   updateHistory(l);
