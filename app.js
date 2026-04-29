@@ -663,6 +663,7 @@ function showStats(id){
 
       <p>🏆 Rank: ${rank}</p>
       <p>⭐ ELO: ${Math.floor(item.rating)}</p>
+      <p>📊 Winrate: ${(getWinrate(item)*100).toFixed(1)}%</p>
       <p>🔥 Streak: ${streakText || "-"}</p>
       <p>📈 ${trend.map(x => Math.floor(x)).join(" → ")}</p>
 
@@ -1178,6 +1179,26 @@ function getH2H(a, b){
   return d > 0 
     ? `${data.w}–${data.l} (${d})`
     : `${data.w}–${data.l}`;
+}
+
+function getWinrate(item){
+  if(!item.h2h) return 0;
+
+  let wins = 0;
+  let losses = 0;
+  let draws = 0;
+
+  Object.values(item.h2h).forEach(h => {
+    wins += h.w || 0;
+    losses += h.l || 0;
+    draws += h.d || 0;
+  });
+
+  const total = wins + losses + draws;
+
+  if(total === 0) return 0;
+
+  return (wins + draws * 0.5) / total;
 }
 
 renderChips();
