@@ -10,6 +10,21 @@
 </head>
 
 <body>
+
+ <div id="modeBar" style="
+  position:fixed;
+  top:10px;
+  right:10px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  z-index:9999;
+">
+  <div onclick="setMode('home')" class="modeBtn">🏠 Home</div>
+  <div onclick="setMode('versus')" class="modeBtn">⚔️ Versus</div>
+  <div onclick="setMode('tournament')" class="modeBtn">🏆 Tournament</div>
+</div>
+
 <div class="container">
 
 <h2>⚔️ Ranking V2</h2>
