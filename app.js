@@ -172,28 +172,54 @@ function closeAddItem(){
 function nextMatch(){
   if(state.items.length < 2) return;
 
-  let a = Math.floor(Math.random()*state.items.length);
-  let b;
+  const items = state.items;
 
-  do { b = Math.floor(Math.random()*state.items.length) }
-  while(a===b);
+  // 1. velg første item tilfeldig
+  const a = items[Math.floor(Math.random() * items.length)];
 
-  state.current = [state.items[a], state.items[b]];
+  let candidates = items.filter(x => x.id !== a.id);
 
-  const itemA = state.current[0];
-const itemB = state.current[1];
+  // 🎯 60% sjanse: samme kategori
+  if(Math.random() < 0.6 && a.categories.length){
+    const shared = candidates.filter(x =>
+      x.categories.some(c => a.categories.includes(c))
+    );
 
-const elA = document.getElementById("a");
-const elB = document.getElementById("b");
+    if(shared.length > 0){
+      candidates = shared;
+    }
+  }
 
-elA.innerHTML = formatChoice(itemA, itemB);
-elB.innerHTML = formatChoice(itemB, itemA);
+  // ⚖️ 30% sjanse: lignende rating
+  if(Math.random() < 0.3){
+    const target = a.rating;
 
-// VIKTIG: legg tilbake klikkene
-elA.onclick = () => pick(0);
-elB.onclick = () => pick(1);
+    candidates.sort((x, y) =>
+      Math.abs(x.rating - target) - Math.abs(y.rating - target)
+    );
 
-}   // 👈 DENNE MÅ VÆRE HER
+    candidates = candidates.slice(0, Math.max(2, Math.floor(candidates.length * 0.3)));
+  }
+
+  // 🎲 fallback hvis tom liste
+  if(candidates.length === 0){
+    candidates = items.filter(x => x.id !== a.id);
+  }
+
+  // velg b
+  const b = candidates[Math.floor(Math.random() * candidates.length)];
+
+  state.current = [a, b];
+
+  const elA = document.getElementById("a");
+  const elB = document.getElementById("b");
+
+  elA.innerHTML = formatChoice(a, b);
+  elB.innerHTML = formatChoice(b, a);
+
+  elA.onclick = () => pick(0);
+  elB.onclick = () => pick(1);
+}
 
 function getRank(id){
   return [...state.items]
