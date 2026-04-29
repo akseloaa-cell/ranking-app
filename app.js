@@ -1,5 +1,5 @@
 const state = {
-  mode: "home"
+  mode: "home",
   items: JSON.parse(localStorage.getItem("items")) || [],
   categories: JSON.parse(localStorage.getItem("categories")) || [],
   current: [],
@@ -7,7 +7,7 @@ const state = {
   previousRanking: JSON.parse(localStorage.getItem("previousRanking")) || {},
   lastRankingDate: localStorage.getItem("lastRankingDate") || null,
   previousRankingByCategory: JSON.parse(localStorage.getItem("previousRankingByCategory")) || {},
-  recentMatches: JSON.parse(localStorage.getItem("recentMatches")) || []
+  recentMatches: JSON.parse(localStorage.getItem("recentMatches")) || [],
   bracket: [],
   round: 0,
   match: 0,
