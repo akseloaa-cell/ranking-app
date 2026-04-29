@@ -1,4 +1,5 @@
 const state = {
+  mode: "home"
   items: JSON.parse(localStorage.getItem("items")) || [],
   categories: JSON.parse(localStorage.getItem("categories")) || [],
   current: [],
@@ -1279,9 +1280,51 @@ function isRival(a, b){
   return diff <= 1;
 }
 
+function setMode(mode){
+  state.mode = mode;
+
+  document.querySelectorAll(".modeBtn").forEach(btn=>{
+    btn.classList.remove("active");
+  });
+
+  event.target.classList.add("active");
+
+  renderMode();
+}
+
+function renderMode(){
+
+  const ranking = document.getElementById("ranking");
+  const tournament = document.getElementById("tournament");
+  const vs = document.getElementById("vs"); // hvis du har vs container
+
+  // reset visning
+  ranking.style.display = "none";
+  tournament.style.display = "none";
+  if(vs) vs.style.display = "none";
+
+  if(state.mode === "home"){
+    ranking.style.display = "block";
+    tournament.style.display = "block";
+  }
+
+  if(state.mode === "versus"){
+    if(vs) vs.style.display = "block";
+    ranking.style.display = "none";
+    tournament.style.display = "none";
+  }
+
+  if(state.mode === "tournament"){
+    tournament.style.display = "block";
+    ranking.style.display = "none";
+    if(vs) vs.style.display = "none";
+  }
+}
+
 renderChips();
 update();
 nextMatch();
 initDailyTournament();
 renderTournament();
+renderMode();
 
