@@ -1321,6 +1321,20 @@ function renderMode(){
   }
 }
 
+function toggleMenu(){
+  const menu = document.getElementById("modeMenu");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
+
+document.addEventListener("click", (e) => {
+  const menu = document.getElementById("modeMenu");
+  const btn = document.getElementById("menuBtn");
+
+  if(!menu.contains(e.target) && !btn.contains(e.target)){
+    menu.style.display = "none";
+  }
+});
+
 renderChips();
 update();
 nextMatch();
