@@ -258,3 +258,24 @@ button:active {
   transform: translateY(100%);
   transition: 0.3s ease;
 }
+
+.modeBtn{
+  background:#1f1f1f;
+  color:white;
+  padding:8px 10px;
+  border-radius:10px;
+  font-size:12px;
+  cursor:pointer;
+  opacity:0.8;
+  transition:0.2s;
+}
+
+.modeBtn:hover{
+  opacity:1;
+  transform:scale(1.05);
+}
+
+.modeBtn.active{
+  background:#4f8cff;
+  opacity:1;
+}
