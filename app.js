@@ -124,7 +124,7 @@ function addItem(){
   history: [1000],
   tournamentsPlayed: 0,
   tournamentWins: 0,
-  top3: 0
+  top3: 0,
 
    h2h: {}
 });
