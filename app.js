@@ -34,9 +34,9 @@ state.categories = [...new Set(
 state.items.forEach(i => {
   if (!i.history) i.history = [];
   if (i.history.length === 0) i.history.push(i.rating || 1000);
-
+  if(!i.h2h) i.h2h = {};
   if (!i.categories) i.categories = [];
-
+  
   // normaliser categories på items også
   i.categories = [...new Set(
     i.categories
@@ -125,6 +125,8 @@ function addItem(){
   tournamentsPlayed: 0,
   tournamentWins: 0,
   top3: 0
+
+   h2h: {}
 });
 
   document.getElementById("itemInput").value = "";
@@ -216,8 +218,12 @@ function formatChoice(item, opponent){
     </div>
 
     <div style="font-size:11px; opacity:0.6;">
-      #${rank} • ⭐ ${elo}
-    </div>
+  #${rank} • ⭐ ${elo}
+</div>
+
+<div style="font-size:11px; opacity:0.5;">
+  ${getH2H(item, opponent)}
+</div>
 
     <div style="font-size:14px; opacity:0.8;">
       <span style="color:${gainColor};">+${gain}</span>
@@ -230,6 +236,7 @@ function formatChoice(item, opponent){
 function pick(i){
   let w = state.current[i];
   let l = state.current[1 - i];
+  updateH2H(w, l, "win");
 
   let Ea = 1 / (1 + Math.pow(10, (l.rating - w.rating) / 400));
 
@@ -268,6 +275,7 @@ function draw(){
 
   let a = state.current[0];
   let b = state.current[1];
+  updateH2H(a, b, "draw");
 
   let Ea = 1 / (1 + Math.pow(10, (b.rating - a.rating) / 400));
   let Eb = 1 / (1 + Math.pow(10, (a.rating - b.rating) / 400));
@@ -1130,6 +1138,46 @@ function getPreviousRankInFilter(itemId, filter){
 
   // finn ny plassering i denne lista
   return prevItems.findIndex(x => x.id === itemId) + 1;
+}
+
+function updateH2H(a, b, result){
+  if(!a.h2h) a.h2h = {};
+  if(!b.h2h) b.h2h = {};
+
+  if(!a.h2h[b.id]){
+    a.h2h[b.id] = { w:0, l:0, d:0 };
+  }
+
+  if(!b.h2h[a.id]){
+    b.h2h[a.id] = { w:0, l:0, d:0 };
+  }
+
+  if(result === "win"){
+    a.h2h[b.id].w += 1;
+    b.h2h[a.id].l += 1;
+  }
+
+  if(result === "loss"){
+    a.h2h[b.id].l += 1;
+    b.h2h[a.id].w += 1;
+  }
+
+  if(result === "draw"){
+    a.h2h[b.id].d += 1;
+    b.h2h[a.id].d += 1;
+  }
+}
+
+function getH2H(a, b){
+  const data = a.h2h?.[b.id];
+  if(!data) return "0–0";
+
+  const d = data.d || 0;
+
+  // bare vis draw hvis > 0
+  return d > 0 
+    ? `${data.w}–${data.l} (${d})`
+    : `${data.w}–${data.l}`;
 }
 
 renderChips();
