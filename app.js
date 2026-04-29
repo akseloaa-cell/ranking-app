@@ -230,6 +230,16 @@ function getRank(id){
 function formatChoice(item, opponent){
   const rank = getRank(item.id);
   const elo = Math.round(item.rating);
+  const rivalBadge = isRival(item, opponent)
+  ? `<span style="
+      font-size:10px;
+      background:#ff4d4d;
+      color:white;
+      padding:2px 6px;
+      border-radius:999px;
+      margin-left:6px;
+    ">🔥 RIVAL</span>`
+  : "";
 
   const Ea = 1/(1+Math.pow(10,(opponent.rating-item.rating)/400));
   const gain = Math.round(32*(1-Ea));
@@ -239,9 +249,9 @@ function formatChoice(item, opponent){
   const lossColor = Math.abs(loss) >= 16 ? "#f44336" : "#aaa";
 
   return `
-    <div style="font-size:18px; font-weight:600;">
-      ${item.name}
-    </div>
+   <div style="font-size:18px; font-weight:600;">
+  ${item.name} ${rivalBadge}
+</div>
 
     <div style="font-size:11px; opacity:0.6;">
   #${rank} • ⭐ ${elo}
@@ -1225,6 +1235,20 @@ function getWinrate(item){
   if(total === 0) return 0;
 
   return (wins + draws * 0.5) / total;
+}
+
+function isRival(a, b){
+  const h2h = a.h2h?.[b.id];
+
+  if(!h2h) return false;
+
+  const total = (h2h.w || 0) + (h2h.l || 0) + (h2h.d || 0);
+
+  if(total < 3) return false;
+
+  const diff = Math.abs((h2h.w || 0) - (h2h.l || 0));
+
+  return diff <= 1;
 }
 
 renderChips();
