@@ -1302,13 +1302,14 @@ function renderMode(){
   const tournamentSection = document.getElementById("tournamentSection");
   const vs = document.querySelector(".vs");
 
-  // reset
-  [ranking, tournamentSection, vs].forEach(el => {
-    if(el) el.style.display = "none";
-  });
+  // skjul alt først
+  ranking.style.display = "none";
+  tournamentSection.style.display = "none";
+  vs.style.display = "none";
 
   if(state.mode === "home"){
     ranking.style.display = "block";
+    vs.style.display = "block"; // 👈 VIKTIG
   }
 
   if(state.mode === "versus"){
@@ -1317,7 +1318,6 @@ function renderMode(){
 
   if(state.mode === "tournament"){
     tournamentSection.style.display = "block";
-    renderTournament();
   }
 }
 
