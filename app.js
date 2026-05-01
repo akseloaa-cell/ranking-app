@@ -512,12 +512,14 @@ function renderBracket(){
 /* INIT */
 
 function renderTournament(){
+  if(state.mode !== "tournament") return;
+  
   const el = document.getElementById("tournament");
 
   el.innerHTML = `
-  <h2 style="margin-bottom:10px;">🏆 Daily Tournament</h2>
-` + el.innerHTML;
-
+    <h2 style="margin-bottom:10px;">🏆 Daily Tournament</h2>
+  `;
+  
   if(!state.tournament){
     el.innerHTML = "Ingen turnering i dag";
     return;
