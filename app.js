@@ -1300,8 +1300,9 @@ function renderMode(){
   const tournament = document.getElementById("tournament");
   const vs = document.getElementById("vs");
 
-  // reset
+  // reset ALT
   ranking.style.display = "none";
+  tournament.style.display = "none"; // 👈 DENNE MANGLER
   if(vs) vs.style.display = "none";
 
   if(state.mode === "home"){
