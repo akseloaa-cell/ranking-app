@@ -1299,24 +1299,24 @@ function setMode(mode){
 function renderMode(){
 
   const ranking = document.getElementById("ranking");
-  const tournament = document.getElementById("tournament");
-  const vs = document.getElementById("vs");
+  const tournamentSection = document.getElementById("tournamentSection");
+  const vs = document.querySelector(".vs");
 
-  // reset ALT
-  ranking.style.display = "none";
-  tournament.style.display = "none"; // 👈 DENNE MANGLER
-  if(vs) vs.style.display = "none";
+  // reset
+  [ranking, tournamentSection, vs].forEach(el => {
+    if(el) el.style.display = "none";
+  });
 
   if(state.mode === "home"){
     ranking.style.display = "block";
   }
 
   if(state.mode === "versus"){
-    if(vs) vs.style.display = "block";
+    vs.style.display = "block";
   }
 
   if(state.mode === "tournament"){
-    tournament.style.display = "block";
+    tournamentSection.style.display = "block";
     renderTournament();
   }
 }
