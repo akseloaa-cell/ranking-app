@@ -1297,27 +1297,18 @@ function setMode(mode, el){
 }
 
 function renderMode(){
-
   const ranking = document.getElementById("ranking");
-  const tournamentSection = document.getElementById("tournamentSection");
   const vs = document.querySelector(".vs");
 
-  // skjul alt først
-  ranking.style.display = "none";
-  tournamentSection.style.display = "none";
-  vs.style.display = "none";
-
-  if(state.mode === "home"){
-    ranking.style.display = "block";
-    vs.style.display = "block"; // 👈 VIKTIG
-  }
+  ranking.style.display = "block";
+  vs.style.display = "flex";
 
   if(state.mode === "versus"){
-    vs.style.display = "block";
+    ranking.style.display = "none";
   }
 
   if(state.mode === "tournament"){
-    tournamentSection.style.display = "block";
+    vs.style.display = "none";
   }
 }
 
