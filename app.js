@@ -222,9 +222,15 @@ candidates = candidates.filter(b => {
 });
 
   // velg b
-  const b = candidates[Math.floor(Math.random() * candidates.length)];
+ const b = candidates[Math.floor(Math.random() * candidates.length)];
 
-  state.current = [a, b];
+if(!a || !b){
+  console.warn("Invalid match skipped", a, b);
+  return nextMatch();
+}
+
+state.current = [a, b];
+
 
   const elA = document.getElementById("a");
   const elB = document.getElementById("b");
@@ -285,9 +291,22 @@ function formatChoice(item, opponent){
 }
 
 function pick(i){
-  let w = state.current[i];
-  let l = state.current[1 - i];
-  updateH2H(w, l, "win");
+  const match = state.current;
+
+  if(!match || !match[0] || !match[1]){
+    console.warn("Invalid match state", match);
+    nextMatch();
+    return;
+  }
+
+  let w = match[i];
+  let l = match[1 - i];
+
+  if(!w || !l){
+    console.warn("Undefined player in match", w, l);
+    nextMatch();
+    return;
+  }
 
   let Ea = 1 / (1 + Math.pow(10, (l.rating - w.rating) / 400));
 
@@ -1211,6 +1230,8 @@ function getPreviousRankInFilter(itemId, filter){
 }
 
 function updateH2H(a, b, result){
+  if(!a || !b) return;
+
   if(!a.h2h) a.h2h = {};
   if(!b.h2h) b.h2h = {};
 
@@ -1271,8 +1292,9 @@ function getWinrate(item){
 }
 
 function isRival(a, b){
-  const h2h = a.h2h?.[b.id];
+  if(!a || !b) return false;
 
+  const h2h = a.h2h?.[b.id];
   if(!h2h) return false;
 
   const total = (h2h.w || 0) + (h2h.l || 0) + (h2h.d || 0);
