@@ -1304,7 +1304,6 @@ function renderMode(){
 
   // reset
   ranking.style.display = "none";
-  tournament.style.display = "none";
   if(vs) vs.style.display = "none";
 
   if(state.mode === "home"){
