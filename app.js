@@ -1316,6 +1316,7 @@ function renderMode(){
 
   if(state.mode === "tournament"){
     tournament.style.display = "block";
+    renderTournament();
   }
 }
 
@@ -1337,6 +1338,5 @@ renderChips();
 update();
 nextMatch();
 initDailyTournament();
-renderTournament();
 renderMode();
 
