@@ -1284,14 +1284,14 @@ function isRival(a, b){
   return diff <= 1;
 }
 
-function setMode(mode){
+function setMode(mode, el){
   state.mode = mode;
 
   document.querySelectorAll(".modeBtn").forEach(btn=>{
     btn.classList.remove("active");
   });
 
-  event.target.classList.add("active");
+  if(el) el.classList.add("active");
 
   renderMode();
 }
