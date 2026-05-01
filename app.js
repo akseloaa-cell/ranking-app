@@ -514,6 +514,10 @@ function renderBracket(){
 function renderTournament(){
   const el = document.getElementById("tournament");
 
+  el.innerHTML = `
+  <h2 style="margin-bottom:10px;">🏆 Daily Tournament</h2>
+` + el.innerHTML;
+
   if(!state.tournament){
     el.innerHTML = "Ingen turnering i dag";
     return;
@@ -1304,9 +1308,8 @@ function renderMode(){
   if(vs) vs.style.display = "none";
 
   if(state.mode === "home"){
-    ranking.style.display = "block";
-    tournament.style.display = "block";
-  }
+  ranking.style.display = "block";
+}
 
   if(state.mode === "versus"){
     if(vs) vs.style.display = "block";
@@ -1314,11 +1317,10 @@ function renderMode(){
     tournament.style.display = "none";
   }
 
-  if(state.mode === "tournament"){
-    tournament.style.display = "block";
-    ranking.style.display = "none";
-    if(vs) vs.style.display = "none";
-  }
+if(state.mode === "tournament"){
+  tournament.style.display = "block";
+  ranking.style.display = "none";
+  if(vs) vs.style.display = "none";
 }
 
 function toggleMenu(){
