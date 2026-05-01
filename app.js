@@ -621,7 +621,6 @@ function pickTournamentWinner(i){
 
   saveTournament();
   save();
-  renderTournament();
   update();
 }
 
@@ -672,7 +671,6 @@ function finishTournament(winner){
   save();
   saveTournament();
   update();
-  renderTournament();
 }
 
 function showStats(id){
