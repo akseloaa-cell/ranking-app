@@ -1300,27 +1300,24 @@ function renderMode(){
 
   const ranking = document.getElementById("ranking");
   const tournament = document.getElementById("tournament");
-  const vs = document.getElementById("vs"); // hvis du har vs container
+  const vs = document.getElementById("vs");
 
-  // reset visning
+  // reset
   ranking.style.display = "none";
   tournament.style.display = "none";
   if(vs) vs.style.display = "none";
 
   if(state.mode === "home"){
-  ranking.style.display = "block";
-}
+    ranking.style.display = "block";
+  }
 
   if(state.mode === "versus"){
     if(vs) vs.style.display = "block";
-    ranking.style.display = "none";
-    tournament.style.display = "none";
   }
 
-if(state.mode === "tournament"){
-  tournament.style.display = "block";
-  ranking.style.display = "none";
-  if(vs) vs.style.display = "none";
+  if(state.mode === "tournament"){
+    tournament.style.display = "block";
+  }
 }
 
 function toggleMenu(){
