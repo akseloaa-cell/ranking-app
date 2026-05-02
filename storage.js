@@ -1,4 +1,4 @@
-import { state } from "./state.js";
+import { state } from "./state.js"; 
 
 export function save(){
   localStorage.setItem("items", JSON.stringify(state.items));
