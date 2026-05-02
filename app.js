@@ -505,15 +505,6 @@ function closeRankingView(){
   }, 300);
 }
 
-function renderRankingView(){
-  let list = [...state.items];
-
-  // FILTER
-  if(state.rankingFilter !== "all"){
-    list = list.filter(x =>
-      (x.categories || []).includes(state.rankingFilter)
-    );
-  }
 
   // SORTERING
   if(state.rankingSort === "elo"){
