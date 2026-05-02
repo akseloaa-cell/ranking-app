@@ -1,4 +1,4 @@
-export const state = {
+export const state = { 
   mode: "home",
   items: JSON.parse(localStorage.getItem("items")) || [],
   categories: JSON.parse(localStorage.getItem("categories")) || [],
