@@ -1,4 +1,4 @@
-import { state, save } from "./main.js";
+import { state, save } from "./main.js"; 
 
 export function getWinrate(item){
   if(!item.h2h) return 0;
