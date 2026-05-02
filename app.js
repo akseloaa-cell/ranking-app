@@ -112,15 +112,6 @@ function addItem(){
   nextMatch();
 }
 
-function updateHistory(item){
-  if(!item.history) item.history = [];
-  item.history.push(item.rating);
-
-  if(item.history.length > 30){
-    item.history.shift();
-  }
-}
-
 
 function openAddItem(){
   const overlay = document.getElementById("addOverlay");
