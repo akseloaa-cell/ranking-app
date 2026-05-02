@@ -7,6 +7,7 @@ import { closeAddItem } from "./ui.js";
 import { closeRankingView } from "./ranking.js";
 import { closeStats } from "./stats.js";
 import { setSort } from "./ranking.js";
+import { state } from "./state.js";
 
 // gjør tilgjengelig i HTML
 window.addItem = addItem;
@@ -22,22 +23,6 @@ window.scrollToTop = scrollToTop;
 window.setSort = setSort;
 
 // ================= STATE =================
-export const state = {
-  mode: "home",
-  items: JSON.parse(localStorage.getItem("items")) || [],
-  categories: JSON.parse(localStorage.getItem("categories")) || [],
-  current: [],
-  tournament: JSON.parse(localStorage.getItem("dailyTournament")) || null,
-  previousRanking: JSON.parse(localStorage.getItem("previousRanking")) || {},
-  lastRankingDate: localStorage.getItem("lastRankingDate") || null,
-  previousRankingByCategory: JSON.parse(localStorage.getItem("previousRankingByCategory")) || {},
-  recentMatches: JSON.parse(localStorage.getItem("recentMatches")) || [],
-
-  showAllChips: false,
-  showAllStatsChips: false,
-  rankingFilter: "all",
-  rankingSort: "elo"
-};
 
 // ================= CLEANUP =================
 state.categories = [...new Set(
