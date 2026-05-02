@@ -1,4 +1,4 @@
-import { state, save } from "./main.js";
+import { state, save } from "./main.js"; 
 
 export function startTournament(){
   let pool = [...state.items];
