@@ -130,4 +130,39 @@ box.innerHTML =
 ` : "");
 
 }
- 
+
+function renderMode(){
+
+  const ranking = document.getElementById("ranking");
+  const vs = document.querySelector(".vs");
+  const bracket = document.getElementById("bracket");
+  const tournament = document.getElementById("tournament");
+
+  // default vis home
+  ranking.style.display = "block";
+  vs.style.display = "flex";
+  bracket.style.display = "block";
+  tournament.style.display = "block";
+
+  if(state.mode === "home"){
+    ranking.style.display = "block";
+    vs.style.display = "flex";
+    bracket.style.display = "none";
+    tournament.style.display = "none";
+  }
+
+  if(state.mode === "versus"){
+    ranking.style.display = "none";
+    vs.style.display = "flex";
+    bracket.style.display = "none";
+    tournament.style.display = "none";
+  }
+
+  if(state.mode === "tournament"){
+    ranking.style.display = "none";
+    vs.style.display = "none";
+    bracket.style.display = "block";
+    tournament.style.display = "block";
+  }
+}
+
