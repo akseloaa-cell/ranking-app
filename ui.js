@@ -101,3 +101,33 @@ if(mvp){
     </div>
     ` + html;
 }
+
+function renderChips(filter=""){
+  const box = document.getElementById("chipBox");
+
+const f = filter.toLowerCase();
+
+let list = state.categories.filter(c => c.includes(f));
+
+if(!state.showAllChips){
+  list = list.slice(0, 4); // 👈 antall synlige chips
+}
+box.innerHTML =
+  list.map(c => `
+    <div class="chip" onclick="toggleCat(this)">${c}</div>
+  `).join("") +
+
+  (state.categories.length > 4 ? `
+  <div class="chip"
+       onclick="toggleAllChips()"
+       style="
+         background:#4f8cff;
+         color:white;
+         font-weight:bold;
+       ">
+    ${state.showAllChips ? "−" : "+"}
+  </div>
+` : "");
+
+}
+ 
