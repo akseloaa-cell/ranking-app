@@ -166,3 +166,25 @@ function renderMode(){
   }
 }
 
+
+function openStats(){
+  const overlay = document.getElementById("statsOverlay");
+  const view = document.getElementById("statsView");
+
+  overlay.style.display = "flex";
+
+  setTimeout(() => {
+    view.style.transform = "translateY(0)";
+  }, 10);
+}
+
+function closeStats(){
+  const overlay = document.getElementById("statsOverlay");
+  const view = document.getElementById("statsView");
+
+  view.style.transform = "translateY(100%)";
+
+  setTimeout(() => {
+    overlay.style.display = "none";
+  }, 300);
+}
