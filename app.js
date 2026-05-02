@@ -27,10 +27,6 @@ state.items.forEach(i => {
 });
 
 /* ================= SAVE ================= */
-function save(){
-  localStorage.setItem("items", JSON.stringify(state.items));
-  localStorage.setItem("categories", JSON.stringify(state.categories));
-}
 
 /* ================= CATEGORY ================= */
 function normalize(c){
