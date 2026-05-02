@@ -2,13 +2,16 @@ import { state } from "./state.js";
 import { save } from "./storage.js";
 import { update } from "./ranking.js";
 import { nextMatch } from "./match.js";
+import { normalize } from "./categories.js";
 
 export function addItem(){
   let name = document.getElementById("itemInput").value;
+
+  name = name.trim();
   if(!name) return;
 
   let selected = [...document.querySelectorAll(".chip.active")]
-    .map(x => x.innerText);
+    .map(x => normalize(x.innerText));
 
   state.items.push({
     id: Date.now(),
