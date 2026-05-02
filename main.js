@@ -42,3 +42,20 @@ export function save(){
   localStorage.setItem("categories", JSON.stringify(state.categories));
   localStorage.setItem("recentMatches", JSON.stringify(state.recentMatches));
 }
+
+import * as ui from "./ui.js";
+import * as ranking from "./ranking.js";
+import * as tournament from "./tournament.js";
+import * as stats from "./stats.js";
+
+window.toggleCat = ui.toggleCat;
+window.toggleAllChips = ui.toggleAllChips;
+window.setMode = ui.setMode;
+
+window.showStats = stats.showStats;
+
+window.startTournament = tournament.startTournament;
+
+ranking.updateRanking();
+ui.renderChips();
+ui.renderMode();
