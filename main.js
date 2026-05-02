@@ -1,3 +1,26 @@
+import { addItem } from "./items.js";
+import { addCategory } from "./categories.js";
+import { toggleMenu, setMode, scrollToTop } from "./ui.js";
+import { draw } from "./match.js";
+import { startTournament } from "./tournament.js";
+import { closeAddItem } from "./ui.js";
+import { closeRankingView } from "./ranking.js";
+import { closeStats } from "./stats.js";
+import { setSort } from "./ranking.js";
+
+// gjør tilgjengelig i HTML
+window.addItem = addItem;
+window.addCategory = addCategory;
+window.toggleMenu = toggleMenu;
+window.setMode = setMode;
+window.draw = draw;
+window.startTournament = startTournament;
+window.closeAddItem = closeAddItem;
+window.closeRankingView = closeRankingView;
+window.closeStats = closeStats;
+window.scrollToTop = scrollToTop;
+window.setSort = setSort;
+
 // ================= STATE =================
 export const state = {
   mode: "home",
