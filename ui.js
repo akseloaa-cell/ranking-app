@@ -1,5 +1,5 @@
 import { state } from "./main.js";
-
+ 
 export function renderChips(filter=""){
   const box = document.getElementById("chipBox");
   const f = filter.toLowerCase();
