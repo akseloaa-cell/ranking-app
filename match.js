@@ -153,3 +153,45 @@ b.streak = 0;
   nextMatch();
   saveDailyRanking();
 }
+
+function formatChoice(item, opponent){
+  const rank = getRank(item.id);
+  const elo = Math.round(item.rating);
+  const rivalBadge = isRival(item, opponent)
+  ? `<span style="
+      font-size:10px;
+      background:#ff4d4d;
+      color:white;
+      padding:2px 6px;
+      border-radius:999px;
+      margin-left:6px;
+    ">🔥 RIVAL</span>`
+  : "";
+
+  const Ea = 1/(1+Math.pow(10,(opponent.rating-item.rating)/400));
+  const gain = Math.round(32*(1-Ea));
+  const loss = Math.round(32*(0-Ea));
+
+  const gainColor = gain >= 16 ? "#4caf50" : "#aaa";
+  const lossColor = Math.abs(loss) >= 16 ? "#f44336" : "#aaa";
+
+  return `
+   <div style="font-size:18px; font-weight:600;">
+  ${item.name} ${rivalBadge}
+</div>
+
+    <div style="font-size:11px; opacity:0.6;">
+  #${rank} • ⭐ ${elo}
+</div>
+
+<div style="font-size:11px; opacity:0.5;">
+  ${getH2H(item, opponent)}
+</div>
+
+    <div style="font-size:14px; opacity:0.8;">
+      <span style="color:${gainColor};">+${gain}</span>
+      /
+      <span style="color:${lossColor};">${loss}</span>
+    </div>
+  `;
+}
