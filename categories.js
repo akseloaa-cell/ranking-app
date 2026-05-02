@@ -1,5 +1,6 @@
 import { state } from "./state.js";
 import { save } from "./storage.js";
+import { renderChips } from "./ui.js";
 
 export function normalize(c){
   return c.trim().toLowerCase();
