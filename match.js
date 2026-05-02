@@ -123,6 +123,8 @@ localStorage.setItem("recentMatches", JSON.stringify(state.recentMatches));
   updateHistory(w);
   updateHistory(l);
   saveDailyRanking();
+  updateH2H(w, l, "win");
+  updateH2H(l, w, "loss");
 
   save();
   update();
