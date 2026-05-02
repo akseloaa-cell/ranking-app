@@ -188,3 +188,13 @@ function closeStats(){
     overlay.style.display = "none";
   }, 300);
 }
+
+function renderRankingView(){
+  let list = [...state.items];
+
+  // FILTER
+  if(state.rankingFilter !== "all"){
+    list = list.filter(x =>
+      (x.categories || []).includes(state.rankingFilter)
+    );
+  }
