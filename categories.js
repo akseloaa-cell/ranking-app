@@ -23,3 +23,4 @@ export function addCategory(){
 export function toggleCat(el){
   el.classList.toggle("active");
 }
+
