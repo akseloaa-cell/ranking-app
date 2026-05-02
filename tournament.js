@@ -39,3 +39,43 @@ function initDailyTournament(){
 
   saveTournament();
 }
+
+function renderTournament(){
+  if(state.mode !== "tournament") return;
+  
+  const el = document.getElementById("tournament");
+
+  el.innerHTML = `
+    <h2 style="margin-bottom:10px;">🏆 Daily Tournament</h2>
+  `;
+  
+  if(!state.tournament){
+    el.innerHTML = "Ingen turnering i dag";
+    return;
+  }
+
+  const t = state.tournament;
+
+  if(t.done){
+    el.innerHTML = `
+      🏆 Turnering ferdig!<br>
+      Kategori: ${t.category}
+    `;
+    return;
+  }
+
+  const match = t.rounds[t.currentRound][t.currentMatch];
+
+  el.innerHTML = `
+    🏆 Kategori: ${t.category}<br><br>
+
+    <div class="vs">
+      <div class="choice" onclick="pickTournamentWinner(0)">
+        ${match.a.name}
+      </div>
+      <div class="choice" onclick="pickTournamentWinner(1)">
+        ${match.b.name}
+      </div>
+    </div>
+  `;
+}
