@@ -121,9 +121,6 @@ function updateHistory(item){
   }
 }
 
-function matchKey(a, b){
-  return [a.id, b.id].sort().join("-");
-}
 
 function openAddItem(){
   const overlay = document.getElementById("addOverlay");
