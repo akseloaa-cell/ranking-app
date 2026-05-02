@@ -1,4 +1,4 @@
-const state = {
+export const state = {
   mode: "home",
   items: JSON.parse(localStorage.getItem("items")) || [],
   categories: JSON.parse(localStorage.getItem("categories")) || [],
@@ -12,10 +12,13 @@ const state = {
   round: 0,
   match: 0,
   showAll: false,
-
   showAllChips: false,
   showAllStatsChips: false,
-
   rankingFilter: "all",
   rankingSort: "elo"
 };
+
+export function save(){
+  localStorage.setItem("items", JSON.stringify(state.items));
+  localStorage.setItem("categories", JSON.stringify(state.categories));
+}
