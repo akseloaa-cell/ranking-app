@@ -195,3 +195,7 @@ function formatChoice(item, opponent){
     </div>
   `;
 }
+
+function matchKey(a, b){
+  return [a.id, b.id].sort().join("-");
+}
