@@ -633,28 +633,6 @@ function setSort(type){
   renderRankingView();
 }
 
-function openStats(){
-  const overlay = document.getElementById("statsOverlay");
-  const view = document.getElementById("statsView");
-
-  overlay.style.display = "flex";
-
-  setTimeout(() => {
-    view.style.transform = "translateY(0)";
-  }, 10);
-}
-
-function closeStats(){
-  const overlay = document.getElementById("statsOverlay");
-  const view = document.getElementById("statsView");
-
-  view.style.transform = "translateY(100%)";
-
-  setTimeout(() => {
-    overlay.style.display = "none";
-  }, 300);
-}
-
 // klikk utenfor lukker
 document.getElementById("statsOverlay").addEventListener("click", (e)=>{
   if(e.target.id === "statsOverlay"){
