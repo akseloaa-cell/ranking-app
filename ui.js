@@ -68,3 +68,8 @@ export function renderChips(filter = ""){
       </span>
     ` : "");
 }
+
+export function toggleAllChips(){
+  state.showAllChips = !state.showAllChips;
+  renderChips();
+}
