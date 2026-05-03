@@ -12,6 +12,7 @@ import {
   renderStatsChips,
   toggleCatSection
 } from "./stats.js";
+import { renderChips, toggleAllChips } from "./ui.js";
 
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
@@ -27,6 +28,8 @@ window.addCatToItem = addCatToItem;
 window.removeCatFromItem = removeCatFromItem;
 window.renderStatsChips = renderStatsChips;
 window.toggleCatSection = toggleCatSection;
+window.renderChips = renderChips;
+window.toggleAllChips = toggleAllChips;
 
 // start
 update();
