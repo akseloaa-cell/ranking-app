@@ -128,7 +128,7 @@ export function renderRankingView(){
       ">
       <b>#${i+1}</b> ${x.name}
       <span style="float:right;">
-        ⭐ ${Math.floor(x.rating)}
+         ${Math.floor(x.rating)}
       </span>
     </div>
   `).join("");
