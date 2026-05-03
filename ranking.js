@@ -10,18 +10,29 @@ export function update(){
     const currentRank = i + 1;
     const prevRank = state.previousRanking?.[x.id];
 
-    let indicator = "";
+let indicator = "";
 
-    if(prevRank !== undefined){
-      const diff = prevRank - currentRank;
+// 🆕 NY badge
+if(isNewToday(x)){
+  indicator = `<span style="
+    background:#4f8cff;
+    color:white;
+    padding:2px 6px;
+    border-radius:6px;
+    font-size:11px;
+    font-weight:bold;
+  ">NY</span>`;
+}
+else if(prevRank !== undefined){
+  const diff = prevRank - currentRank;
 
-      if(diff > 0){
-        indicator = `<span style="color:#4caf50; font-size:12px;">▲ ${diff}</span>`;
-      } 
-      else if(diff < 0){
-        indicator = `<span style="color:#f44336; font-size:12px;">▼ ${Math.abs(diff)}</span>`;
-      }
-    }
+  if(diff > 0){
+    indicator = `<span style="color:#4caf50; font-size:12px;">▲ ${diff}</span>`;
+  } 
+  else if(diff < 0){
+    indicator = `<span style="color:#f44336; font-size:12px;">▼ ${Math.abs(diff)}</span>`;
+  }
+}
 
     return `
       <div onclick="showStats(${x.id})"
@@ -140,18 +151,29 @@ export function renderRankingView(){
       prevRank = state.previousRankingByCategory?.[state.rankingFilter]?.[x.id];
     }
 
-    let indicator = "";
+  let indicator = "";
 
-    if(prevRank !== undefined){
-      const diff = prevRank - currentRank;
+// 🆕 NY badge
+if(isNewToday(x)){
+  indicator = `<span style="
+    background:#4f8cff;
+    color:white;
+    padding:2px 6px;
+    border-radius:6px;
+    font-size:11px;
+    font-weight:bold;
+  ">NY</span>`;
+}
+else if(prevRank !== undefined){
+  const diff = prevRank - currentRank;
 
-      if(diff > 0){
-        indicator = `<span style="color:#4caf50; font-size:12px;">▲ ${diff}</span>`;
-      } 
-      else if(diff < 0){
-        indicator = `<span style="color:#f44336; font-size:12px;">▼ ${Math.abs(diff)}</span>`;
-      }
-    }
+  if(diff > 0){
+    indicator = `<span style="color:#4caf50; font-size:12px;">▲ ${diff}</span>`;
+  } 
+  else if(diff < 0){
+    indicator = `<span style="color:#f44336; font-size:12px;">▼ ${Math.abs(diff)}</span>`;
+  }
+}
 
     return `
       <div onclick="showStats(${x.id})"
@@ -243,5 +265,14 @@ export function getDailyMVP(){
   });
 
   return best;
+}
+
+function isNewToday(item){
+  if(!item.createdAt) return false;
+
+  const today = new Date().toISOString().split("T")[0];
+  const created = item.createdAt.split("T")[0];
+
+  return today === created;
 }
 
