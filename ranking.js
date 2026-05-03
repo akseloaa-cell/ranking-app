@@ -2,6 +2,28 @@ import { state } from "./state.js";
 import { showStats } from "./stats.js";
 
 export function update(){
+  const mvp = getDailyMVP();
+
+let mvpHtml = "";
+
+if(mvp){
+  mvpHtml = `
+    <div style="
+      width:80%;
+      margin:10px auto;
+      padding:12px;
+      background:#1f1f1f;
+      border-radius:12px;
+      text-align:center;
+      font-weight:bold;
+    ">
+      🔥 Dagens MVP: ${mvp.item.name} (+${mvp.diff})
+    </div>
+  `;
+}
+document.getElementById("ranking").innerHTML =
+  mvpHtml + html;
+
   const list = [...state.items].sort((a,b)=>b.rating-a.rating);
 
   const html = list.map((x,i)=>`
