@@ -30,6 +30,7 @@ window.renderStatsChips = renderStatsChips;
 window.toggleCatSection = toggleCatSection;
 window.renderChips = renderChips;
 window.toggleAllChips = toggleAllChips;
+window.update = update;
 
 // start
 update();
