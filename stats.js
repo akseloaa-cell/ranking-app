@@ -40,6 +40,100 @@ export function toggleCatSection(){
   }
 }
 
+export function addCatToItem(id, valOverride){
+  const item = state.items.find(x => x.id === id);
+  if(!item) return;
+
+  let val = valOverride || document.getElementById("newCatInput")?.value;
+  if(!val || !val.trim()) return;
+
+  val = val.trim().toLowerCase();
+
+  // 🔥 unngå duplicates
+  if(!item.categories.some(c => c.toLowerCase() === val)){
+    item.categories.push(val);
+  }
+
+  // 🔥 legg til global category hvis mangler
+  if(!state.categories.includes(val)){
+    state.categories.push(val);
+  }
+
+  save();
+  showStats(id);     // rerender stats
+  renderChips();     // oppdater chips
+}
+
+export function removeCatFromItem(id, cat){
+  const item = state.items.find(x => x.id === id);
+  if(!item) return;
+
+  item.categories = item.categories.filter(c => c !== cat);
+
+  save();
+  showStats(id);
+  renderChips();
+}
+
+export function renderStatsChips(itemId, filter=""){
+  const box = document.getElementById("statsChipBox");
+  if(!box) return;
+
+  const item = state.items.find(x => x.id === itemId);
+  const selected = item?.categories || [];
+
+  const f = filter.toLowerCase();
+
+  let list = state.categories
+    .filter(c => c.includes(f));
+
+  if(!state.showAllStatsChips){
+    list = list.slice(0, 6);
+  }
+
+  box.innerHTML =
+    list.map(c => `
+      <span onclick="addCatToItem(${itemId}, '${c}')"
+        style="
+          background:${selected.includes(c) ? '#4f8cff' : '#222'};
+          padding:6px 10px;
+          border-radius:999px;
+          cursor:pointer;
+          font-size:12px;
+          display:inline-block;
+          margin:3px;
+        ">
+        ${c}
+      </span>
+    `).join("") +
+
+    (state.categories.length > 6 ? `
+      <span onclick="toggleStatsChips(${itemId})"
+        style="
+          background:#4f8cff;
+          color:white;
+          font-weight:bold;
+          padding:6px 10px;
+          border-radius:999px;
+          cursor:pointer;
+          font-size:12px;
+          display:inline-block;
+          margin:3px;
+        ">
+        ${state.showAllStatsChips ? "−" : "+"}
+      </span>
+    ` : "");
+}
+
+export function toggleStatsChips(id){
+  state.showAllStatsChips = !state.showAllStatsChips;
+
+  renderStatsChips(
+    id,
+    document.getElementById("statsCatSearch")?.value || ""
+  );
+}
+
 export function showStats(id){
   const item = state.items.find(x => x.id === id);
   if(!item) return;
