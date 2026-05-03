@@ -6,9 +6,10 @@ export function showStats(id){
 
   document.getElementById("statsContent").innerHTML = `
     <h2>${item.name}</h2>
-    <p>Rating: ${Math.floor(item.rating)}</p>
+    <p>⭐ ${Math.floor(item.rating)}</p>
   `;
 
+  // 🔥 DENNE MANGLER OFTE
   document.getElementById("statsOverlay").style.display = "flex";
 }
 
