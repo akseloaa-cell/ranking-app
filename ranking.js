@@ -1,5 +1,6 @@
 import { state } from "./state.js";
-import { showStats } from "./stats.js";
+
+/* ================= MAIN RANKING ================= */
 
 export function update(){
 
@@ -7,7 +8,6 @@ export function update(){
 
   const html = list.map((x,i)=>{
     const currentRank = i + 1;
-
     const prevRank = state.previousRanking?.[x.id];
 
     let indicator = "";
@@ -16,39 +16,40 @@ export function update(){
       const diff = prevRank - currentRank;
 
       if(diff > 0){
-        indicator = `<span style="color:#4caf50;">▲ ${diff}</span>`;
+        indicator = `<span style="color:#4caf50; font-size:12px;">▲ ${diff}</span>`;
       } 
       else if(diff < 0){
-        indicator = `<span style="color:#f44336;">▼ ${Math.abs(diff)}</span>`;
+        indicator = `<span style="color:#f44336; font-size:12px;">▼ ${Math.abs(diff)}</span>`;
       }
     }
 
     return `
- <div onclick="showStats(${x.id})"
-  style="
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:10px;
-    background:#141a26;
-    border:1px solid #2a3142;
-    border-radius:10px;
-    margin:6px 0;
-    cursor:pointer;
+      <div onclick="showStats(${x.id})"
+        style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          padding:10px;
+          background:#141a26;
+          border:1px solid #2a3142;
+          border-radius:10px;
+          margin:6px 0;
+          cursor:pointer;
+        ">
 
-    <span>${indicator}</span>
-    <b>#${currentRank}</b>
-    <span>${x.name}</span>
-  </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <span>${indicator}</span>
+          <b>#${currentRank}</b>
+          <span>${x.name}</span>
+        </div>
 
-  <span> ${Math.floor(x.rating)}</span>
+        <span>⭐ ${Math.floor(x.rating)}</span>
 
-</div>
-
+      </div>
     `;
   }).join("");
 
-  // 🔥 MVP etterpå
+  // 🔥 MVP
   const mvp = getDailyMVP();
 
   let mvpHtml = "";
@@ -69,9 +70,10 @@ export function update(){
     `;
   }
 
-  document.getElementById("ranking").innerHTML =
-    mvpHtml + html;
+  document.getElementById("ranking").innerHTML = mvpHtml + html;
 }
+
+/* ================= HELPERS ================= */
 
 export function getRank(id){
   return [...state.items]
@@ -79,10 +81,7 @@ export function getRank(id){
     .findIndex(x => x.id === id) + 1;
 }
 
-export function setSort(type){
-  state.rankingSort = type;
-  update();
-}
+/* ================= FULL RANKING ================= */
 
 export function openRankingView(){
   const overlay = document.getElementById("rankingOverlay");
@@ -109,6 +108,7 @@ export function closeRankingView(){
 }
 
 export function renderRankingView(){
+
   let list = [...state.items];
 
   // 🔹 FILTER
@@ -118,50 +118,73 @@ export function renderRankingView(){
     );
   }
 
-  // 🔹 SORTERING
+  // 🔹 SORT
   if(state.rankingSort === "elo"){
     list.sort((a,b)=>b.rating-a.rating);
   }
-
   if(state.rankingSort === "wins"){
     list.sort((a,b)=>(b.tournamentWins||0)-(a.tournamentWins||0));
   }
-
   if(state.rankingSort === "top3"){
     list.sort((a,b)=>(b.top3||0)-(a.top3||0));
   }
 
-  // 🔹 HTML
-  const html = list.map((x,i)=>`
-    <div onclick="showStats(${x.id})"
-  style="
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:12px;
-    margin:6px 0;
-    background:#1f1f1f;
-    border-radius:12px;
-    cursor:pointer;
-  ">
+  const html = list.map((x,i)=>{
+    const currentRank = i + 1;
 
-  <div style="display:flex; gap:8px; align-items:center;">
-    <span>${indicator}</span>
-    <b>#${currentRank}</b>
-    <span>${x.name}</span>
-  </div>
+    let prevRank;
 
-  <span>${Math.floor(x.rating)}</span>
+    if(state.rankingFilter === "all"){
+      prevRank = state.previousRanking?.[x.id];
+    } else {
+      prevRank = state.previousRankingByCategory?.[state.rankingFilter]?.[x.id];
+    }
 
-</div>
+    let indicator = "";
 
-  `).join("");
+    if(prevRank !== undefined){
+      const diff = prevRank - currentRank;
+
+      if(diff > 0){
+        indicator = `<span style="color:#4caf50; font-size:12px;">▲ ${diff}</span>`;
+      } 
+      else if(diff < 0){
+        indicator = `<span style="color:#f44336; font-size:12px;">▼ ${Math.abs(diff)}</span>`;
+      }
+    }
+
+    return `
+      <div onclick="showStats(${x.id})"
+        style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          padding:12px;
+          margin:6px 0;
+          background:#1f1f1f;
+          border-radius:12px;
+          cursor:pointer;
+        ">
+
+        <div style="display:flex; gap:8px; align-items:center;">
+          <span>${indicator}</span>
+          <b>#${currentRank}</b>
+          <span>${x.name}</span>
+        </div>
+
+        <span>${Math.floor(x.rating)}</span>
+
+      </div>
+    `;
+  }).join("");
 
   document.getElementById("rankingViewList").innerHTML =
     "<h3>🏆 Full ranking</h3>" + html;
 
   renderRankingFilters();
 }
+
+/* ================= FILTER ================= */
 
 export function renderRankingFilters(){
   const container = document.getElementById("rankingFilters");
@@ -188,6 +211,15 @@ export function setRankingFilter(cat){
   renderRankingView();
 }
 
+/* ================= SORT ================= */
+
+export function setSort(type){
+  state.rankingSort = type;
+  renderRankingView();
+}
+
+/* ================= MVP ================= */
+
 export function getDailyMVP(){
   if(!state.previousRanking) return null;
 
@@ -212,3 +244,4 @@ export function getDailyMVP(){
 
   return best;
 }
+
