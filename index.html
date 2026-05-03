@@ -88,28 +88,42 @@
 
 <button onclick="draw()">🤝 Uavgjort</button>
 
-<div style="display:flex; gap:10px; margin:10px 0; justify-content:center;">
-
-  <button onclick="openAddItem()" style="
-    padding:8px 12px;
-    border-radius:10px;
-    background:#4f8cff;
-    border:none;
-    color:white;
-    cursor:pointer;
-  ">
-    ➕ Add item
-  </button>
-
+<div style="
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+  width: 100%;
+">
+  
+  <!-- FULL RANKING -->
   <button onclick="openRankingView()" style="
-    padding:8px 12px;
-    border-radius:10px;
-    background:#1f1f1f;
-    border:1px solid #333;
-    color:white;
-    cursor:pointer;
+    flex: 1;
+    padding: 12px;
+    margin-right: 10px;
+    border-radius: 12px;
+    background: #1f1f1f;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
   ">
     🏆 Full ranking
+  </button>
+
+  <!-- ADD ITEM (RUND KNAPP) -->
+  <button onclick="openAddItem()" style="
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #4f8cff;
+    color: white;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    flex-shrink: 0;
+  ">
+    +
   </button>
 
 </div>
