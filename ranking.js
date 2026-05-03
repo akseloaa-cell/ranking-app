@@ -37,3 +37,14 @@ export function openRankingView(){
 
   renderRankingView();
 }
+
+export function closeRankingView(){
+  const overlay = document.getElementById("rankingOverlay");
+  const view = document.getElementById("rankingView");
+
+  view.style.transform = "translateY(100%)";
+
+  setTimeout(() => {
+    overlay.style.display = "none";
+  }, 300);
+}
