@@ -24,3 +24,16 @@ export function setSort(type){
   state.rankingSort = type;
   update();
 }
+
+export function openRankingView(){
+  const overlay = document.getElementById("rankingOverlay");
+  const view = document.getElementById("rankingView");
+
+  overlay.style.display = "flex";
+
+  setTimeout(() => {
+    view.style.transform = "translateY(0)";
+  }, 10);
+
+  renderRankingView();
+}
