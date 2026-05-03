@@ -49,7 +49,7 @@ else if(prevRank !== undefined){
     ">
 
     <div style="display:flex; align-items:center; gap:8px;">
-      <span style="width:10px; text-align:left;">
+      <span style="width:28px; text-align:left;">
         ${indicator}
       </span>
 
