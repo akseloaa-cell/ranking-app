@@ -17,8 +17,8 @@ export function nextMatch(){
 
   state.current = [a, b];
 
-  document.getElementById("a").innerHTML = a.name;
-  document.getElementById("b").innerHTML = b.name;
+  document.getElementById("a").innerHTML = formatchoice(a, b);
+  document.getElementById("b").innerHTML = formatchoice(b, a);
 
   document.getElementById("a").onclick = () => pick(0);
   document.getElementById("b").onclick = () => pick(1);
