@@ -12,6 +12,10 @@ body {
   padding: 20px;
 }
 
+.container > div {
+  box-sizing: border-box;
+}
+
 /* HEADLINE */
 h2, h3 {
   font-weight: 700;
@@ -290,4 +294,14 @@ button:active {
 
 .menuItem:hover{
   background:#2a2a2a;
+}
+
+.action-row {
+  width: 80%;
+  margin: 10px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
 }
