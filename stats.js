@@ -22,6 +22,20 @@ export function updateHistory(item){
   if(item.history.length > 30) item.history.shift();
 }
 
+export function getH2H(a, b){
+  if(!a.h2h || !a.h2h[b.id]) return "0-0";
+
+  const r = a.h2h[b.id];
+  return `${r.w}-${r.l}`;
+}
+
+export function isRival(a, b){
+  if(!a.h2h || !a.h2h[b.id]) return false;
+
+  const total = a.h2h[b.id].w + a.h2h[b.id].l;
+  return total >= 3;
+}
+
 export function updateH2H(a, b, result){
   if(!a.h2h) a.h2h = {};
   if(!a.h2h[b.id]) a.h2h[b.id] = { w:0,l:0,d:0 };
