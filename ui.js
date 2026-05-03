@@ -36,10 +36,6 @@ export function scrollToTop(){
   document.getElementById("rankingView").scrollTop = 0;
 }
 
-export function closeAddItem(){
-  document.getElementById("addOverlay").style.display = "none";
-}
-
 export function renderChips(filter = ""){
   const box = document.getElementById("chipBox");
   if(!box) return;
