@@ -35,9 +35,7 @@ export function update(){
     border-radius:10px;
     margin:6px 0;
     cursor:pointer;
-  ">
 
-  <div style="display:flex; gap:8px; align-items:center;">
     <span>${indicator}</span>
     <b>#${currentRank}</b>
     <span>${x.name}</span>
