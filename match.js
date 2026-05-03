@@ -64,3 +64,38 @@ export function draw(){
   update();
   nextMatch();
 }
+
+function formatChoice(item, opponent){
+  const rank = getRank(item.id);
+  const elo = Math.round(item.rating);
+
+  const rival = isRival(item, opponent)
+    ? `<span style="color:#ff4d4d;">🔥</span>`
+    : "";
+
+  const h2h = getH2H(item, opponent);
+
+  const Ea = 1/(1+Math.pow(10,(opponent.rating-item.rating)/400));
+  const gain = Math.round(32*(1-Ea));
+  const loss = Math.round(32*(0-Ea));
+
+  return `
+    <div style="font-size:18px;font-weight:600;">
+      ${item.name} ${rival}
+    </div>
+
+    <div style="font-size:12px;opacity:0.6;">
+      #${rank} • ⭐ ${elo}
+    </div>
+
+    <div style="font-size:11px;opacity:0.5;">
+      ${h2h}
+    </div>
+
+    <div style="font-size:13px;">
+      <span style="color:#4caf50;">+${gain}</span>
+      /
+      <span style="color:#f44336;">${loss}</span>
+    </div>
+  `;
+}
