@@ -2,6 +2,9 @@ import { state } from "./state.js";
 import { save } from "./storage.js";
 import { update } from "./ranking.js";
 import { updateHistory, saveDailyRanking, updateH2H } from "./stats.js";
+import { getRank } from "./ranking.js";
+import { getH2H, isRival } from "./stats.js";
+
 
 export function nextMatch(){
   if(state.items.length < 2) return;
