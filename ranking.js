@@ -4,7 +4,9 @@ import { state } from "./state.js";
 
 export function update(){
 
-  let list = [...state.items].sort((a,b)=>b.rating-a.rating);
+  let list = [...state.items]
+  .sort((a,b)=>b.rating-a.rating)
+  .slice(0, 10);
 
   const html = list.map((x,i)=>{
     const currentRank = i + 1;
