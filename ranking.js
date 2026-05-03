@@ -2,53 +2,60 @@ import { state } from "./state.js";
 import { showStats } from "./stats.js";
 
 export function update(){
+
+  let list = [...state.items].sort((a,b)=>b.rating-a.rating);
+
+  const html = list.map((x,i)=>{
+    const currentRank = i + 1;
+
+    const prevRank = state.previousRanking?.[x.id];
+
+    let indicator = "";
+
+    if(prevRank !== undefined){
+      const diff = prevRank - currentRank;
+
+      if(diff > 0){
+        indicator = `<span style="color:#4caf50;">▲ ${diff}</span>`;
+      } 
+      else if(diff < 0){
+        indicator = `<span style="color:#f44336;">▼ ${Math.abs(diff)}</span>`;
+      }
+    }
+
+    return `
+      <div onclick="showStats(${x.id})">
+        <b>#${currentRank}</b> ${x.name}
+        <span style="float:right;">
+          ${indicator} ⭐ ${Math.floor(x.rating)}
+        </span>
+      </div>
+    `;
+  }).join("");
+
+  // 🔥 MVP etterpå
   const mvp = getDailyMVP();
 
-let mvpHtml = "";
+  let mvpHtml = "";
 
-if(mvp){
-  mvpHtml = `
-    <div style="
-      width:80%;
-      margin:10px auto;
-      padding:12px;
-      background:#1f1f1f;
-      border-radius:12px;
-      text-align:center;
-      font-weight:bold;
-    ">
-      🔥 Dagens MVP: ${mvp.item.name} (+${mvp.diff})
-    </div>
-  `;
-}
-document.getElementById("ranking").innerHTML =
-  mvpHtml + html;
-
-  const list = [...state.items].sort((a,b)=>b.rating-a.rating);
-
-  const html = list.map((x,i)=>`
-    <div onclick="showStats(${x.id})"
-      style="padding:12px;margin:6px 0;background:#1f1f1f;border-radius:12px;cursor:pointer;">
-      <b>#${i+1}</b> ${x.name}
-      <span style="float:right;">${Math.floor(x.rating)}</span>
-    </div>
-  `).join("");
-const prevRank = state.previousRanking?.[x.id];
-
-let indicator = "";
-
-if(prevRank !== undefined){
-  const diff = prevRank - currentRank;
-
-  if(diff > 0){
-    indicator = `<span style="color:#4caf50;">▲ ${diff}</span>`;
-  } 
-  else if(diff < 0){
-    indicator = `<span style="color:#f44336;">▼ ${Math.abs(diff)}</span>`;
+  if(mvp){
+    mvpHtml = `
+      <div style="
+        width:80%;
+        margin:10px auto;
+        padding:12px;
+        background:#1f1f1f;
+        border-radius:12px;
+        text-align:center;
+        font-weight:bold;
+      ">
+        🔥 Dagens MVP: ${mvp.item.name} (+${mvp.diff})
+      </div>
+    `;
   }
-}
 
-  document.getElementById("ranking").innerHTML = html;
+  document.getElementById("ranking").innerHTML =
+    mvpHtml + html;
 }
 
 export function getRank(id){
