@@ -13,6 +13,7 @@ import {
   toggleCatSection
 } from "./stats.js";
 import { renderChips, toggleAllChips } from "./ui.js";
+import {  openAddItem, closeAddItem } from "./ui.js";
 
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
@@ -31,6 +32,8 @@ window.toggleCatSection = toggleCatSection;
 window.renderChips = renderChips;
 window.toggleAllChips = toggleAllChips;
 window.update = update;
+window.openAddItem = openAddItem;
+window.closeAddItem = closeAddItem;
 
 // start
 update();
