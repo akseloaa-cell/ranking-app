@@ -1,6 +1,38 @@
 import { state } from "./state.js";
 import { save } from "./storage.js";
 import { renderChips } from "./ui.js";
+import { updateRanking } from "./ranking.js";
+import { nextMatch } from "./match.js";
+
+export function deleteItem(id){
+  const confirmDelete = confirm("Er du sikker?");
+  if(!confirmDelete) return;
+
+  state.items = state.items.filter(x => x.id !== id);
+
+  save();
+  updateRanking();
+  nextMatch();
+
+  closeStats();
+}
+
+export function renameItem(id, newName){
+  const item = state.items.find(x => x.id === id);
+  if(!item) return;
+
+  newName = newName.trim();
+
+  if(!newName){
+    alert("Navn kan ikke være tomt");
+    return;
+  }
+
+  item.name = newName;
+
+  save();
+  updateRanking();
+}
 
 export function getWinrate(item){
   if(!item.h2h) return 0;
