@@ -304,11 +304,30 @@ export function isRival(a, b){
 
 export function updateH2H(a, b, result){
   if(!a.h2h) a.h2h = {};
-  if(!a.h2h[b.id]) a.h2h[b.id] = { w:0,l:0,d:0 };
+  if(!b.h2h) b.h2h = {};
 
-  if(result === "win") a.h2h[b.id].w++;
-  if(result === "loss") a.h2h[b.id].l++;
-  if(result === "draw") a.h2h[b.id].d++;
+  if(!a.h2h[b.id]){
+    a.h2h[b.id] = { wins: 0, losses: 0, draws: 0 };
+  }
+
+  if(!b.h2h[a.id]){
+    b.h2h[a.id] = { wins: 0, losses: 0, draws: 0 };
+  }
+
+  if(result === "win"){
+    a.h2h[b.id].wins++;
+    b.h2h[a.id].losses++;
+  }
+
+  if(result === "loss"){
+    a.h2h[b.id].losses++;
+    b.h2h[a.id].wins++;
+  }
+
+  if(result === "draw"){
+    a.h2h[b.id].draws++;
+    b.h2h[a.id].draws++;
+  }
 }
 
 export function saveDailyRanking(){
