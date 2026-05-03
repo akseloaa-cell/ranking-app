@@ -91,7 +91,7 @@ if(mvp){
 
   mvpHtml = `
     <div style="
-      width:100%;
+      width:80%;
       margin:10px 0;
       padding:8px 10px;
       background:#141a26;
