@@ -1,6 +1,28 @@
 import { state } from "./state.js";
 import { toggleCat } from "./categories.js";
 
+export function openAddItem(){
+  const overlay = document.getElementById("addOverlay");
+  const view = document.getElementById("addView");
+
+  overlay.style.display = "flex";
+
+  setTimeout(() => {
+    view.style.transform = "translateY(0)";
+  }, 10);
+}
+
+export function closeAddItem(){
+  const overlay = document.getElementById("addOverlay");
+  const view = document.getElementById("addView");
+
+  view.style.transform = "translateY(100%)";
+
+  setTimeout(() => {
+    overlay.style.display = "none";
+  }, 300);
+}
+
 export function toggleMenu(){
   const menu = document.getElementById("modeMenu");
   menu.style.display = menu.style.display === "flex" ? "none" : "flex";
