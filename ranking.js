@@ -120,3 +120,28 @@ export function setRankingFilter(cat){
   state.rankingFilter = cat;
   renderRankingView();
 }
+
+export function getDailyMVP(){
+  if(!state.previousRanking) return null;
+
+  const sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
+
+  let best = null;
+  let bestDiff = 0;
+
+  sorted.forEach((item, i) => {
+    const currentRank = i + 1;
+    const prevRank = state.previousRanking[item.id];
+
+    if(prevRank === undefined) return;
+
+    const diff = prevRank - currentRank;
+
+    if(diff > bestDiff){
+      bestDiff = diff;
+      best = { item, diff };
+    }
+  });
+
+  return best;
+}
