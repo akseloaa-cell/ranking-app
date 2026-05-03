@@ -27,7 +27,7 @@ export function update(){
       <div onclick="showStats(${x.id})">
         <b>#${currentRank}</b> ${x.name}
         <span style="float:right;">
-          ${indicator} ⭐ ${Math.floor(x.rating)}
+          ${indicator}  ${Math.floor(x.rating)}
         </span>
       </div>
     `;
