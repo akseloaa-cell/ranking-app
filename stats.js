@@ -1,5 +1,4 @@
 import { state } from "./state.js";
-import { state } from "./state.js";
 import { save } from "./storage.js";
 import { renderChips } from "./ui.js";
 
