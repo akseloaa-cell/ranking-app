@@ -1,7 +1,7 @@
 import { state } from "./state.js";
 import { save } from "./storage.js";
 import { renderChips } from "./ui.js";
-import { updateRanking } from "./ranking.js";
+import { update } from "./ranking.js";
 import { nextMatch } from "./match.js";
 
 export function deleteItem(id){
