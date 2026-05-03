@@ -33,6 +33,20 @@ document.getElementById("ranking").innerHTML =
       <span style="float:right;">${Math.floor(x.rating)}</span>
     </div>
   `).join("");
+const prevRank = state.previousRanking?.[x.id];
+
+let indicator = "";
+
+if(prevRank !== undefined){
+  const diff = prevRank - currentRank;
+
+  if(diff > 0){
+    indicator = `<span style="color:#4caf50;">▲ ${diff}</span>`;
+  } 
+  else if(diff < 0){
+    indicator = `<span style="color:#f44336;">▼ ${Math.abs(diff)}</span>`;
+  }
+}
 
   document.getElementById("ranking").innerHTML = html;
 }
