@@ -289,10 +289,10 @@ export function updateHistory(item){
 }
 
 export function getH2H(a, b){
-  if(!a.h2h || !a.h2h[b.id]) return "0-0";
+  const h = a.h2h?.[b.id];
+  if(!h) return "0-0";
 
-  const r = a.h2h[b.id];
-  return `${r.w}-${r.l}`;
+  return `${h.wins}-${h.losses}${h.draws ? ` (${h.draws})` : ""}`;
 }
 
 export function isRival(a, b){
