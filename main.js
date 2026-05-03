@@ -4,6 +4,14 @@ import { showStats, closeStats } from "./stats.js";
 import * as ui from "./ui.js";
 import * as stats from "./stats.js";
 import * as tournament from "./tournament.js";
+import {
+  renameItem,
+  deleteItem,
+  addCatToItem,
+  removeCatFromItem,
+  renderStatsChips,
+  toggleCatSection
+} from "./stats.js";
 
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
@@ -13,6 +21,12 @@ window.startTournament = tournament.startTournament;
 window.scrollToTop = ui.scrollToTop;
 window.showStats = showStats;
 window.closeStats = closeStats;
+window.renameItem = renameItem;
+window.deleteItem = deleteItem;
+window.addCatToItem = addCatToItem;
+window.removeCatFromItem = removeCatFromItem;
+window.renderStatsChips = renderStatsChips;
+window.toggleCatSection = toggleCatSection;
 
 // start
 update();
