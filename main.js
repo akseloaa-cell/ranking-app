@@ -14,6 +14,7 @@ import {
 } from "./stats.js";
 import { renderChips, toggleAllChips } from "./ui.js";
 import {  openAddItem, closeAddItem } from "./ui.js";
+import { openRankingView } from"./ranking.js";
 
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
@@ -34,6 +35,7 @@ window.toggleAllChips = toggleAllChips;
 window.update = update;
 window.openAddItem = openAddItem;
 window.closeAddItem = closeAddItem;
+window.openRankingView = openRankingView;
 
 // start
 update();
