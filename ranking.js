@@ -34,39 +34,33 @@ else if(prevRank !== undefined){
   }
 }
 
-  return `
+return `
   <div onclick="showStats(${x.id})"
     style="
       display:flex;
       justify-content:space-between;
       align-items:center;
-      padding:8px 10px;
+      padding:6px 10px;
       background:#141a26;
       border:1px solid #2a3142;
       border-radius:10px;
       margin:4px 0;
       cursor:pointer;
+      font-size:14px;
     ">
 
-    <div style="display:flex; align-items:center; gap:8px;">
-      <span style="width:28px; text-align:left;">
-        ${indicator}
-      </span>
-
+    <span style="display:flex; align-items:center; gap:6px;">
+      ${indicator}
       <b>#${currentRank}</b>
-
-      <span style="opacity:0.9;">
-        ${x.name}
-      </span>
-    </div>
+      ${x.name}
+    </span>
 
     <span style="opacity:0.7;">
-       ${Math.floor(x.rating)}
+      ${Math.floor(x.rating)}
     </span>
 
   </div>
 `;
-
   }).join("");
 
   // 🔥 MVP
