@@ -19,6 +19,7 @@ import {
   setSort,
   setRankingFilter
 } from "./ranking.js";
+import { openAddItem, closeAddItem } from "./ui.js";
 
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
