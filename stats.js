@@ -9,12 +9,26 @@ export function showStats(id){
     <p>⭐ ${Math.floor(item.rating)}</p>
   `;
 
-  // 🔥 DENNE MANGLER OFTE
-  document.getElementById("statsOverlay").style.display = "flex";
+  const overlay = document.getElementById("statsOverlay");
+  const view = document.getElementById("statsView");
+
+  overlay.style.display = "flex";
+
+  // 🔥 viktig for animasjon
+  setTimeout(() => {
+    view.style.transform = "translateY(0)";
+  }, 10);
 }
 
 export function closeStats(){
-  document.getElementById("statsOverlay").style.display = "none";
+  const overlay = document.getElementById("statsOverlay");
+  const view = document.getElementById("statsView");
+
+  view.style.transform = "translateY(100%)";
+
+  setTimeout(() => {
+    overlay.style.display = "none";
+  }, 300);
 }
 
 export function updateHistory(item){
