@@ -64,25 +64,63 @@ return `
   }).join("");
 
   // 🔥 MVP
-  const mvp = getDailyMVP();
+const mvp = getDailyMVP();
 
-  let mvpHtml = "";
+let mvpHtml = "";
 
-  if(mvp){
-    mvpHtml = `
-      <div style="
-        width:80%;
-        margin:10px auto;
-        padding:12px;
-        background:#1f1f1f;
-        border-radius:12px;
-        text-align:center;
-        font-weight:bold;
-      ">
-        🔥 Dagens MVP: ${mvp.item.name} (+${mvp.diff})
-      </div>
-    `;
+if(mvp){
+
+  const currentRank = [...state.items]
+    .sort((a,b)=>b.rating-a.rating)
+    .findIndex(x => x.id === mvp.item.id) + 1;
+
+  const prevRank = state.previousRanking?.[mvp.item.id];
+
+  let mvpIndicator = "";
+
+  if(prevRank !== undefined){
+    const diff = prevRank - currentRank;
+
+    if(diff > 0){
+      mvpIndicator = `<span style="color:#4caf50; font-size:12px;">▲ ${diff}</span>`;
+    } 
+    else if(diff < 0){
+      mvpIndicator = `<span style="color:#f44336; font-size:12px;">▼ ${Math.abs(diff)}</span>`;
+    }
   }
+
+  mvpHtml = `
+    <div style="
+      width:80%;
+      margin:10px auto;
+      padding:8px 10px;
+      background:#141a26;
+      border:1px solid #2a3142;
+      border-radius:10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    ">
+
+      <span style="display:flex; align-items:baseline; gap:8px;">
+
+        <b style="font-size:14px;">
+          🔥 ${mvp.item.name}
+        </b>
+
+        <span style="font-size:11px; opacity:0.5;">
+          #${currentRank} • ⭐ ${Math.floor(mvp.item.rating)}
+        </span>
+
+      </span>
+
+      <span>
+        ${mvpIndicator}
+      </span>
+
+    </div>
+  `;
+}
 
   document.getElementById("ranking").innerHTML = mvpHtml + html;
 }
