@@ -1,4 +1,5 @@
 import { state } from "./state.js";
+import { toggleCat } from "./categories.js";
 
 export function toggleMenu(){
   const menu = document.getElementById("modeMenu");
@@ -16,9 +17,6 @@ export function scrollToTop(){
 export function closeAddItem(){
   document.getElementById("addOverlay").style.display = "none";
 }
-
-import { state } from "./state.js";
-import { toggleCat } from "./categories.js";
 
 export function renderChips(filter = ""){
   const box = document.getElementById("chipBox");
