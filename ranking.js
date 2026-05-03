@@ -89,18 +89,19 @@ if(mvp){
     }
   }
 
-  mvpHtml = `
-    <div style="
-      width:80%;
-      margin:10px 0;
-      padding:8px 10px;
-      background:#141a26;
-      border:1px solid #2a3142;
-      border-radius:10px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    ">
+ mvpHtml = `
+  <div style="
+    width:100%;
+    box-sizing:border-box;
+    padding:8px 10px;
+    background:#141a26;
+    border:1px solid #2a3142;
+    border-radius:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:10px 0;
+  ">
 
       <span style="display:flex; align-items:baseline; gap:8px;">
 
