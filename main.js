@@ -13,8 +13,12 @@ import {
   toggleCatSection
 } from "./stats.js";
 import { renderChips, toggleAllChips } from "./ui.js";
-import {  openAddItem, closeAddItem } from "./ui.js";
-import { openRankingView, closeRankingView } from "./ranking.js";
+import { 
+  openRankingView,
+  closeRankingView,
+  setSort,
+  setRankingFilter
+} from "./ranking.js";
 
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
@@ -37,6 +41,10 @@ window.openAddItem = openAddItem;
 window.closeAddItem = closeAddItem;
 window.openRankingView = openRankingView;
 window.closeRankingView = closeRankingView;
+window.openRankingView = openRankingView;
+window.closeRankingView = closeRankingView;
+window.setSort = setSort;
+window.setRankingFilter = setRankingFilter;
 
 // start
 update();
