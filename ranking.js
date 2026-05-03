@@ -24,12 +24,29 @@ export function update(){
     }
 
     return `
-      <div onclick="showStats(${x.id})">
-        <b>#${currentRank}</b> ${x.name}
-        <span style="float:right;">
-          ${indicator}  ${Math.floor(x.rating)}
-        </span>
-      </div>
+ <div onclick="showStats(${x.id})"
+  style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px;
+    background:#141a26;
+    border:1px solid #2a3142;
+    border-radius:10px;
+    margin:6px 0;
+    cursor:pointer;
+  ">
+
+  <div style="display:flex; gap:8px; align-items:center;">
+    <span>${indicator}</span>
+    <b>#${currentRank}</b>
+    <span>${x.name}</span>
+  </div>
+
+  <span> ${Math.floor(x.rating)}</span>
+
+</div>
+
     `;
   }).join("");
 
