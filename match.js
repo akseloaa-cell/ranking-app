@@ -71,6 +71,7 @@ export function pick(i){
 
   updateHistory(w);
   updateHistory(l);
+  saveDailyRanking();
 
   updateH2H(w, l, "win");
 
@@ -93,6 +94,7 @@ export function draw(){
 
   updateHistory(a);
   updateHistory(b);
+  saveDailyRanking();
 
   save();
   update();
