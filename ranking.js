@@ -287,7 +287,9 @@ export function setSort(type){
 /* ================= MVP ================= */
 
 export function getDailyMVP(){
-  if(!state.previousRanking) return null;
+  if(!state.previousRanking || Object.keys(state.previousRanking).length === 0){
+    return null;
+  }
 
   const sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
 
