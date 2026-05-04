@@ -86,7 +86,16 @@ export function renderChips(filter = "", targetId = "chipBox", mode = "select", 
     ` : "");
 }
 
-export function toggleAllChips(){
+export function toggleAllChips(targetId, mode, itemId){
   state.showAllChips = !state.showAllChips;
-  renderChips();
+  renderChips(
+    document.getElementById("catSearch")?.value || "",
+    targetId,
+    mode,
+    itemId
+  );
+}
+
+export function toggleChip(el){
+  el.classList.toggle("active");
 }
