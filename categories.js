@@ -10,14 +10,15 @@ export function addCategory(){
   let v = document.getElementById("catInput").value;
   if(!v || !v.trim()) return;
 
-  v = normalize(v);
+  v = v.trim().toLowerCase();
 
   if(!state.categories.includes(v)){
     state.categories.push(v);
   }
 
   document.getElementById("catInput").value = "";
-  renderChips();
+
+  renderChips({ targetId: "chipBox", mode: "select" });
   save();
 }
 
