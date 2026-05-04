@@ -160,12 +160,13 @@ export function renderStatsChips(itemId, filter=""){
 export function toggleStatsChips(id){
   state.showAllStatsChips = !state.showAllStatsChips;
 
-  renderStatsChips(
-    id,
-    document.getElementById("statsCatSearch")?.value || ""
-  );
-}
-
+renderChips({
+  filter: document.getElementById("statsCatSearch")?.value || "",
+  targetId: "statsChipBox",
+  mode: "add",
+  itemId: id
+});
+  
 export function showStats(id){
   const item = state.items.find(x => x.id === id);
   if(!item) return;
