@@ -253,24 +253,12 @@ else if(prevRank !== undefined){
 
 /* ================= FILTER ================= */
 
+
 export function renderRankingFilters(){
-  const container = document.getElementById("rankingFilters");
-
-  const cats = ["all", ...state.categories];
-
-  container.innerHTML = cats.map(c => `
-    <span onclick="setRankingFilter('${c}')"
-      style="
-        padding:6px 10px;
-        margin:4px;
-        border-radius:999px;
-        background:${state.rankingFilter === c ? '#4f8cff' : '#222'};
-        cursor:pointer;
-        display:inline-block;
-      ">
-      ${c}
-    </span>
-  `).join("");
+  renderChips({
+    targetId: "rankingFilters",
+    mode: "filter"
+  });
 }
 
 export function setRankingFilter(cat){
