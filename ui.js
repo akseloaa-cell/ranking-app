@@ -36,9 +36,6 @@ export function scrollToTop(){
   document.getElementById("rankingView").scrollTop = 0;
 }
 
-import { state } from "./state.js";
-
-
 export function renderChips({
   filter = "",
   targetId,
