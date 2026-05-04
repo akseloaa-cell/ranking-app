@@ -36,8 +36,10 @@ export function scrollToTop(){
   document.getElementById("rankingView").scrollTop = 0;
 }
 
-export function renderChips(filter = ""){
-  const box = document.getElementById("chipBox");
+import { state } from "./state.js";
+
+export function renderChips(filter = "", targetId = "chipBox", mode = "select", itemId = null){
+  const box = document.getElementById(targetId);
   if(!box) return;
 
   const f = filter.toLowerCase();
@@ -45,41 +47,40 @@ export function renderChips(filter = ""){
   let list = state.categories
     .filter(c => c.includes(f));
 
-  // 👇 begrens hvis ikke expanded
+  // 🔥 begrens visning
   if(!state.showAllChips){
-    list = list.slice(0, 10);
+    list = list.slice(0, 6);
   }
 
-  box.innerHTML =
-    list.map(c => `
-      <span class="chip"
-        onclick="toggleCat(this)"
-        style="
-          background:#222;
-          padding:6px 10px;
-          border-radius:999px;
-          cursor:pointer;
-          font-size:12px;
-          display:inline-block;
-          margin:3px;
-        ">
-        ${c}
-      </span>
-    `).join("") +
+  const selected = itemId
+    ? (state.items.find(x => x.id === itemId)?.categories || [])
+    : [];
 
-    (state.categories.length > 10 ? `
-      <span onclick="toggleAllChips()"
-        style="
-          background:#4f8cff;
-          color:white;
-          font-weight:bold;
-          padding:6px 10px;
-          border-radius:999px;
-          cursor:pointer;
-          font-size:12px;
-          display:inline-block;
-          margin:3px;
-        ">
+  box.innerHTML =
+    list.map(c => {
+
+      let active = "";
+
+      if(mode === "select"){
+        active = selected.includes(c) ? "active" : "";
+      }
+
+      return `
+        <span class="chip ${active}"
+          onclick="${
+            mode === "select"
+              ? `toggleChip(this)`
+              : `addCatToItem(${itemId}, '${c}')`
+          }">
+          ${c}
+        </span>
+      `;
+    }).join("") +
+
+    (state.categories.length > 6 ? `
+      <span class="chip"
+        style="background:#4f8cff;color:white;font-weight:bold;"
+        onclick="toggleAllChips('${targetId}', '${mode}', ${itemId || 'null'})">
         ${state.showAllChips ? "−" : "+"}
       </span>
     ` : "");
