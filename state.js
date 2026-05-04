@@ -9,8 +9,9 @@ export const state = {
   lastRankingDate: localStorage.getItem("lastRankingDate") || null,
   recentMatches: JSON.parse(localStorage.getItem("recentMatches")) || [],
 
-  showAllChips: false,
+   showAllAddChips: false,
   showAllStatsChips: false,
+  showAllRankingChips: false,
   rankingFilter: "all",
   rankingSort: "elo"
 };
