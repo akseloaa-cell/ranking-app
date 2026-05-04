@@ -46,6 +46,17 @@ window.openRankingView = openRankingView;
 window.closeRankingView = closeRankingView;
 window.setSort = setSort;
 window.setRankingFilter = setRankingFilter;
+window.renderChips = (filter) =>
+  ui.renderChips({
+    filter,
+    targetId: "chipBox",
+    mode: "select"
+  });
+
+window.toggleChips = ui.toggleChips;
+window.toggleChip = ui.toggleChip;
+window.addCatToItem = stats.addCatToItem;
+window.setRankingFilter = ranking.setRankingFilter;
 
 export function saveDailyRanking(){
   const today = new Date().toISOString().split("T")[0];
