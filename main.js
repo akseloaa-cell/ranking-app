@@ -47,6 +47,27 @@ window.closeRankingView = closeRankingView;
 window.setSort = setSort;
 window.setRankingFilter = setRankingFilter;
 
+export function saveDailyRanking(){
+  const today = new Date().toISOString().split("T")[0];
+
+  // 🚫 ikke overskriv samme dag
+  if(state.lastRankingDate === today) return;
+
+  const sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
+
+  const rankingMap = {};
+  sorted.forEach((item, i) => {
+    rankingMap[item.id] = i + 1;
+  });
+
+  state.previousRanking = rankingMap;
+  state.lastRankingDate = today;
+
+  localStorage.setItem("previousRanking", JSON.stringify(rankingMap));
+  localStorage.setItem("lastRankingDate", today);
+}
+
 // start
 update();
 nextMatch();
+saveDailyRanking();
