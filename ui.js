@@ -38,19 +38,27 @@ export function scrollToTop(){
 
 import { state } from "./state.js";
 
-export function renderChips(filter = "", targetId = "chipBox", mode = "select", itemId = null){
+
+export function renderChips({
+  filter = "",
+  targetId,
+  mode = "select", // select | add | filter
+  itemId = null
+}) {
   const box = document.getElementById(targetId);
-  if(!box) return;
+  if (!box) return;
 
   const f = filter.toLowerCase();
 
-  let list = state.categories
-    .filter(c => c.includes(f));
+  let list = state.categories.filter(c => c.includes(f));
 
-  // 🔥 begrens visning
-  if(!state.showAllChips){
-    list = list.slice(0, 6);
-  }
+  // 🔥 riktig toggle basert på hvor vi er
+  let showAll =
+    targetId === "chipBox" ? state.showAllAddChips :
+    targetId === "statsChipBox" ? state.showAllStatsChips :
+    state.showAllRankingChips;
+
+  if (!showAll) list = list.slice(0, 6);
 
   const selected = itemId
     ? (state.items.find(x => x.id === itemId)?.categories || [])
@@ -58,10 +66,9 @@ export function renderChips(filter = "", targetId = "chipBox", mode = "select", 
 
   box.innerHTML =
     list.map(c => {
-
       let active = "";
 
-      if(mode === "select"){
+      if (mode === "select") {
         active = selected.includes(c) ? "active" : "";
       }
 
@@ -70,7 +77,9 @@ export function renderChips(filter = "", targetId = "chipBox", mode = "select", 
           onclick="${
             mode === "select"
               ? `toggleChip(this)`
-              : `addCatToItem(${itemId}, '${c}')`
+              : mode === "add"
+              ? `addCatToItem(${itemId}, '${c}')`
+              : `setRankingFilter('${c}')`
           }">
           ${c}
         </span>
@@ -80,21 +89,34 @@ export function renderChips(filter = "", targetId = "chipBox", mode = "select", 
     (state.categories.length > 6 ? `
       <span class="chip"
         style="background:#4f8cff;color:white;font-weight:bold;"
-        onclick="toggleAllChips('${targetId}', '${mode}', ${itemId || 'null'})">
-        ${state.showAllChips ? "−" : "+"}
+        onclick="toggleChips('${targetId}', '${mode}', ${itemId || 'null'})">
+        ${showAll ? "−" : "+"}
       </span>
     ` : "");
 }
 
-export function toggleAllChips(targetId, mode, itemId){
-  state.showAllChips = !state.showAllChips;
-  renderChips(
-    document.getElementById("catSearch")?.value || "",
+/* ================= TOGGLE ================= */
+
+export function toggleChips(targetId, mode, itemId){
+  if(targetId === "chipBox"){
+    state.showAllAddChips = !state.showAllAddChips;
+  }
+  else if(targetId === "statsChipBox"){
+    state.showAllStatsChips = !state.showAllStatsChips;
+  }
+  else{
+    state.showAllRankingChips = !state.showAllRankingChips;
+  }
+
+  renderChips({
+    filter: document.getElementById("catSearch")?.value || "",
     targetId,
     mode,
     itemId
-  );
+  });
 }
+
+/* ================= SELECT CHIP ================= */
 
 export function toggleChip(el){
   el.classList.toggle("active");
