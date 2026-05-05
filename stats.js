@@ -299,7 +299,7 @@ export function isRival(a, b){
   return total >= 3;
 }
 
-function updateH2H(a, b, result){
+export function updateH2H(a, b, result){
   ensureH2H(a, b);
 
   if(result === "win"){
