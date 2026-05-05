@@ -39,7 +39,7 @@ export function updateH2H(a, b, result){
 
 export function getH2H(a, b){
   if(!a.h2h || !a.h2h[b.id]){
-    return "0-0-0";
+    return "0-0(0)";
   }
 
   const h = a.h2h[b.id];
