@@ -111,13 +111,3 @@ function ensureH2H(a, b){
     b.h2h[a.id] = { wins: 0, losses: 0, draws: 0 };
   }
 }
-
-export function getH2H(a, b){
-  if(!a.h2h || !a.h2h[b.id]){
-    return "0-0-0";
-  }
-
-  const h = a.h2h[b.id];
-
-  return `${h.wins || 0}-${h.losses || 0}-${h.draws || 0}`;
-}
