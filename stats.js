@@ -3,6 +3,7 @@ import { save } from "./storage.js";
 import { renderChips } from "./ui.js";
 import { update } from "./ranking.js";
 import { nextMatch } from "./match.js";
+import { getH2H } from "./match.js";
 
 export function deleteItem(id){
   const confirmDelete = confirm("Er du sikker?");
