@@ -71,8 +71,7 @@ export function pick(i){
 
   updateHistory(w);
   updateHistory(l);
-  saveDailyRanking();
-
+ 
   updateH2H(w, l, "win");
 
   state.recentMatches.push([a.id, b.id].sort().join("-"));
@@ -94,8 +93,7 @@ export function draw(){
 
   updateHistory(a);
   updateHistory(b);
-  saveDailyRanking();
-
+  
   save();
   update();
   nextMatch();
