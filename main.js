@@ -1,3 +1,4 @@
+import { state } from "./state.js";
 import { nextMatch } from "./match.js";
 import { update } from "./ranking.js";
 import { showStats, closeStats } from "./stats.js";
