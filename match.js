@@ -44,7 +44,7 @@ export function getH2H(a, b){
 
   const h = a.h2h[b.id];
 
-  return `${h.wins || 0}-${h.losses || 0}-${h.draws || 0}`;
+  return `${h.wins || 0}-${h.losses || 0}(${h.draws || 0})`;
 }
 
 export function isRival(a, b){
