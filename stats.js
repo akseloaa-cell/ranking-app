@@ -42,8 +42,8 @@ export function getWinrate(item){
   let total = 0;
 
   Object.values(item.h2h).forEach(r => {
-    wins += r.w || 0;
-    total += (r.w || 0) + (r.l || 0);
+    wins += r.wins || 0;
+    total += (r.wins || 0) + (r.losses || 0);
   });
 
   return total ? wins / total : 0;
@@ -295,7 +295,9 @@ export function updateHistory(item){
 export function isRival(a, b){
   if(!a.h2h || !a.h2h[b.id]) return false;
 
-  const total = a.h2h[b.id].w + a.h2h[b.id].l;
+  const h = a.h2h[b.id];
+  const total = (h.wins || 0) + (h.losses || 0) + (h.draws || 0);
+
   return total >= 3;
 }
 
