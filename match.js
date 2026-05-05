@@ -3,7 +3,7 @@ import { save } from "./storage.js";
 import { update } from "./ranking.js";
 import { updateHistory, saveDailyRanking, updateH2H } from "./stats.js";
 import { getRank } from "./ranking.js";
-import { getH2H, isRival } from "./stats.js";
+import { isRival } from "./stats.js";
 
 function formatChoice(item, opponent){
   const rank = getRank(item.id);
