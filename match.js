@@ -99,3 +99,15 @@ export function draw(){
   nextMatch();
 }
 
+function ensureH2H(a, b){
+  if(!a.h2h) a.h2h = {};
+  if(!b.h2h) b.h2h = {};
+
+  if(!a.h2h[b.id]){
+    a.h2h[b.id] = { wins: 0, losses: 0, draws: 0 };
+  }
+
+  if(!b.h2h[a.id]){
+    b.h2h[a.id] = { wins: 0, losses: 0, draws: 0 };
+  }
+}
