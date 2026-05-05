@@ -60,6 +60,7 @@ window.toggleChip = ui.toggleChip;
 window.addCatToItem = stats.addCatToItem;
 window.setRankingFilter = ranking.setRankingFilter;
 window.draw = draw;
+window.state = state;
 
 export function saveDailyRanking(){
   const today = new Date().toISOString().split("T")[0];
