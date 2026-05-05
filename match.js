@@ -1,9 +1,74 @@
 import { state } from "./state.js";
 import { save } from "./storage.js";
 import { update } from "./ranking.js";
-import { updateHistory, saveDailyRanking, updateH2H } from "./stats.js";
 import { getRank } from "./ranking.js";
-import { isRival } from "./stats.js";
+
+// ================= H2H =================
+
+function ensureH2H(a, b){
+  if(!a.h2h) a.h2h = {};
+  if(!b.h2h) b.h2h = {};
+
+  if(!a.h2h[b.id]){
+    a.h2h[b.id] = { wins: 0, losses: 0, draws: 0 };
+  }
+
+  if(!b.h2h[a.id]){
+    b.h2h[a.id] = { wins: 0, losses: 0, draws: 0 };
+  }
+}
+
+export function updateH2H(a, b, result){
+  ensureH2H(a, b);
+
+  if(result === "win"){
+    a.h2h[b.id].wins += 1;
+    b.h2h[a.id].losses += 1;
+  }
+
+  if(result === "loss"){
+    a.h2h[b.id].losses += 1;
+    b.h2h[a.id].wins += 1;
+  }
+
+  if(result === "draw"){
+    a.h2h[b.id].draws += 1;
+    b.h2h[a.id].draws += 1;
+  }
+}
+
+export function getH2H(a, b){
+  if(!a.h2h || !a.h2h[b.id]){
+    return "0-0-0";
+  }
+
+  const h = a.h2h[b.id];
+
+  return `${h.wins || 0}-${h.losses || 0}-${h.draws || 0}`;
+}
+
+export function isRival(a, b){
+  if(!a.h2h || !a.h2h[b.id]) return false;
+
+  const h = a.h2h[b.id];
+  const total = (h.wins || 0) + (h.losses || 0) + (h.draws || 0);
+
+  return total >= 3;
+}
+
+// ================= HISTORY =================
+
+export function updateHistory(item){
+  if(!item.history) item.history = [];
+
+  item.history.push(item.rating);
+
+  if(item.history.length > 30){
+    item.history.shift();
+  }
+}
+
+// ================= MATCH =================
 
 function formatChoice(item, opponent){
   const rank = getRank(item.id);
@@ -44,9 +109,10 @@ export function nextMatch(){
   if(state.items.length < 2) return;
 
   const a = state.items[Math.floor(Math.random() * state.items.length)];
-  let candidates = state.items.filter(x => x.id !== a.id);
+  const candidates = state.items.filter(x => x.id !== a.id);
 
   const b = candidates[Math.floor(Math.random() * candidates.length)];
+
   if(!a || !b) return nextMatch();
 
   state.current = [a, b];
@@ -61,21 +127,18 @@ export function nextMatch(){
 export function pick(i){
   const [a, b] = state.current;
 
-  const w = state.current[i];
-  const l = state.current[1 - i];
+  const winner = state.current[i];
+  const loser = state.current[1 - i];
 
-  const Ea = 1 / (1 + Math.pow(10, (l.rating - w.rating) / 400));
+  const Ea = 1 / (1 + Math.pow(10, (loser.rating - winner.rating) / 400));
 
-  w.rating += 32 * (1 - Ea);
-  l.rating += 32 * (0 - Ea);
+  winner.rating += 32 * (1 - Ea);
+  loser.rating += 32 * (0 - Ea);
 
-  updateHistory(w);
-  updateHistory(l);
- 
-  updateH2H(w, l, "win");
+  updateHistory(winner);
+  updateHistory(loser);
 
-  state.recentMatches.push([a.id, b.id].sort().join("-"));
-  if(state.recentMatches.length > 15) state.recentMatches.shift();
+  updateH2H(winner, loser, "win");
 
   save();
   update();
@@ -93,32 +156,10 @@ export function draw(){
 
   updateHistory(a);
   updateHistory(b);
-  updateH2H(a, b, "draw"); 
+
+  updateH2H(a, b, "draw");
 
   save();
   update();
   nextMatch();
-}
-
-function ensureH2H(a, b){
-  if(!a.h2h) a.h2h = {};
-  if(!b.h2h) b.h2h = {};
-
-  if(!a.h2h[b.id]){
-    a.h2h[b.id] = { wins: 0, losses: 0, draws: 0 };
-  }
-
-  if(!b.h2h[a.id]){
-    b.h2h[a.id] = { wins: 0, losses: 0, draws: 0 };
-  }
-}
-
-export function getH2H(a, b){
-  if(!a.h2h || !a.h2h[b.id]){
-    return "0-0-0";
-  }
-
-  const h = a.h2h[b.id];
-
-  return `${h.wins || 0}-${h.losses || 0}-${h.draws || 0}`;
 }
