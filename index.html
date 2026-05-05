@@ -161,7 +161,11 @@
 
     <!-- SØK -->
     <input id="catSearch" placeholder="Søk kategori..."
-      oninput="renderChips(this.value)">
+      oninput="renderChips({
+  filter: this.value,
+  targetId: 'chipBox',
+  mode: 'select'
+})"
 
     <!-- CHIPS -->
     <div class="chip-container" id="chipBox"></div>
