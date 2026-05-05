@@ -291,15 +291,6 @@ export function updateHistory(item){
   if(item.history.length > 30) item.history.shift();
 }
 
-export function getH2H(a, b){
-  if(!a.h2h || !a.h2h[b.id]){
-    return "0–0–0";
-  }
-
-  const h = a.h2h[b.id];
-
-  return `${h.wins || 0}-${h.losses || 0}-${h.draws || 0}`;
-}
 
 export function isRival(a, b){
   if(!a.h2h || !a.h2h[b.id]) return false;
