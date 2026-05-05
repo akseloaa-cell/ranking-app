@@ -79,6 +79,27 @@ export function saveDailyRanking(){
   localStorage.setItem("lastRankingDate", today);
 }
 
+state.items.forEach(i => {
+  if(!i.h2h) i.h2h = {};
+
+  Object.keys(i.h2h).forEach(id => {
+    const h = i.h2h[id];
+
+    // gammel struktur
+    if(h.w !== undefined || h.l !== undefined){
+      i.h2h[id] = {
+        wins: h.w || 0,
+        losses: h.l || 0,
+        draws: h.d || 0
+      };
+    } else {
+      h.wins = h.wins || 0;
+      h.losses = h.losses || 0;
+      h.draws = h.draws || 0;
+    }
+  });
+});
+
 // start
 update();
 nextMatch();
