@@ -21,6 +21,7 @@ import {
   setRankingFilter
 } from "./ranking.js";
 import { openAddItem, closeAddItem } from "./ui.js";
+import { draw } from "./match.js";
 
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
@@ -58,6 +59,7 @@ window.toggleChips = ui.toggleChips;
 window.toggleChip = ui.toggleChip;
 window.addCatToItem = stats.addCatToItem;
 window.setRankingFilter = ranking.setRankingFilter;
+window.draw = draw;
 
 export function saveDailyRanking(){
   const today = new Date().toISOString().split("T")[0];
