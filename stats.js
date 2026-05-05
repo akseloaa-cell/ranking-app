@@ -1,18 +1,18 @@
 import { state } from "./state.js";
 import { save } from "./storage.js";
-import { renderChips } from "./ui.js";
 import { update } from "./ranking.js";
 import { nextMatch } from "./match.js";
 import { getH2H } from "./match.js";
 
+// ================= BASIC =================
+
 export function deleteItem(id){
-  const confirmDelete = confirm("Er du sikker?");
-  if(!confirmDelete) return;
+  if(!confirm("Er du sikker?")) return;
 
   state.items = state.items.filter(x => x.id !== id);
 
   save();
-  updateRanking();
+  update();
   nextMatch();
 
   closeStats();
@@ -23,17 +23,15 @@ export function renameItem(id, newName){
   if(!item) return;
 
   newName = newName.trim();
-
-  if(!newName){
-    alert("Navn kan ikke være tomt");
-    return;
-  }
+  if(!newName) return alert("Navn kan ikke være tomt");
 
   item.name = newName;
 
   save();
-  updateRanking();
+  update();
 }
+
+// ================= STATS =================
 
 export function getWinrate(item){
   if(!item.h2h) return 0;
@@ -49,6 +47,8 @@ export function getWinrate(item){
   return total ? wins / total : 0;
 }
 
+// ================= UI =================
+
 export function openStats(){
   const overlay = document.getElementById("statsOverlay");
   const view = document.getElementById("statsView");
@@ -58,220 +58,6 @@ export function openStats(){
   setTimeout(() => {
     view.style.transform = "translateY(0)";
   }, 10);
-}
-
-export function toggleCatSection(){
-  const el = document.getElementById("catSection");
-  const btn = document.getElementById("catToggleBtn");
-
-  if(el.style.display === "none"){
-    el.style.display = "block";
-    btn.innerText = "📂 Kategorier −";
-  } else {
-    el.style.display = "none";
-    btn.innerText = "📂 Kategorier +";
-  }
-}
-
-export function addCatToItem(id, valOverride){
-  const item = state.items.find(x => x.id === id);
-  if(!item) return;
-
-  let val = valOverride || document.getElementById("newCatInput")?.value;
-  if(!val || !val.trim()) return;
-
-  val = val.trim().toLowerCase();
-
-  // 🔥 unngå duplicates
-  if(!item.categories.some(c => c.toLowerCase() === val)){
-    item.categories.push(val);
-  }
-
-  // 🔥 legg til global category hvis mangler
-  if(!state.categories.includes(val)){
-    state.categories.push(val);
-  }
-
-  save();
-  showStats(id);     // rerender stats
-  renderChips();     // oppdater chips
-}
-
-export function removeCatFromItem(id, cat){
-  const item = state.items.find(x => x.id === id);
-  if(!item) return;
-
-  item.categories = item.categories.filter(c => c !== cat);
-
-  save();
-  showStats(id);
-  renderChips();
-}
-
-export function renderStatsChips(itemId, filter=""){
-  const box = document.getElementById("statsChipBox");
-  if(!box) return;
-
-  const item = state.items.find(x => x.id === itemId);
-  const selected = item?.categories || [];
-
-  const f = filter.toLowerCase();
-
-  let list = state.categories
-    .filter(c => c.includes(f));
-
-  if(!state.showAllStatsChips){
-    list = list.slice(0, 6);
-  }
-
-  box.innerHTML =
-    list.map(c => `
-      <span onclick="addCatToItem(${itemId}, '${c}')"
-        style="
-          background:${selected.includes(c) ? '#4f8cff' : '#222'};
-          padding:6px 10px;
-          border-radius:999px;
-          cursor:pointer;
-          font-size:12px;
-          display:inline-block;
-          margin:3px;
-        ">
-        ${c}
-      </span>
-    `).join("") +
-
-    (state.categories.length > 6 ? `
-      <span onclick="toggleStatsChips(${itemId})"
-        style="
-          background:#4f8cff;
-          color:white;
-          font-weight:bold;
-          padding:6px 10px;
-          border-radius:999px;
-          cursor:pointer;
-          font-size:12px;
-          display:inline-block;
-          margin:3px;
-        ">
-        ${state.showAllStatsChips ? "−" : "+"}
-      </span>
-    ` : "");
-}
-
-export function toggleStatsChips(id){
-  state.showAllStatsChips = !state.showAllStatsChips;
-
-renderChips({
-  filter: document.getElementById("statsCatSearch")?.value || "",
-  targetId: "statsChipBox",
-  mode: "add",
-  itemId: id
-});
-}
-
-export function showStats(id){
-  const item = state.items.find(x => x.id === id);
-  if(!item) return;
-
-  const rank = [...state.items]
-    .sort((a,b)=>b.rating-a.rating)
-    .findIndex(x => x.id === id) + 1;
-
-  const trend = item.history?.slice(-5) || [];
-
-  let streakText = "-";
-
-  if(item.streak > 0){
-    streakText = `<span style="color:#4caf50;">W${item.streak}</span>`;
-  }
-  else if(item.streak < 0){
-    streakText = `<span style="color:#f44336;">L${Math.abs(item.streak)}</span>`;
-  }
-
-  document.getElementById("statsContent").innerHTML = `
-    <div style="padding:20px; text-align:left;">
-
-      <h2 style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-
-        <span contenteditable="true"
-          onblur="renameItem(${item.id}, this.innerText)"
-          style="font-weight:bold;">
-          ${item.name}
-        </span>
-
-        <span style="font-size:12px; opacity:0.6;">
-          ${item.categories.length ? "• " + item.categories.join(", ") : ""}
-        </span>
-
-      </h2>
-
-      <button onclick="deleteItem(${item.id})"
-        style="
-          background:#1f1f1f;
-          border:1px solid #f44336;
-          color:#f44336;
-          font-size:12px;
-          padding:4px 8px;
-          border-radius:8px;
-          margin-top:8px;
-          cursor:pointer;
-          opacity:0.8;
-        ">
-        🗑️
-      </button>
-
-      <p>🏆 Rank: ${rank}</p>
-      <p>⭐ ELO: ${Math.floor(item.rating)}</p>
-      <p>📊 Winrate: ${(getWinrate(item)*100).toFixed(1)}%</p>
-      <p>🔥 Streak: ${streakText}</p>
-      <p>📈 ${trend.map(x => Math.floor(x)).join(" → ")}</p>
-
-      <hr>
-
-      <p>🏆 Wins: ${item.tournamentWins || 0}</p>
-      <p>🥇 Top 3: ${item.top3 || 0}</p>
-      <p>🎮 Played: ${item.tournamentsPlayed || 0}</p>
-
-      <hr>
-
-      <button onclick="toggleCatSection()" id="catToggleBtn"
-        style="width:100%; padding:10px; border-radius:10px; background:#1f1f1f; border:none; cursor:pointer;">
-        📂 Kategorier +
-      </button>
-
-      <div id="catSection" style="display:none; margin-top:10px;">
-
-        <p>
-          ${item.categories.map(c => `
-            <span onclick="removeCatFromItem(${item.id}, '${c}')"
-              style="background:#222;padding:4px 8px;margin:2px;border-radius:999px;display:inline-block;cursor:pointer;">
-              ${c} ✕
-            </span>
-          `).join(" ")}
-        </p>
-
-        <div style="margin-top:10px;">
-          <input id="newCatInput" placeholder="Legg til kategori"
-            style="width:70%; padding:8px; border-radius:8px; border:none;">
-          <button onclick="addCatToItem(${item.id})" style="width:25%;">+</button>
-        </div>
-
-        <div style="margin-top:10px;">
-          <input id="statsCatSearch"
-            placeholder="Søk kategori..."
-            style="width:100%; padding:8px; margin-bottom:8px; border-radius:8px; border:none;"
-            oninput="renderStatsChips(${item.id}, this.value)">
-
-          <div id="statsChipBox"></div>
-        </div>
-
-      </div>
-
-    </div>
-  `;
-
-  openStats();
-  renderStatsChips(id);
 }
 
 export function closeStats(){
@@ -285,45 +71,44 @@ export function closeStats(){
   }, 300);
 }
 
-export function updateHistory(item){
-  if(!item.history) item.history = [];
-  item.history.push(item.rating);
-  if(item.history.length > 30) item.history.shift();
-}
+// ================= MAIN =================
 
+export function showStats(id){
+  const item = state.items.find(x => x.id === id);
+  if(!item) return;
 
-export function isRival(a, b){
-  if(!a.h2h || !a.h2h[b.id]) return false;
+  const rank = [...state.items]
+    .sort((a,b)=>b.rating-a.rating)
+    .findIndex(x => x.id === id) + 1;
 
-  const h = a.h2h[b.id];
-  const total = (h.wins || 0) + (h.losses || 0) + (h.draws || 0);
+  document.getElementById("statsContent").innerHTML = `
+    <div style="padding:20px; text-align:left;">
 
-  return total >= 3;
-}
+      <h2 contenteditable="true"
+        onblur="renameItem(${item.id}, this.innerText)">
+        ${item.name}
+      </h2>
 
-export function updateH2H(a, b, result){
-  ensureH2H(a, b);
+      <p>🏆 Rank: ${rank}</p>
+      <p>⭐ ELO: ${Math.floor(item.rating)}</p>
+      <p>📊 Winrate: ${(getWinrate(item)*100).toFixed(1)}%</p>
 
-  if(result === "win"){
-    a.h2h[b.id].wins += 1;
-    b.h2h[a.id].losses += 1;
-  }
+      <hr>
 
-  if(result === "loss"){
-    a.h2h[b.id].losses += 1;
-    b.h2h[a.id].wins += 1;
-  }
+      <p>📊 Head to Head:</p>
+      ${Object.keys(item.h2h || {}).map(id => {
+        const opp = state.items.find(x => x.id == id);
+        if(!opp) return "";
 
-  if(result === "draw"){
-    a.h2h[b.id].draws += 1;
-    b.h2h[a.id].draws += 1;
-  }
-}
+        return `<div>${opp.name}: ${getH2H(item, opp)}</div>`;
+      }).join("")}
 
-export function saveDailyRanking(){
-  // simplified versjon
-  const sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
+      <hr>
 
-  state.previousRanking = {};
-  sorted.forEach((x,i)=>state.previousRanking[x.id] = i+1);
+      <button onclick="deleteItem(${item.id})">🗑️ Slett</button>
+
+    </div>
+  `;
+
+  openStats();
 }
