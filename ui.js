@@ -10,6 +10,12 @@ export function openAddItem(){
   setTimeout(() => {
     view.style.transform = "translateY(0)";
   }, 10);
+  renderChips({
+  filter: "",
+  targetId: "chipBox",
+  mode: "select"
+});
+
 }
 
 export function closeAddItem(){
