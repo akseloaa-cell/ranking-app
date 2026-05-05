@@ -94,7 +94,7 @@ export function renderChips({
 
 /* ================= TOGGLE ================= */
 
-export function toggleChips(targetId, mode, itemId){
+export function toggleAllChips(targetId, mode, itemId){
   if(targetId === "chipBox"){
     state.showAllAddChips = !state.showAllAddChips;
   }
