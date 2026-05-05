@@ -93,7 +93,7 @@ export function draw(){
 
   updateHistory(a);
   updateHistory(b);
-  updateH2H(a, b, "draw"); ✅
+  updateH2H(a, b, "draw"); 
 
   save();
   update();
