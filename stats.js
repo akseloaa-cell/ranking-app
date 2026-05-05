@@ -291,10 +291,13 @@ export function updateHistory(item){
 }
 
 export function getH2H(a, b){
-  const h = a.h2h?.[b.id];
-  if(!h) return "0-0";
+  if(!a.h2h || !a.h2h[b.id]){
+    return "0–0–0";
+  }
 
-  return `${h.wins}-${h.losses}${h.draws ? ` (${h.draws})` : ""}`;
+  const h = a.h2h[b.id];
+
+  return `${h.wins || 0}-${h.losses || 0}-${h.draws || 0}`;
 }
 
 export function isRival(a, b){
@@ -304,31 +307,22 @@ export function isRival(a, b){
   return total >= 3;
 }
 
-export function updateH2H(a, b, result){
-  if(!a.h2h) a.h2h = {};
-  if(!b.h2h) b.h2h = {};
-
-  if(!a.h2h[b.id]){
-    a.h2h[b.id] = { wins: 0, losses: 0, draws: 0 };
-  }
-
-  if(!b.h2h[a.id]){
-    b.h2h[a.id] = { wins: 0, losses: 0, draws: 0 };
-  }
+function updateH2H(a, b, result){
+  ensureH2H(a, b);
 
   if(result === "win"){
-    a.h2h[b.id].wins++;
-    b.h2h[a.id].losses++;
+    a.h2h[b.id].wins += 1;
+    b.h2h[a.id].losses += 1;
   }
 
   if(result === "loss"){
-    a.h2h[b.id].losses++;
-    b.h2h[a.id].wins++;
+    a.h2h[b.id].losses += 1;
+    b.h2h[a.id].wins += 1;
   }
 
   if(result === "draw"){
-    a.h2h[b.id].draws++;
-    b.h2h[a.id].draws++;
+    a.h2h[b.id].draws += 1;
+    b.h2h[a.id].draws += 1;
   }
 }
 
