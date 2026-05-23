@@ -11,8 +11,18 @@ export function update(){
 
   const html = list.map((x,i)=>{
     const currentRank = i + 1;
-    const prevRank = state.previousRanking?.[x.id];
+    let prevRank;
 
+if(state.rankingFilter === "all"){
+  prevRank = state.previousRanking?.[x.id];
+}
+else{
+  prevRank =
+    state.previousRankingByCategory?.[
+      state.rankingFilter
+    ]?.[x.id];
+}
+    
 let indicator = "";
 
 // 🆕 NY badge
