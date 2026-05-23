@@ -51,11 +51,22 @@ export function isRival(a, b){
   if(!a.h2h || !a.h2h[b.id]) return false;
 
   const h = a.h2h[b.id];
-  const total = (h.wins || 0) + (h.losses || 0) + (h.draws || 0);
 
-  return total >= 3;
+  const wins = h.wins || 0;
+  const losses = h.losses || 0;
+  const draws = h.draws || 0;
+
+  const total = wins + losses + draws;
+
+  // minst 4 matcher
+  if(total < 4) return false;
+
+  // hvor jevn matchupen er
+  const diff = Math.abs(wins - losses);
+
+  // rival hvis ganske jevnt
+  return diff <= 2;
 }
-
 // ================= HISTORY =================
 
 export function updateHistory(item){
