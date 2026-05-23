@@ -1,222 +1,45 @@
 import { state } from "./state.js";
 
-/* ================= MAIN RANKING ================= */
+/* ================= HELPERS ================= */
+
 function getCategorySorted(cat){
   return [...state.items]
     .filter(x => (x.categories || []).includes(cat))
     .sort((a,b)=>b.rating-a.rating);
 }
 
+function getPrevRank(item){
+  if(state.rankingFilter === "all"){
+    return state.previousRanking?.[item.id];
+  }
+
+  return state.previousRankingByCategory
+    ?. [state.rankingFilter]
+    ?. [item.id];
+}
+
+function isNewToday(item){
+  if(!item.createdAt) return false;
+  const today = new Date().toISOString().split("T")[0];
+  return item.createdAt.split("T")[0] === today;
+}
+
+/* ================= MAIN TOP 10 ================= */
+
 export function update(){
 
-  state.rankingFilter = "all";
-  
-  let list = [...state.items]
+  const list = [...state.items]
     .sort((a,b)=>b.rating-a.rating)
     .slice(0, 10);
 
-  const html = list.map((x,i)=>{
+  const html = list.map((item,i)=>{
+
     const currentRank = i + 1;
-
-    let prevRank;
-
-    if(state.rankingFilter === "all"){
-      prevRank = state.previousRanking?.[x.id];
-    } else {
-      prevRank =
-        state.previousRankingByCategory?.[state.rankingFilter]?.[x.id];
-    }
+    const prevRank = state.previousRanking?.[item.id];
 
     let indicator = "";
 
-    // 🆕 NY badge
-    if(isNewToday(x)){
-      indicator = `<span style="
-        background:#4f8cff;
-        color:white;
-        padding:2px 6px;
-        border-radius:6px;
-        font-size:11px;
-        font-weight:bold;
-      ">NY</span>`;
-    }
-    else if(prevRank !== undefined){
-      const diff = prevRank - currentRank;
-
-      if(diff > 0){
-        indicator = `<span style="color:#4caf50; font-size:12px;">▲ ${diff}</span>`;
-      } else if(diff < 0){
-        indicator = `<span style="color:#f44336; font-size:12px;">▼ ${Math.abs(diff)}</span>`;
-      }
-    }
-
-    return `
-      <div onclick="showStats(${x.id})"
-        style="
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          padding:6px 10px;
-          background:#141a26;
-          border:1px solid #2a3142;
-          border-radius:10px;
-          margin:4px 0;
-          cursor:pointer;
-          font-size:14px;
-        ">
-
-        <span style="display:flex; align-items:center; gap:6px;">
-          ${indicator}
-          <b>#${currentRank}</b>
-          ${x.name}
-        </span>
-
-        <span style="opacity:0.7;">
-          ${Math.floor(x.rating)}
-        </span>
-
-      </div>
-    `;
-  }).join("");
-
-  const mvp = getDailyMVP();
-
-  let mvpHtml = "";
-
-  if(mvp){
-
-    const currentRank = [...state.items]
-      .sort((a,b)=>b.rating-a.rating)
-      .findIndex(x => x.id === mvp.item.id) + 1;
-
-    let prevRank;
-
-    if(state.rankingFilter === "all"){
-      prevRank = state.previousRanking?.[mvp.item.id];
-    } else {
-      prevRank =
-        state.previousRankingByCategory?.[state.rankingFilter]?.[mvp.item.id];
-    }
-
-    let mvpIndicator = "";
-
-    if(prevRank !== undefined){
-      const diff = prevRank - currentRank;
-
-      if(diff > 0){
-        mvpIndicator = `<span style="color:#4caf50; font-size:12px;">▲ ${diff}</span>`;
-      } else if(diff < 0){
-        mvpIndicator = `<span style="color:#f44336; font-size:12px;">▼ ${Math.abs(diff)}</span>`;
-      }
-    }
-
-    mvpHtml = `
-      <div style="
-        width:100%;
-        box-sizing:border-box;
-        padding:8px 10px;
-        background:#141a26;
-        border:1px solid #2a3142;
-        border-radius:10px;
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        margin:10px 0;
-      ">
-
-        <span style="display:flex; align-items:baseline; gap:8px;">
-          <b style="font-size:14px;">🔥 ${mvp.item.name}</b>
-
-          <span style="font-size:11px; opacity:0.5;">
-            #${currentRank} • ⭐ ${Math.floor(mvp.item.rating)}
-          </span>
-        </span>
-
-        <span>${mvpIndicator}</span>
-
-      </div>
-    `;
-  }
-
-  document.getElementById("ranking").innerHTML = mvpHtml + html;
-}
-
-/* ================= HELPERS ================= */
-
-export function getRank(id){
-  return [...state.items]
-    .sort((a,b)=>b.rating-a.rating)
-    .findIndex(x => x.id === id) + 1;
-}
-
-/* ================= FULL RANKING ================= */
-
-export function openRankingView(){
-  const overlay = document.getElementById("rankingOverlay");
-  const view = document.getElementById("rankingView");
-
-  overlay.style.display = "flex";
-
-  setTimeout(() => {
-    view.style.transform = "translateY(0)";
-  }, 10);
-
-  renderRankingView();
-}
-
-export function closeRankingView(){
-  const overlay = document.getElementById("rankingOverlay");
-  const view = document.getElementById("rankingView");
-
-  view.style.transform = "translateY(100%)";
-
-  setTimeout(() => {
-    overlay.style.display = "none";
-  }, 300);
-}
-
-/* ================= FULL LIST ================= */
-
-export function renderRankingView(){
-
-let list;
-
-if(state.rankingFilter === "all"){
-  list = [...state.items].sort((a,b)=>b.rating-a.rating);
-} else {
-  list = getCategorySorted(state.rankingFilter);
-}
-
-  // 🔹 SORT
-  if(state.rankingSort === "elo"){
-    list.sort((a,b)=>b.rating-a.rating);
-  }
-  if(state.rankingSort === "wins"){
-    list.sort((a,b)=>(b.tournamentWins||0)-(a.tournamentWins||0));
-  }
-  if(state.rankingSort === "top3"){
-    list.sort((a,b)=>(b.top3||0)-(a.top3||0));
-  }
-
-  const html = list.map((x,i)=>{
-
-    const currentRank = i + 1;
-
-    let prevRank;
-
-    if(state.rankingFilter === "all"){
-      prevRank =
-  state.rankingFilter === "all"
-    ? state.previousRanking?.[x.id]
-    : state.previousRankingByCategory?.[state.rankingFilter]?.[x.id];
-    } else {
-      prevRank =
-        state.previousRankingByCategory?.[state.rankingFilter]?.[x.id];
-    }
-
-    let indicator = "";
-
-    if(isNewToday(x)){
+    if(isNewToday(item)){
       indicator = `<span style="
         background:#4f8cff;
         color:white;
@@ -237,26 +60,84 @@ if(state.rankingFilter === "all"){
     }
 
     return `
-      <div onclick="showStats(${x.id})"
-        style="
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          padding:12px;
-          margin:6px 0;
-          background:#1f1f1f;
-          border-radius:12px;
-          cursor:pointer;
-        ">
+      <div onclick="showStats(${item.id})"
+        style="display:flex;justify-content:space-between;align-items:center;
+        padding:6px 10px;background:#141a26;border:1px solid #2a3142;
+        border-radius:10px;margin:4px 0;cursor:pointer;font-size:14px;">
 
-        <div style="display:flex; gap:8px; align-items:center;">
+        <span style="display:flex;align-items:center;gap:6px;">
           ${indicator}
           <b>#${currentRank}</b>
-          <span>${x.name}</span>
+          ${item.name}
+        </span>
+
+        <span style="opacity:0.7;">
+          ${Math.floor(item.rating)}
+        </span>
+
+      </div>
+    `;
+  }).join("");
+
+  document.getElementById("ranking").innerHTML = html;
+}
+
+/* ================= FULL RANKING ================= */
+
+export function renderRankingView(){
+
+  let list;
+
+  if(state.rankingFilter === "all"){
+    list = [...state.items].sort((a,b)=>b.rating-a.rating);
+  } else {
+    list = getCategorySorted(state.rankingFilter);
+  }
+
+  if(state.rankingSort === "wins"){
+    list.sort((a,b)=>(b.tournamentWins||0)-(a.tournamentWins||0));
+  }
+
+  const html = list.map((item,i)=>{
+
+    const currentRank = i + 1;
+    const prevRank = getPrevRank(item);
+
+    let indicator = "";
+
+    if(isNewToday(item)){
+      indicator = `<span style="
+        background:#4f8cff;
+        color:white;
+        padding:2px 6px;
+        border-radius:6px;
+        font-size:11px;
+        font-weight:bold;
+      ">NY</span>`;
+    }
+    else if(prevRank !== undefined){
+      const diff = prevRank - currentRank;
+
+      if(diff > 0){
+        indicator = `<span style="color:#4caf50;">▲ ${diff}</span>`;
+      } else if(diff < 0){
+        indicator = `<span style="color:#f44336;">▼ ${Math.abs(diff)}</span>`;
+      }
+    }
+
+    return `
+      <div onclick="showStats(${item.id})"
+        style="display:flex;justify-content:space-between;align-items:center;
+        padding:12px;margin:6px 0;background:#1f1f1f;
+        border-radius:12px;cursor:pointer;">
+
+        <div style="display:flex;gap:8px;align-items:center;">
+          ${indicator}
+          <b>#${currentRank}</b>
+          <span>${item.name}</span>
         </div>
 
-        <span>${Math.floor(x.rating)}</span>
-
+        <span>${Math.floor(item.rating)}</span>
       </div>
     `;
   }).join("");
@@ -267,76 +148,22 @@ if(state.rankingFilter === "all"){
   renderRankingFilters();
 }
 
-/* ================= FILTER ================= */
-
-export function renderRankingFilters(search = ""){
-
-  const container = document.getElementById("rankingFilters");
-  if(!container) return;
-
-  const cats = ["all", ...state.categories];
-
-  const f = search.toLowerCase();
-
-  let visible = cats.filter(c =>
-    c.toLowerCase().includes(f)
-  );
-
-  if(!state.showAllRankingChips){
-    visible = visible.slice(0, 6);
-  }
-
-  container.innerHTML =
-    visible.map(c => `
-      <span
-        onclick="setRankingFilter('${c}')"
-        class="chip"
-        style="
-          background:${state.rankingFilter === c ? '#4f8cff' : '#222'};
-          margin:3px;
-          display:inline-block;
-        ">
-        ${c}
-      </span>
-    `).join("") +
-
-    (cats.length > 6 ? `
-      <span class="chip"
-        onclick="toggleRankingChips()"
-        style="background:#4f8cff;color:white;font-weight:bold;">
-        ${state.showAllRankingChips ? "−" : "+"}
-      </span>
-    ` : "");
-}
-
-export function setRankingFilter(cat){
-  state.rankingFilter = cat;
-  renderRankingView();
-}
-
-/* ================= SORT ================= */
-
-export function setSort(type){
-  state.rankingSort = type;
-  renderRankingView();
-}
-
 /* ================= MVP ================= */
 
 export function getDailyMVP(){
+
   if(!state.previousRanking) return null;
 
-  const sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
+  const sorted = [...state.items]
+    .sort((a,b)=>b.rating-a.rating);
 
   let best = null;
   let bestDiff = 0;
 
   sorted.forEach((item, i) => {
+
     const currentRank = i + 1;
-    prevRank =
-  state.rankingFilter === "all"
-    ? state.previousRanking?.[x.id]
-    : state.previousRankingByCategory?.[state.rankingFilter]?.[x.id];
+    const prevRank = state.previousRanking[item.id];
 
     if(prevRank === undefined) return;
 
@@ -351,25 +178,46 @@ export function getDailyMVP(){
   return best;
 }
 
-/* ================= NEW CHECK ================= */
+/* ================= FILTER ================= */
 
-function isNewToday(item){
-  if(!item.createdAt) return false;
+export function renderRankingFilters(search = ""){
 
-  const today = new Date().toISOString().split("T")[0];
-  const created = item.createdAt.split("T")[0];
+  const container = document.getElementById("rankingFilters");
+  if(!container) return;
 
-  return today === created;
+  const f = search.toLowerCase();
+
+  let cats = ["all", ...state.categories]
+    .filter(c => c.toLowerCase().includes(f))
+    .slice(0, state.showAllRankingChips ? 999 : 6);
+
+  container.innerHTML = cats.map(c => `
+    <span onclick="setRankingFilter('${c}')"
+      class="chip"
+      style="background:${state.rankingFilter === c ? '#4f8cff' : '#222'}">
+      ${c}
+    </span>
+  `).join("");
 }
 
-/* ================= TOGGLE ================= */
+/* ================= ACTIONS ================= */
+
+export function setRankingFilter(cat){
+  state.rankingFilter = cat;
+  renderRankingView();
+}
+
+export function setSort(type){
+  state.rankingSort = type;
+  renderRankingView();
+}
 
 export function toggleRankingChips(){
-  state.showAllRankingChips =
-    !state.showAllRankingChips;
-
+  state.showAllRankingChips = !state.showAllRankingChips;
   renderRankingFilters();
 }
+
+/* ================= GLOBAL EXPORT ================= */
 
 window.renderRankingFilters = renderRankingFilters;
 window.setRankingFilter = setRankingFilter;
