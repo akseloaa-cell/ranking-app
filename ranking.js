@@ -24,6 +24,12 @@ function isNewToday(item){
   return item.createdAt.split("T")[0] === today;
 }
 
+export function getRank(id){
+  return [...state.items]
+    .sort((a,b)=>b.rating-a.rating)
+    .findIndex(x => x.id === id) + 1;
+}
+
 /* ================= MAIN TOP 10 ================= */
 
 export function update(){
