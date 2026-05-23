@@ -69,6 +69,20 @@
     </div>
 
     <!-- FILTER -->
+   <input
+  id="rankingCatSearch"
+  placeholder="Søk kategori..."
+  oninput="renderRankingFilters(this.value)"
+  style="
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border-radius:10px;
+    border:none;
+    background:#151a24;
+    color:white;
+  "
+/>
     <div id="rankingFilters" style="margin-bottom:10px;"></div>
 
     <div id="rankingViewList"></div>
