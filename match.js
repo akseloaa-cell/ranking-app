@@ -2,7 +2,6 @@ import { state } from "./state.js";
 import { save } from "./storage.js";
 import { update } from "./ranking.js";
 import { getRank } from "./ranking.js";
-import { saveDailyRanking } from "./stats.js";
 // ================= H2H =================
 
 function ensureH2H(a, b){
@@ -158,7 +157,7 @@ export function pick(i){
   updateHistory(loser);
 
   updateH2H(winner, loser, "win");
-  saveDailyRanking();
+
   save();
   update();
   nextMatch();
@@ -185,7 +184,7 @@ export function draw(){
   updateHistory(b);
 
   updateH2H(a, b, "draw");
-  saveDailyRanking();
+
   save();
   update();
   nextMatch();
