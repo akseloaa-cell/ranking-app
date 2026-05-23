@@ -11,7 +11,7 @@ import {
   addCatToItem,
   removeCatFromItem,
   renderStatsChips,
-  toggleCatSection
+  toggleCatSection,
 } from "./stats.js";
 import { renderChips, toggleAllChips } from "./ui.js";
 import { 
