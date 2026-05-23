@@ -187,7 +187,7 @@ export function renderRankingView(){
   }
 
   const html = list.map((x,i)=>{
-    const currentRank = i + 1;
+    const currentRank = getRank(x.id);
 
     let prevRank;
 
