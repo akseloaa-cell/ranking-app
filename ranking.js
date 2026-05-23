@@ -154,6 +154,19 @@ export function renderRankingView(){
   renderRankingFilters();
 }
 
+export function closeRankingView(){
+  const overlay = document.getElementById("rankingOverlay");
+  const view = document.getElementById("rankingView");
+
+  if(!overlay || !view) return;
+
+  view.style.transform = "translateY(100%)";
+
+  setTimeout(() => {
+    overlay.style.display = "none";
+  }, 300);
+}
+
 /* ================= MVP ================= */
 
 export function getDailyMVP(){
