@@ -92,7 +92,7 @@ export function renderChips({
     (state.categories.length > 6 ? `
       <span class="chip"
         style="background:#4f8cff;color:white;font-weight:bold;"
-        onclick="toggleChips('${targetId}', '${mode}', ${itemId || 'null'})">
+        onclick="toggleAllChips('${targetId}', '${mode}', ${itemId || 'null'})">
         ${showAll ? "−" : "+"}
       </span>
     ` : "");
@@ -124,3 +124,6 @@ export function toggleAllChips(targetId, mode, itemId){
 export function toggleChip(el){
   el.classList.toggle("active");
 }
+
+window.toggleAllChips = toggleAllChips;
+window.toggleChip = toggleChip;
