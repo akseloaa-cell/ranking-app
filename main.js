@@ -57,7 +57,6 @@ window.renderChips = (filter) =>
     mode: "select"
   });
 
-window.toggleChips = ui.toggleChips;
 window.toggleChip = ui.toggleChip;
 window.addCatToItem = stats.addCatToItem;
 window.setRankingFilter = ranking.setRankingFilter;
