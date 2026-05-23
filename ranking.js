@@ -89,6 +89,20 @@ export function update(){
 }
 
 /* ================= FULL RANKING ================= */
+export function openRankingView(){
+  const overlay = document.getElementById("rankingOverlay");
+  const view = document.getElementById("rankingView");
+
+  if(!overlay || !view) return;
+
+  overlay.style.display = "flex";
+
+  setTimeout(() => {
+    view.style.transform = "translateY(0)";
+  }, 10);
+
+  renderRankingView();
+}
 
 export function renderRankingView(){
 
