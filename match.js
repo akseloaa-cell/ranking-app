@@ -158,7 +158,7 @@ export function pick(i){
   updateHistory(loser);
 
   updateH2H(winner, loser, "win");
-
+  saveDailyRanking();
   save();
   update();
   nextMatch();
@@ -185,7 +185,7 @@ export function draw(){
   updateHistory(b);
 
   updateH2H(a, b, "draw");
-
+  saveDailyRanking();
   save();
   update();
   nextMatch();
