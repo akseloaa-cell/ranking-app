@@ -1,6 +1,11 @@
 import { state } from "./state.js";
 
 /* ================= MAIN RANKING ================= */
+function getCategorySorted(cat){
+  return [...state.items]
+    .filter(x => (x.categories || []).includes(cat))
+    .sort((a,b)=>b.rating-a.rating);
+}
 
 export function update(){
 
@@ -172,14 +177,13 @@ export function closeRankingView(){
 
 export function renderRankingView(){
 
-  let list = [...state.items];
+let list;
 
-  // 🔹 FILTER
-  if(state.rankingFilter !== "all"){
-    list = list.filter(x =>
-      (x.categories || []).includes(state.rankingFilter)
-    );
-  }
+if(state.rankingFilter === "all"){
+  list = [...state.items].sort((a,b)=>b.rating-a.rating);
+} else {
+  list = getCategorySorted(state.rankingFilter);
+}
 
   // 🔹 SORT
   if(state.rankingSort === "elo"){
