@@ -264,15 +264,22 @@ if(state.rankingFilter === "all"){
 
 /* ================= FILTER ================= */
 
-export function renderRankingFilters(){
+export function renderRankingFilters(search = ""){
+
   const container = document.getElementById("rankingFilters");
   if(!container) return;
 
   const cats = ["all", ...state.categories];
 
-  let visible = state.showAllRankingChips
-    ? cats
-    : cats.slice(0, 6);
+  const f = search.toLowerCase();
+
+  let visible = cats.filter(c =>
+    c.toLowerCase().includes(f)
+  );
+
+  if(!state.showAllRankingChips){
+    visible = visible.slice(0, 6);
+  }
 
   container.innerHTML =
     visible.map(c => `
@@ -282,6 +289,7 @@ export function renderRankingFilters(){
         style="
           background:${state.rankingFilter === c ? '#4f8cff' : '#222'};
           margin:3px;
+          display:inline-block;
         ">
         ${c}
       </span>
