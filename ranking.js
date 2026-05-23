@@ -203,7 +203,10 @@ if(state.rankingFilter === "all"){
     let prevRank;
 
     if(state.rankingFilter === "all"){
-      prevRank = state.previousRanking?.[x.id];
+      prevRank =
+  state.rankingFilter === "all"
+    ? state.previousRanking?.[x.id]
+    : state.previousRankingByCategory?.[state.rankingFilter]?.[x.id];
     } else {
       prevRank =
         state.previousRankingByCategory?.[state.rankingFilter]?.[x.id];
@@ -328,7 +331,10 @@ export function getDailyMVP(){
 
   sorted.forEach((item, i) => {
     const currentRank = i + 1;
-    const prevRank = state.previousRanking[item.id];
+    prevRank =
+  state.rankingFilter === "all"
+    ? state.previousRanking?.[x.id]
+    : state.previousRankingByCategory?.[state.rankingFilter]?.[x.id];
 
     if(prevRank === undefined) return;
 
