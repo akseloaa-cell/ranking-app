@@ -1,140 +1,135 @@
-import { state } from "./state.js"; 
-
+import { state } from "./state.js";
 
 /* ================= MAIN RANKING ================= */
 
 export function update(){
 
   let list = [...state.items]
-  .sort((a,b)=>b.rating-a.rating)
-  .slice(0, 10);
+    .sort((a,b)=>b.rating-a.rating)
+    .slice(0, 10);
 
   const html = list.map((x,i)=>{
     const currentRank = i + 1;
+
     let prevRank;
 
-if(state.rankingFilter === "all"){
-  prevRank = state.previousRanking?.[x.id];
-}
-else{
-  prevRank =
-    state.previousRankingByCategory?.[
-      state.rankingFilter
-    ]?.[x.id];
-}
-    
-let indicator = "";
-
-// 🆕 NY badge
-if(isNewToday(x)){
-  indicator = `<span style="
-    background:#4f8cff;
-    color:white;
-    padding:2px 6px;
-    border-radius:6px;
-    font-size:11px;
-    font-weight:bold;
-  ">NY</span>`;
-}
-else if(prevRank !== undefined){
-  const diff = prevRank - currentRank;
-
-  if(diff > 0){
-    indicator = `<span style="color:#4caf50; font-size:12px;">▲ ${diff}</span>`;
-  } 
-  else if(diff < 0){
-    indicator = `<span style="color:#f44336; font-size:12px;">▼ ${Math.abs(diff)}</span>`;
-  }
-}
-
-return `
-  <div onclick="showStats(${x.id})"
-    style="
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:6px 10px;
-      background:#141a26;
-      border:1px solid #2a3142;
-      border-radius:10px;
-      margin:4px 0;
-      cursor:pointer;
-      font-size:14px;
-    ">
-
-    <span style="display:flex; align-items:center; gap:6px;">
-      ${indicator}
-      <b>#${currentRank}</b>
-      ${x.name}
-    </span>
-
-    <span style="opacity:0.7;">
-      ${Math.floor(x.rating)}
-    </span>
-
-  </div>
-`;
-  }).join("");
-
-  // 🔥 MVP
-const mvp = getDailyMVP();
-
-let mvpHtml = "";
-
-if(mvp){
-
-  const currentRank = [...state.items]
-    .sort((a,b)=>b.rating-a.rating)
-    .findIndex(x => x.id === mvp.item.id) + 1;
-
-  const prevRank = state.previousRanking?.[mvp.item.id];
-
-  let mvpIndicator = "";
-
-  if(prevRank !== undefined){
-    const diff = prevRank - currentRank;
-
-    if(diff > 0){
-      mvpIndicator = `<span style="color:#4caf50; font-size:12px;">▲ ${diff}</span>`;
-    } 
-    else if(diff < 0){
-      mvpIndicator = `<span style="color:#f44336; font-size:12px;">▼ ${Math.abs(diff)}</span>`;
+    if(state.rankingFilter === "all"){
+      prevRank = state.previousRanking?.[x.id];
+    } else {
+      prevRank =
+        state.previousRankingByCategory?.[state.rankingFilter]?.[x.id];
     }
-  }
 
- mvpHtml = `
-  <div style="
-    width:100%;
-    box-sizing:border-box;
-    padding:8px 10px;
-    background:#141a26;
-    border:1px solid #2a3142;
-    border-radius:10px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin:10px 0;
-  ">
+    let indicator = "";
 
-      <span style="display:flex; align-items:baseline; gap:8px;">
+    // 🆕 NY badge
+    if(isNewToday(x)){
+      indicator = `<span style="
+        background:#4f8cff;
+        color:white;
+        padding:2px 6px;
+        border-radius:6px;
+        font-size:11px;
+        font-weight:bold;
+      ">NY</span>`;
+    }
+    else if(prevRank !== undefined){
+      const diff = prevRank - currentRank;
 
-        <b style="font-size:14px;">
-          🔥 ${mvp.item.name}
-        </b>
+      if(diff > 0){
+        indicator = `<span style="color:#4caf50; font-size:12px;">▲ ${diff}</span>`;
+      } else if(diff < 0){
+        indicator = `<span style="color:#f44336; font-size:12px;">▼ ${Math.abs(diff)}</span>`;
+      }
+    }
 
-        <span style="font-size:11px; opacity:0.5;">
-          #${currentRank} • ⭐ ${Math.floor(mvp.item.rating)}
+    return `
+      <div onclick="showStats(${x.id})"
+        style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          padding:6px 10px;
+          background:#141a26;
+          border:1px solid #2a3142;
+          border-radius:10px;
+          margin:4px 0;
+          cursor:pointer;
+          font-size:14px;
+        ">
+
+        <span style="display:flex; align-items:center; gap:6px;">
+          ${indicator}
+          <b>#${currentRank}</b>
+          ${x.name}
         </span>
 
-      </span>
+        <span style="opacity:0.7;">
+          ${Math.floor(x.rating)}
+        </span>
 
-      <span>
-        ${mvpIndicator}
-      </span>
+      </div>
+    `;
+  }).join("");
 
-    </div>
-  `;
-}
+  const mvp = getDailyMVP();
+
+  let mvpHtml = "";
+
+  if(mvp){
+
+    const currentRank = [...state.items]
+      .sort((a,b)=>b.rating-a.rating)
+      .findIndex(x => x.id === mvp.item.id) + 1;
+
+    let prevRank;
+
+    if(state.rankingFilter === "all"){
+      prevRank = state.previousRanking?.[mvp.item.id];
+    } else {
+      prevRank =
+        state.previousRankingByCategory?.[state.rankingFilter]?.[mvp.item.id];
+    }
+
+    let mvpIndicator = "";
+
+    if(prevRank !== undefined){
+      const diff = prevRank - currentRank;
+
+      if(diff > 0){
+        mvpIndicator = `<span style="color:#4caf50; font-size:12px;">▲ ${diff}</span>`;
+      } else if(diff < 0){
+        mvpIndicator = `<span style="color:#f44336; font-size:12px;">▼ ${Math.abs(diff)}</span>`;
+      }
+    }
+
+    mvpHtml = `
+      <div style="
+        width:100%;
+        box-sizing:border-box;
+        padding:8px 10px;
+        background:#141a26;
+        border:1px solid #2a3142;
+        border-radius:10px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin:10px 0;
+      ">
+
+        <span style="display:flex; align-items:baseline; gap:8px;">
+          <b style="font-size:14px;">🔥 ${mvp.item.name}</b>
+
+          <span style="font-size:11px; opacity:0.5;">
+            #${currentRank} • ⭐ ${Math.floor(mvp.item.rating)}
+          </span>
+        </span>
+
+        <span>${mvpIndicator}</span>
+
+      </div>
+    `;
+  }
 
   document.getElementById("ranking").innerHTML = mvpHtml + html;
 }
@@ -173,6 +168,8 @@ export function closeRankingView(){
   }, 300);
 }
 
+/* ================= FULL LIST ================= */
+
 export function renderRankingView(){
 
   let list = [...state.items];
@@ -182,7 +179,6 @@ export function renderRankingView(){
     list = list.filter(x =>
       (x.categories || []).includes(state.rankingFilter)
     );
-    renderRankingFilters();
   }
 
   // 🔹 SORT
@@ -197,39 +193,39 @@ export function renderRankingView(){
   }
 
   const html = list.map((x,i)=>{
-    const currentRank = getRank(x.id);
+
+    const currentRank = i + 1;
 
     let prevRank;
 
     if(state.rankingFilter === "all"){
       prevRank = state.previousRanking?.[x.id];
     } else {
-      prevRank = state.previousRankingByCategory?.[state.rankingFilter]?.[x.id];
+      prevRank =
+        state.previousRankingByCategory?.[state.rankingFilter]?.[x.id];
     }
 
-  let indicator = "";
+    let indicator = "";
 
-// 🆕 NY badge
-if(isNewToday(x)){
-  indicator = `<span style="
-    background:#4f8cff;
-    color:white;
-    padding:2px 6px;
-    border-radius:6px;
-    font-size:11px;
-    font-weight:bold;
-  ">NY</span>`;
-}
-else if(prevRank !== undefined){
-  const diff = prevRank - currentRank;
+    if(isNewToday(x)){
+      indicator = `<span style="
+        background:#4f8cff;
+        color:white;
+        padding:2px 6px;
+        border-radius:6px;
+        font-size:11px;
+        font-weight:bold;
+      ">NY</span>`;
+    }
+    else if(prevRank !== undefined){
+      const diff = prevRank - currentRank;
 
-  if(diff > 0){
-    indicator = `<span style="color:#4caf50; font-size:12px;">▲ ${diff}</span>`;
-  } 
-  else if(diff < 0){
-    indicator = `<span style="color:#f44336; font-size:12px;">▼ ${Math.abs(diff)}</span>`;
-  }
-}
+      if(diff > 0){
+        indicator = `<span style="color:#4caf50;">▲ ${diff}</span>`;
+      } else if(diff < 0){
+        indicator = `<span style="color:#f44336;">▼ ${Math.abs(diff)}</span>`;
+      }
+    }
 
     return `
       <div onclick="showStats(${x.id})"
@@ -245,7 +241,7 @@ else if(prevRank !== undefined){
         ">
 
         <div style="display:flex; gap:8px; align-items:center;">
-          <span>${indicator}</span>
+          ${indicator}
           <b>#${currentRank}</b>
           <span>${x.name}</span>
         </div>
@@ -264,19 +260,15 @@ else if(prevRank !== undefined){
 
 /* ================= FILTER ================= */
 
-
 export function renderRankingFilters(){
   const container = document.getElementById("rankingFilters");
-
   if(!container) return;
 
   const cats = ["all", ...state.categories];
 
-  let visible = cats;
-
-  if(!state.showAllRankingChips){
-    visible = cats.slice(0, 6);
-  }
+  let visible = state.showAllRankingChips
+    ? cats
+    : cats.slice(0, 6);
 
   container.innerHTML =
     visible.map(c => `
@@ -284,13 +276,8 @@ export function renderRankingFilters(){
         onclick="setRankingFilter('${c}')"
         class="chip"
         style="
-          background:${
-            state.rankingFilter === c
-              ? '#4f8cff'
-              : '#222'
-          };
+          background:${state.rankingFilter === c ? '#4f8cff' : '#222'};
           margin:3px;
-          display:inline-block;
         ">
         ${c}
       </span>
@@ -299,11 +286,7 @@ export function renderRankingFilters(){
     (cats.length > 6 ? `
       <span class="chip"
         onclick="toggleRankingChips()"
-        style="
-          background:#4f8cff;
-          color:white;
-          font-weight:bold;
-        ">
+        style="background:#4f8cff;color:white;font-weight:bold;">
         ${state.showAllRankingChips ? "−" : "+"}
       </span>
     ` : "");
@@ -324,9 +307,7 @@ export function setSort(type){
 /* ================= MVP ================= */
 
 export function getDailyMVP(){
-  if(!state.previousRanking || Object.keys(state.previousRanking).length === 0){
-    return null;
-  }
+  if(!state.previousRanking) return null;
 
   const sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
 
@@ -350,6 +331,8 @@ export function getDailyMVP(){
   return best;
 }
 
+/* ================= NEW CHECK ================= */
+
 function isNewToday(item){
   if(!item.createdAt) return false;
 
@@ -358,6 +341,8 @@ function isNewToday(item){
 
   return today === created;
 }
+
+/* ================= TOGGLE ================= */
 
 export function toggleRankingChips(){
   state.showAllRankingChips =
