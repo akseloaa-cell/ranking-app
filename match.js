@@ -2,7 +2,7 @@ import { state } from "./state.js";
 import { save } from "./storage.js";
 import { update } from "./ranking.js";
 import { getRank } from "./ranking.js";
-
+import { saveDailyRanking } from "./stats.js";
 // ================= H2H =================
 
 function ensureH2H(a, b){
