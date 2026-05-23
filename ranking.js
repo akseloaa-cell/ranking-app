@@ -9,6 +9,8 @@ function getCategorySorted(cat){
 
 export function update(){
 
+  state.rankingFilter = "all";
+  
   let list = [...state.items]
     .sort((a,b)=>b.rating-a.rating)
     .slice(0, 10);
