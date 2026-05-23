@@ -22,8 +22,7 @@ import {
 } from "./ranking.js";
 import { openAddItem, closeAddItem } from "./ui.js";
 import { draw } from "./match.js";
-import { toggleRankingChips } from ".ranking.js";
-  
+ 
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
 window.showStats = stats.showStats;
