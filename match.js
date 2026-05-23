@@ -130,10 +130,18 @@ export function pick(i){
   const winner = state.current[i];
   const loser = state.current[1 - i];
 
+  // 🔥 expected score
   const Ea = 1 / (1 + Math.pow(10, (loser.rating - winner.rating) / 400));
 
-  winner.rating += 32 * (1 - Ea);
-  loser.rating += 32 * (0 - Ea);
+  // 🔥 clean symmetric elo change
+  const change = Math.round(32 * (1 - Ea));
+
+  winner.rating += change;
+  loser.rating -= change;
+
+  // 🔥 safety
+  winner.rating = Math.round(winner.rating);
+  loser.rating = Math.round(loser.rating);
 
   updateHistory(winner);
   updateHistory(loser);
@@ -151,8 +159,16 @@ export function draw(){
   const Ea = 1 / (1 + Math.pow(10, (b.rating - a.rating) / 400));
   const Eb = 1 / (1 + Math.pow(10, (a.rating - b.rating) / 400));
 
-  a.rating += 32 * (0.5 - Ea);
-  b.rating += 32 * (0.5 - Eb);
+  // 🔥 draw elo changes
+  const changeA = Math.round(32 * (0.5 - Ea));
+  const changeB = Math.round(32 * (0.5 - Eb));
+
+  a.rating += changeA;
+  b.rating += changeB;
+
+  // 🔥 safety
+  a.rating = Math.round(a.rating);
+  b.rating = Math.round(b.rating);
 
   updateHistory(a);
   updateHistory(b);
