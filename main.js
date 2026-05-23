@@ -18,7 +18,8 @@ import {
   openRankingView,
   closeRankingView,
   setSort,
-  setRankingFilter
+  setRankingFilter,
+  toggleRankingChips
 } from "./ranking.js";
 import { openAddItem, closeAddItem } from "./ui.js";
 import { draw } from "./match.js";
