@@ -362,3 +362,7 @@ export function toggleRankingChips(){
 
   renderRankingFilters();
 }
+
+window.renderRankingFilters = renderRankingFilters;
+window.setRankingFilter = setRankingFilter;
+window.toggleRankingChips = toggleRankingChips;
