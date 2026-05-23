@@ -256,3 +256,44 @@ export function showStats(id){
   openStats();
   renderStatsChips(id);
 }
+
+export function saveDailyRanking(){
+
+  // 🔥 GLOBAL RANKING SNAPSHOT
+  const globalSorted = [...state.items]
+    .sort((a,b)=>b.rating-a.rating);
+
+  state.previousRanking = {};
+
+  globalSorted.forEach((item, i)=>{
+    state.previousRanking[item.id] = i + 1;
+  });
+
+  // 🔥 CATEGORY RANKING SNAPSHOT
+  state.previousRankingByCategory = {};
+
+  (state.categories || []).forEach(cat => {
+
+    const list = state.items
+      .filter(x => (x.categories || []).includes(cat))
+      .sort((a,b)=>b.rating-a.rating);
+
+    state.previousRankingByCategory[cat] = {};
+
+    list.forEach((item, i)=>{
+      state.previousRankingByCategory[cat][item.id] = i + 1;
+    });
+
+  });
+
+  // 🔥 PERSIST (valgfritt men anbefalt)
+  localStorage.setItem(
+    "previousRanking",
+    JSON.stringify(state.previousRanking)
+  );
+
+  localStorage.setItem(
+    "previousRankingByCategory",
+    JSON.stringify(state.previousRankingByCategory)
+  );
+}
