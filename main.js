@@ -85,6 +85,20 @@ export function saveDailyRanking(){
   localStorage.setItem("lastRankingDate", today);
 }
 
+state.previousRankingByCategory = {};
+
+state.categories.forEach(cat => {
+  const list = state.items
+    .filter(x => (x.categories || []).includes(cat))
+    .sort((a,b)=>b.rating-a.rating);
+
+  state.previousRankingByCategory[cat] = {};
+
+  list.forEach((x,i)=>{
+    state.previousRankingByCategory[cat][x.id] = i + 1;
+  });
+});
+
 state.items.forEach(i => {
   if(!i.h2h) i.h2h = {};
 
