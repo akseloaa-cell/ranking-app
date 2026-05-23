@@ -61,6 +61,8 @@ window.addCatToItem = stats.addCatToItem;
 window.setRankingFilter = ranking.setRankingFilter;
 window.draw = draw;
 window.state = state;
+window.setRankingFilter = setRankingFilter;
+window.toggleRankingChips = toggleRankingChips;
 
 export function saveDailyRanking(){
   const today = new Date().toISOString().split("T")[0];
