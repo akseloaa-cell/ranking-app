@@ -50,9 +50,7 @@ export function setMode(mode){
   if (mode === "categoryBattle" && battle) battle.style.display = "block";
 }
 
-export function setMode(mode, el){
-
-  state.mode = mode;
+export function setActiveMenu(el){
 
   document.querySelectorAll(".menuItem")
     .forEach(x => x.style.background = "");
