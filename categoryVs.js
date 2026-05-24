@@ -3,31 +3,15 @@ import { nextMatch, pick, draw } from "./match.js";
 import { update } from "./ranking.js";
 
 /* =========================
-   VIEW HELPERS
-========================= */
-
-function hideAllViews(){
-  const home = document.getElementById("homeView");
-  const select = document.getElementById("categorySelectView");
-  const battle = document.getElementById("categoryBattleView");
-
-  if (home) home.style.display = "none";
-  if (select) select.style.display = "none";
-  if (battle) battle.style.display = "none";
-}
-
-/* =========================
    OPEN MODE
 ========================= */
 
 export function openCategoryVs(){
-  state.mode = "categoryVs";
+
+  state.mode = "categorySelect";
   state.activeCategory = null;
 
-  hideAllViews();
-
-  const view = document.getElementById("categorySelectView");
-  if (view) view.style.display = "block";
+  setMode("categorySelect");
 
   renderCategorySelectScreen();
 }
@@ -114,12 +98,9 @@ export function renderCategoryList(filter = ""){
 export function startCategoryVs(category){
 
   state.activeCategory = category;
-  state.mode = "categoryVs";
+  state.mode = "categoryBattle";
 
-  hideAllViews();
-
-  const view = document.getElementById("categoryBattleView");
-  if (view) view.style.display = "block";
+  setMode("categoryBattle");
 
   renderVsScreen();
   nextCategoryMatch();
@@ -255,13 +236,10 @@ function format(item){
 
 export function exitCategoryVs(){
 
-  state.mode = "home";
   state.activeCategory = null;
+  state.mode = "home";
 
-  hideAllViews();
-
-  const home = document.getElementById("homeView");
-  if (home) home.style.display = "block";
+  setMode("home");
 
   update();
 }
