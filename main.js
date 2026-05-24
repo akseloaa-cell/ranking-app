@@ -23,7 +23,11 @@ import {
 } from "./ranking.js";
 import { openAddItem, closeAddItem } from "./ui.js";
 import { draw } from "./match.js";
-import { openCategoryVs } from "./categoryVs.js";
+import {
+  openCategoryVs,
+  exitCategoryVs,
+  backToCategorySelect
+} from "./categoryVs.js";
  
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
@@ -71,6 +75,9 @@ window.state = state;
 window.toggleRankingChips = toggleRankingChips;
 
 window.openCategoryVs = openCategoryVs;
+
+window.exitCategoryVs = exitCategoryVs;
+window.backToCategorySelect = backToCategorySelect;
 
 export function saveDailyRanking(){
   const today = new Date().toISOString().split("T")[0];
