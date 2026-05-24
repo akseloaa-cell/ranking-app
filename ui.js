@@ -50,6 +50,7 @@ export function setMode(mode){
   });
 
   if (mode === "home"){
+    document.querySelector(".vs").style.display = "none";
     const el = document.getElementById("homeView");
     if (el) el.style.display = "block";
   }
