@@ -6,12 +6,15 @@ import { update } from "./ranking.js";
    OPEN MODE
 ========================= */
 
-export function openCategoryVs(){
+import { hideAllViews } from "./ui.js";
 
-  state.mode = "categorySelect";
+export function openCategoryVs(){
+  state.mode = "categoryVs";
   state.activeCategory = null;
 
-  setMode("categorySelect");
+  hideAllViews();
+
+  document.getElementById("categorySelectView").style.display = "block";
 
   renderCategorySelectScreen();
 }
@@ -236,16 +239,31 @@ function format(item){
    EXIT
 ========================= */
 
+import { hideAllViews } from "./ui.js";
+
 export function exitCategoryVs(){
 
-  state.mode = "categorySelect";
+  state.mode = "home";
   state.activeCategory = null;
 
-  setMode("categorySelect");
+  hideAllViews();
+
+  document.getElementById("ranking").style.display = "block";
+  document.getElementById("tournamentSection").style.display = "block";
+
+  update();
+  nextMatch();
+}
+
+export function backToCategorySelect(){
+  state.activeCategory = null;
+
+  hideAllViews();
+
+  document.getElementById("categorySelectView").style.display = "block";
 
   renderCategorySelectScreen();
 }
-
 /* =========================
    SEARCH
 ========================= */
