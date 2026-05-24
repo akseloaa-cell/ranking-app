@@ -154,6 +154,67 @@
 
 </div>
 
+ <!-- CATEGORY SELECT -->
+
+<div id="categorySelectView" style="display:none;">
+
+  <div class="vs-header">
+    <h1>⚔️ Versus</h1>
+
+    <input
+      id="vsCategorySearch"
+      placeholder="Søk kategori..."
+      oninput="renderVsCategories(this.value)"
+    >
+  </div>
+
+  <div id="vsCategoryList"></div>
+
+</div>
+
+
+<!-- CATEGORY BATTLE -->
+
+<div id="categoryBattleView" style="display:none;">
+
+  <div class="battle-topbar">
+
+    <button onclick="backToCategorySelect()" class="battle-back">
+      ← Categories
+    </button>
+
+    <div id="battleCategoryTitle">
+      ⚔️ Category
+    </div>
+
+  </div>
+
+  <div id="battleArena">
+
+    <div id="battleCardA" class="battle-card"></div>
+
+    <div class="battle-vs">
+      VS
+    </div>
+
+    <div id="battleCardB" class="battle-card"></div>
+
+  </div>
+
+  <div class="battle-buttons">
+
+    <button id="battlePickA"></button>
+
+    <button onclick="categoryDraw()">
+      Draw
+    </button>
+
+    <button id="battlePickB"></button>
+
+  </div>
+
+</div>
+ 
 <button onclick="scrollToTop()" style="
   position:fixed;
   bottom:20px;
