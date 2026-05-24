@@ -102,6 +102,8 @@ export function startCategoryVs(category){
 
   setMode("categoryBattle");
 
+  document.querySelector(".vs").style.display = "flex";
+   
   renderVsScreen();
   nextCategoryMatch();
 }
