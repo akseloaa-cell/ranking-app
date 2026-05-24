@@ -129,8 +129,5 @@ state.items.forEach(i => {
 
 // start
 update();
-
-if (state.mode === "home") {
-  nextMatch();
-}
+nextMatch();
 saveDailyRanking();
