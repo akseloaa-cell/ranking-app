@@ -1,15 +1,33 @@
-import { state } from "./state.js";   
+import { state } from "./state.js";
 import { nextMatch, pick, draw } from "./match.js";
 import { update } from "./ranking.js";
-import { renderChips } from "./ui.js";
 
 /* =========================
-   CATEGORY VS MODE STATE
+   VIEW HELPERS
+========================= */
+
+function hideAllViews(){
+  const home = document.getElementById("homeView");
+  const select = document.getElementById("categorySelectView");
+  const battle = document.getElementById("categoryBattleView");
+
+  if (home) home.style.display = "none";
+  if (select) select.style.display = "none";
+  if (battle) battle.style.display = "none";
+}
+
+/* =========================
+   OPEN MODE
 ========================= */
 
 export function openCategoryVs(){
   state.mode = "categoryVs";
   state.activeCategory = null;
+
+  hideAllViews();
+
+  const view = document.getElementById("categorySelectView");
+  if (view) view.style.display = "block";
 
   renderCategorySelectScreen();
 }
@@ -19,27 +37,28 @@ export function openCategoryVs(){
 ========================= */
 
 export function renderCategorySelectScreen(){
-  const container = document.getElementById("mainView");
 
-  if(!container) return;
-
-  const cats = ["all", ...state.categories];
+  const container = document.getElementById("categorySelectView");
+  if (!container) return;
 
   container.innerHTML = `
-    <div style="padding:20px;">
+    <div class="vs-select">
 
       <h2>🎮 Select Category</h2>
 
-      <input id="categorySearch"
+      <input
+        id="categorySearch"
         placeholder="Search categories..."
+        oninput="filterCategories(this.value)"
         style="
           width:100%;
-          padding:10px;
+          padding:12px;
           margin:10px 0;
-          border-radius:8px;
+          border-radius:10px;
           border:none;
+          background:#1a1f2b;
+          color:white;
         "
-        oninput="filterCategories(this.value)"
       />
 
       <div id="categoryList"></div>
@@ -55,8 +74,9 @@ export function renderCategorySelectScreen(){
 ========================= */
 
 export function renderCategoryList(filter = ""){
+
   const box = document.getElementById("categoryList");
-  if(!box) return;
+  if (!box) return;
 
   const f = filter.toLowerCase();
 
@@ -64,19 +84,27 @@ export function renderCategoryList(filter = ""){
     c.toLowerCase().includes(f)
   );
 
-  box.innerHTML = cats.map(c => `
-    <div
-      onclick="startCategoryVs('${c}')"
-      style="
-        padding:10px;
-        margin:6px 0;
-        background:#1f1f1f;
-        border-radius:10px;
-        cursor:pointer;
-      ">
-      📂 ${c}
-    </div>
-  `).join("");
+  box.innerHTML = cats.map(c => {
+
+    const count = state.items.filter(x =>
+      (x.categories || []).includes(c)
+    ).length;
+
+    return `
+      <div class="vs-category-card"
+        onclick="startCategoryVs('${c}')">
+
+        <div style="font-weight:700;font-size:18px;">
+          📂 ${c}
+        </div>
+
+        <div style="opacity:0.6;margin-top:4px;">
+          ${count} items
+        </div>
+
+      </div>
+    `;
+  }).join("");
 }
 
 /* =========================
@@ -84,8 +112,14 @@ export function renderCategoryList(filter = ""){
 ========================= */
 
 export function startCategoryVs(category){
+
   state.activeCategory = category;
   state.mode = "categoryVs";
+
+  hideAllViews();
+
+  const view = document.getElementById("categoryBattleView");
+  if (view) view.style.display = "block";
 
   renderVsScreen();
   nextCategoryMatch();
@@ -96,38 +130,30 @@ export function startCategoryVs(category){
 ========================= */
 
 export function renderVsScreen(){
-  const container = document.getElementById("mainView");
+
+  const container = document.getElementById("categoryBattleView");
+  if (!container) return;
 
   container.innerHTML = `
-    <div style="padding:10px;">
+    <div class="battle-topbar">
 
-      <button onclick="exitCategoryVs()"
-        style="
-          margin-bottom:10px;
-          padding:8px 12px;
-          border-radius:8px;
-          border:none;
-          background:#333;
-          color:white;
-          cursor:pointer;
-        ">
-        ← Back
+      <button onclick="exitCategoryVs()" class="battle-back">
+        ← Categories
       </button>
 
-      <h3>🎮 Category: ${state.activeCategory}</h3>
-
-      <div id="vsContainer"
-        style="
-          display:flex;
-          gap:10px;
-          margin-top:20px;
-        ">
-
-        <div id="a" style="flex:1;"></div>
-        <div style="padding:10px;opacity:0.5;">VS</div>
-        <div id="b" style="flex:1;"></div>
-
+      <div id="battleCategoryTitle">
+        ⚔️ ${state.activeCategory}
       </div>
+
+    </div>
+
+    <div id="vsContainer">
+
+      <div id="a"></div>
+
+      <div style="opacity:0.5;font-size:24px;">VS</div>
+
+      <div id="b"></div>
 
     </div>
   `;
@@ -145,23 +171,27 @@ export function nextCategoryMatch(){
     (x.categories || []).includes(state.activeCategory)
   );
 
-  if(pool.length < 2) return;
+  if (pool.length < 2) return;
 
   const useBalanced = Math.random() > 0.5;
 
   let a = pool[Math.floor(Math.random() * pool.length)];
   let b;
 
-  if(useBalanced){
+  if (useBalanced) {
+
     const sorted = [...pool].sort(
-      (x, y) => Math.abs(x.rating - a.rating) - Math.abs(y.rating - a.rating)
+      (x, y) =>
+        Math.abs(x.rating - a.rating) -
+        Math.abs(y.rating - a.rating)
     );
 
     b = sorted.find(x => x.id !== a.id) || pool[0];
+
   } else {
     do {
       b = pool[Math.floor(Math.random() * pool.length)];
-    } while(b.id === a.id);
+    } while (b.id === a.id);
   }
 
   state.current = [a, b];
@@ -174,12 +204,13 @@ export function nextCategoryMatch(){
 ========================= */
 
 export function renderMatch(){
+
   const [a, b] = state.current;
 
   const aEl = document.getElementById("a");
   const bEl = document.getElementById("b");
 
-  if(!aEl || !bEl) return;
+  if (!aEl || !bEl) return;
 
   aEl.innerHTML = format(a);
   bEl.innerHTML = format(b);
@@ -198,23 +229,19 @@ export function renderMatch(){
 }
 
 /* =========================
-   FORMAT CARD
+   CARD UI
 ========================= */
 
 function format(item){
-  return `
-    <div style="
-      padding:16px;
-      background:#1f1f1f;
-      border-radius:12px;
-      cursor:pointer;
-    ">
 
-      <div style="font-weight:600;font-size:18px;">
+  return `
+    <div class="battle-card">
+
+      <div style="font-size:22px;font-weight:700;">
         ${item.name}
       </div>
 
-      <div style="font-size:12px;opacity:0.6;">
+      <div style="margin-top:10px;opacity:0.7;">
         ⭐ ${Math.floor(item.rating)}
       </div>
 
@@ -223,18 +250,18 @@ function format(item){
 }
 
 /* =========================
-   EXIT MODE
+   EXIT
 ========================= */
 
 export function exitCategoryVs(){
+
   state.mode = "home";
   state.activeCategory = null;
 
-  const container = document.getElementById("mainView");
+  hideAllViews();
 
-  container.innerHTML = `
-    <div id="ranking"></div>
-  `;
+  const home = document.getElementById("homeView");
+  if (home) home.style.display = "block";
 
   update();
 }
@@ -248,7 +275,7 @@ export function filterCategories(value){
 }
 
 /* =========================
-   GLOBAL ACCESS (UI onclick)
+   GLOBAL ACCESS
 ========================= */
 
 window.startCategoryVs = startCategoryVs;
