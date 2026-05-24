@@ -50,6 +50,16 @@ export function setMode(mode){
   if (mode === "categoryBattle" && battle) battle.style.display = "block";
 }
 
+export function setMode(mode, el){
+
+  state.mode = mode;
+
+  document.querySelectorAll(".menuItem")
+    .forEach(x => x.style.background = "");
+
+  if (el) el.style.background = "#2f3b55";
+}
+
 export function scrollToTop(){
   document.getElementById("rankingView").scrollTop = 0;
 }
