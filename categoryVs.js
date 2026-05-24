@@ -238,16 +238,12 @@ function format(item){
 
 export function exitCategoryVs(){
 
+  state.mode = "categorySelect";
   state.activeCategory = null;
-  state.current = null;
 
-  state.mode = "home";
+  setMode("categorySelect");
 
-  setMode("home");
-
-   document.querySelector(".vs").style.display = "none";
-   
-  update();
+  renderCategorySelectScreen();
 }
 
 /* =========================
