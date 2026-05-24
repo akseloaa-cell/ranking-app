@@ -27,29 +27,23 @@ import { openCategoryVs } from "./categoryVs.js";
  
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
+
 window.showStats = stats.showStats;
 window.closeStats = stats.closeStats;
+
 window.startTournament = tournament.startTournament;
+
 window.scrollToTop = ui.scrollToTop;
-window.showStats = showStats; 
-window.closeStats = closeStats;
+
 window.renameItem = renameItem;
 window.deleteItem = deleteItem;
+
 window.addCatToItem = addCatToItem;
 window.removeCatFromItem = removeCatFromItem;
+
 window.renderStatsChips = renderStatsChips;
 window.toggleCatSection = toggleCatSection;
-window.renderChips = renderChips;
-window.toggleAllChips = toggleAllChips;
-window.update = update;
-window.openAddItem = openAddItem;
-window.closeAddItem = closeAddItem;
-window.openRankingView = openRankingView;
-window.closeRankingView = closeRankingView;
-window.openRankingView = openRankingView;
-window.closeRankingView = closeRankingView;
-window.setSort = setSort;
-window.setRankingFilter = setRankingFilter;
+
 window.renderChips = (filter) =>
   ui.renderChips({
     filter,
@@ -57,13 +51,25 @@ window.renderChips = (filter) =>
     mode: "select"
   });
 
+window.toggleAllChips = toggleAllChips;
 window.toggleChip = ui.toggleChip;
-window.addCatToItem = stats.addCatToItem;
-window.setRankingFilter = ranking.setRankingFilter;
+
+window.update = update;
+
+window.openAddItem = openAddItem;
+window.closeAddItem = closeAddItem;
+
+window.openRankingView = openRankingView;
+window.closeRankingView = closeRankingView;
+
+window.setSort = setSort;
+window.setRankingFilter = setRankingFilter;
+
 window.draw = draw;
 window.state = state;
-window.setRankingFilter = setRankingFilter;
+
 window.toggleRankingChips = toggleRankingChips;
+
 window.openCategoryVs = openCategoryVs;
 
 export function saveDailyRanking(){
