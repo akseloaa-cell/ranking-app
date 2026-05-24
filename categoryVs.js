@@ -245,6 +245,8 @@ export function exitCategoryVs(){
 
   setMode("home");
 
+   document.querySelector(".vs").style.display = "none";
+   
   update();
 }
 
