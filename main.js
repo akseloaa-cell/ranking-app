@@ -23,7 +23,7 @@ import {
 } from "./ranking.js";
 import { openAddItem, closeAddItem } from "./ui.js";
 import { draw } from "./match.js";
-import { openCategoryVs } from "./ranking-app/gamemodes/categoryVs.js";
+import { openCategoryVs } from "./categoryVs.js";
  
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
