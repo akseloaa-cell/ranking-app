@@ -35,19 +35,34 @@ export function toggleMenu(){
 }
 
 export function setMode(mode){
+
   state.mode = mode;
 
-  const home = document.getElementById("homeView");
-  const select = document.getElementById("categorySelectView");
-  const battle = document.getElementById("categoryBattleView");
+  const views = [
+    "homeView",
+    "categorySelectView",
+    "categoryBattleView"
+  ];
 
-  if (home) home.style.display = "none";
-  if (select) select.style.display = "none";
-  if (battle) battle.style.display = "none";
+  views.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "none";
+  });
 
-  if (mode === "home" && home) home.style.display = "block";
-  if (mode === "categorySelect" && select) select.style.display = "block";
-  if (mode === "categoryBattle" && battle) battle.style.display = "block";
+  if (mode === "home"){
+    const el = document.getElementById("homeView");
+    if (el) el.style.display = "block";
+  }
+
+  if (mode === "categorySelect"){
+    const el = document.getElementById("categorySelectView");
+    if (el) el.style.display = "block";
+  }
+
+  if (mode === "categoryBattle"){
+    const el = document.getElementById("categoryBattleView");
+    if (el) el.style.display = "block";
+  }
 }
 
 export function setActiveMenu(el){
