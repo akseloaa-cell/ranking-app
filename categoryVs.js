@@ -1,4 +1,4 @@
-import { state } from "../state.js";  
+import { state } from "../state.js";   
 import { nextMatch, pick, draw } from "../match.js";
 import { update } from "../ranking.js";
 import { renderChips } from "../ui.js";
