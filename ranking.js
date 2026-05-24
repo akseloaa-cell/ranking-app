@@ -33,7 +33,9 @@ export function getRank(id){
 /* ================= MAIN TOP 10 ================= */
 
 export function update(){
-
+  
+  if(state.mode !== "home") return;
+  
   const list = [...state.items]
     .sort((a,b)=>b.rating-a.rating)
     .slice(0, 10);
@@ -86,6 +88,8 @@ export function update(){
   }).join("");
 
   document.getElementById("ranking").innerHTML = html;
+
+  ensureHomeRenderClean();
 }
 
 /* ================= FULL RANKING ================= */
