@@ -30,6 +30,12 @@ export function getRank(id){
     .findIndex(x => x.id === id) + 1;
 }
 
+function ensureHomeRenderClean(){
+  const container = document.querySelector(".vs");
+  if(container){
+    container.innerHTML = "";
+  }
+}
 /* ================= MAIN TOP 10 ================= */
 
 export function update(){
