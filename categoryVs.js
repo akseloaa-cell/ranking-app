@@ -237,6 +237,8 @@ function format(item){
 export function exitCategoryVs(){
 
   state.activeCategory = null;
+  state.current = null;
+
   state.mode = "home";
 
   setMode("home");
