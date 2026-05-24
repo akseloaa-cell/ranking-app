@@ -94,8 +94,9 @@ export function update(){
   }).join("");
 
   document.getElementById("ranking").innerHTML = html;
-
-  ensureHomeRenderClean();
+  document.getElementById("a").innerHTML = "";
+document.getElementById("b").innerHTML = "";
+  
 }
 
 /* ================= FULL RANKING ================= */
