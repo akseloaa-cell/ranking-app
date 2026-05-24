@@ -1,18 +1,6 @@
 import { state } from "./state.js";
 import { toggleCat } from "./categories.js";
 
-export function hideAllViews(){
-  const ranking = document.getElementById("ranking");
-  const tournament = document.getElementById("tournamentSection");
-  const catSelect = document.getElementById("categorySelectView");
-  const catBattle = document.getElementById("categoryBattleView");
-
-  if (ranking) ranking.style.display = "none";
-  if (tournament) tournament.style.display = "none";
-  if (catSelect) catSelect.style.display = "none";
-  if (catBattle) catBattle.style.display = "none";
-}
-
 export function openAddItem(){
   const overlay = document.getElementById("addOverlay");
   const view = document.getElementById("addView");
