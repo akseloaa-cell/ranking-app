@@ -31,6 +31,7 @@ import {
  
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
+window.setActiveMenu = ui.setActiveMenu;
 
 window.showStats = stats.showStats;
 window.closeStats = stats.closeStats;
