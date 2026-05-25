@@ -159,8 +159,11 @@ export function pick(i){
   updateH2H(winner, loser, "win");
 
   save();
-  update();
+update();
+
+if(state.mode === "home"){
   nextMatch();
+}
 }
 
 export function draw(){
@@ -186,6 +189,9 @@ export function draw(){
   updateH2H(a, b, "draw");
 
   save();
-  update();
+update();
+
+if(state.mode === "home"){
   nextMatch();
+}
 }
