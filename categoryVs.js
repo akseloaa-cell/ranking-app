@@ -133,11 +133,11 @@ export function renderVsScreen(){
 
     <div id="vsContainer">
 
-      <div id="a"></div>
+      <div id="battleCardA"></div>
 
-      <div style="opacity:0.5;font-size:24px;">VS</div>
+<div style="opacity:0.5;font-size:24px;">VS</div>
 
-      <div id="b"></div>
+<div id="battleCardB"></div>
 
     </div>
   `;
@@ -191,8 +191,8 @@ export function renderMatch(){
 
   const [a, b] = state.current;
 
-  const aEl = document.getElementById("a");
-  const bEl = document.getElementById("b");
+ const aEl = document.getElementById("battleCardA");
+const bEl = document.getElementById("battleCardB");
 
   if (!aEl || !bEl) return;
 
