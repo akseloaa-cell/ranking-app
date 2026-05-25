@@ -6,7 +6,7 @@ import { update } from "./ranking.js";
    OPEN MODE
 ========================= */
 
-import { hideAllViews } from "./ui.js";
+import { hideAllViews, setMode } from "./ui.js";
 
 export function openCategoryVs(){
   state.mode = "categoryVs";
@@ -105,8 +105,6 @@ export function startCategoryVs(category){
 
   setMode("categoryBattle");
 
-  document.querySelector(".vs").style.display = "flex";
-   
   renderVsScreen();
   nextCategoryMatch();
 }
@@ -123,7 +121,7 @@ export function renderVsScreen(){
   container.innerHTML = `
     <div class="battle-topbar">
 
-      <button onclick="exitCategoryVs()" class="battle-back">
+      onclick="backToCategorySelect()" class="battle-back">
         ← Categories
       </button>
 
@@ -241,24 +239,19 @@ function format(item){
 
 export function exitCategoryVs(){
 
-  state.mode = "home";
   state.activeCategory = null;
 
-  hideAllViews();
-
-  document.getElementById("ranking").style.display = "block";
-  document.getElementById("tournamentSection").style.display = "block";
+  setMode("home");
 
   update();
   nextMatch();
 }
 
 export function backToCategorySelect(){
+
   state.activeCategory = null;
 
-  hideAllViews();
-
-  document.getElementById("categorySelectView").style.display = "block";
+  setMode("categorySelect");
 
   renderCategorySelectScreen();
 }
