@@ -161,5 +161,18 @@ export function toggleChip(el){
   el.classList.toggle("active");
 }
 
+export function hideAllViews(){
+
+  const ranking = document.getElementById("ranking");
+  const tournament = document.getElementById("tournamentSection");
+  const categorySelect = document.getElementById("categorySelectView");
+  const categoryBattle = document.getElementById("categoryBattleView");
+
+  if(ranking) ranking.style.display = "none";
+  if(tournament) tournament.style.display = "none";
+  if(categorySelect) categorySelect.style.display = "none";
+  if(categoryBattle) categoryBattle.style.display = "none";
+}
+
 window.toggleAllChips = toggleAllChips;
 window.toggleChip = toggleChip;
