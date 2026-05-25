@@ -106,7 +106,6 @@
   </div>
 </div>
 
- <div id="homeView">
 <div class="vs">
   <div class="choice" id="a"></div>
 <div class="choice" id="b"></div>
@@ -163,7 +162,7 @@
 </div>
 
 </div>
-</div>
+
  <!-- CATEGORY SELECT -->
 
 <div id="categorySelectView" style="display:none;">
@@ -247,12 +246,13 @@
     <input id="itemInput" placeholder="Navn">
 
     <!-- SØK -->
-    <input id="catSearch" placeholder="Søk kategori..."
-      oninput="renderChips({
-  filter: this.value,
-  targetId: 'chipBox',
-  mode: 'select'
-})"
+   <input id="catSearch" placeholder="Søk kategori..."
+  oninput="renderChips({
+    filter: this.value,
+    targetId: 'chipBox',
+    mode: 'select'
+  })"
+/>
 
     <!-- CHIPS -->
     <div class="chip-container" id="chipBox"></div>
