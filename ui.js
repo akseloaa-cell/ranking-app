@@ -50,7 +50,7 @@ export function setMode(mode){
   });
 
   if (mode === "home"){
-    document.querySelector(".vs").style.display = "none";
+    document.querySelector(".vs").style.display = "flex";
     const el = document.getElementById("homeView");
     if (el) el.style.display = "block";
   }
@@ -163,13 +163,11 @@ export function toggleChip(el){
 
 export function hideAllViews(){
 
-  const ranking = document.getElementById("ranking");
-  const tournament = document.getElementById("tournamentSection");
+  const home = document.getElementById("homeView");
   const categorySelect = document.getElementById("categorySelectView");
   const categoryBattle = document.getElementById("categoryBattleView");
 
-  if(ranking) ranking.style.display = "none";
-  if(tournament) tournament.style.display = "none";
+  if(home) home.style.display = "none";
   if(categorySelect) categorySelect.style.display = "none";
   if(categoryBattle) categoryBattle.style.display = "none";
 }
