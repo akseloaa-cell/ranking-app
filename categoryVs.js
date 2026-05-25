@@ -239,8 +239,6 @@ function format(item){
    EXIT
 ========================= */
 
-import { hideAllViews } from "./ui.js";
-
 export function exitCategoryVs(){
 
   state.mode = "home";
