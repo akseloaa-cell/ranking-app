@@ -36,6 +36,26 @@ function ensureHomeRenderClean(){
     container.innerHTML = "";
   }
 }
+
+function renderDailyMVPCard(){
+  const mvp = getDailyMVP();
+
+  if(!mvp) return "";
+
+  return `
+    <div onclick="showStats(${mvp.item.id})"
+      style="padding:12px 14px;background:#172238;border:1px solid #4f8cff;
+      border-radius:12px;margin:0 0 12px 0;cursor:pointer;">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;">
+        <div>
+          <div style="font-size:12px;opacity:0.75;">Daily MVP</div>
+          <b>${mvp.item.name}</b>
+        </div>
+        <span style="color:#4caf50;font-weight:bold;">+${mvp.diff}</span>
+      </div>
+    </div>
+  `;
+}
 /* ================= MAIN TOP 10 ================= */
 
 export function update(){
@@ -93,7 +113,7 @@ export function update(){
     `;
   }).join("");
 
-  document.getElementById("ranking").innerHTML = html;
+  document.getElementById("ranking").innerHTML = renderDailyMVPCard() + html;
   document.getElementById("a").innerHTML = "";
 document.getElementById("b").innerHTML = "";
   

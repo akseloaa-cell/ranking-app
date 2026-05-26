@@ -80,12 +80,15 @@ window.openCategoryVs = openCategoryVs;
 window.exitCategoryVs = exitCategoryVs;
 window.backToCategorySelect = backToCategorySelect;
 
-export function saveDailyRanking(){
-  const today = new Date().toISOString().split("T")[0];
+function getTodayKey(){
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
 
-  // 🚫 ikke overskriv samme dag
-  if(state.lastRankingDate === today) return;
-
+function buildRankingSnapshots(){
   const sorted = [...state.items].sort((a,b)=>b.rating-a.rating);
 
   const rankingMap = {};
@@ -93,16 +96,44 @@ export function saveDailyRanking(){
     rankingMap[item.id] = i + 1;
   });
 
+  const categoryMap = {};
+  const allCats = [...new Set(state.items.flatMap(item => item.categories || []))];
+
+  allCats.forEach(cat => {
+    categoryMap[cat] = {};
+
+    state.items
+      .filter(item => (item.categories || []).includes(cat))
+      .sort((a,b)=>b.rating-a.rating)
+      .forEach((item, i) => {
+        categoryMap[cat][item.id] = i + 1;
+      });
+  });
+
+  return { rankingMap, categoryMap };
+}
+
+export function saveDailyRanking(){
+  const today = getTodayKey();
+
+  // 🚫 ikke overskriv samme dag
+  if(state.lastRankingDate === today) return;
+
+  const { rankingMap, categoryMap } = buildRankingSnapshots();
+
   state.previousRanking = rankingMap;
+  state.previousRankingByCategory = categoryMap;
   state.lastRankingDate = today;
 
   localStorage.setItem("previousRanking", JSON.stringify(rankingMap));
+  localStorage.setItem("previousRankingByCategory", JSON.stringify(categoryMap));
   localStorage.setItem("lastRankingDate", today);
 }
 
-state.previousRankingByCategory = {};
+if(!state.previousRankingByCategory || !Object.keys(state.previousRankingByCategory).length){
+  state.previousRankingByCategory = {};
 
-state.categories.forEach(cat => {
+  state.categories.forEach(cat => {
   const list = state.items
     .filter(x => (x.categories || []).includes(cat))
     .sort((a,b)=>b.rating-a.rating);
@@ -112,7 +143,13 @@ state.categories.forEach(cat => {
   list.forEach((x,i)=>{
     state.previousRankingByCategory[cat][x.id] = i + 1;
   });
-});
+  });
+
+  localStorage.setItem(
+    "previousRankingByCategory",
+    JSON.stringify(state.previousRankingByCategory)
+  );
+}
 
 state.items.forEach(i => {
   if(!i.h2h) i.h2h = {};
@@ -136,6 +173,6 @@ state.items.forEach(i => {
 });
 
 // start
+saveDailyRanking();
 update();
 nextMatch();
-saveDailyRanking();
