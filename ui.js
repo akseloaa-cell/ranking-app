@@ -1,5 +1,7 @@
 import { state } from "./state.js";
 import { toggleCat } from "./categories.js";
+import { nextMatch } from "./match.js";
+import { update } from "./ranking.js";
 
 export function openAddItem(){
   const overlay = document.getElementById("addOverlay");
@@ -55,6 +57,8 @@ export function setMode(mode, menuEl = null){
     document.querySelector(".vs").style.display = "flex";
     const el = document.getElementById("homeView");
     if (el) el.style.display = "block";
+    update();
+    nextMatch();
   }
 
   if (mode === "tournament"){

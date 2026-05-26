@@ -116,7 +116,21 @@ function formatChoice(item, opponent){
 }
 
 export function nextMatch(){
-  if(state.items.length < 2) return;
+  const aEl = document.getElementById("a");
+  const bEl = document.getElementById("b");
+
+  if(state.items.length < 2){
+    state.current = [];
+    if(aEl) {
+      aEl.innerHTML = "Legg til minst 2 items";
+      aEl.onclick = null;
+    }
+    if(bEl) {
+      bEl.innerHTML = "";
+      bEl.onclick = null;
+    }
+    return;
+  }
 
   const a = state.items[Math.floor(Math.random() * state.items.length)];
   const candidates = state.items.filter(x => x.id !== a.id);
@@ -127,18 +141,28 @@ export function nextMatch(){
 
   state.current = [a, b];
 
-  document.getElementById("a").innerHTML = formatChoice(a, b);
-  document.getElementById("b").innerHTML = formatChoice(b, a);
+  if(!aEl || !bEl) return;
 
-  document.getElementById("a").onclick = () => pick(0);
-  document.getElementById("b").onclick = () => pick(1);
+  aEl.innerHTML = formatChoice(a, b);
+  bEl.innerHTML = formatChoice(b, a);
+
+  aEl.onclick = () => pick(0);
+  bEl.onclick = () => pick(1);
 }
 
 export function pick(i){
-  const [a, b] = state.current;
+  if(!state.current || state.current.length < 2){
+    nextMatch();
+    return;
+  }
 
   const winner = state.current[i];
   const loser = state.current[1 - i];
+
+  if(!winner || !loser){
+    nextMatch();
+    return;
+  }
 
   // 🔥 expected score
   const Ea = 1 / (1 + Math.pow(10, (loser.rating - winner.rating) / 400));
@@ -170,7 +194,17 @@ if(state.mode === "home"){
 }
 
 export function draw(){
+  if(!state.current || state.current.length < 2){
+    nextMatch();
+    return;
+  }
+
   const [a, b] = state.current;
+
+  if(!a || !b){
+    nextMatch();
+    return;
+  }
 
   const Ea = 1 / (1 + Math.pow(10, (b.rating - a.rating) / 400));
   const Eb = 1 / (1 + Math.pow(10, (a.rating - b.rating) / 400));
