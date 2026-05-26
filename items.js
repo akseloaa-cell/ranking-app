@@ -10,7 +10,7 @@ export function addItem(){
   name = name.trim();
   if(!name) return;
 
-  let selected = [...document.querySelectorAll(".chip.active")]
+  let selected = [...document.querySelectorAll("#chipBox .chip.active")]
     .map(x => normalize(x.innerText));
 
   state.items.push({
@@ -27,6 +27,9 @@ export function addItem(){
   });
 
   document.getElementById("itemInput").value = "";
+  document
+    .querySelectorAll("#chipBox .chip.active")
+    .forEach(chip => chip.classList.remove("active"));
 
   save();
   update();

@@ -129,6 +129,10 @@ export function renderRankingView(){
     list.sort((a,b)=>(b.tournamentWins||0)-(a.tournamentWins||0));
   }
 
+  if(state.rankingSort === "top3"){
+    list.sort((a,b)=>(b.top3||0)-(a.top3||0));
+  }
+
   const html = list.map((item,i)=>{
 
     const currentRank = i + 1;

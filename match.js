@@ -153,6 +153,9 @@ export function pick(i){
   winner.rating = Math.round(winner.rating);
   loser.rating = Math.round(loser.rating);
 
+  winner.streak = winner.streak > 0 ? winner.streak + 1 : 1;
+  loser.streak = loser.streak < 0 ? loser.streak - 1 : -1;
+
   updateHistory(winner);
   updateHistory(loser);
 
@@ -182,6 +185,9 @@ export function draw(){
   // 🔥 safety
   a.rating = Math.round(a.rating);
   b.rating = Math.round(b.rating);
+
+  a.streak = 0;
+  b.streak = 0;
 
   updateHistory(a);
   updateHistory(b);

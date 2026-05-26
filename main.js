@@ -1,16 +1,18 @@
 import { state } from "./state.js"; 
 import { nextMatch } from "./match.js";
 import { update } from "./ranking.js";
-import { showStats, closeStats } from "./stats.js";
 import * as ui from "./ui.js";
 import * as stats from "./stats.js";
 import * as tournament from "./tournament.js";
+import { addItem } from "./items.js";
+import { addCategory } from "./categories.js";
 import {
   renameItem,
   deleteItem,
   addCatToItem,
   removeCatFromItem,
   renderStatsChips,
+  toggleStatsChips,
   toggleCatSection,
 } from "./stats.js";
 import { renderChips, toggleAllChips } from "./ui.js";
@@ -47,14 +49,10 @@ window.addCatToItem = addCatToItem;
 window.removeCatFromItem = removeCatFromItem;
 
 window.renderStatsChips = renderStatsChips;
+window.toggleStatsChips = toggleStatsChips;
 window.toggleCatSection = toggleCatSection;
 
-window.renderChips = (filter) =>
-  ui.renderChips({
-    filter,
-    targetId: "chipBox",
-    mode: "select"
-  });
+window.renderChips = ui.renderChips;
 
 window.toggleAllChips = toggleAllChips;
 window.toggleChip = ui.toggleChip;
@@ -63,6 +61,8 @@ window.update = update;
 
 window.openAddItem = openAddItem;
 window.closeAddItem = closeAddItem;
+window.addItem = addItem;
+window.addCategory = addCategory;
 
 window.openRankingView = openRankingView;
 window.closeRankingView = closeRankingView;

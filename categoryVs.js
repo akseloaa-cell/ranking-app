@@ -121,7 +121,7 @@ export function renderVsScreen(){
   container.innerHTML = `
     <div class="battle-topbar">
 
-      onclick="backToCategorySelect()" class="battle-back">
+      <button onclick="backToCategorySelect()" class="battle-back">
         ← Categories
       </button>
 
@@ -131,14 +131,20 @@ export function renderVsScreen(){
 
     </div>
 
-    <div id="vsContainer">
+    <div id="battleArena">
 
-      <div id="battleCardA"></div>
+      <div id="battleCardA" class="battle-card"></div>
 
-<div style="opacity:0.5;font-size:24px;">VS</div>
+      <div class="battle-vs">VS</div>
 
-<div id="battleCardB"></div>
+      <div id="battleCardB" class="battle-card"></div>
 
+    </div>
+
+    <div class="battle-buttons">
+      <button id="battlePickA"></button>
+      <button onclick="categoryDraw()">Draw</button>
+      <button id="battlePickB"></button>
     </div>
   `;
 
@@ -155,7 +161,11 @@ export function nextCategoryMatch(){
     (x.categories || []).includes(state.activeCategory)
   );
 
-  if (pool.length < 2) return;
+  if (pool.length < 2) {
+    state.current = [];
+    renderMatch();
+    return;
+  }
 
   const useBalanced = Math.random() > 0.5;
 
@@ -191,13 +201,33 @@ export function renderMatch(){
 
   const [a, b] = state.current;
 
- const aEl = document.getElementById("battleCardA");
-const bEl = document.getElementById("battleCardB");
+  const aEl = document.getElementById("battleCardA");
+  const bEl = document.getElementById("battleCardB");
+  const pickA = document.getElementById("battlePickA");
+  const pickB = document.getElementById("battlePickB");
 
   if (!aEl || !bEl) return;
 
+  if(!a || !b){
+    aEl.innerHTML = "Need at least 2 items";
+    bEl.innerHTML = "Add more items to this category";
+    aEl.onclick = null;
+    bEl.onclick = null;
+    if(pickA) pickA.style.display = "none";
+    if(pickB) pickB.style.display = "none";
+    return;
+  }
+
   aEl.innerHTML = format(a);
   bEl.innerHTML = format(b);
+  if(pickA){
+    pickA.style.display = "block";
+    pickA.innerText = a.name;
+  }
+  if(pickB){
+    pickB.style.display = "block";
+    pickB.innerText = b.name;
+  }
 
   aEl.onclick = () => {
     pick(0);
@@ -210,6 +240,15 @@ const bEl = document.getElementById("battleCardB");
     nextCategoryMatch();
     update();
   };
+
+  if(pickA) pickA.onclick = aEl.onclick;
+  if(pickB) pickB.onclick = bEl.onclick;
+}
+
+export function categoryDraw(){
+  draw();
+  nextCategoryMatch();
+  update();
 }
 
 /* =========================
@@ -263,6 +302,10 @@ export function filterCategories(value){
   renderCategoryList(value);
 }
 
+export function renderVsCategories(value = ""){
+  renderCategoryList(value);
+}
+
 /* =========================
    GLOBAL ACCESS
 ========================= */
@@ -270,3 +313,5 @@ export function filterCategories(value){
 window.startCategoryVs = startCategoryVs;
 window.exitCategoryVs = exitCategoryVs;
 window.filterCategories = filterCategories;
+window.renderVsCategories = renderVsCategories;
+window.categoryDraw = categoryDraw;

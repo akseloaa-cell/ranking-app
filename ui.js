@@ -34,9 +34,11 @@ export function toggleMenu(){
   menu.style.display = menu.style.display === "flex" ? "none" : "flex";
 }
 
-export function setMode(mode){
+export function setMode(mode, menuEl = null){
 
   state.mode = mode;
+
+  setActiveMenu(menuEl);
 
   const views = [
     "homeView",
@@ -53,6 +55,13 @@ export function setMode(mode){
     document.querySelector(".vs").style.display = "flex";
     const el = document.getElementById("homeView");
     if (el) el.style.display = "block";
+  }
+
+  if (mode === "tournament"){
+    document.querySelector(".vs").style.display = "none";
+    const el = document.getElementById("homeView");
+    if (el) el.style.display = "block";
+    document.getElementById("tournamentSection")?.scrollIntoView({ behavior: "smooth" });
   }
 
   if (mode === "categorySelect"){
@@ -89,7 +98,7 @@ export function renderChips({
 
   const f = filter.toLowerCase();
 
-  let list = state.categories.filter(c => c.includes(f));
+  let list = state.categories.filter(c => c.toLowerCase().includes(f));
 
   // 🔥 riktig toggle basert på hvor vi er
   let showAll =
