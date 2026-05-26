@@ -65,7 +65,6 @@ export function setMode(mode, menuEl = null){
     document.querySelector(".vs").style.display = "none";
     const el = document.getElementById("homeView");
     if (el) el.style.display = "block";
-    document.getElementById("tournamentSection")?.scrollIntoView({ behavior: "smooth" });
   }
 
   if (mode === "categorySelect"){
