@@ -15,4 +15,6 @@ export const state = {
   rankingFilter: "all",
   rankingSort: "elo",
   selectedCategories: [],
+    categorySortType: "items", // "items" | "alpha"
+  categorySortDir: "desc",   // "asc" | "desc"
 };
