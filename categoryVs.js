@@ -33,6 +33,17 @@ export function renderCategorySelectScreen(){
 
       <h2>🎮 Select Category</h2>
 
+<div class="sortDropdown" onclick="toggleCategorySortDropdown()">
+  <div id="sortLabel">📦 Most Items ▾</div>
+
+  <div id="sortOptions" class="sortOptions hidden">
+    <div onclick="setCategorySort('itemsDesc')">📦 Most Items</div>
+    <div onclick="setCategorySort('itemsAsc')">📦 Least Items</div>
+    <div onclick="setCategorySort('az')">🔤 A–Z</div>
+    <div onclick="setCategorySort('za')">🔤 Z–A</div>
+  </div>
+</div>
+
       <input
         id="categorySearch"
         placeholder="Search categories..."
