@@ -398,6 +398,5 @@ window.filterCategories = filterCategories;
 window.renderVsCategories = renderVsCategories;
 window.categoryDraw = categoryDraw;
 window.toggleCategorySortDropdown = toggleCategorySortDropdown;
-window.setCategorySort = setCategorySort;
 window.toggleSortType = toggleSortType;
 window.toggleSortDir = toggleSortDir;
