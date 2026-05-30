@@ -80,6 +80,8 @@ window.openCategoryVs = openCategoryVs;
 window.exitCategoryVs = exitCategoryVs;
 window.backToCategorySelect = backToCategorySelect;
 
+window.closeMenu = ui.closeMenu;
+
 function getTodayKey(){
   const now = new Date();
   const year = now.getFullYear();
