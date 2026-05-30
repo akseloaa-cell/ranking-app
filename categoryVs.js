@@ -353,6 +353,11 @@ function format(item){
 /* =========================
    EXIT
 ========================= */
+export function backToCategorySelect(){
+  state.activeCategory = null;
+  setMode("categorySelect");
+  renderCategorySelectScreen();
+}
 
 export function exitCategoryVs(){
 
@@ -396,3 +401,4 @@ window.categoryDraw = categoryDraw;
 window.toggleCategorySortDropdown = toggleCategorySortDropdown;
 window.toggleSortType = toggleSortType;
 window.toggleSortDir = toggleSortDir;
+window.backToCategorySelect = backToCategorySelect;
