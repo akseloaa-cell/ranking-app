@@ -12,9 +12,7 @@ export function openCategoryVs(){
   state.mode = "categoryVs";
   state.activeCategory = null;
 
-  hideAllViews();
-
-  document.getElementById("categorySelectView").style.display = "block";
+setMode("categorySelect");
 
   renderCategorySelectScreen();
 }
@@ -357,24 +355,22 @@ function format(item){
 ========================= */
 
 export function exitCategoryVs(){
+
   state.activeCategory = null;
   state.mode = "home";
 
   setMode("home");
 
   document.getElementById("categoryBattleView").innerHTML = "";
+  document.getElementById("battleCardA").innerHTML = "";
+  document.getElementById("battleCardB").innerHTML = "";
 
   update();
+
+  // viktig: reset UI riktig
+  document.querySelector(".vs").style.display = "flex";
+
   nextMatch();
-}
-
-export function backToCategorySelect(){
-  state.activeCategory = null;
-  state.mode = "categorySelect";
-
-  setMode("categorySelect");
-
-  renderCategorySelectScreen();
 }
 /* =========================
    SEARCH
