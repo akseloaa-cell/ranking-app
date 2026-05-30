@@ -131,31 +131,8 @@ if(state.categorySortDir === "desc"){
   }).join("");
 }
 
-export function setCategorySort(sort){
-
-  state.categorySort = sort;
-
-  const labels = {
-    itemsDesc: "📦 Most Items",
-    itemsAsc: "📦 Least Items",
-    az: "🔤 A–Z",
-    za: "🔤 Z–A"
-  };
-
-  const label = document.getElementById("sortLabel");
-  if(label) label.innerText = labels[sort];
-
-  const dropdown = document.getElementById("sortOptions");
-  if(dropdown) dropdown.classList.add("hidden");
-
-  const search =
-    document.getElementById("categorySearch")?.value || "";
-
-  renderCategoryList(search);
-}
-
 export function toggleCategorySortDropdown(){
-  const el = document.getElementById("sortOptions");
+  const el = document.getElementById("sortDropdownMenu");
   if(!el) return;
 
   el.classList.toggle("hidden");
@@ -380,18 +357,20 @@ function format(item){
 ========================= */
 
 export function exitCategoryVs(){
-
   state.activeCategory = null;
+  state.mode = "home";
 
   setMode("home");
+
+  document.getElementById("categoryBattleView").innerHTML = "";
 
   update();
   nextMatch();
 }
 
 export function backToCategorySelect(){
-
   state.activeCategory = null;
+  state.mode = "categorySelect";
 
   setMode("categorySelect");
 
