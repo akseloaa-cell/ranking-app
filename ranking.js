@@ -287,7 +287,7 @@ const toggle =
     : "";
 
 container.innerHTML = chips + toggle;
-
+}
 /* ================= ACTIONS ================= */
 
 export function setRankingFilter(cat){
