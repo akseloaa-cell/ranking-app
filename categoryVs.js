@@ -187,6 +187,10 @@ export function startCategoryVs(category){
   nextCategoryMatch();
 }
 
+export function setSortType(type){
+  state.categorySortType = type;
+  renderCategoryList(document.getElementById("categorySearch")?.value || "");
+}
 /* =========================
    VS SCREEN
 ========================= */
@@ -402,3 +406,4 @@ window.toggleCategorySortDropdown = toggleCategorySortDropdown;
 window.toggleSortType = toggleSortType;
 window.toggleSortDir = toggleSortDir;
 window.backToCategorySelect = backToCategorySelect;
+window.setSortType = setSortType;
