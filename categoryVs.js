@@ -154,12 +154,33 @@ if(state.categorySort === "itemsAsc"){
 }
 
 export function setCategorySort(sort){
+
   state.categorySort = sort;
+
+  const labels = {
+    itemsDesc: "📦 Most Items",
+    itemsAsc: "📦 Least Items",
+    az: "🔤 A–Z",
+    za: "🔤 Z–A"
+  };
+
+  const label = document.getElementById("sortLabel");
+  if(label) label.innerText = labels[sort];
+
+  const dropdown = document.getElementById("sortOptions");
+  if(dropdown) dropdown.classList.add("hidden");
 
   const search =
     document.getElementById("categorySearch")?.value || "";
 
   renderCategoryList(search);
+}
+
+export function toggleCategorySortDropdown(){
+  const el = document.getElementById("sortOptions");
+  if(!el) return;
+
+  el.classList.toggle("hidden");
 }
 /* =========================
    START MODE
@@ -382,4 +403,5 @@ window.exitCategoryVs = exitCategoryVs;
 window.filterCategories = filterCategories;
 window.renderVsCategories = renderVsCategories;
 window.categoryDraw = categoryDraw;
+window.toggleCategorySortDropdown = toggleCategorySortDropdown;
 window.setCategorySort = setCategorySort;
