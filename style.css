@@ -430,3 +430,23 @@ button:active {
   flex-wrap: wrap;
   gap: 8px;
 }
+
+@media (max-width: 768px) {
+
+  #battleArena {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .battle-vs {
+    text-align: center;
+    font-size: 28px;
+    padding: 8px 0;
+  }
+
+  .battle-card {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+}
