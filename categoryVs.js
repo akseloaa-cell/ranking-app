@@ -48,12 +48,12 @@ export function renderCategorySelectScreen(){
 
 <div class="sortBar">
 
-  <div class="sortDropdown" onclick="toggleSortDropdown()">
+  <div class="sortDropdown" onclick="toggleCategorySortDropdown()">
     <span id="sortLabel">📦 Items</span> ▾
   </div>
 
   <div id="sortDropdownMenu" class="sortMenu hidden">
-    <div onclick="setSortType('items')">📦 Items</div>
+    <div onclick="toggleSortType()">📦 Items</div>
     <div onclick="setSortType('alpha')">🔤 A–Z</div>
   </div>
 
