@@ -48,15 +48,16 @@ export function renderCategorySelectScreen(){
         "
       />
 
-<div class="sortDropdown" onclick="toggleCategorySortDropdown()">
-  <div id="sortLabel">📦 Most Items ▾</div>
+<div class="sortBar">
 
-  <div id="sortOptions" class="sortOptions hidden">
-    <div onclick="setCategorySort('itemsDesc')">📦 Most Items</div>
-    <div onclick="setCategorySort('itemsAsc')">📦 Least Items</div>
-    <div onclick="setCategorySort('az')">🔤 A–Z</div>
-    <div onclick="setCategorySort('za')">🔤 Z–A</div>
+  <div class="sortType" onclick="toggleSortType()">
+    <span id="sortTypeLabel">📦 Items</span> ▾
   </div>
+
+  <div class="sortDir" onclick="toggleSortDir()">
+    <span id="sortDirLabel">↓</span>
+  </div>
+
 </div>
 
       <div id="categoryList"></div>
@@ -82,36 +83,24 @@ let cats = state.categories.filter(c =>
   c.toLowerCase().includes(f)
 );
 
-if(state.categorySort === "az"){
-  cats.sort((a,b)=>a.localeCompare(b));
+const getCount = (cat) =>
+  state.items.filter(x =>
+    (x.categories || []).includes(cat)
+  ).length;
+
+// ALPHABETICAL
+if(state.categorySortType === "alpha"){
+  cats.sort((a,b) => a.localeCompare(b));
 }
 
-if(state.categorySort === "za"){
-  cats.sort((a,b)=>b.localeCompare(a));
+// ITEMS
+if(state.categorySortType === "items"){
+  cats.sort((a,b) => getCount(a) - getCount(b));
 }
 
-if(state.categorySort === "itemsDesc"){
-  cats.sort((a,b)=>
-    state.items.filter(x =>
-      (x.categories || []).includes(b)
-    ).length -
-
-    state.items.filter(x =>
-      (x.categories || []).includes(a)
-    ).length
-  );
-}
-
-if(state.categorySort === "itemsAsc"){
-  cats.sort((a,b)=>
-    state.items.filter(x =>
-      (x.categories || []).includes(a)
-    ).length -
-
-    state.items.filter(x =>
-      (x.categories || []).includes(b)
-    ).length
-  );
+// DIRECTION
+if(state.categorySortDir === "desc"){
+  cats.reverse();
 }
 
   box.innerHTML = cats.map(c => {
@@ -165,6 +154,43 @@ export function toggleCategorySortDropdown(){
   if(!el) return;
 
   el.classList.toggle("hidden");
+}
+
+export function toggleSortType(){
+
+  if(state.categorySortType === "items"){
+    state.categorySortType = "alpha";
+  } else {
+    state.categorySortType = "items";
+  }
+
+  const label = document.getElementById("sortTypeLabel");
+  if(label){
+    label.innerText =
+      state.categorySortType === "items"
+        ? "📦 Items"
+        : "🔤 A–Z";
+  }
+
+  renderCategoryList(
+    document.getElementById("categorySearch")?.value || ""
+  );
+}
+
+export function toggleSortDir(){
+
+  state.categorySortDir =
+    state.categorySortDir === "asc" ? "desc" : "asc";
+
+  const label = document.getElementById("sortDirLabel");
+  if(label){
+    label.innerText =
+      state.categorySortDir === "asc" ? "↑" : "↓";
+  }
+
+  renderCategoryList(
+    document.getElementById("categorySearch")?.value || ""
+  );
 }
 /* =========================
    START MODE
@@ -389,3 +415,5 @@ window.renderVsCategories = renderVsCategories;
 window.categoryDraw = categoryDraw;
 window.toggleCategorySortDropdown = toggleCategorySortDropdown;
 window.setCategorySort = setCategorySort;
+window.toggleSortType = toggleSortType;
+window.toggleSortDir = toggleSortDir;
