@@ -48,15 +48,18 @@
   box-shadow: 0 8px 24px rgba(0,0,0,0.35);
 ">
  
-<div class="menuItem" onclick="setMode('home', this)">
+<div class="menuItem"
+     onclick="setMode('home'); setActiveMenu(this); closeMenu();">
   🏠 Home
 </div>
 
-<div class="menuItem" onclick="openCategoryVs(); setActiveMenu(this)">
+<div class="menuItem"
+     onclick="openCategoryVs(); setActiveMenu(this); closeMenu();">
   ⚔️ Versus
 </div>
 
-<div class="menuItem" onclick="setMode('tournament', this)">
+<div class="menuItem"
+     onclick="setMode('tournament'); setActiveMenu(this); closeMenu();">
   🏆 Tournament
 </div>
 
