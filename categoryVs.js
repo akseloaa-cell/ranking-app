@@ -48,6 +48,22 @@ export function renderCategorySelectScreen(){
         "
       />
 
+<select
+  id="categorySort"
+  onchange="setCategorySort(this.value)"
+  style="
+    width:100%;
+    padding:10px;
+    margin-bottom:12px;
+    border-radius:10px;
+  "
+>
+  <option value="itemsDesc">📦 Most Items</option>
+  <option value="itemsAsc">📦 Least Items</option>
+  <option value="az">🔤 A-Z</option>
+  <option value="za">🔤 Z-A</option>
+</select>
+
       <div id="categoryList"></div>
 
     </div>
@@ -67,9 +83,41 @@ export function renderCategoryList(filter = ""){
 
   const f = filter.toLowerCase();
 
-  const cats = state.categories.filter(c =>
-    c.toLowerCase().includes(f)
+let cats = state.categories.filter(c =>
+  c.toLowerCase().includes(f)
+);
+
+if(state.categorySort === "az"){
+  cats.sort((a,b)=>a.localeCompare(b));
+}
+
+if(state.categorySort === "za"){
+  cats.sort((a,b)=>b.localeCompare(a));
+}
+
+if(state.categorySort === "itemsDesc"){
+  cats.sort((a,b)=>
+    state.items.filter(x =>
+      (x.categories || []).includes(b)
+    ).length -
+
+    state.items.filter(x =>
+      (x.categories || []).includes(a)
+    ).length
   );
+}
+
+if(state.categorySort === "itemsAsc"){
+  cats.sort((a,b)=>
+    state.items.filter(x =>
+      (x.categories || []).includes(a)
+    ).length -
+
+    state.items.filter(x =>
+      (x.categories || []).includes(b)
+    ).length
+  );
+}
 
   box.innerHTML = cats.map(c => {
 
@@ -94,6 +142,14 @@ export function renderCategoryList(filter = ""){
   }).join("");
 }
 
+export function setCategorySort(sort){
+  state.categorySort = sort;
+
+  const search =
+    document.getElementById("categorySearch")?.value || "";
+
+  renderCategoryList(search);
+}
 /* =========================
    START MODE
 ========================= */
@@ -315,3 +371,4 @@ window.exitCategoryVs = exitCategoryVs;
 window.filterCategories = filterCategories;
 window.renderVsCategories = renderVsCategories;
 window.categoryDraw = categoryDraw;
+window.setCategorySort = setCategorySort;
