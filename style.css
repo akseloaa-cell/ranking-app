@@ -450,3 +450,38 @@ button:active {
   }
 
 }
+
+.sortDropdown {
+  position: relative;
+  background: #1f1f1f;
+  padding: 10px 12px;
+  border-radius: 12px;
+  margin: 10px 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sortOptions {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  right: 0;
+  background: #151a24;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  z-index: 10;
+}
+
+.sortOptions div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.sortOptions div:hover {
+  background: #2a3142;
+}
+
+.hidden {
+  display: none;
+}
