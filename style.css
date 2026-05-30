@@ -521,3 +521,21 @@ button:active {
 .hidden {
   display: none;
 }
+
+@media (max-width: 600px) {
+  #battleArena {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .battle-vs {
+    transform: rotate(90deg);
+    font-size: 20px;
+  }
+
+  .battle-card {
+    width: 90%;
+  }
+}
