@@ -33,17 +33,6 @@ export function renderCategorySelectScreen(){
 
       <h2>🎮 Select Category</h2>
 
-<div class="sortDropdown" onclick="toggleCategorySortDropdown()">
-  <div id="sortLabel">📦 Most Items ▾</div>
-
-  <div id="sortOptions" class="sortOptions hidden">
-    <div onclick="setCategorySort('itemsDesc')">📦 Most Items</div>
-    <div onclick="setCategorySort('itemsAsc')">📦 Least Items</div>
-    <div onclick="setCategorySort('az')">🔤 A–Z</div>
-    <div onclick="setCategorySort('za')">🔤 Z–A</div>
-  </div>
-</div>
-
       <input
         id="categorySearch"
         placeholder="Search categories..."
@@ -59,21 +48,16 @@ export function renderCategorySelectScreen(){
         "
       />
 
-<select
-  id="categorySort"
-  onchange="setCategorySort(this.value)"
-  style="
-    width:100%;
-    padding:10px;
-    margin-bottom:12px;
-    border-radius:10px;
-  "
->
-  <option value="itemsDesc">📦 Most Items</option>
-  <option value="itemsAsc">📦 Least Items</option>
-  <option value="az">🔤 A-Z</option>
-  <option value="za">🔤 Z-A</option>
-</select>
+<div class="sortDropdown" onclick="toggleCategorySortDropdown()">
+  <div id="sortLabel">📦 Most Items ▾</div>
+
+  <div id="sortOptions" class="sortOptions hidden">
+    <div onclick="setCategorySort('itemsDesc')">📦 Most Items</div>
+    <div onclick="setCategorySort('itemsAsc')">📦 Least Items</div>
+    <div onclick="setCategorySort('az')">🔤 A–Z</div>
+    <div onclick="setCategorySort('za')">🔤 Z–A</div>
+  </div>
+</div>
 
       <div id="categoryList"></div>
 
