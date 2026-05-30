@@ -13,5 +13,6 @@ export const state = {
   showAllStatsChips: false,
   showAllRankingChips: false,
   rankingFilter: "all",
-  rankingSort: "elo"
+  rankingSort: "elo",
+  selectedCategories: [],
 };
