@@ -36,6 +36,14 @@ export function toggleMenu(){
   menu.style.display = menu.style.display === "flex" ? "none" : "flex";
 }
 
+export function closeMenu(){
+  const menu = document.getElementById("modeMenu");
+
+  if(menu){
+    menu.style.display = "none";
+  }
+}
+
 export function setMode(mode, menuEl = null){
 
   state.mode = mode;
