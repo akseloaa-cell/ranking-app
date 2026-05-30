@@ -267,14 +267,26 @@ export function renderRankingFilters(search = ""){
     .filter(c => c.toLowerCase().includes(f))
     .slice(0, state.showAllRankingChips ? 999 : 6);
 
-  container.innerHTML = cats.map(c => `
-    <span onclick="setRankingFilter('${c}')"
-      class="chip"
-      style="background:${state.rankingFilter === c ? '#4f8cff' : '#222'}">
-      ${c}
-    </span>
-  `).join("");
-}
+const chips = cats.map(c => `
+  <span onclick="setRankingFilter('${c}')"
+    class="chip"
+    style="background:${state.rankingFilter === c ? '#4f8cff' : '#222'}">
+    ${c}
+  </span>
+`).join("");
+
+const toggle =
+  state.categories.length > 6
+    ? `
+      <span class="chip"
+        onclick="toggleRankingChips()"
+        style="background:#4f8cff;color:white;font-weight:bold;">
+        ${state.showAllRankingChips ? "−" : "+"}
+      </span>
+    `
+    : "";
+
+container.innerHTML = chips + toggle;
 
 /* ================= ACTIONS ================= */
 
