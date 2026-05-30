@@ -422,3 +422,9 @@ button:active {
   font-size:15px;
   cursor:pointer;
 }
+
+#rankingFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
