@@ -31,6 +31,7 @@ export function addItem(){
     .querySelectorAll("#chipBox .chip.active")
     .forEach(chip => chip.classList.remove("active"));
 
+  state.selectedCategories = [];
   save();
   update();
   nextMatch();
