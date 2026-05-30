@@ -111,9 +111,9 @@ export function renderChips({
 
   if (!showAll) list = list.slice(0, 6);
 
-  const selected = itemId
-    ? (state.items.find(x => x.id === itemId)?.categories || [])
-    : [];
+const selected = itemId
+  ? (state.items.find(x => x.id === itemId)?.categories || [])
+  : state.selectedCategories;
 
   box.innerHTML =
     list.map(c => {
@@ -170,7 +170,19 @@ export function toggleAllChips(targetId, mode, itemId){
 /* ================= SELECT CHIP ================= */
 
 export function toggleChip(el){
-  el.classList.toggle("active");
+
+  const cat = el.textContent.trim();
+
+  if(state.selectedCategories.includes(cat)){
+    state.selectedCategories =
+      state.selectedCategories.filter(x => x !== cat);
+
+    el.classList.remove("active");
+  }
+  else{
+    state.selectedCategories.push(cat);
+    el.classList.add("active");
+  }
 }
 
 export function hideAllViews(){
