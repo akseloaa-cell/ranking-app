@@ -224,9 +224,7 @@ export function renderVsScreen(){
     </div>
 
     <div class="battle-buttons">
-      <button id="battlePickA"></button>
-      <button onclick="categoryDraw()">Draw</button>
-      <button id="battlePickB"></button>
+      <button onclick="categoryDraw()">Uavgjort</button>
     </div>
   `;
 
@@ -285,8 +283,6 @@ export function renderMatch(){
 
   const aEl = document.getElementById("battleCardA");
   const bEl = document.getElementById("battleCardB");
-  const pickA = document.getElementById("battlePickA");
-  const pickB = document.getElementById("battlePickB");
 
   if (!aEl || !bEl) return;
 
@@ -295,21 +291,11 @@ export function renderMatch(){
     bEl.innerHTML = "Add more items to this category";
     aEl.onclick = null;
     bEl.onclick = null;
-    if(pickA) pickA.style.display = "none";
-    if(pickB) pickB.style.display = "none";
     return;
   }
 
   aEl.innerHTML = formatChoice(a, b);
   bEl.innerHTML = formatChoice(b, a);
-  if(pickA){
-    pickA.style.display = "block";
-    pickA.innerText = a.name;
-  }
-  if(pickB){
-    pickB.style.display = "block";
-    pickB.innerText = b.name;
-  }
 
   aEl.onclick = () => {
     pick(0);
@@ -322,9 +308,6 @@ export function renderMatch(){
     nextCategoryMatch();
     update();
   };
-
-  if(pickA) pickA.onclick = aEl.onclick;
-  if(pickB) pickB.onclick = bEl.onclick;
 }
 
 export function categoryDraw(){
