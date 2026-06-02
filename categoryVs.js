@@ -339,15 +339,35 @@ function renderCategoryBattleRanking(){
       Ranking
     </div>
 
-    ${list.map((item, i) => `
-      <div onclick="showStats(${item.id})" class="category-battle-rank-row">
-        <span>
-          <b>#${i + 1}</b>
-          ${item.name}
-        </span>
-        <span>${Math.floor(item.rating)}</span>
-      </div>
-    `).join("")}
+    ${list.map((item, i) => {
+      const currentRank = i + 1;
+      const prevRank = state.previousRankingByCategory
+        ?. [state.activeCategory]
+        ?. [item.id];
+
+      let indicator = "";
+
+      if(prevRank !== undefined){
+        const diff = prevRank - currentRank;
+
+        if(diff > 0){
+          indicator = `<span style="color:#4caf50;">▲ ${diff}</span>`;
+        } else if(diff < 0){
+          indicator = `<span style="color:#f44336;">▼ ${Math.abs(diff)}</span>`;
+        }
+      }
+
+      return `
+        <div onclick="showStats(${item.id})" class="category-battle-rank-row">
+          <span>
+            ${indicator}
+            <b>#${currentRank}</b>
+            ${item.name}
+          </span>
+          <span>${Math.floor(item.rating)}</span>
+        </div>
+      `;
+    }).join("")}
   `;
 }
 
