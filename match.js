@@ -80,7 +80,7 @@ export function updateHistory(item){
 
 // ================= MATCH =================
 
-function formatChoice(item, opponent){
+export function formatChoice(item, opponent){
   const rank = getRank(item.id);
   const elo = Math.round(item.rating);
 

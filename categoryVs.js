@@ -1,5 +1,5 @@
 import { state } from "./state.js";
-import { nextMatch, pick, draw } from "./match.js";
+import { nextMatch, pick, draw, formatChoice } from "./match.js";
 import { update } from "./ranking.js";
 
 /* =========================
@@ -300,8 +300,8 @@ export function renderMatch(){
     return;
   }
 
-  aEl.innerHTML = format(a);
-  bEl.innerHTML = format(b);
+  aEl.innerHTML = formatChoice(a, b);
+  bEl.innerHTML = formatChoice(b, a);
   if(pickA){
     pickA.style.display = "block";
     pickA.innerText = a.name;
