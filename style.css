@@ -425,6 +425,38 @@ button:active {
   cursor:pointer;
 }
 
+#categoryBattleRanking{
+  width:min(560px, 92vw);
+  margin:28px auto 0;
+  text-align:left;
+}
+
+.category-battle-ranking-title{
+  font-size:13px;
+  font-weight:700;
+  opacity:0.7;
+  margin:0 0 8px 2px;
+}
+
+.category-battle-rank-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:8px 10px;
+  background:#141a26;
+  border:1px solid #2a3142;
+  border-radius:10px;
+  margin:5px 0;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.category-battle-rank-row span:first-child{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
 #rankingFilters {
   display: flex;
   flex-wrap: wrap;

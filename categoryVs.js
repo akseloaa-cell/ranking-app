@@ -226,6 +226,8 @@ export function renderVsScreen(){
     <div class="battle-buttons">
       <button onclick="categoryDraw()">Uavgjort</button>
     </div>
+
+    <div id="categoryBattleRanking"></div>
   `;
 
   update();
@@ -291,6 +293,7 @@ export function renderMatch(){
     bEl.innerHTML = "Add more items to this category";
     aEl.onclick = null;
     bEl.onclick = null;
+    renderCategoryBattleRanking();
     return;
   }
 
@@ -308,12 +311,44 @@ export function renderMatch(){
     nextCategoryMatch();
     update();
   };
+
+  renderCategoryBattleRanking();
 }
 
 export function categoryDraw(){
   draw();
   nextCategoryMatch();
   update();
+}
+
+function renderCategoryBattleRanking(){
+  const box = document.getElementById("categoryBattleRanking");
+  if(!box) return;
+
+  const list = state.items
+    .filter(item => (item.categories || []).includes(state.activeCategory))
+    .sort((a,b)=>b.rating-a.rating);
+
+  if(!list.length){
+    box.innerHTML = "";
+    return;
+  }
+
+  box.innerHTML = `
+    <div class="category-battle-ranking-title">
+      Ranking
+    </div>
+
+    ${list.map((item, i) => `
+      <div onclick="showStats(${item.id})" class="category-battle-rank-row">
+        <span>
+          <b>#${i + 1}</b>
+          ${item.name}
+        </span>
+        <span>${Math.floor(item.rating)}</span>
+      </div>
+    `).join("")}
+  `;
 }
 
 /* =========================
