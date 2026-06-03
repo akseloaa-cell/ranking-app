@@ -1,5 +1,5 @@
 import { state } from "./state.js";
-import { nextMatch, pick, draw, formatChoice } from "./match.js";
+import { nextMatch, draw, formatChoice } from "./match.js";
 import { update } from "./ranking.js";
 
 /* =========================
@@ -312,17 +312,15 @@ export function renderMatch(){
   aEl.innerHTML = formatChoice(a, b);
   bEl.innerHTML = formatChoice(b, a);
 
-  aEl.onclick = () => {
-    pick(0);
-    nextCategoryMatch();
-    update();
-  };
+aEl.onclick = () => {
+  categoryPick(a, b);
+  nextCategoryMatch();
+};
 
-  bEl.onclick = () => {
-    pick(1);
-    nextCategoryMatch();
-    update();
-  };
+bEl.onclick = () => {
+  categoryPick(b, a);
+  nextCategoryMatch();
+};
 
   renderCategoryBattleRanking();
 }
