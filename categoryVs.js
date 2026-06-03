@@ -1,7 +1,6 @@
 import { state } from "./state.js";
-import { nextMatch, draw, formatChoice } from "./match.js";
+import { nextMatch, pick, draw, formatChoice } from "./match.js";
 import { update } from "./ranking.js";
-import { categoryPick } from "./categoryElo.js";
 
 /* =========================
    OPEN MODE
@@ -298,18 +297,20 @@ export function renderMatch(){
     return;
   }
 
-aEl.innerHTML = format(a);
-bEl.innerHTML = format(b);
+  aEl.innerHTML = formatChoice(a, b);
+  bEl.innerHTML = formatChoice(b, a);
 
-aEl.onclick = () => {
-  categoryPick(a, b);
-  nextCategoryMatch();
-};
+  aEl.onclick = () => {
+    pick(0);
+    nextCategoryMatch();
+    update();
+  };
 
-bEl.onclick = () => {
-  categoryPick(b, a);
-  nextCategoryMatch();
-};
+  bEl.onclick = () => {
+    pick(1);
+    nextCategoryMatch();
+    update();
+  };
 
   renderCategoryBattleRanking();
 }
@@ -412,6 +413,9 @@ export function exitCategoryVs(){
   document.getElementById("battleCardB").innerHTML = "";
 
   update();
+
+  // viktig: reset UI riktig
+  document.querySelector(".vs").style.display = "flex";
 
   nextMatch();
 }
