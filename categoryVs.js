@@ -1,6 +1,7 @@
 import { state } from "./state.js";
 import { nextMatch, draw, formatChoice } from "./match.js";
 import { update } from "./ranking.js";
+import { categoryPick } from "./categoryElo.js";
 
 /* =========================
    OPEN MODE
@@ -243,11 +244,9 @@ export function nextCategoryMatch(){
     (x.categories || []).includes(state.activeCategory)
   );
 
-  if (pool.length < 2) {
-    state.current = [];
-    renderMatch();
-    return;
-  }
+state.current = [];
+renderCategoryBattleRanking();
+return;
 
   const useBalanced = Math.random() > 0.5;
 
@@ -270,8 +269,6 @@ export function nextCategoryMatch(){
     } while (b.id === a.id);
   }
 
-  state.current = [a, b];
-
    const key = [a.id, b.id].sort().join("-");
 
 if(state.lastMatches.includes(key)){
@@ -283,7 +280,9 @@ state.lastMatches.push(key);
 if(state.lastMatches.length > 10){
   state.lastMatches.shift();
 }
-   
+
+     state.current = [a, b];
+
   renderMatch();
 }
 
@@ -423,9 +422,6 @@ export function exitCategoryVs(){
   document.getElementById("battleCardB").innerHTML = "";
 
   update();
-
-  // viktig: reset UI riktig
-  document.querySelector(".vs").style.display = "flex";
 
   nextMatch();
 }
