@@ -256,6 +256,7 @@ export function nextCategoryMatch(){
   let b;
 
   if (useBalanced) {
+
     const sorted = [...pool].sort(
       (x, y) =>
         Math.abs(x.rating - a.rating) -
@@ -263,6 +264,7 @@ export function nextCategoryMatch(){
     );
 
     b = sorted.find(x => x.id !== a.id) || pool[0];
+
   } else {
     do {
       b = pool[Math.floor(Math.random() * pool.length)];
@@ -271,13 +273,13 @@ export function nextCategoryMatch(){
 
   const key = [a.id, b.id].sort().join("-");
 
-  if (state.lastMatches.includes(key)) {
+  if(state.lastMatches.includes(key)){
     return nextCategoryMatch();
   }
 
   state.lastMatches.push(key);
 
-  if (state.lastMatches.length > 10) {
+  if(state.lastMatches.length > 10){
     state.lastMatches.shift();
   }
 
