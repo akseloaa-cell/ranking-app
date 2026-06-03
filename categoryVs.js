@@ -272,6 +272,18 @@ export function nextCategoryMatch(){
 
   state.current = [a, b];
 
+   const key = [a.id, b.id].sort().join("-");
+
+if(state.lastMatches.includes(key)){
+  return nextCategoryMatch();
+}
+
+state.lastMatches.push(key);
+
+if(state.lastMatches.length > 10){
+  state.lastMatches.shift();
+}
+   
   renderMatch();
 }
 
