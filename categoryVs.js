@@ -308,8 +308,8 @@ export function renderMatch(){
     return;
   }
 
-  aEl.innerHTML = formatChoice(a, b);
-  bEl.innerHTML = formatChoice(b, a);
+aEl.innerHTML = format(a);
+bEl.innerHTML = format(b);
 
 aEl.onclick = () => {
   categoryPick(a, b);
