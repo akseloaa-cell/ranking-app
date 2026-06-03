@@ -244,9 +244,11 @@ export function nextCategoryMatch(){
     (x.categories || []).includes(state.activeCategory)
   );
 
-state.current = [];
-renderCategoryBattleRanking();
-return;
+  if (pool.length < 2) {
+    state.current = [];
+    renderMatch();
+    return;
+  }
 
   const useBalanced = Math.random() > 0.5;
 
@@ -254,7 +256,6 @@ return;
   let b;
 
   if (useBalanced) {
-
     const sorted = [...pool].sort(
       (x, y) =>
         Math.abs(x.rating - a.rating) -
@@ -262,26 +263,25 @@ return;
     );
 
     b = sorted.find(x => x.id !== a.id) || pool[0];
-
   } else {
     do {
       b = pool[Math.floor(Math.random() * pool.length)];
     } while (b.id === a.id);
   }
 
-   const key = [a.id, b.id].sort().join("-");
+  const key = [a.id, b.id].sort().join("-");
 
-if(state.lastMatches.includes(key)){
-  return nextCategoryMatch();
-}
+  if (state.lastMatches.includes(key)) {
+    return nextCategoryMatch();
+  }
 
-state.lastMatches.push(key);
+  state.lastMatches.push(key);
 
-if(state.lastMatches.length > 10){
-  state.lastMatches.shift();
-}
+  if (state.lastMatches.length > 10) {
+    state.lastMatches.shift();
+  }
 
-     state.current = [a, b];
+  state.current = [a, b];
 
   renderMatch();
 }
