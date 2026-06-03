@@ -18,4 +18,5 @@ export const state = {
     categorySortType: "items", // "items" | "alpha"
   categorySortDir: "desc",   // "asc" | "desc"
   lastMatches: [],
+  categoryElo: {},
 };
