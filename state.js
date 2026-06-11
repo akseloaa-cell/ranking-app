@@ -18,3 +18,9 @@ export const state = {
     categorySortType: "items", // "items" | "alpha"
   categorySortDir: "desc",   // "asc" | "desc"
 };
+
+export function commit(changeFn) {
+  changeFn(state);
+  update();
+  save();
+}
