@@ -1,4 +1,5 @@
 import { state } from "./state.js";
+import { STATE_VERSION } from "./state.js";
 
 function save() {
   localStorage.setItem("rankingApp", JSON.stringify({
