@@ -9,3 +9,17 @@ export function save(){
   localStorage.setItem("previousRankingByCategory", JSON.stringify(state.previousRankingByCategory));
   localStorage.setItem("lastRankingDate", state.lastRankingDate);
 }
+
+function load() {
+  const raw = localStorage.getItem("rankingApp");
+  if (!raw) return null;
+
+  const data = JSON.parse(raw);
+
+  if (data.version !== STATE_VERSION) {
+    console.warn("State version mismatch – resetting or migrating");
+    return null;
+  }
+
+  return data;
+}
