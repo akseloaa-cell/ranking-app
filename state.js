@@ -24,3 +24,5 @@ export function commit(changeFn) {
   update();
   save();
 }
+
+export const STATE_VERSION = 1;
