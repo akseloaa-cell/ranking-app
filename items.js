@@ -13,6 +13,7 @@ export function addItem(){
   let selected = [...document.querySelectorAll("#chipBox .chip.active")]
     .map(x => normalize(x.innerText));
 
+commit(() => {
   state.items.push({
     id: Date.now(),
     name,
@@ -25,6 +26,7 @@ export function addItem(){
     top3: 0,
     h2h: {}
   });
+});
 
   document.getElementById("itemInput").value = "";
   document
