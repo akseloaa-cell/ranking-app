@@ -72,11 +72,10 @@ const views = [
 
 if (mode === "tournament"){
 
-  document.querySelector(".vs").style.display = "none";
+  const el =
+    document.getElementById("tournamentSection");
 
-  document.getElementById("homeView").style.display = "block";
-
-  document.getElementById("tournamentSection").style.display = "block";
+  if (el) el.style.display = "block";
 
 }
 
