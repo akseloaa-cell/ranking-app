@@ -69,11 +69,13 @@ export function setMode(mode, menuEl = null){
     nextMatch();
   }
 
-  if (mode === "tournament"){
-    document.querySelector(".vs").style.display = "none";
-    const el = document.getElementById("homeView");
-    if (el) el.style.display = "block";
-  }
+if (mode === "tournament"){
+  document.querySelector(".vs").style.display = "none";
+
+  const el = document.getElementById("tournamentSection");
+
+  if (el) el.style.display = "block";
+}
 
   if (mode === "categorySelect"){
     const el = document.getElementById("categorySelectView");
