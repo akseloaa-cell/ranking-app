@@ -31,7 +31,15 @@ import {
   backToCategorySelect
 } from "./categoryVs.js";
 
-import { startTournament } from "./tournament.js";
+import {
+  startTournament,
+  selectTournamentMode,
+  pickWinner
+} from "./tournament.js";
+
+window.startTournament = startTournament;
+window.selectTournamentMode = selectTournamentMode;
+window.pickWinner = pickWinner;
 
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
@@ -39,8 +47,6 @@ window.setActiveMenu = ui.setActiveMenu;
 
 window.showStats = stats.showStats;
 window.closeStats = stats.closeStats;
-
-window.startTournament = startTournament;
 
 window.scrollToTop = ui.scrollToTop;
 
