@@ -1,14 +1,14 @@
 import { state } from "./state.js";
 import { STATE_VERSION } from "./state.js";
 
-function save() {
+export function save() {
   localStorage.setItem("rankingApp", JSON.stringify({
     ...state,
     version: STATE_VERSION
   }));
 }
 
-function load() {
+export function load() {
   const raw = localStorage.getItem("rankingApp");
   if (!raw) return null;
 
