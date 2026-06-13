@@ -30,7 +30,9 @@ import {
   exitCategoryVs,
   backToCategorySelect
 } from "./categoryVs.js";
- 
+
+import { startTournament } from "./tournament.js";
+
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
 window.setActiveMenu = ui.setActiveMenu;
@@ -38,7 +40,7 @@ window.setActiveMenu = ui.setActiveMenu;
 window.showStats = stats.showStats;
 window.closeStats = stats.closeStats;
 
-window.startTournament = tournament.startTournament;
+window.startTournament = startTournament;
 
 window.scrollToTop = ui.scrollToTop;
 
