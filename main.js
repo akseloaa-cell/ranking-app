@@ -34,12 +34,10 @@ import {
 import {
   startTournament,
   selectTournamentMode,
-  pickWinner
 } from "./tournament.js";
 
 window.startTournament = startTournament;
 window.selectTournamentMode = selectTournamentMode;
-window.pickWinner = pickWinner;
 
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
