@@ -19,6 +19,31 @@ export const state = {
   categorySortDir: "desc",   // "asc" | "desc"
 };
 
+state.tournament = {
+  phase: "hub", 
+  // hub | setup | active
+
+  mode: null,
+  // "random" | "category"
+
+  category: null,
+
+  size: 8,
+
+  participants: [],
+
+  matches: [],
+
+  currentMatch: 0,
+
+  round: 1,
+
+  results: {
+    winner: null,
+    top3: []
+  }
+};
+
 export function commit(changeFn) {
   changeFn(state);
   update();
