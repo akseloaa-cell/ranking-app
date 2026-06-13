@@ -1,76 +1,105 @@
 import { state } from "./state.js";
 
-export function startTournament() {
+export function startTournament(){
 
-  const bracket =
-    document.getElementById("bracket");
+  const t = state.tournament;
 
-  if (!bracket) return;
+  let pool = [...state.items];
 
-  bracket.innerHTML = "";
-
-  if (state.items.length < 2) {
-    bracket.innerHTML =
-      "Minst 2 items kreves";
-    return;
+  if(t.mode === "category"){
+    pool = pool.filter(i =>
+      i.categories.includes(t.category)
+    );
   }
 
-  const players =
-    [...state.items];
+  shuffle(pool);
 
-  shuffle(players);
+  t.participants = pool.slice(0, t.size);
 
-  for (let i = 0; i < players.length; i += 2) {
+  t.matches = createBracket(t.participants);
 
-    const a = players[i];
+  t.phase = "active";
+  t.currentMatch = 0;
 
-    const b = players[i + 1];
+  renderTournament();
+}
 
-    if (!b) break;
+export function openTournamentHub(){
+  state.tournament.phase = "hub";
+  renderTournament();
+}
 
-    const match =
-      document.createElement("div");
+export function selectTournamentMode(mode){
+  state.tournament.mode = mode;
+  state.tournament.phase = "setup";
+  renderTournament();
+}
 
-    match.className =
-      "tournamentMatch";
+function createBracket(players){
+  const matches = [];
 
-    match.innerHTML =
-      `
-      <button>
-        ${a.name}
+  for(let i = 0; i < players.length; i += 2){
+    matches.push({
+      a: players[i],
+      b: players[i+1],
+      winner: null
+    });
+  }
+
+  return matches;
+}
+
+function renderTournament(){
+
+  const t = state.tournament;
+
+  const root =
+    document.getElementById("tournamentSection");
+
+  if(!root) return;
+
+  if(t.phase === "hub"){
+    root.innerHTML = `
+      <h3>🏆 Tournament</h3>
+
+      <button onclick="selectTournamentMode('random')">
+        Random
+      </button>
+
+      <button onclick="selectTournamentMode('category')">
+        Category
+      </button>
+    `;
+  }
+
+  if(t.phase === "setup"){
+    root.innerHTML = `
+      <h3>Setup</h3>
+
+      <button onclick="state.tournament.size=8">8</button>
+      <button onclick="state.tournament.size=16">16</button>
+
+      <button onclick="startTournament()">
+        Start
+      </button>
+    `;
+  }
+
+  if(t.phase === "active"){
+    const m = t.matches[t.currentMatch];
+
+    root.innerHTML = `
+      <h3>Round ${t.round}</h3>
+
+      <button onclick="pickWinner('a')">
+        ${m.a.name}
       </button>
 
       VS
 
-      <button>
-        ${b.name}
+      <button onclick="pickWinner('b')">
+        ${m.b.name}
       </button>
-      `;
-
-    bracket.appendChild(match);
-
+    `;
   }
-
-}
-
-function shuffle(arr){
-
-  for(
-    let i = arr.length - 1;
-    i > 0;
-    i--
-  ){
-
-    const j =
-      Math.floor(
-        Math.random()
-        *
-        (i + 1)
-      );
-
-    [arr[i], arr[j]] =
-      [arr[j], arr[i]];
-
-  }
-
 }
