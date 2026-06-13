@@ -50,11 +50,12 @@ export function setMode(mode, menuEl = null){
 
   setActiveMenu(menuEl);
 
-  const views = [
-    "homeView",
-    "categorySelectView",
-    "categoryBattleView"
-  ];
+const views = [
+  "homeView",
+  "categorySelectView",
+  "categoryBattleView",
+  "tournamentSection"
+];
 
   views.forEach(id => {
     const el = document.getElementById(id);
