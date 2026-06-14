@@ -18,7 +18,33 @@ function renderTournament(){
     );
 
   if(!root) return;
+  
+if (state.tournament.phase === "hub") {
 
+  root.innerHTML = `
+
+<h3>
+Velg gamemode
+</h3>
+
+<button
+onclick="selectTournamentMode('random')"
+>
+🎲 Random
+</button>
+
+<br><br>
+
+<button
+onclick="selectTournamentMode('category')"
+>
+🏷️ Category
+</button>
+
+`;
+
+}
+  
 if (state.tournament.phase === "setup") {
 
   const categories =
