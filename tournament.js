@@ -30,6 +30,10 @@ if (state.tournament.phase === "setup") {
 
   root.innerHTML = `
 
+<button onclick="backTournament()">
+← Tilbake
+</button>
+
 <h3>
 ${state.tournament.mode}
 </h3>
@@ -157,5 +161,17 @@ export function confirmTournamentSetup(){
   }
 
   startTournament();
+
+}
+
+export function backTournament(){
+
+  state.tournament.phase = "hub";
+
+  state.tournament.mode = null;
+
+  state.tournament.category = null;
+
+  renderTournament();
 
 }
