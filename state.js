@@ -33,7 +33,9 @@ tournament: {
 
   currentMatch: 0,
 
-  nextRoundPool: []
+  nextRoundPool: [],
+
+  bracketHistory: []
 }
   
 };
