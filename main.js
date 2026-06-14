@@ -34,6 +34,7 @@ import {
 import {
   startTournament,
   selectTournamentMode,
+  confirmTournamentSetup,
 } from "./tournament.js";
 
 window.startTournament = startTournament;
