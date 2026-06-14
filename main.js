@@ -36,13 +36,14 @@ import {
   selectTournamentMode,
   confirmTournamentSetup,
   backTournament,
+  pickWinner,
 } from "./tournament.js";
 
 window.startTournament = startTournament;
 window.selectTournamentMode = selectTournamentMode;
 window.confirmTournamentSetup = confirmTournamentSetup;
 window.backTournament = backTournament;
-
+window.pickWinner = pickWinner;
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
 window.setActiveMenu = ui.setActiveMenu;
