@@ -38,6 +38,7 @@ import {
 
 window.startTournament = startTournament;
 window.selectTournamentMode = selectTournamentMode;
+window.confirmTournamentSetup = confirmTournamentSetup;
 
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
