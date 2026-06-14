@@ -3,6 +3,7 @@ import { save } from "./storage.js";
 import { update } from "./ranking.js";
 import { nextMatch } from "./match.js";
 import { normalize } from "./categories.js";
+import { commit } from "./state.js";
 
 export function addItem(){
   let name = document.getElementById("itemInput").value;
