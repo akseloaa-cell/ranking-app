@@ -106,8 +106,16 @@ Start
 
 export function startTournament(){
 
-  console.log(
-    state.tournament
+  console.log("MODE:",
+    state.tournament.mode
+  );
+
+  console.log("CATEGORY:",
+    state.tournament.category
+  );
+
+  console.log("SIZE:",
+    state.tournament.size
   );
 
 }
