@@ -209,11 +209,22 @@ export function startTournament(){
 
   pool = shuffle(pool);
 
-  state.tournament.participants =
-    pool.slice(
-      0,
-      state.tournament.size
-    );
+const maxPossible = pool.length;
+
+// gjør size trygg
+const safeSize = Math.min(
+  state.tournament.size,
+  maxPossible
+);
+
+// sørg for partall (viktig for matches)
+const evenSize =
+  safeSize % 2 === 0
+    ? safeSize
+    : safeSize - 1;
+
+state.tournament.participants =
+  pool.slice(0, evenSize);
 
   state.tournament.round = 1;
 
