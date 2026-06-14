@@ -583,3 +583,19 @@ button:active {
 
   align-items:center;
 }
+
+.round {
+  margin: 20px 0;
+}
+
+.match {
+  display: flex;
+  gap: 10px;
+  padding: 6px;
+  opacity: 0.6;
+}
+
+.win {
+  font-weight: bold;
+  color: #4f8cff;
+}
