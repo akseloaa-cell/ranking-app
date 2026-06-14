@@ -332,42 +332,40 @@ function shuffle(arr){
 
 }
 
-export function pickWinner(
-side
-){
+export function pickWinner(side){
 
-const match =
-state
-.tournament
-.matches[
-state
-.tournament
-.currentMatch
-];
+  const t = state.tournament;
 
-const winner =
+  const match = t.matches[t.currentMatch];
 
-side === "a"
+  const winner =
+    side === "a" ? match.a : match.b;
 
-?
+  // 1. legg til vinner i neste runde pool
+  t.nextRoundPool.push(winner);
 
-match.a
+  // 2. gå til neste match
+  t.currentMatch++;
 
-:
+  // hvis runden ikke er ferdig
+  if (t.currentMatch < t.matches.length) {
+    renderTournament();
+    return;
+  }
 
-match.b;
+  // hvis runden er ferdig → lag ny runde
 
-console.log(
-"Winner:",
-winner.name
-);
+  t.participants = t.nextRoundPool;
 
-state
-.tournament
-.currentMatch++;
+  t.nextRoundPool = [];
 
-renderTournament();
+  t.currentMatch = 0;
 
+  t.round++;
+
+  createNextRound();
+
+  renderTournament();
 }
 
 function getTournamentPool(){
@@ -396,5 +394,21 @@ function getAllowedSizes(poolLength){
     size <= poolLength
   );
 
+}
+
+function createNextRound(){
+
+  const p = state.tournament.participants;
+
+  const matches = [];
+
+  for (let i = 0; i < p.length; i += 2) {
+    matches.push({
+      a: p[i],
+      b: p[i + 1]
+    });
+  }
+
+  state.tournament.matches = matches;
 }
 
