@@ -17,32 +17,21 @@ export const state = {
   selectedCategories: [],
     categorySortType: "items", // "items" | "alpha"
   categorySortDir: "desc",   // "asc" | "desc"
-};
 
-state.tournament = {
-  phase: "hub", 
-  // hub | setup | active
+  tournament: {
+
+  phase: "hub",
 
   mode: null,
-  // "random" | "category"
 
   category: null,
 
-  size: 8,
+  size: 8
 
-  participants: [],
-
-  matches: [],
-
-  currentMatch: 0,
-
-  round: 1,
-
-  results: {
-    winner: null,
-    top3: []
-  }
+},
+  
 };
+
 
 export function commit(changeFn) {
   changeFn();
