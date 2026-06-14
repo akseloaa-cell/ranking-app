@@ -180,6 +180,64 @@ ${match.b.name}
   
 }
 
+function renderBracket(){
+
+  const root =
+    document.getElementById(
+      "bracketView"
+    );
+
+  if(!root) return;
+
+  const t = state.tournament;
+
+  root.innerHTML =
+    t.bracketHistory.map(r => {
+
+      return `
+
+<div class="round">
+
+<h3>Round ${r.round}</h3>
+
+${r.matches.map(m => {
+
+  const aWin =
+    m.winner?.id === m.a.id;
+
+  const bWin =
+    m.winner?.id === m.b.id;
+
+  return `
+  <div class="match">
+
+    <span
+    class="${aWin ? "win" : ""}"
+    >
+    ${m.a.name}
+    </span>
+
+    vs
+
+    <span
+    class="${bWin ? "win" : ""}"
+    >
+    ${m.b.name}
+    </span>
+
+  </div>
+  `;
+
+}).join("")}
+
+</div>
+
+`;
+
+    }).join("");
+
+}
+
 export function startTournament(){
 
   let pool = [...state.items];
@@ -341,6 +399,18 @@ export function pickWinner(side){
   const winner =
     side === "a" ? match.a : match.b;
 
+  const currentRound =
+  state.tournament.bracketHistory[
+    state.tournament.round - 1
+  ];
+
+const matchIndex =
+  state.tournament.currentMatch;
+
+if (currentRound?.matches[matchIndex]) {
+  currentRound.matches[matchIndex].winner = winner;
+}
+  
   // 1. legg til vinner i neste runde pool
   t.nextRoundPool.push(winner);
 
@@ -410,5 +480,13 @@ function createNextRound(){
   }
 
   state.tournament.matches = matches;
+  state.tournament.bracketHistory.push({
+  round: state.tournament.round,
+  matches: state.tournament.matches.map(m => ({
+    a: m.a,
+    b: m.b,
+    winner: null
+  }))
+});
 }
 
