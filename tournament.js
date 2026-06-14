@@ -132,21 +132,67 @@ Start
 
 }
 
+  if (
+  state.tournament.phase
+  ===
+  "active"
+){
+
+root.innerHTML = `
+
+<h3>
+Turnering startet
+</h3>
+
+<p>
+
+Deltakere:
+
+${
+state.tournament
+.participants
+.length
+}
+
+</p>
+
+`;
+
+}
+  
 }
 
 export function startTournament(){
 
-  console.log("MODE:",
-    state.tournament.mode
-  );
+  let pool = [...state.items];
 
-  console.log("CATEGORY:",
-    state.tournament.category
-  );
+  if (
+    state.tournament.mode ===
+    "category"
+  ){
 
-  console.log("SIZE:",
-    state.tournament.size
-  );
+    pool = pool.filter(item =>
+
+      item.categories?.includes(
+        state.tournament.category
+      )
+
+    );
+
+  }
+
+  pool = shuffle(pool);
+
+  state.tournament.participants =
+    pool.slice(
+      0,
+      state.tournament.size
+    );
+
+  state.tournament.phase =
+    "active";
+
+  renderTournament();
 
 }
 
@@ -199,5 +245,31 @@ export function backTournament(){
   state.tournament.category = null;
 
   renderTournament();
+
+}
+
+function shuffle(arr){
+
+  const copy = [...arr];
+
+  for(
+    let i = copy.length - 1;
+    i > 0;
+    i--
+  ){
+
+    const j =
+      Math.floor(
+        Math.random()
+        *
+        (i + 1)
+      );
+
+    [copy[i], copy[j]] =
+    [copy[j], copy[i]];
+
+  }
+
+  return copy;
 
 }
