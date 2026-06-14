@@ -54,6 +54,10 @@ if (state.tournament.phase === "setup") {
       )
     )];
 
+const pool = getTournamentPool();
+
+const sizes = getAllowedSizes(pool.length);
+  
   root.innerHTML = `
 
 <button onclick="backTournament()">
@@ -100,24 +104,12 @@ ${cat}
 
 <p>Antall deltakere</p>
 
-<select
-id="tournamentSize"
->
-
-<option>4</option>
-
-<option selected>
-8
-</option>
-
-<option>
-16
-</option>
-
-<option>
-32
-</option>
-
+<select id="tournamentSize">
+  ${sizes.map(s => `
+    <option value="${s}">
+      ${s}
+    </option>
+  `).join("")}
 </select>
 
 <br><br>
@@ -377,3 +369,32 @@ state
 renderTournament();
 
 }
+
+function getTournamentPool(){
+
+  let pool = [...state.items];
+
+  if (state.tournament.mode === "category") {
+
+    pool = pool.filter(item =>
+      item.categories?.includes(
+        state.tournament.category
+      )
+    );
+
+  }
+
+  return pool;
+
+}
+
+function getAllowedSizes(poolLength){
+
+  const baseSizes = [4, 8, 16, 32];
+
+  return baseSizes.filter(size =>
+    size <= poolLength
+  );
+
+}
+
