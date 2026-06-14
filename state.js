@@ -18,17 +18,23 @@ export const state = {
     categorySortType: "items", // "items" | "alpha"
   categorySortDir: "desc",   // "asc" | "desc"
 
-  tournament: {
-
-  phase: "hub",
+tournament: {
+  phase: "hub" | "setup" | "active",
 
   mode: null,
-
   category: null,
+  size: 8,
 
-  size: 8
+  participants: [],
 
-},
+  matches: [],
+
+  round: 1,
+
+  currentMatch: 0,
+
+  nextRoundPool: []
+}
   
 };
 
