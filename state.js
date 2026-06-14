@@ -45,9 +45,7 @@ state.tournament = {
 };
 
 export function commit(changeFn) {
-  changeFn(state);
-  update();
-  save();
+  changeFn();
 }
 
 export const STATE_VERSION = 1;
