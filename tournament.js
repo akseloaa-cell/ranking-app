@@ -19,43 +19,88 @@ function renderTournament(){
 
   if(!root) return;
 
-  if(
-    state.tournament.phase
-    ===
-    "setup"
-  ){
+if (state.tournament.phase === "setup") {
 
-    root.innerHTML = `
+  const categories =
+    [...new Set(
+      state.items.flatMap(
+        x => x.categories || []
+      )
+    )];
+
+  root.innerHTML = `
 
 <h3>
 ${state.tournament.mode}
 </h3>
 
-<p>
-Velg antall deltakere
-</p>
+${
+state.tournament.mode === "category"
 
-<button onclick="
-state.tournament.size=8
-">
+?
+
+`
+
+<p>Velg kategori</p>
+
+<select
+id="tournamentCategory"
+>
+
+${categories.map(cat=>
+
+`
+<option
+value="${cat}"
+>
+${cat}
+</option>
+`
+
+).join("")}
+
+</select>
+
+`
+
+:
+
+""
+}
+
+<p>Antall deltakere</p>
+
+<select
+id="tournamentSize"
+>
+
+<option>4</option>
+
+<option selected>
 8
-</button>
+</option>
 
-<button onclick="
-state.tournament.size=16
-">
+<option>
 16
-</button>
+</option>
 
-<button onclick="
-startTournament()
-">
+<option>
+32
+</option>
+
+</select>
+
+<br><br>
+
+<button
+onclick="confirmTournamentSetup()"
+>
 Start
 </button>
 
 `;
 
-  }
+}
 
 }
 
@@ -64,5 +109,45 @@ export function startTournament(){
   console.log(
     state.tournament
   );
+
+}
+
+export function confirmTournamentSetup(){
+
+  const size =
+    document.getElementById(
+      "tournamentSize"
+    );
+
+  if(size){
+
+    state.tournament.size =
+      Number(
+        size.value
+      );
+
+  }
+
+  if(
+    state.tournament.mode
+    ===
+    "category"
+  ){
+
+    const cat =
+      document.getElementById(
+        "tournamentCategory"
+      );
+
+    if(cat){
+
+      state.tournament.category =
+        cat.value;
+
+    }
+
+  }
+
+  startTournament();
 
 }
