@@ -132,29 +132,55 @@ Start
 
 }
 
-  if (
+if (
   state.tournament.phase
   ===
   "active"
 ){
 
+const match =
+state
+.tournament
+.matches[
+state
+.tournament
+.currentMatch
+];
+
 root.innerHTML = `
 
 <h3>
-Turnering startet
+
+Round
+${state.tournament.round}
+
 </h3>
 
-<p>
+<button
+onclick="
+pickWinner('a')
+"
+>
 
-Deltakere:
+${match.a.name}
 
-${
-state.tournament
-.participants
-.length
-}
+</button>
 
-</p>
+<br><br>
+
+VS
+
+<br><br>
+
+<button
+onclick="
+pickWinner('b')
+"
+>
+
+${match.b.name}
+
+</button>
 
 `;
 
@@ -189,6 +215,35 @@ export function startTournament(){
       state.tournament.size
     );
 
+  state.tournament.round = 1;
+
+state.tournament.currentMatch = 0;
+
+state.tournament.matches = [];
+
+for(
+  let i = 0;
+  i <
+  state.tournament.participants.length;
+  i += 2
+){
+
+  state.tournament.matches.push({
+
+    a:
+      state.tournament
+      .participants[i],
+
+    b:
+      state.tournament
+      .participants[
+        i + 1
+      ]
+
+  });
+
+}
+  
   state.tournament.phase =
     "active";
 
@@ -271,5 +326,43 @@ function shuffle(arr){
   }
 
   return copy;
+
+}
+
+export function pickWinner(
+side
+){
+
+const match =
+state
+.tournament
+.matches[
+state
+.tournament
+.currentMatch
+];
+
+const winner =
+
+side === "a"
+
+?
+
+match.a
+
+:
+
+match.b;
+
+console.log(
+"Winner:",
+winner.name
+);
+
+state
+.tournament
+.currentMatch++;
+
+renderTournament();
 
 }
