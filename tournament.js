@@ -392,6 +392,9 @@ const evenSize =
 state.tournament.participants =
   pool.slice(0, evenSize);
 
+  state.tournament.originalParticipants =
+  [...state.tournament.participants];
+  
 state.tournament.round = 1;
 
 state.tournament.currentMatch = 0;
