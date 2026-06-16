@@ -517,69 +517,69 @@ export function pickWinner(side){
 
   const t = state.tournament;
 
-  if(!t.nextRoundPool){
+  const match = t.matches?.[t.currentMatch];
 
-  t.nextRoundPool = [];
-
-}
-  
-  const match = t.matches[t.currentMatch];
+  if (!match) return;
 
   const winner =
     side === "a" ? match.a : match.b;
 
+  // sørg for pool finnes
+  if (!t.nextRoundPool) {
+    t.nextRoundPool = [];
+  }
+
+  // --- bracket history (safe) ---
   const currentRound =
-  state.tournament.bracketHistory[
-    state.tournament.round - 1
-  ];
+    t.bracketHistory.at(-1);
 
-const matchIndex =
-  state.tournament.currentMatch;
+  if (currentRound?.matches?.[t.currentMatch]) {
+    currentRound.matches[t.currentMatch].winner = winner;
+  }
 
-if (currentRound?.matches[matchIndex]) {
-  currentRound.matches[matchIndex].winner = winner;
-}
-  
-  // 1. legg til vinner i neste runde pool
+  // legg til winner i neste runde
   t.nextRoundPool.push(winner);
 
-  // 2. gå til neste match
+  // gå til neste match
   t.currentMatch++;
 
-  // hvis runden ikke er ferdig
+  // --- fortsatt i runde ---
   if (t.currentMatch < t.matches.length) {
     renderTournament();
     return;
   }
 
-  // hvis runden er ferdig → lag ny runde
+  // --- runde ferdig ---
+  const next = t.nextRoundPool;
+  t.nextRoundPool = [];
 
-t.participants = t.nextRoundPool;
+  // RESET MATCH FLOW
+  t.currentMatch = 0;
 
-t.nextRoundPool = [];
+  // --- FINAL CHECK ---
+  if (next.length === 1) {
 
-// ferdig?
-if (t.participants.length === 1) {
+    t.participants = next;
 
-  t.averageElo = getTournamentAverageElo();
+    t.averageElo = getTournamentAverageElo();
 
-  applyTournamentElo();
+    applyTournamentElo();
 
-  t.phase = "finished";
+    t.phase = "finished";
+
+    renderTournament();
+
+    return;
+  }
+
+  // --- NEXT ROUND ---
+  t.participants = next;
+
+  t.round++;
+
+  createNextRound();
 
   renderTournament();
-
-  return;
-
-}
-
-t.currentMatch = 0;
-
-t.round++;
-
-createNextRound();
-
-renderTournament();
 }
 
 function getTournamentPool(){
