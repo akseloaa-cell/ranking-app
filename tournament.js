@@ -233,39 +233,36 @@ ${match.b.name}
   "finished"
 ){
 
-const winner =
-state
-.tournament
-.participants[0];
+const results = state.tournament.finalResults;
+
+const getBoost = (name) => {
+  const before = results.beforeRatings.get(name) || 0;
+  const after = results.afterRatings.get(name) || 0;
+  return after - before;
+};
 
 root.innerHTML = `
 
-<h1>
+<h1>🏆 Winner</h1>
+<h2>${results.first.name}</h2>
+<p>+${getBoost(results.first.name)} ELO</p>
 
-🏆
+<hr>
 
-</h1>
+<h3>🥈 2nd Place</h3>
+<p>${results.second.name}</p>
+<p>+${getBoost(results.second.name)} ELO</p>
 
-<h2>
+<hr>
 
-Winner
+<h3>🥉 3rd Place</h3>
+<p>${results.third.name}</p>
+<p>+${getBoost(results.third.name)} ELO</p>
 
-</h2>
+<br><br>
 
-<h1>
-
-${winner.name}
-
-</h1>
-
-<button
-onclick="
-backTournament()
-"
->
-
+<button onclick="backTournament()">
 Tilbake
-
 </button>
 
 `;
@@ -562,6 +559,18 @@ function getTop3(participants){
     .slice(0, 3);
 }
 
+function getFinalTop3(participants){
+
+  const sorted = [...participants]
+    .sort((a, b) => b.rating - a.rating);
+
+  return {
+    first: sorted[0],
+    second: sorted[1],
+    third: sorted[2]
+  };
+}
+
 function applyTournamentElo(participants, avg){
 
   const multiplier = (avg || 1000) / 1000;
@@ -607,17 +616,36 @@ function advanceRound(){
   t.currentMatch = 0;
 
   // FINISHED
-  if (next.length === 1) {
+if (next.length === 1) {
 
-    t.participants = next;
+  t.participants = next;
 
-    const avg = getTournamentAverageElo(next);
-    applyTournamentElo(next, avg);
+  const avg = getTournamentAverageElo(next);
 
-    t.phase = "finished";
+  const top3Before = getFinalTop3(state.tournament.originalParticipants);
 
-    return;
-  }
+  const beforeRatings = new Map(
+    state.tournament.originalParticipants.map(p => [p.name, p.rating])
+  );
+
+  applyTournamentElo(next, avg);
+
+  const afterRatings = new Map(
+    state.tournament.originalParticipants.map(p => [p.name, p.rating])
+  );
+
+  t.finalResults = {
+    first: top3Before.first,
+    second: top3Before.second,
+    third: top3Before.third,
+    beforeRatings,
+    afterRatings
+  };
+
+  t.phase = "finished";
+
+  return;
+}
 
   // NEXT ROUND
   t.round++;
