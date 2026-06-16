@@ -331,12 +331,16 @@ const evenSize =
 state.tournament.participants =
   pool.slice(0, evenSize);
 
-  state.tournament.round = 1;
+state.tournament.round = 1;
 
 state.tournament.currentMatch = 0;
 
 state.tournament.matches = [];
 
+state.tournament.nextRoundPool = [];
+
+state.tournament.bracketHistory = [];
+  
 for(
   let i = 0;
   i <
@@ -449,6 +453,12 @@ export function pickWinner(side){
 
   const t = state.tournament;
 
+  if(!t.nextRoundPool){
+
+  t.nextRoundPool = [];
+
+}
+  
   const match = t.matches[t.currentMatch];
 
   const winner =
