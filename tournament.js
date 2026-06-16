@@ -627,3 +627,57 @@ function createNextRound(){
 });
 }
 
+function getTournamentAverageElo(){
+
+  const t = state.tournament;
+
+  const pool = t.participants;
+
+  const sum = pool.reduce((acc, item) =>
+    acc + item.rating, 0
+  );
+
+  return sum / pool.length;
+
+}
+
+function getTop3(){
+
+  const sorted = [...state.tournament.participants]
+    .sort((a,b)=> b.rating - a.rating);
+
+  return sorted.slice(0, 3);
+
+}
+
+function applyTournamentElo(){
+
+  const t = state.tournament;
+
+  const avg = t.averageElo || 1000;
+
+  const multiplier =
+    avg / 1000;
+
+  const top3 = getTop3();
+
+  const rewards = [30, 20, 10];
+
+  top3.forEach((item, i) => {
+
+    const reward =
+      Math.round(
+        rewards[i] * multiplier
+      );
+
+    item.rating += reward;
+
+    item.tournamentWins =
+      (item.tournamentWins || 0) + (i === 0 ? 1 : 0);
+
+    item.top3 =
+      (item.top3 || 0) + 1;
+
+  });
+
+}
