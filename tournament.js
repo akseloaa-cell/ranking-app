@@ -18,10 +18,12 @@ function renderTournament(){
     );
 
   if(!root) return;
-  
-if (state.tournament.phase === "hub") {
 
-  root.innerHTML = `
+  // HUB
+
+  if (state.tournament.phase === "hub") {
+
+    root.innerHTML = `
 
 <h3>
 Velg gamemode
@@ -43,22 +45,32 @@ onclick="selectTournamentMode('category')"
 
 `;
 
-}
-  
-if (state.tournament.phase === "setup") {
+    renderBracket();
 
-  const categories =
-    [...new Set(
-      state.items.flatMap(
-        x => x.categories || []
-      )
-    )];
+    return;
 
-const pool = getTournamentPool();
+  }
 
-const sizes = getAllowedSizes(pool.length);
-  
-  root.innerHTML = `
+  // SETUP
+
+  if (state.tournament.phase === "setup") {
+
+    const categories =
+      [...new Set(
+        state.items.flatMap(
+          x => x.categories || []
+        )
+      )];
+
+    const pool =
+      getTournamentPool();
+
+    const sizes =
+      getAllowedSizes(
+        pool.length
+      );
+
+    root.innerHTML = `
 
 <button onclick="backTournament()">
 ← Tilbake
@@ -81,17 +93,15 @@ state.tournament.mode === "category"
 id="tournamentCategory"
 >
 
-${categories.map(cat=>
+${categories.map(cat=>`
 
-`
 <option
 value="${cat}"
 >
 ${cat}
 </option>
-`
 
-).join("")}
+`).join("")}
 
 </select>
 
@@ -105,48 +115,83 @@ ${cat}
 <p>Antall deltakere</p>
 
 <select id="tournamentSize">
-  ${sizes.map(s => `
-    <option value="${s}">
-      ${s}
-    </option>
-  `).join("")}
+
+${sizes.map(s=>`
+
+<option
+value="${s}"
+>
+${s}
+</option>
+
+`).join("")}
+
 </select>
 
 <br><br>
 
 <button
-onclick="confirmTournamentSetup()"
+onclick="
+confirmTournamentSetup()
+"
 >
 Start
 </button>
 
 `;
 
-}
+    renderBracket();
 
-if (
-  state.tournament.phase
-  ===
-  "active"
-){
+    return;
 
-const match =
-state
-.tournament
-.matches[
-state
-.tournament
-.currentMatch
-];
+  }
 
-root.innerHTML = `
+  // ACTIVE
 
-<h3>
+  if (
+    state.tournament.phase
+    ===
+    "active"
+  ){
+
+    const match =
+      state
+      .tournament
+      .matches[
+        state
+        .tournament
+        .currentMatch
+      ];
+
+    root.innerHTML = `
+
+<div>
 
 Round
 ${state.tournament.round}
 
-</h3>
+</div>
+
+<div style="
+margin-bottom:16px;
+opacity:.7;
+">
+
+Match
+
+${
+state.tournament.currentMatch
++
+1
+}
+
+/
+
+${
+state.tournament.matches.length
+}
+
+</div>
 
 <button
 onclick="
@@ -176,8 +221,12 @@ ${match.b.name}
 
 `;
 
-}
-  
+    renderBracket();
+
+    return;
+
+  }
+
 }
 
 function renderBracket(){
@@ -189,52 +238,58 @@ function renderBracket(){
 
   if(!root) return;
 
-  const t = state.tournament;
+  const t =
+    state.tournament;
 
-  root.innerHTML =
-    t.bracketHistory.map(r => {
+  if(
+    !t.matches
+    ||
+    !t.matches.length
+  ){
 
-      return `
+    root.innerHTML = "";
 
-<div class="round">
+    return;
 
-<h3>Round ${r.round}</h3>
+  }
 
-${r.matches.map(m => {
+  root.innerHTML = `
 
-  const aWin =
-    m.winner?.id === m.a.id;
+<h3>
+Round ${t.round}
+</h3>
 
-  const bWin =
-    m.winner?.id === m.b.id;
+${t.matches.map((m,i)=>`
 
-  return `
-  <div class="match">
+<div
+class="
+bracketMatch
+${
+i===t.currentMatch
+?
+" active"
+:
+""
+}
+">
 
-    <span
-    class="${aWin ? "win" : ""}"
-    >
-    ${m.a.name}
-    </span>
+<div>
 
-    vs
-
-    <span
-    class="${bWin ? "win" : ""}"
-    >
-    ${m.b.name}
-    </span>
-
-  </div>
-  `;
-
-}).join("")}
+${m.a.name}
 
 </div>
 
-`;
+<div>
 
-    }).join("");
+${m.b.name}
+
+</div>
+
+</div>
+
+`).join("")}
+
+`;
 
 }
 
