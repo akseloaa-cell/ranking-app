@@ -272,6 +272,30 @@ renderBracket();
 return;
 
 }
+
+  if (state.tournament.phase === "thirdPlace") {
+
+  const match = state.tournament.thirdPlaceMatch;
+
+  root.innerHTML = `
+
+<h2>🥉 3rd Place Match</h2>
+
+<button onclick="pickThirdPlaceWinner('a')">
+${match.a.name}
+</button>
+
+<br><br>VS<br><br>
+
+<button onclick="pickThirdPlaceWinner('b')">
+${match.b.name}
+</button>
+
+`;
+
+  renderBracket();
+  return;
+}
   
 }
 
@@ -377,6 +401,8 @@ export function startTournament(){
   state.tournament.matches = createMatches(participants);
   state.tournament.nextRoundPool = [];
 
+  state.tournament.semiFinalLosers = [];
+  
   state.tournament.bracketHistory = [{
     round: 1,
     matches: state.tournament.matches.map(m => ({
@@ -469,7 +495,22 @@ export function pickWinner(side){
   // init safety
   if (!t.nextRoundPool) t.nextRoundPool = [];
 
-  t.nextRoundPool.push(winner);
+  const isSemiFinal =
+  t.matches.length === 2;
+
+const loser = side === "a" ? match.b : match.a;
+
+t.nextRoundPool.push(winner);
+
+// hvis semifinal → lagre taper
+if (isSemiFinal) {
+
+  if (!t.semiFinalLosers) {
+    t.semiFinalLosers = [];
+  }
+
+  t.semiFinalLosers.push(loser);
+}
 
   // lagre i bracket history
   const currentRound = t.bracketHistory[t.bracketHistory.length - 1];
@@ -634,15 +675,30 @@ if (next.length === 1) {
     state.tournament.originalParticipants.map(p => [p.name, p.rating])
   );
 
+  // 🥉 CREATE 3RD PLACE MATCH
+  t.thirdPlaceMatch = null;
+
+  if (t.semiFinalLosers?.length === 2) {
+    t.thirdPlaceMatch = {
+      a: t.semiFinalLosers[0],
+      b: t.semiFinalLosers[1],
+      winner: null
+    };
+
+    t.phase = "thirdPlace";
+
+    return;
+  }
+
+  // fallback (shouldn't happen)
+  t.phase = "finished";
   t.finalResults = {
-    first: top3Before.first,
-    second: top3Before.second,
-    third: top3Before.third,
+    first: next[0],
+    second: t.semiFinalLosers?.[0],
+    third: t.semiFinalLosers?.[1],
     beforeRatings,
     afterRatings
   };
-
-  t.phase = "finished";
 
   return;
 }
@@ -661,5 +717,48 @@ if (next.length === 1) {
       winner: null
     }))
   });
+}
+
+export function pickThirdPlaceWinner(side){
+
+  const t = state.tournament;
+
+  const match = t.thirdPlaceMatch;
+  if (!match) return;
+
+  const winner = side === "a" ? match.a : match.b;
+
+  const loser = side === "a" ? match.b : match.a;
+
+  // sett resultater
+  t.thirdPlaceWinner = winner;
+  t.thirdPlaceLoser = loser;
+
+  t.phase = "finished";
+
+  // final ranking
+  const final = t.participants[0];
+
+  const beforeRatings = new Map(
+    state.tournament.originalParticipants.map(p => [p.name, p.rating])
+  );
+
+  const avg = getTournamentAverageElo([final]);
+
+  applyTournamentElo([final, winner, loser], avg);
+
+  const afterRatings = new Map(
+    state.tournament.originalParticipants.map(p => [p.name, p.rating])
+  );
+
+  t.finalResults = {
+    first: final,
+    second: loser,
+    third: winner,
+    beforeRatings,
+    afterRatings
+  };
+
+  renderTournament();
 }
 
