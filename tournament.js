@@ -356,83 +356,42 @@ ${m.b.name}
 
 export function startTournament(){
 
-  let pool = [...state.items];
-
-  if (
-    state.tournament.mode ===
-    "category"
-  ){
-
-    pool = pool.filter(item =>
-
-      item.categories?.includes(
-        state.tournament.category
-      )
-
-    );
-
-  }
+  let pool = getTournamentPool();
 
   pool = shuffle(pool);
 
-const maxPossible = pool.length;
+  const maxPossible = pool.length;
 
-// gjør size trygg
-const safeSize = Math.min(
-  state.tournament.size,
-  maxPossible
-);
+  let size = Math.min(state.tournament.size, maxPossible);
 
-// sørg for partall (viktig for matches)
-const evenSize =
-  safeSize % 2 === 0
-    ? safeSize
-    : safeSize - 1;
+  // sørg for par
+  if (size % 2 !== 0) {
+    size -= 1;
+  }
 
-state.tournament.participants =
-  pool.slice(0, evenSize);
+  const participants = pool.slice(0, size);
 
-  state.tournament.originalParticipants =
-  [...state.tournament.participants];
-  
-state.tournament.round = 1;
+  state.tournament.participants = participants;
+  state.tournament.originalParticipants = [...participants];
 
-state.tournament.currentMatch = 0;
+  state.tournament.round = 1;
+  state.tournament.currentMatch = 0;
 
-state.tournament.matches = [];
+  state.tournament.matches = createMatches(participants);
+  state.tournament.nextRoundPool = [];
 
-state.tournament.nextRoundPool = [];
+  state.tournament.bracketHistory = [{
+    round: 1,
+    matches: state.tournament.matches.map(m => ({
+      a: m.a,
+      b: m.b,
+      winner: null
+    }))
+  }];
 
-state.tournament.bracketHistory = [];
-  
-for(
-  let i = 0;
-  i <
-  state.tournament.participants.length;
-  i += 2
-){
-
-  state.tournament.matches.push({
-
-    a:
-      state.tournament
-      .participants[i],
-
-    b:
-      state.tournament
-      .participants[
-        i + 1
-      ]
-
-  });
-
-}
-  
-  state.tournament.phase =
-    "active";
+  state.tournament.phase = "active";
 
   renderTournament();
-
 }
 
 export function confirmTournamentSetup(){
@@ -491,26 +450,14 @@ function shuffle(arr){
 
   const copy = [...arr];
 
-  for(
-    let i = copy.length - 1;
-    i > 0;
-    i--
-  ){
+  for (let i = copy.length - 1; i > 0; i--) {
 
-    const j =
-      Math.floor(
-        Math.random()
-        *
-        (i + 1)
-      );
+    const j = Math.floor(Math.random() * (i + 1));
 
-    [copy[i], copy[j]] =
-    [copy[j], copy[i]];
-
+    [copy[i], copy[j]] = [copy[j], copy[i]];
   }
 
   return copy;
-
 }
 
 export function pickWinner(side){
@@ -518,66 +465,32 @@ export function pickWinner(side){
   const t = state.tournament;
 
   const match = t.matches?.[t.currentMatch];
-
   if (!match) return;
 
-  const winner =
-    side === "a" ? match.a : match.b;
+  const winner = side === "a" ? match.a : match.b;
 
-  // sørg for pool finnes
-  if (!t.nextRoundPool) {
-    t.nextRoundPool = [];
-  }
+  // init safety
+  if (!t.nextRoundPool) t.nextRoundPool = [];
 
-  // --- bracket history (safe) ---
-  const currentRound =
-    t.bracketHistory.at(-1);
+  t.nextRoundPool.push(winner);
+
+  // lagre i bracket history
+  const currentRound = t.bracketHistory[t.bracketHistory.length - 1];
 
   if (currentRound?.matches?.[t.currentMatch]) {
     currentRound.matches[t.currentMatch].winner = winner;
   }
 
-  // legg til winner i neste runde
-  t.nextRoundPool.push(winner);
-
-  // gå til neste match
   t.currentMatch++;
 
-  // --- fortsatt i runde ---
+  // fortsatt runde
   if (t.currentMatch < t.matches.length) {
     renderTournament();
     return;
   }
 
-  // --- runde ferdig ---
-  const next = t.nextRoundPool;
-  t.nextRoundPool = [];
-
-  // RESET MATCH FLOW
-  t.currentMatch = 0;
-
-  // --- FINAL CHECK ---
-  if (next.length === 1) {
-
-    t.participants = next;
-
-    t.averageElo = getTournamentAverageElo();
-
-    applyTournamentElo();
-
-    t.phase = "finished";
-
-    renderTournament();
-
-    return;
-  }
-
-  // --- NEXT ROUND ---
-  t.participants = next;
-
-  t.round++;
-
-  createNextRound();
+  // ROUND DONE
+  advanceRound();
 
   renderTournament();
 }
@@ -587,17 +500,12 @@ function getTournamentPool(){
   let pool = [...state.items];
 
   if (state.tournament.mode === "category") {
-
     pool = pool.filter(item =>
-      item.categories?.includes(
-        state.tournament.category
-      )
+      item.categories?.includes(state.tournament.category)
     );
-
   }
 
   return pool;
-
 }
 
 function getAllowedSizes(poolLength){
@@ -636,57 +544,94 @@ function createNextRound(){
 
 }
 
-function getTournamentAverageElo(){
+function getTournamentAverageElo(participants){
 
-  const t = state.tournament;
+  if (!participants.length) return 1000;
 
-  const pool = t.participants;
-
-  const sum = pool.reduce((acc, item) =>
-    acc + item.rating, 0
+  const sum = participants.reduce((acc, item) =>
+    acc + (item.rating || 1000), 0
   );
 
-  return sum / pool.length;
-
+  return sum / participants.length;
 }
 
-function getTop3(){
+function getTop3(participants){
 
-  const sorted = [...state.tournament.participants]
-    .sort((a,b)=> b.rating - a.rating);
-
-  return sorted.slice(0, 3);
-
+  return [...participants]
+    .sort((a, b) => b.rating - a.rating)
+    .slice(0, 3);
 }
 
-function applyTournamentElo(){
+function applyTournamentElo(participants, avg){
 
-  const t = state.tournament;
+  const multiplier = (avg || 1000) / 1000;
 
-  const avg = t.averageElo || 1000;
-
-  const multiplier =
-    avg / 1000;
-
-  const top3 = getTop3();
-
+  const top3 = getTop3(participants);
   const rewards = [30, 20, 10];
 
   top3.forEach((item, i) => {
 
-    const reward =
-      Math.round(
-        rewards[i] * multiplier
-      );
+    const reward = Math.round(rewards[i] * multiplier);
 
-    item.rating += reward;
+    item.rating = Math.max(0, item.rating + reward);
 
     item.tournamentWins =
       (item.tournamentWins || 0) + (i === 0 ? 1 : 0);
 
-    item.top3 =
-      (item.top3 || 0) + 1;
+    item.top3 = (item.top3 || 0) + 1;
 
   });
-
 }
+
+function createMatches(participants){
+
+  const matches = [];
+
+  for (let i = 0; i < participants.length; i += 2) {
+    matches.push({
+      a: participants[i],
+      b: participants[i + 1]
+    });
+  }
+
+  return matches;
+}
+
+function advanceRound(){
+
+  const t = state.tournament;
+
+  const next = t.nextRoundPool;
+  t.nextRoundPool = [];
+
+  t.currentMatch = 0;
+
+  // FINISHED
+  if (next.length === 1) {
+
+    t.participants = next;
+
+    const avg = getTournamentAverageElo(next);
+    applyTournamentElo(next, avg);
+
+    t.phase = "finished";
+
+    return;
+  }
+
+  // NEXT ROUND
+  t.round++;
+
+  t.participants = next;
+  t.matches = createMatches(next);
+
+  t.bracketHistory.push({
+    round: t.round,
+    matches: t.matches.map(m => ({
+      a: m.a,
+      b: m.b,
+      winner: null
+    }))
+  });
+}
+
