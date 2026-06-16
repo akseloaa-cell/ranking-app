@@ -287,6 +287,18 @@ function renderBracket(){
 
   if(!root) return;
 
+  if (
+  state.tournament.phase
+  !==
+  "active"
+){
+
+  root.innerHTML = "";
+
+  return;
+
+}
+  
   const t =
     state.tournament;
 
