@@ -39,6 +39,8 @@ import {
   pickWinner,
 } from "./tournament.js";
 
+import { load } from "./storage.js";
+
 window.startTournament = startTournament;
 window.selectTournamentMode = selectTournamentMode;
 window.confirmTournamentSetup = confirmTournamentSetup;
@@ -184,6 +186,17 @@ state.items.forEach(i => {
     }
   });
 });
+
+const saved = load();
+
+if(saved){
+
+  Object.assign(
+    state,
+    saved
+  );
+
+}
 
 // start
 saveDailyRanking();
