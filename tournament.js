@@ -558,6 +558,10 @@ t.nextRoundPool = [];
 // ferdig?
 if (t.participants.length === 1) {
 
+  t.averageElo = getTournamentAverageElo();
+
+  applyTournamentElo();
+
   t.phase = "finished";
 
   renderTournament();
@@ -616,8 +620,7 @@ function createNextRound(){
     });
   }
 
-  state.tournament.matches = matches;
-  state.tournament.bracketHistory.push({
+    state.tournament.bracketHistory.push({
   round: state.tournament.round,
   matches: state.tournament.matches.map(m => ({
     a: m.a,
@@ -625,6 +628,9 @@ function createNextRound(){
     winner: null
   }))
 });
+  
+  state.tournament.matches = matches;
+
 }
 
 function getTournamentAverageElo(){
