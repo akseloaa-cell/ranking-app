@@ -227,6 +227,55 @@ ${match.b.name}
 
   }
 
+  if (
+  state.tournament.phase
+  ===
+  "finished"
+){
+
+const winner =
+state
+.tournament
+.participants[0];
+
+root.innerHTML = `
+
+<h1>
+
+🏆
+
+</h1>
+
+<h2>
+
+Winner
+
+</h2>
+
+<h1>
+
+${winner.name}
+
+</h1>
+
+<button
+onclick="
+backTournament()
+"
+>
+
+Tilbake
+
+</button>
+
+`;
+
+renderBracket();
+
+return;
+
+}
+  
 }
 
 function renderBracket(){
@@ -490,17 +539,28 @@ if (currentRound?.matches[matchIndex]) {
 
   // hvis runden er ferdig → lag ny runde
 
-  t.participants = t.nextRoundPool;
+t.participants = t.nextRoundPool;
 
-  t.nextRoundPool = [];
+t.nextRoundPool = [];
 
-  t.currentMatch = 0;
+// ferdig?
+if (t.participants.length === 1) {
 
-  t.round++;
-
-  createNextRound();
+  t.phase = "finished";
 
   renderTournament();
+
+  return;
+
+}
+
+t.currentMatch = 0;
+
+t.round++;
+
+createNextRound();
+
+renderTournament();
 }
 
 function getTournamentPool(){
