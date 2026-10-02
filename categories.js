@@ -90,7 +90,7 @@ export function renderCategoryManager(){
   const categoryQuery = (state.categoryManagerCategorySearch || "").trim().toLowerCase();
   const visibleCategories = categories.filter(category => !categoryQuery || category.toLowerCase().includes(categoryQuery));
 
-  const items = state.items
+  const items = [...state.items]
     .filter(item => !q || item.name.toLowerCase().includes(q))
     .sort((a, b) => {
       const aActive = (a.categories || []).includes(selected);
