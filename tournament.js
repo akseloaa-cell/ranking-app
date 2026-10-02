@@ -12,7 +12,7 @@ export function selectTournamentMode(mode){
 
 }
 
-function renderTournament(){
+export function renderTournament(){
 
   const root =
     document.getElementById(
