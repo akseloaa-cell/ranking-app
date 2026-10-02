@@ -1003,3 +1003,105 @@ button:active {
     font-size:12px;
   }
 }
+
+
+/* Tournament bracket connectors */
+.tournamentBracketRound{
+  position:relative;
+}
+
+.tournamentBracketRound.withConnector::before{
+  content:"";
+  position:absolute;
+  left:-9px;
+  top:0;
+  bottom:0;
+  width:18px;
+  pointer-events:none;
+}
+
+.tournamentBracketRound.withConnector .tournamentBracketMatch{
+  position:relative;
+}
+
+.tournamentBracketRound.withConnector .tournamentBracketMatch::before{
+  content:"";
+  position:absolute;
+  left:-18px;
+  top:50%;
+  width:18px;
+  height:1px;
+  background:#465066;
+}
+
+.tournamentBracketRound:not(:last-child) .tournamentBracketMatch::after{
+  content:"";
+  position:absolute;
+  right:-18px;
+  top:50%;
+  width:18px;
+  height:1px;
+  background:#465066;
+}
+
+.tournamentBracketRound:not(:first-child) .tournamentBracketMatch{
+  margin-top:28px;
+  margin-bottom:28px;
+}
+
+.tournamentBracketRound:not(:first-child) .tournamentBracketMatch:first-child{
+  margin-top:56px;
+}
+
+.tournamentBracketRound:not(:first-child) .tournamentBracketMatches{
+  position:relative;
+}
+
+.tournamentBracketRound:not(:first-child) .tournamentBracketMatches::before{
+  content:"";
+  position:absolute;
+  left:-18px;
+  top:84px;
+  width:1px;
+  height:calc(100% - 168px);
+  background:#465066;
+}
+
+.tournamentThirdPlaceBracket{
+  position:relative;
+}
+
+.tournamentThirdPlaceBracket::before{
+  content:"";
+  position:absolute;
+  left:-18px;
+  top:50%;
+  width:18px;
+  height:1px;
+  background:#465066;
+}
+
+.tournamentThirdPlaceBracket .tournamentBracketMatch{
+  position:relative;
+}
+
+.tournamentThirdPlaceBracket .tournamentBracketMatch::after{
+  content:"";
+  position:absolute;
+  right:-18px;
+  top:50%;
+  width:18px;
+  height:1px;
+  background:#465066;
+}
+
+@media (max-width:600px){
+  .tournamentBracketRound:not(:first-child) .tournamentBracketMatch:first-child{
+    margin-top:42px;
+  }
+
+  .tournamentBracketRound:not(:first-child) .tournamentBracketMatch{
+    margin-top:22px;
+    margin-bottom:22px;
+  }
+}
