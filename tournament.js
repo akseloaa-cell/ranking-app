@@ -237,9 +237,9 @@ ${match.b.name}
 
 const results = state.tournament.finalResults;
 
-const getBoost = (name) => {
-  const before = results.beforeRatings.get(name) || 0;
-  const after = results.afterRatings.get(name) || 0;
+const getBoost = (item) => {
+  const before = results.beforeRatings?.[item.id] ?? item.rating;
+  const after = results.afterRatings?.[item.id] ?? item.rating;
   return after - before;
 };
 
@@ -247,19 +247,19 @@ root.innerHTML = `
 
 <h1>🏆 Winner</h1>
 <h2>${results.first.name}</h2>
-<p>+${getBoost(results.first.name)} ELO</p>
+<p>+${getBoost(results.first)} ELO</p>
 
 <hr>
 
 <h3>🥈 2nd Place</h3>
 <p>${results.second.name}</p>
-<p>+${getBoost(results.second.name)} ELO</p>
+<p>+${getBoost(results.second)} ELO</p>
 
 <hr>
 
 <h3>🥉 3rd Place</h3>
 <p>${results.third.name}</p>
-<p>+${getBoost(results.third.name)} ELO</p>
+<p>+${getBoost(results.third)} ELO</p>
 
 <br><br>
 
@@ -676,8 +676,8 @@ if (next.length === 1) {
 
   const top3Before = getFinalTop3(state.tournament.originalParticipants);
 
-  const beforeRatings = new Map(
-    state.tournament.originalParticipants.map(p => [p.name, p.rating])
+  const beforeRatings = Object.fromEntries(
+    state.tournament.originalParticipants.map(p => [p.id, p.rating])
   );
 
   // 🥉 CREATE 3RD PLACE MATCH
@@ -699,8 +699,8 @@ if (next.length === 1) {
   // fallback (shouldn't happen)
   applyTournamentElo(next, avg);
 
-  const afterRatings = new Map(
-    state.tournament.originalParticipants.map(p => [p.name, p.rating])
+  const afterRatings = Object.fromEntries(
+    state.tournament.originalParticipants.map(p => [p.id, p.rating])
   );
 
   t.phase = "finished";
@@ -751,8 +751,8 @@ export function pickThirdPlaceWinner(side){
   // final ranking
   const final = t.participants[0];
 
-  const beforeRatings = new Map(
-    state.tournament.originalParticipants.map(p => [p.name, p.rating])
+  const beforeRatings = Object.fromEntries(
+    state.tournament.originalParticipants.map(p => [p.id, p.rating])
   );
 
   const avg = getTournamentAverageElo(
@@ -761,8 +761,8 @@ export function pickThirdPlaceWinner(side){
 
   applyTournamentElo([final, loser, winner], avg);
 
-  const afterRatings = new Map(
-    state.tournament.originalParticipants.map(p => [p.name, p.rating])
+  const afterRatings = Object.fromEntries(
+    state.tournament.originalParticipants.map(p => [p.id, p.rating])
   );
 
   t.finalResults = {
