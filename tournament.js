@@ -26,7 +26,40 @@ function isDailyCompletedToday(){
   return state.tournament.dailyCompletedDate === getTodayKey();
 }
 
-export function renderTournament(){
+export function startDailyCountdown(){
+  if (window.dailyTournamentCountdownInterval) {
+    clearInterval(window.dailyTournamentCountdownInterval);
+    window.dailyTournamentCountdownInterval = null;
+  }
+
+  const update = () => {
+    const el = document.getElementById("dailyTournamentCountdown");
+    if (!el) return;
+
+    const now = new Date();
+    const nextReset = new Date(now);
+    nextReset.setHours(24, 0, 0, 0);
+
+    const diff = Math.max(0, nextReset - now);
+    const totalSeconds = Math.floor(diff / 1000);
+    const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+    const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
+    const seconds = String(totalSeconds % 60).padStart(2, "0");
+
+    el.textContent = "Resetter om " + hours + ":" + minutes + ":" + seconds;
+
+    if (diff <= 0) {
+      clearInterval(window.dailyTournamentCountdownInterval);
+      window.dailyTournamentCountdownInterval = null;
+      renderTournament();
+    }
+  };
+
+  update();
+  window.dailyTournamentCountdownInterval = setInterval(update, 1000);
+}
+
+function renderTournament(){
 
   const root =
     document.getElementById(
@@ -70,12 +103,14 @@ export function renderTournament(){
       <strong>Daily Tournament</strong>
       <small>${isDailyCompletedToday() ? "Fullført i dag · Kom tilbake i morgen" : "Dagens spesialturnering · Større ELO-belønninger"}</small>
     </span>
+    <span id="dailyTournamentCountdown" class="dailyTournamentCountdown"></span>
     <span class="tournamentModeStatus">${isDailyCompletedToday() ? "✓" : "DAILY"}</span>
   </button>
 </div>
 `;
 
     renderBracket();
+    startDailyCountdown();
 
     return;
 
