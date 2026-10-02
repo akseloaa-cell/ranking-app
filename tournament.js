@@ -59,7 +59,7 @@ export function startDailyCountdown(){
   window.dailyTournamentCountdownInterval = setInterval(update, 1000);
 }
 
-function renderTournament(){
+export function renderTournament(){
 
   const root =
     document.getElementById(
