@@ -1509,3 +1509,13 @@ button:active {
   width:80%;
   box-sizing:border-box;
 }
+
+
+/* Keep random setup content narrower than the main Start button */
+.randomSetupCard{
+  width:70%;
+}
+
+.randomSetupParticipants .tournamentDropdown{
+  width:70%;
+}
