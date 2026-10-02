@@ -32,6 +32,7 @@ export function openCategoryManager(){
   state.categoryManagerCategory = state.categories[0] || "";
   state.categoryManagerSearch = "";
   state.categoryManagerItemSort = "elo";
+  state.categoryManagerItemSortDir = "asc";
   renderCategoryManager();
 }
 
@@ -66,6 +67,13 @@ export function toggleItemInCategory(itemId){
 
 export function setCategoryManagerItemSort(sort){
   state.categoryManagerItemSort = sort;
+  state.categoryManagerItemSortDir = "asc";
+  renderCategoryManager();
+}
+
+export function toggleCategoryManagerItemSortDir(){
+  if((state.categoryManagerItemSort || "elo") !== "name") return;
+  state.categoryManagerItemSortDir = state.categoryManagerItemSortDir === "asc" ? "desc" : "asc";
   renderCategoryManager();
 }
 
@@ -99,7 +107,7 @@ export function renderCategoryManager(){
 
       switch(state.categoryManagerItemSort || "elo"){
         case "name":
-          return a.name.localeCompare(b.name, "nb", { sensitivity: "base" });
+          return a.name.localeCompare(b.name, "nb", { sensitivity: "base" }) * (state.categoryManagerItemSortDir === "desc" ? -1 : 1);
         case "createdAt":
           return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
         case "elo":
@@ -139,10 +147,11 @@ export function renderCategoryManager(){
       <div class="categoryManagerSort">
         <span>Sorter:</span>
         <button type="button" class="categoryManagerSortButton" onclick="toggleCategoryManagerSortDropdown()">
-          ${(state.categoryManagerItemSort === "name" ? "Alfabetisk" : state.categoryManagerItemSort === "createdAt" ? "Lagt til" : "Elo")} <span>⌄</span>
+          ${(state.categoryManagerItemSort === "name" ? (state.categoryManagerItemSortDir === "desc" ? "Å–A" : "A–Å") : state.categoryManagerItemSort === "createdAt" ? "Lagt til" : "Elo")} <span>⌄</span>
         </button>
         <div id="categoryManagerSortMenu" class="categoryManagerSortMenu hidden">
-          <div onclick="setCategoryManagerItemSort('name')">Alfabetisk</div>
+          <div onclick="setCategoryManagerItemSort('name')">A–Å</div>
+          <div onclick="setCategoryManagerItemSort('name'); toggleCategoryManagerItemSortDir()">Å–A</div>
           <div onclick="setCategoryManagerItemSort('createdAt')">Lagt til</div>
           <div onclick="setCategoryManagerItemSort('elo')">Elo</div>
         </div>
