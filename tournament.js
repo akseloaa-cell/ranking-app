@@ -350,7 +350,7 @@ function renderBracket(){
   };
 
   const rounds = history.map((round, roundIndex) =>
-    '<div class="tournamentBracketRound round-' + roundIndex + '" style="--round-gap:' + (86 * Math.pow(2, roundIndex) - 72) + 'px;--round-offset:' + (roundIndex === 0 ? 0 : (43 * (Math.pow(2, roundIndex) - 1))) + 'px;--connector-height:' + (86 * Math.pow(2, roundIndex - 1)) + 'px">' +
+    '<div class="tournamentBracketRound round-' + roundIndex + '" style="--round-gap:' + (86 * Math.pow(2, roundIndex) - 72) + 'px;--round-offset:' + (roundIndex === 0 ? 0 : (43 * (Math.pow(2, roundIndex) - 1))) + 'px;--connector-height:' + (86 * Math.pow(2, roundIndex - 1)) + 'px;--connector-top:' + (roundIndex === 0 ? 36 : (36 - 43 * Math.pow(2, roundIndex - 1))) + 'px">' +
       '<div class="tournamentBracketRoundTitle">' + getRoundName(round) + '</div>' +
       '<div class="tournamentBracketMatches">' +
         (round.matches || []).map((match, matchIndex) =>
