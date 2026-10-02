@@ -1,7 +1,14 @@
 import { state } from "./state.js";
 import { save } from "./storage.js";
 
+export function resumeTournament(){
+  state.tournament.showTournamentHub = false;
+  renderTournament();
+}
+
 export function selectTournamentMode(mode){
+
+  state.tournament.showTournamentHub = false;
 
   if (mode === "daily" && isDailyCompletedToday()) return;
 
@@ -223,7 +230,7 @@ export function renderTournament(){
 
   // HUB
 
-  if (state.tournament.phase === "hub") {
+  if (state.tournament.phase === "hub" || state.tournament.showTournamentHub) {
 
     root.innerHTML = `
 <div class="tournamentModeHeader">
@@ -232,6 +239,8 @@ export function renderTournament(){
 </div>
 
 <div class="tournamentModeCards">
+${state.tournament.phase !== "hub" ? `<button class="tournamentResumeCard" onclick="resumeTournament()">↩️ Fortsett ${state.tournament.mode === "daily" ? "Daily Tournament" : state.tournament.mode === "category" ? "Category Tournament" : "Random Tournament"} <span>›</span></button>` : ""}
+
   <button class="tournamentModeCard" onclick="selectTournamentMode('random')">
     <span class="tournamentModeIcon">🎲</span>
     <span class="tournamentModeText">
@@ -872,6 +881,7 @@ export function confirmTournamentSetup(){
 }
 export function backTournament(){
 
+  state.tournament.showTournamentHub = false;
   state.tournament.phase = "hub";
 
   state.tournament.mode = null;
