@@ -247,8 +247,10 @@ export function renderTournament(){
 </button>
 
 <h3>
-${state.tournament.mode}
+${state.tournament.mode === "daily" ? "🌟 Daily Tournament" : state.tournament.mode}
 </h3>
+
+${state.tournament.mode === "daily" ? (() => { const config = getDailyConfig(); const rules = getDailyRuleText(config); const sizeText = config.size === "random" ? "Tilfeldig størrelse" : config.size + " deltakere"; return "<p><strong>" + config.name + "</strong><br>" + sizeText + " · 👥 " + rules.participants + " · ⚔️ " + rules.matchups + " · 💰 " + rules.rewards + "</p>"; })() : ""}
 
 ${
 state.tournament.mode === "category"
