@@ -189,7 +189,7 @@ export function startDailyCountdown(){
   }
 
   const update = () => {
-    const el = document.getElementById("dailyTournamentCountdown");
+    const el = document.getElementById("dailyTournamentCountdown") || document.getElementById("dailyTournamentSetupCountdown");
     if (!el) return;
 
     const now = new Date();
@@ -318,6 +318,7 @@ ${state.tournament.mode === "daily" ? `<div class="dailySetupHeader">
     <h2>Daily Tournament</h2>
     <p>Dagens spesialturnering</p>
   </div>
+  <span id="dailyTournamentSetupCountdown" class="dailyTournamentSetupCountdown"></span>
 </div>
 
 ${(() => { const config = getDailyConfig(); const rules = getDailyRuleText(config); const sizeText = config.size === "random" ? "Tilfeldig størrelse" : config.size + " deltakere"; return `<div class="dailySetupCard">
@@ -352,6 +353,10 @@ Start
 `;
 
     renderBracket();
+
+    if (state.tournament.mode === "daily") {
+      startDailyCountdown();
+    }
 
     return;
 
