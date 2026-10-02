@@ -1413,3 +1413,41 @@ button:active {
   border-color:#2e2b25;
   background:#171820;
 }
+
+
+.randomSetupHeader{
+  justify-content:center;
+  text-align:center;
+}
+
+.randomSetupHeader .randomSetupSubtitle{
+  text-align:center;
+}
+
+.randomSetupCard{
+  text-align:center;
+}
+
+.randomSetupCard .dailyRuleRow{
+  text-align:center;
+  justify-content:center;
+}
+
+.randomSetupCard .dailyRuleRow > span:nth-child(2){
+  flex:0 1 auto;
+}
+
+.randomSetupParticipants{
+  text-align:center;
+  margin-top:18px;
+}
+
+.randomSetupParticipants > p{
+  margin:0 0 8px;
+  font-size:13px;
+  opacity:.65;
+}
+
+.randomSetupParticipants .tournamentDropdown{
+  margin:0 auto;
+}
