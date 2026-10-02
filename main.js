@@ -5,7 +5,7 @@ import * as ui from "./ui.js";
 import * as stats from "./stats.js";
 import * as tournament from "./tournament.js";
 import { addItem } from "./items.js";
-import { addCategory, openCategoryManager, selectCategoryManagerCategory, toggleItemInCategory, searchCategoryManager, renderCategoryManager, toggleCategoryManagerDropdown } from "./categories.js";
+import { addCategory, openCategoryManager, selectCategoryManagerCategory, toggleItemInCategory, searchCategoryManager, searchCategoryManagerCategory, renderCategoryManager, toggleCategoryManagerDropdown } from "./categories.js";
 import {
   renameItem,
   deleteItem,
