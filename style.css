@@ -873,3 +873,133 @@ button:active {
   opacity:.6;
   font-size:12px;
 }
+
+
+.tournamentBracketHeader{
+  width:90%;
+  margin:20px auto 10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+.tournamentBracketHeader h3{
+  margin:0;
+}
+
+.tournamentBracketHeader span{
+  opacity:.55;
+  font-size:13px;
+}
+
+.tournamentBracketScroll{
+  width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:8px 0 20px;
+  -webkit-overflow-scrolling:touch;
+}
+
+.tournamentBracket{
+  width:max-content;
+  min-width:100%;
+  display:flex;
+  align-items:flex-start;
+  gap:18px;
+  padding:0 5%;
+  box-sizing:border-box;
+}
+
+.tournamentBracketRound,
+.tournamentThirdPlaceBracket{
+  width:170px;
+  flex:0 0 170px;
+}
+
+.tournamentBracketRoundTitle{
+  text-align:center;
+  font-size:13px;
+  font-weight:700;
+  opacity:.65;
+  margin-bottom:12px;
+}
+
+.tournamentBracketMatches{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.tournamentBracketMatch{
+  background:#141a26;
+  border:1px solid #2a3142;
+  border-radius:12px;
+  overflow:hidden;
+  opacity:.72;
+  transition:.2s;
+}
+
+.tournamentBracketMatch.completed{
+  opacity:1;
+}
+
+.tournamentBracketMatch.current{
+  border-color:#4f8cff;
+  box-shadow:0 0 0 1px rgba(79,140,255,.25);
+  opacity:1;
+}
+
+.tournamentBracketPlayer{
+  min-height:34px;
+  padding:8px 10px;
+  box-sizing:border-box;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  font-size:13px;
+}
+
+.tournamentBracketPlayer.winner{
+  font-weight:700;
+}
+
+.tournamentBracketPlayer.loser{
+  opacity:.45;
+}
+
+.tournamentBracketCheck{
+  font-weight:700;
+  opacity:.9;
+}
+
+.tournamentBracketDivider{
+  height:1px;
+  background:#2a3142;
+}
+
+.tournamentThirdPlaceBracket{
+  margin-left:4px;
+}
+
+.tournamentThirdPlaceBracket .tournamentBracketMatch{
+  margin-top:0;
+}
+
+@media (max-width:600px){
+  .tournamentBracket{
+    padding:0 20px;
+    gap:14px;
+  }
+
+  .tournamentBracketRound,
+  .tournamentThirdPlaceBracket{
+    width:155px;
+    flex-basis:155px;
+  }
+
+  .tournamentBracketPlayer{
+    font-size:12px;
+  }
+}
