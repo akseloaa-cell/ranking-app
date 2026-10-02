@@ -388,6 +388,35 @@ function renderBracket(){
         thirdPlaceHtml +
       '</div>' +
     '</div>';
+
+  const scrollBox = root.querySelector(".tournamentBracketScroll");
+  const rounds = root.querySelectorAll(".tournamentBracketRound");
+
+  if(scrollBox && rounds.length){
+    let targetIndex = history.length - 1;
+
+    if(t.phase === "active"){
+      targetIndex = history.length - 1;
+    } else if(t.phase === "finished"){
+      targetIndex = history.length - 1;
+    }
+
+    const target = rounds[targetIndex];
+
+    if(target){
+      requestAnimationFrame(() => {
+        const left = Math.max(
+          0,
+          target.offsetLeft - scrollBox.clientWidth / 2 + target.offsetWidth / 2
+        );
+
+        scrollBox.scrollTo({
+          left,
+          behavior: "smooth"
+        });
+      });
+    }
+  }
 }
 
 export function startTournament(){
