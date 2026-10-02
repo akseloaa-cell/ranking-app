@@ -62,7 +62,6 @@ window.setActiveMenu = ui.setActiveMenu;
 
 window.showStats = stats.showStats;
 window.closeStats = stats.closeStats;
-
 window.scrollToTop = ui.scrollToTop;
 
 window.renameItem = renameItem;
@@ -78,7 +77,6 @@ window.toggleH2H = toggleH2H;
 window.searchH2H = searchH2H;
 
 window.renderChips = ui.renderChips;
-
 window.toggleAllChips = toggleAllChips;
 window.toggleChip = ui.toggleChip;
 
@@ -88,6 +86,8 @@ window.openAddItem = openAddItem;
 window.closeAddItem = closeAddItem;
 window.addItem = addItem;
 window.addCategory = addCategory;
+window.renderItemSuggestions = ui.renderItemSuggestions;
+window.selectItemSuggestion = ui.selectItemSuggestion;
 window.openCategoryManager = openCategoryManager;
 window.selectCategoryManagerCategory = selectCategoryManagerCategory;
 window.toggleItemInCategory = toggleItemInCategory;
@@ -101,20 +101,14 @@ window.toggleCategoryManagerDropdown = toggleCategoryManagerDropdown;
 
 window.openRankingView = openRankingView;
 window.closeRankingView = closeRankingView;
-
 window.setSort = setSort;
 window.setRankingFilter = setRankingFilter;
-
 window.draw = draw;
 window.state = state;
-
 window.toggleRankingChips = toggleRankingChips;
-
 window.openCategoryVs = openCategoryVs;
-
 window.exitCategoryVs = exitCategoryVs;
 window.backToCategorySelect = backToCategorySelect;
-
 window.closeMenu = ui.closeMenu;
 
 function getTodayKey(){
@@ -153,7 +147,6 @@ function buildRankingSnapshots(){
 export function saveDailyRanking(){
   const today = getTodayKey();
 
-  // 🚫 ikke overskriv samme dag
   if(state.lastRankingDate === today) return;
 
   const { rankingMap, categoryMap } = buildRankingSnapshots();
@@ -170,7 +163,6 @@ export function saveDailyRanking(){
 const saved = load();
 if(saved) Object.assign(state, saved);
 
-// Always open the app on the Home view, even if another mode was active when it was last closed.
 state.mode = "home";
 
 function hydrateTournamentReferences(){
@@ -193,7 +185,6 @@ function hydrateTournamentReferences(){
 
 hydrateTournamentReferences();
 
-// Migrate old H2H data after loading persisted state.
 state.items.forEach(i => {
   if(!i.h2h) i.h2h = {};
   Object.keys(i.h2h).forEach(id => {
@@ -212,15 +203,15 @@ if(!state.previousRankingByCategory || !Object.keys(state.previousRankingByCateg
   state.previousRankingByCategory = {};
 
   state.categories.forEach(cat => {
-  const list = state.items
-    .filter(x => (x.categories || []).includes(cat))
-    .sort((a,b)=>b.rating-a.rating);
+    const list = state.items
+      .filter(x => (x.categories || []).includes(cat))
+      .sort((a,b)=>b.rating-a.rating);
 
-  state.previousRankingByCategory[cat] = {};
+    state.previousRankingByCategory[cat] = {};
 
-  list.forEach((x,i)=>{
-    state.previousRankingByCategory[cat][x.id] = i + 1;
-  });
+    list.forEach((x,i)=>{
+      state.previousRankingByCategory[cat][x.id] = i + 1;
+    });
   });
 
   localStorage.setItem(
@@ -229,7 +220,6 @@ if(!state.previousRankingByCategory || !Object.keys(state.previousRankingByCateg
   );
 }
 
-// start
 saveDailyRanking();
 update();
 nextMatch();
