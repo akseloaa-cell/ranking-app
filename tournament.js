@@ -248,10 +248,9 @@ export function renderTournament(){
       ? getDailyConfig()
       : null;
 
-    const sizes =
-      getAllowedSizes(
-        pool.length
-      );
+    const sizes = dailyConfig && dailyConfig.size !== "random"
+      ? getAllowedSizes(pool.length).filter(size => size === dailyConfig.size)
+      : getAllowedSizes(pool.length);
 
     root.innerHTML = `
 
@@ -918,7 +917,7 @@ function getDailyParticipantPool(pool, config){
   } else if (config.participants === "unplayed") {
     candidates.sort((a, b) => (a.tournamentsPlayed || 0) - (b.tournamentsPlayed || 0));
   } else if (config.participants === "comeback") {
-    candidates.sort((a, b) => ((b.tournamentsPlayed || 0) - (b.tournamentWins || 0)) - ((a.tournamentsPlayed || 0) - (a.tournamentWins || 0)));
+    candidates.sort((a, b) => (b.tournamentLosses || 0) - (a.tournamentLosses || 0));
   } else if (config.participants === "revenge") {
     candidates = candidates.filter(item => item.lastTournamentResult === "loss");
   } else if (config.participants === "veterans") {
