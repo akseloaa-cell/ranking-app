@@ -11,23 +11,35 @@ export function addItem(){
   name = name.trim();
   if(!name) return;
 
+  const duplicate = state.items.find(
+    item => item.name.trim().toLowerCase() === name.toLowerCase()
+  );
+
+  if(duplicate){
+    const input = document.getElementById("itemInput");
+    input.focus();
+    input.select();
+    alert("Dette itemet finnes allerede.");
+    return;
+  }
+
   let selected = [...document.querySelectorAll("#chipBox .chip.active")]
     .map(x => normalize(x.innerText));
 
-commit(() => {
-  state.items.push({
-    id: Date.now(),
-    name,
-    categories: selected,
-    rating: 1000,
-    createdAt: new Date().toISOString(),
-    history: [1000],
-    tournamentsPlayed: 0,
-    tournamentWins: 0,
-    top3: 0,
-    h2h: {}
+  commit(() => {
+    state.items.push({
+      id: Date.now(),
+      name,
+      categories: selected,
+      rating: 1000,
+      createdAt: new Date().toISOString(),
+      history: [1000],
+      tournamentsPlayed: 0,
+      tournamentWins: 0,
+      top3: 0,
+      h2h: {}
+    });
   });
-});
 
   document.getElementById("itemInput").value = "";
   document
