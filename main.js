@@ -150,6 +150,26 @@ export function saveDailyRanking(){
 const saved = load();
 if(saved) Object.assign(state, saved);
 
+function hydrateTournamentReferences(){
+  const t = state.tournament;
+  if(!t || !t.originalParticipants?.length) return;
+  const byId = new Map(state.items.map(item => [String(item.id), item]));
+  const ref = item => byId.get(String(item?.id)) || item;
+  t.originalParticipants = t.originalParticipants.map(ref);
+  t.participants = (t.participants || []).map(ref);
+  t.nextRoundPool = (t.nextRoundPool || []).map(ref);
+  t.semiFinalLosers = (t.semiFinalLosers || []).map(ref);
+  t.matches = (t.matches || []).map(match => ({...match, a: ref(match.a), b: ref(match.b)}));
+  if(t.thirdPlaceMatch) t.thirdPlaceMatch = {...t.thirdPlaceMatch, a: ref(t.thirdPlaceMatch.a), b: ref(t.thirdPlaceMatch.b)};
+  if(t.finalResults){
+    t.finalResults.first = ref(t.finalResults.first);
+    t.finalResults.second = ref(t.finalResults.second);
+    t.finalResults.third = ref(t.finalResults.third);
+  }
+}
+
+hydrateTournamentReferences();
+
 // Migrate old H2H data after loading persisted state.
 state.items.forEach(i => {
   if(!i.h2h) i.h2h = {};
