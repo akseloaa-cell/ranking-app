@@ -104,9 +104,9 @@ const DAILY_RULE_DESCRIPTIONS = {
 };
 
 export function toggleDailyRule(type){
-  const el = document.getElementById("dailyRuleExplanation");
+  const el = document.getElementById("dailyRuleExplanation-" + type);
   if(!el) return;
-  if(!el.classList.contains("hidden") && el.dataset.type === type){
+  if(!el.classList.contains("hidden")){
     el.classList.add("hidden");
     return;
   }
@@ -114,10 +114,6 @@ export function toggleDailyRule(type){
   const value = rules[type];
   const description = DAILY_RULE_DESCRIPTIONS[type]?.[value];
   if(!value || !description) return;
-  el.dataset.type = type;
-  el.querySelector(".dailyRuleExplanationTitle").textContent =
-    type === "participants" ? "Deltakere" :
-    type === "matchups" ? "Matchups" : "ELO-belønning";
   el.querySelector(".dailyRuleExplanationText").textContent = description;
   el.classList.remove("hidden");
 }
@@ -328,11 +324,10 @@ ${(() => { const config = getDailyConfig(); const rules = getDailyRuleText(confi
   <div class="dailySetupName">${config.name}</div>
   <div class="dailySetupMeta">${sizeText}</div>
   <div class="dailyRuleList">
-    <button type="button" class="dailyRuleRow" onclick="toggleDailyRule('participants')"><span>👥</span><span><small>Deltakere</small><strong>${rules.participants}</strong></span><b>›</b></button>
-    <button type="button" class="dailyRuleRow" onclick="toggleDailyRule('matchups')"><span>⚔️</span><span><small>Matchups</small><strong>${rules.matchups}</strong></span><b>›</b></button>
-    <button type="button" class="dailyRuleRow" onclick="toggleDailyRule('rewards')"><span>💰</span><span><small>ELO-belønning</small><strong>${rules.rewards}</strong></span><b>›</b></button>
+    <div class="dailyRuleItem">\n    <button type="button" class="dailyRuleRow" onclick="toggleDailyRule('participants')"><span>👥</span><span><small>Deltakere</small><strong>${rules.participants}</strong></span><b>›</b></button>\n    <div id="dailyRuleExplanation-participants" class="dailyRuleExplanation hidden"><span class="dailyRuleExplanationText"></span></div>\n  </div>
+    <div class="dailyRuleItem">\n    <button type="button" class="dailyRuleRow" onclick="toggleDailyRule('matchups')"><span>⚔️</span><span><small>Matchups</small><strong>${rules.matchups}</strong></span><b>›</b></button>\n    <div id="dailyRuleExplanation-matchups" class="dailyRuleExplanation hidden"><span class="dailyRuleExplanationText"></span></div>\n  </div>
+    <div class="dailyRuleItem">\n    <button type="button" class="dailyRuleRow" onclick="toggleDailyRule('rewards')"><span>💰</span><span><small>ELO-belønning</small><strong>${rules.rewards}</strong></span><b>›</b></button>\n    <div id="dailyRuleExplanation-rewards" class="dailyRuleExplanation hidden"><span class="dailyRuleExplanationText"></span></div>\n  </div>
   </div>
-  <div id="dailyRuleExplanation" class="dailyRuleExplanation hidden"><strong class="dailyRuleExplanationTitle"></strong><span class="dailyRuleExplanationText"></span></div>
 </div>`; })()}` : `<h3>${state.tournament.mode}</h3>`}
 </div>
 
