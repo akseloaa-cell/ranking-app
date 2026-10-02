@@ -47,6 +47,32 @@ export function getWinrate(item){
   return total ? wins / total : 0;
 }
 
+
+
+function renderH2HList(item, query=""){
+  const box = document.getElementById("h2hList");
+  if(!box || !item) return;
+
+  const q = query.trim().toLowerCase();
+  const opponents = Object.keys(item.h2h || {})
+    .map(id => state.items.find(x => x.id == id))
+    .filter(Boolean)
+    .filter(opp => !q || opp.name.toLowerCase().includes(q));
+
+  box.innerHTML = opponents.length
+    ? opponents.map(opp => `<div>${opp.name}: ${getH2H(item, opp)}</div>`).join("")
+    : `<div style="opacity:0.5;">Ingen treff</div>`;
+}
+
+export function toggleH2H(id){
+  state.showAllH2H = !state.showAllH2H;
+  showStats(id);
+}
+
+export function searchH2H(id, query){
+  state.h2hSearch = query;
+  renderH2HList(state.items.find(x => x.id === id), query);
+}
 // ================= UI =================
 
 export function openStats(){
@@ -212,12 +238,14 @@ export function showStats(id){
       <hr>
 
       <p><b>Head to Head:</b></p>
-      ${Object.keys(item.h2h || {}).map(id => {
-        const opp = state.items.find(x => x.id == id);
-        if(!opp) return "";
+      <button onclick="toggleH2H(${item.id})">
+        ${state.showAllH2H ? "− Skjul H2H" : "+ Vis alle H2H (" + Object.keys(item.h2h || {}).length + ")"}
+      </button>
 
-        return `<div>${opp.name}: ${getH2H(item, opp)}</div>`;
-      }).join("")}
+      <div id="h2hSection" style="display:${state.showAllH2H ? "block" : "none"};">
+        <input placeholder="Søk motstander..." value="${state.h2hSearch || ""}" oninput="searchH2H(${item.id}, this.value)">
+        <div id="h2hList"></div>
+      </div>
 
       <hr>
 
@@ -255,4 +283,5 @@ export function showStats(id){
 
   openStats();
   renderStatsChips(id);
+  if(state.showAllH2H) renderH2HList(item, state.h2hSearch || "");
 }
