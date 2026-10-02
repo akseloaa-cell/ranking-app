@@ -360,7 +360,7 @@ function renderBracket(){
     '</div>'
   );
 
-  const thirdPlaceHtml = (t.thirdPlaceMatch && (t.phase === "thirdPlace" || t.phase === "finished"))
+  const thirdPlaceHtml = (t.thirdPlaceMatch && ["thirdPlace", "active", "finished"].includes(t.phase))
     ? '<div class="tournamentThirdPlaceBracket">' +
         '<div class="tournamentBracketRoundTitle">3rd Place</div>' +
         '<div class="tournamentBracketMatch ' + (t.phase === "thirdPlace" ? "current" : "completed") + '">' +
