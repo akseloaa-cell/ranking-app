@@ -152,6 +152,9 @@ export function saveDailyRanking(){
 const saved = load();
 if(saved) Object.assign(state, saved);
 
+// Always open the app on the Home view, even if another mode was active when it was last closed.
+state.mode = "home";
+
 function hydrateTournamentReferences(){
   const t = state.tournament;
   if(!t || !t.originalParticipants?.length) return;
