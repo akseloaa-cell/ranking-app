@@ -1283,3 +1283,18 @@ button:active {
 .dailyRuleRow b{font-size:19px;font-weight:400;opacity:.35;}
 .dailyRuleRow:hover{border-color:#6a5729;background:#1c1b1a;}
 .dailySetupCard .dailyRuleExplanation{margin:0;padding:10px 12px;border:1px solid #2e2b25;border-radius:10px;background:#171820;line-height:1.4;font-size:12px;opacity:.8;}
+
+.tournamentFinishedBack{
+  display:block;
+  margin:0 auto;
+  padding:8px 12px;
+  background:#20232b;
+  border:1px solid #383c47;
+  border-radius:9px;
+  color:inherit;
+  opacity:.9;
+  cursor:pointer;
+  font:inherit;
+  font-size:13px;
+  font-weight:500;
+}
