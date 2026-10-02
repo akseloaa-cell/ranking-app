@@ -2,6 +2,7 @@ import { state } from "./state.js";
 import { toggleCat } from "./categories.js";
 import { nextMatch } from "./match.js";
 import { update } from "./ranking.js";
+import { renderTournament } from "./tournament.js";
 
 export function openAddItem(){
   const overlay = document.getElementById("addOverlay");
@@ -75,6 +76,7 @@ export function setMode(mode, menuEl = null){
   if (mode === "tournament"){
     const el = document.getElementById("tournamentSection");
     if (el) el.style.display = "block";
+    renderTournament();
   }
 
   if (mode === "categorySelect"){
