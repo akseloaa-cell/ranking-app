@@ -64,13 +64,21 @@ onclick="selectTournamentMode('category')"
         )
       )];
 
-    // In setup, the category select has not been created yet.
-    // Use the first category as the initial pool.
+    // In category mode, keep the first category as the active
+    // selection until the user chooses another one.
+    if (
+      state.tournament.mode === "category" &&
+      !state.tournament.category &&
+      categories.length
+    ) {
+      state.tournament.category = categories[0];
+    }
+
     let pool = [...state.items];
 
-    if (state.tournament.mode === "category" && categories.length) {
+    if (state.tournament.mode === "category") {
       pool = pool.filter(item =>
-        item.categories?.includes(categories[0])
+        item.categories?.includes(state.tournament.category)
       );
     }
 
