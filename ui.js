@@ -77,13 +77,10 @@ export function setMode(mode, menuEl = null){
     const el = document.getElementById("tournamentSection");
     if (el) el.style.display = "block";
 
-    // A completed tournament is no longer the active tournament.
-    // When the user returns to the tournament section, start at the hub.
-    if (state.tournament.phase === "finished") {
-      state.tournament.phase = "hub";
-      state.tournament.mode = null;
-      state.tournament.category = null;
-    }
+    // Always start at the gamemode selection when entering the tournament page.
+    state.tournament.phase = "hub";
+    state.tournament.mode = null;
+    state.tournament.category = null;
 
     renderTournament();
   }
