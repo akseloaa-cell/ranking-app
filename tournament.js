@@ -408,31 +408,19 @@ state.tournament.matches.length
 
 </div>
 
-<button
-onclick="
-pickWinner('a')
-"
->
-
-${match.a.name}
-
+<div class="tournamentMatchChoices">
+<button class="tournamentChoiceCard" onclick="pickWinner('a')">
+  <span class="tournamentChoiceName">${match.a.name}</span>
+  <span class="tournamentChoiceMeta">⭐ ${Math.round(match.a.rating)}</span>
 </button>
 
-<br><br>
+<div class="tournamentChoiceVs">VS</div>
 
-VS
-
-<br><br>
-
-<button
-onclick="
-pickWinner('b')
-"
->
-
-${match.b.name}
-
+<button class="tournamentChoiceCard" onclick="pickWinner('b')">
+  <span class="tournamentChoiceName">${match.b.name}</span>
+  <span class="tournamentChoiceMeta">⭐ ${Math.round(match.b.rating)}</span>
 </button>
+</div>
 
 `;
 
@@ -496,15 +484,19 @@ return;
 
 <h2>🥉 3rd Place Match</h2>
 
-<button onclick="pickThirdPlaceWinner('a')">
-${match.a.name}
+<div class="tournamentMatchChoices">
+<button class="tournamentChoiceCard" onclick="pickThirdPlaceWinner('a')">
+  <span class="tournamentChoiceName">${match.a.name}</span>
+  <span class="tournamentChoiceMeta">⭐ ${Math.round(match.a.rating)}</span>
 </button>
 
-<br><br>VS<br><br>
+<div class="tournamentChoiceVs">VS</div>
 
-<button onclick="pickThirdPlaceWinner('b')">
-${match.b.name}
+<button class="tournamentChoiceCard" onclick="pickThirdPlaceWinner('b')">
+  <span class="tournamentChoiceName">${match.b.name}</span>
+  <span class="tournamentChoiceMeta">⭐ ${Math.round(match.b.rating)}</span>
 </button>
+</div>
 
 `;
 
