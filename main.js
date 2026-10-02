@@ -43,6 +43,7 @@ import {
   updateTournamentSizeOptions,
   toggleTournamentDropdown,
   selectTournamentDropdown,
+  toggleDailyRule,
 } from "./tournament.js";
 
 import { load } from "./storage.js";
@@ -56,6 +57,7 @@ window.pickThirdPlaceWinner = pickThirdPlaceWinner;
 window.updateTournamentSizeOptions = updateTournamentSizeOptions;
 window.toggleTournamentDropdown = toggleTournamentDropdown;
 window.selectTournamentDropdown = selectTournamentDropdown;
+window.toggleDailyRule = toggleDailyRule;
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
 window.setActiveMenu = ui.setActiveMenu;
