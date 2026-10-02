@@ -620,10 +620,11 @@ function applyTournamentElo(participants, avg){
 
   const multiplier = (avg || 1000) / 1000;
 
-  const top3 = getTop3(participants);
+  // Participants are passed in final placement order:
+  // 1st, 2nd, 3rd.
   const rewards = [30, 20, 10];
 
-  top3.forEach((item, i) => {
+  participants.slice(0, 3).forEach((item, i) => {
 
     const reward = Math.round(rewards[i] * multiplier);
 
@@ -751,7 +752,7 @@ export function pickThirdPlaceWinner(side){
     state.tournament.originalParticipants
   );
 
-  applyTournamentElo([final, winner, loser], avg);
+  applyTournamentElo([final, loser, winner], avg);
 
   const afterRatings = new Map(
     state.tournament.originalParticipants.map(p => [p.name, p.rating])
