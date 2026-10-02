@@ -812,47 +812,119 @@ button:active {
 
 .categoryManagerSort{
   width:80%;
-  margin:10px auto;
+  margin:14px auto 10px;
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:9px;
   position:relative;
   text-align:left;
   box-sizing:border-box;
 }
 
+.categoryManagerSortLabel{
+  font-size:11px;
+  font-weight:600;
+  opacity:.48;
+  letter-spacing:.02em;
+  white-space:nowrap;
+}
+
 .categoryManagerSortButton{
   width:auto;
+  min-width:122px;
   display:inline-flex;
   align-items:center;
   justify-content:space-between;
+  gap:18px;
   margin:0;
-  padding:9px 12px;
-  background:#1f1f1f;
-  border:1px solid #2a3142;
+  padding:8px 10px 8px 11px;
+  background:linear-gradient(180deg,#202633,#1a1f29);
+  border:1px solid #343d4e;
+  border-radius:10px;
+  color:inherit;
+  box-shadow:0 3px 10px rgba(0,0,0,.18);
+  transition:border-color .15s, background .15s, transform .15s;
+}
+
+.categoryManagerSortButton:hover{
+  background:linear-gradient(180deg,#252c39,#1d232e);
+  border-color:#465268;
+}
+
+.categoryManagerSortButton:active{
+  transform:translateY(1px);
+}
+
+.categoryManagerSortCurrent{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-size:12px;
+  font-weight:600;
+}
+
+.categoryManagerSortCurrentIcon{
+  width:20px;
+  height:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:6px;
+  background:#2b3443;
+  font-size:13px;
+  opacity:.9;
+}
+
+.categoryManagerSortChevron{
+  font-size:14px;
+  opacity:.55;
+  line-height:1;
+  transform:translateY(-1px);
 }
 
 .categoryManagerSortMenu{
   position:absolute;
-  top:calc(100% + 4px);
-  left:55px;
-  min-width:140px;
+  top:calc(100% + 7px);
+  left:58px;
+  min-width:150px;
+  padding:5px;
   background:#151a24;
-  border:1px solid #2a3142;
-  border-radius:10px;
+  border:1px solid #30394a;
+  border-radius:12px;
   overflow:hidden;
-  box-shadow:0 10px 30px rgba(0,0,0,.4);
+  box-shadow:0 14px 34px rgba(0,0,0,.45);
   z-index:1000;
 }
 
 .categoryManagerSortMenu div{
-  padding:10px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  padding:9px 10px;
+  border-radius:8px;
   cursor:pointer;
   white-space:nowrap;
+  font-size:12px;
+  transition:background .12s;
+}
+
+.categoryManagerSortMenu div span:last-child{
+  opacity:0;
+  font-size:12px;
 }
 
 .categoryManagerSortMenu div:hover{
-  background:#2a3142;
+  background:#232b38;
+}
+
+.categoryManagerSortMenu div.active{
+  background:#252e3d;
+  font-weight:600;
+}
+
+.categoryManagerSortMenu div.active span:last-child{
+  opacity:.75;
 }
 
 .categoryManagerCount{
