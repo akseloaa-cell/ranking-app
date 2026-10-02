@@ -26,7 +26,7 @@ function isDailyCompletedToday(){
   return state.tournament.dailyCompletedDate === getTodayKey();
 }
 
-function renderTournament(){
+export function renderTournament(){
 
   const root =
     document.getElementById(
