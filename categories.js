@@ -42,7 +42,7 @@ export function searchCategoryManagerCategory(query){
   const q = String(query || "").trim().toLowerCase();
   document.querySelectorAll(".categoryManagerOption").forEach(option => {
     const text = option.querySelector("span")?.textContent?.toLowerCase() || option.textContent.toLowerCase();
-    option.style.display = !q || text.includes(q) ? "" : "none";
+    option.hidden = Boolean(q) && !text.includes(q);\n    option.style.display = option.hidden ? "none" : "";
   });
 }
 
