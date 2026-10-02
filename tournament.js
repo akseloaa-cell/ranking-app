@@ -924,8 +924,8 @@ function renderTournamentDropdown(id, selected, options, type){
     <span>${selected || "Velg..."}</span>
     <span>⌄</span>
   </button>
-  <div id="${id}Menu" class="tournamentDropdownMenu hidden">
-    ${searchable ? `<input type="search" class="tournamentDropdownSearch" placeholder="Søk kategori..." oninput="filterTournamentCategories(this.value, event)" value="${state.tournament.categorySearch || ""}">` : ""}
+  <div id="${id}Menu" class="tournamentDropdownMenu hidden" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()">
+    ${searchable ? `<input type="search" class="tournamentDropdownSearch" placeholder="Søk kategori..." onclick="event.stopPropagation()" onmousedown="event.stopPropagation()" oninput="filterTournamentCategories(this.value, event)" value="${state.tournament.categorySearch || ""}">` : ""}
     <div id="${type === "category" ? "tournamentCategoryDropdownOptions" : id + "Options"}">
       ${options.map((option, index) => `
         <div class="tournamentDropdownOption ${index === selectedIndex ? "active" : ""}" onclick="selectTournamentDropdown('${type}', ${index})">
@@ -939,7 +939,10 @@ function renderTournamentDropdown(id, selected, options, type){
 }
 
 export function filterTournamentCategories(query, event){
-  if(event) event.stopPropagation();
+  if(event){
+    event.stopPropagation();
+    event.preventDefault();
+  }
   const menu = document.getElementById("tournamentCategoryDropdownMenu");
   if(menu) menu.classList.remove("hidden");
   state.tournament.categorySearch = query;
