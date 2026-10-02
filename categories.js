@@ -139,7 +139,7 @@ export function renderCategoryManager(){
       <div class="categoryManagerSort">
         <span>Sorter:</span>
         <button type="button" class="categoryManagerSortButton" onclick="toggleCategoryManagerSortDropdown()">
-          \${(state.categoryManagerItemSort === "name" ? "Alfabetisk" : state.categoryManagerItemSort === "createdAt" ? "Lagt til" : "Elo")} <span>⌄</span>
+          ${(state.categoryManagerItemSort === "name" ? "Alfabetisk" : state.categoryManagerItemSort === "createdAt" ? "Lagt til" : "Elo")} <span>⌄</span>
         </button>
         <div id="categoryManagerSortMenu" class="categoryManagerSortMenu hidden">
           <div onclick="setCategoryManagerItemSort('name')">Alfabetisk</div>
