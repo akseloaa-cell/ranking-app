@@ -51,9 +51,9 @@ export function searchCategoryManagerCategory(query){
 
     const html = categories.map(category => {
       const count = state.items.filter(item => (item.categories || []).includes(category)).length;
-      const safeCategory = JSON.stringify(category).replace(/</g, "\\u003c");
+      const safeCategory = JSON.stringify(category).replace(/</g, "\\u003c").replace(/\'/g, "&#39;");
       return `
-        <div class="categoryManagerOption ${category === selected ? "active" : ""}" onclick="selectCategoryManagerCategory(${safeCategory})">
+        <div class="categoryManagerOption ${category === selected ? "active" : ""}" onclick='selectCategoryManagerCategory(\${safeCategory})'>
           <span>${category}</span>
           <span class="categoryManagerOptionCount">${count}</span>
         </div>`;
