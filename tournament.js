@@ -426,6 +426,7 @@ export function selectTournamentDropdown(type, index){
   if(type === "category"){
     const categories = [...new Set(state.items.flatMap(x => x.categories || []))];
     state.tournament.category = categories[index] || "";
+    state.tournament.categorySearch = "";
     save();
     renderTournament();
     return;
@@ -445,6 +446,7 @@ export function selectTournamentDropdown(type, index){
 
 function renderTournamentDropdown(id, selected, options, type){
   const selectedIndex = options.findIndex(option => String(option) === String(selected));
+  const searchable = type === "category";
   return `
 <div class="tournamentDropdown">
   <button type="button" class="tournamentDropdownButton" onclick="toggleTournamentDropdown('${id}Menu')">
@@ -452,14 +454,31 @@ function renderTournamentDropdown(id, selected, options, type){
     <span>⌄</span>
   </button>
   <div id="${id}Menu" class="tournamentDropdownMenu hidden">
-    ${options.map((option, index) => `
-      <div class="tournamentDropdownOption ${index === selectedIndex ? "active" : ""}" onclick="selectTournamentDropdown('${type}', ${index})">
-        ${option}
-      </div>
-    `).join("")}
+    ${searchable ? `<input type="search" class="tournamentDropdownSearch" placeholder="Søk kategori..." oninput="filterTournamentCategories(this.value)" value="${state.tournament.categorySearch || ""}">` : ""}
+    <div id="${type === "category" ? "tournamentCategoryDropdownOptions" : id + "Options"}">
+      ${options.map((option, index) => `
+        <div class="tournamentDropdownOption ${index === selectedIndex ? "active" : ""}" onclick="selectTournamentDropdown('${type}', ${index})">
+          ${option}
+        </div>
+      `).join("")}
+    </div>
   </div>
 </div>
 `;
+}
+
+export function filterTournamentCategories(query){
+  state.tournament.categorySearch = query;
+  const q = query.trim().toLowerCase();
+  const allCategories = [...new Set(state.items.flatMap(x => x.categories || []))];
+  const options = allCategories.filter(option => String(option).toLowerCase().includes(q));
+  const container = document.getElementById("tournamentCategoryDropdownOptions");
+  if(!container) return;
+  const selected = state.tournament.category;
+  container.innerHTML = options.map(option => {
+    const index = allCategories.findIndex(x => x === option);
+    return `<div class="tournamentDropdownOption ${String(option) === String(selected) ? "active" : ""}" onclick="selectTournamentDropdown('category', ${index})">${option}</div>`;
+  }).join("");
 }
 
 export function updateTournamentSizeOptions(){
