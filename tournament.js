@@ -3,6 +3,8 @@ import { save } from "./storage.js";
 
 export function selectTournamentMode(mode){
 
+  if (mode === "daily" && isDailyCompletedToday()) return;
+
   state.tournament.mode = mode;
 
   state.tournament.phase = "setup";
@@ -12,7 +14,19 @@ export function selectTournamentMode(mode){
 
 }
 
-export function renderTournament(){
+export function getTodayKey(){
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return year + "-" + month + "-" + day;
+}
+
+function isDailyCompletedToday(){
+  return state.tournament.dailyCompletedDate === getTodayKey();
+}
+
+function renderTournament(){
 
   const root =
     document.getElementById(
@@ -48,6 +62,15 @@ export function renderTournament(){
       <small>Velg en kategori og spill med dens deltakere</small>
     </span>
     <span class="tournamentModeArrow">›</span>
+  </button>
+
+  <button class="tournamentModeCard dailyTournamentCard ${isDailyCompletedToday() ? "completed" : ""}" onclick="${isDailyCompletedToday() ? "" : "selectTournamentMode('daily')"}" ${isDailyCompletedToday() ? "disabled" : ""}>
+    <span class="tournamentModeIcon">🌟</span>
+    <span class="tournamentModeText">
+      <strong>Daily Tournament</strong>
+      <small>${isDailyCompletedToday() ? "Fullført i dag · Kom tilbake i morgen" : "Dagens spesialturnering · Større ELO-belønninger"}</small>
+    </span>
+    <span class="tournamentModeStatus">${isDailyCompletedToday() ? "✓" : "DAILY"}</span>
   </button>
 </div>
 `;
@@ -538,6 +561,11 @@ export function startTournament(){
   state.tournament.thirdPlaceWinner = null;
   state.tournament.thirdPlaceLoser = null;
   state.tournament.finalResults = null;
+  if (state.tournament.mode === "daily") {
+    state.tournament.dailyDate = getTodayKey();
+  } else {
+    state.tournament.dailyDate = null;
+  }
   
   state.tournament.bracketHistory = [{
     round: 1,
@@ -639,6 +667,7 @@ export function backTournament(){
   state.tournament.mode = null;
 
   state.tournament.category = null;
+  state.tournament.dailyDate = null;
 
   save();
   renderTournament();
@@ -796,7 +825,9 @@ function applyTournamentElo(participants, avg){
 
   // Participants are passed in final placement order:
   // 1st, 2nd, 3rd.
-  const rewards = [30, 20, 10];
+  const rewards = state.tournament.mode === "daily"
+    ? [45, 30, 15]
+    : [30, 20, 10];
 
   participants.slice(0, 3).forEach((item, i) => {
 
@@ -860,6 +891,9 @@ if (next.length === 1) {
   );
 
   t.phase = "finished";
+  if (t.mode === "daily") {
+    t.dailyCompletedDate = getTodayKey();
+  }
   t.finalResults = {
     first: final,
     second,
