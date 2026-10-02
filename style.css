@@ -1499,3 +1499,13 @@ button:active {
 .randomSetupParticipants .tournamentDropdown{
   width:80%;
 }
+
+
+.randomSetupCard{
+  box-sizing:border-box;
+}
+
+.randomSetupParticipants .tournamentDropdown{
+  width:80%;
+  box-sizing:border-box;
+}
