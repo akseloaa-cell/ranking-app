@@ -1052,14 +1052,15 @@ button:active {
   left:-18px;
   top:calc(var(--round-offset, 0px) + 36px);
   width:1px;
-  height:calc(var(--round-gap, 14px) + 36px);
+  height:var(--connector-height, 86px);
   background:#465066;
 }
 
 /* Keep every bracket player exactly half the match height. */
 .tournamentBracketPlayer{
-  height:35px;
-  min-height:35px;
+  flex:1;
+  height:auto;
+  min-height:0;
   box-sizing:border-box;
 }
 
