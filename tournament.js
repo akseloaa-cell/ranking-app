@@ -457,6 +457,10 @@ export function startTournament(){
   state.tournament.nextRoundPool = [];
 
   state.tournament.semiFinalLosers = [];
+  state.tournament.thirdPlaceMatch = null;
+  state.tournament.thirdPlaceWinner = null;
+  state.tournament.thirdPlaceLoser = null;
+  state.tournament.finalResults = null;
   
   state.tournament.bracketHistory = [{
     round: 1,
