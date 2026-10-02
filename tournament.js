@@ -235,7 +235,7 @@ export function renderTournament(){
 </div>
 
 <div class="tournamentModeCards">
-${state.tournament.phase !== "hub" ? `<button class="tournamentResumeCard" onclick="resumeTournament()">↩️ Fortsett ${state.tournament.mode === "daily" ? "Daily Tournament" : state.tournament.mode === "category" ? "Category Tournament" : "Random Tournament"} <span>›</span></button>` : ""}
+${["active", "thirdPlace"].includes(state.tournament.phase) ? `<button class="tournamentResumeCard" onclick="resumeTournament()">↩️ Fortsett ${state.tournament.mode === "daily" ? "Daily Tournament" : state.tournament.mode === "category" ? "Category Tournament" : "Random Tournament"} <span>›</span></button>` : ""}
 
   <button class="tournamentModeCard" onclick="selectTournamentMode('random')">
     <span class="tournamentModeIcon">🎲</span>
