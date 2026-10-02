@@ -342,7 +342,7 @@ function renderBracket(){
       '</div>';
     };
 
-    return '<div class="tournamentBracketMatch ' + (isCurrent ? "current" : "") + ' ' + (winnerId ? "completed" : "") + '">' +
+    return '<div class="tournamentBracketMatch ' + (isCurrent ? "current" : "") + ' ' + (winnerId ? "completed" : "") + '" data-round-index="' + roundIndex + '" data-match-index="' + matchIndex + '">' +
       player(match.a) +
       '<div class="tournamentBracketDivider"></div>' +
       player(match.b) +
@@ -350,7 +350,7 @@ function renderBracket(){
   };
 
   const rounds = history.map((round, roundIndex) =>
-    '<div class="tournamentBracketRound round-' + roundIndex + '" style="--round-gap:' + (86 * Math.pow(2, roundIndex) - 72) + 'px;--round-offset:' + (roundIndex === 0 ? 0 : (43 * (Math.pow(2, roundIndex) - 1))) + 'px;--connector-height:' + (86 * Math.pow(2, roundIndex - 1)) + 'px;--connector-top:' + (roundIndex === 0 ? 36 : (36 + 43 * (Math.pow(2, roundIndex - 1) - 1))) + 'px">' +
+    '<div class="tournamentBracketRound round-' + roundIndex + '" data-round-index="' + roundIndex + '" style="--round-gap:' + (86 * Math.pow(2, roundIndex) - 72) + 'px;--round-offset:' + (roundIndex === 0 ? 0 : (43 * (Math.pow(2, roundIndex) - 1))) + 'px">' +
       '<div class="tournamentBracketRoundTitle">' + getRoundName(round) + '</div>' +
       '<div class="tournamentBracketMatches">' +
         (round.matches || []).map((match, matchIndex) =>
@@ -363,7 +363,7 @@ function renderBracket(){
   const thirdPlaceHtml = (t.thirdPlaceMatch && ["thirdPlace", "active", "finished"].includes(t.phase))
     ? '<div class="tournamentThirdPlaceBracket">' +
         '<div class="tournamentBracketRoundTitle">3rd Place</div>' +
-        '<div class="tournamentBracketMatch ' + (t.phase === "thirdPlace" ? "current" : "completed") + '">' +
+        '<div class="tournamentBracketMatch ' + (t.phase === "thirdPlace" ? "current" : "completed") + '" data-third-place="true">' +
           '<div class="tournamentBracketPlayer ' + (t.thirdPlaceWinner?.id === t.thirdPlaceMatch.a?.id ? "winner" : "") + '">' +
             '<span>' + t.thirdPlaceMatch.a.name + '</span>' +
             (t.thirdPlaceWinner?.id === t.thirdPlaceMatch.a?.id ? '<span class="tournamentBracketCheck">✓</span>' : "") +
@@ -387,11 +387,14 @@ function renderBracket(){
     '</div>' +
     '<div class="tournamentBracketScroll">' +
       '<div class="tournamentBracket">' +
+        '<svg class="tournamentBracketLines" aria-hidden="true"></svg>' +
         earlierRounds +
         thirdPlaceHtml +
         finalRound +
       '</div>' +
     '</div>';
+
+  drawTournamentBracketLines();
 
   const scrollBox = root.querySelector(".tournamentBracketScroll");
   const roundElements = root.querySelectorAll(".tournamentBracketRound");
@@ -420,6 +423,75 @@ function renderBracket(){
           behavior: "smooth"
         });
       });
+    }
+  }
+}
+
+function drawTournamentBracketLines(){
+  const bracket = document.querySelector("#bracketView .tournamentBracket");
+  const svg = bracket?.querySelector(".tournamentBracketLines");
+  if(!bracket || !svg) return;
+
+  const rounds = [...bracket.querySelectorAll(".tournamentBracketRound")];
+  const third = bracket.querySelector(".tournamentThirdPlaceBracket .tournamentBracketMatch");
+  const bracketRect = bracket.getBoundingClientRect();
+  const width = Math.max(bracket.scrollWidth, bracketRect.width);
+  const height = Math.max(bracket.scrollHeight, bracketRect.height);
+
+  svg.setAttribute("width", width);
+  svg.setAttribute("height", height);
+  svg.setAttribute("viewBox", "0 0 " + width + " " + height);
+  svg.innerHTML = "";
+
+  const center = (el) => {
+    const r = el.getBoundingClientRect();
+    return {
+      left: r.left - bracketRect.left,
+      right: r.right - bracketRect.left,
+      y: r.top - bracketRect.top + r.height / 2
+    };
+  };
+
+  const line = (d) => {
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", d);
+    path.setAttribute("class", "tournamentBracketLine");
+    svg.appendChild(path);
+  };
+
+  // Normal bracket: every pair of matches in one round feeds the
+  // corresponding match in the next round through the exact centers.
+  for(let roundIndex = 0; roundIndex < rounds.length - 1; roundIndex++){
+    const from = [...rounds[roundIndex].querySelectorAll(":scope > .tournamentBracketMatches .tournamentBracketMatch")];
+    const to = [...rounds[roundIndex + 1].querySelectorAll(":scope > .tournamentBracketMatches .tournamentBracketMatch")];
+
+    to.forEach((target, targetIndex) => {
+      const a = from[targetIndex * 2];
+      const b = from[targetIndex * 2 + 1];
+      if(!a || !b) return;
+
+      const p1 = center(a);
+      const p2 = center(b);
+      const dest = center(target);
+      const branchX = Math.min(dest.left - 10, Math.max(p1.right, p2.right) + 9);
+
+      line("M " + p1.right + " " + p1.y + " H " + branchX + " V " + p2.y + " H " + p2.right);
+      line("M " + branchX + " " + ((p1.y + p2.y) / 2) + " H " + dest.left + " V " + dest.y);
+    });
+  }
+
+  // 3rd place is an offshoot from the semifinal midpoint. It does not
+  // become part of the main path to the final.
+  if(third && rounds.length >= 2){
+    const semiMatches = [...rounds[rounds.length - 2].querySelectorAll(":scope > .tournamentBracketMatches .tournamentBracketMatch")];
+    if(semiMatches.length === 2){
+      const a = center(semiMatches[0]);
+      const b = center(semiMatches[1]);
+      const dest = center(third);
+      const branchX = Math.min(dest.left - 10, Math.max(a.right, b.right) + 9);
+      const midY = (a.y + b.y) / 2;
+
+      line("M " + branchX + " " + midY + " H " + dest.left);
     }
   }
 }
