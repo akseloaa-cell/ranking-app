@@ -1,4 +1,5 @@
 import { state } from "./state.js";
+import { save } from "./storage.js";
 
 export function selectTournamentMode(mode){
 
@@ -6,6 +7,7 @@ export function selectTournamentMode(mode){
 
   state.tournament.phase = "setup";
 
+  save();
   renderTournament();
 
 }
@@ -418,6 +420,7 @@ export function startTournament(){
 
   state.tournament.phase = "active";
 
+  save();
   renderTournament();
 }
 
@@ -469,6 +472,7 @@ export function backTournament(){
 
   state.tournament.category = null;
 
+  save();
   renderTournament();
 
 }
@@ -527,6 +531,7 @@ if (isSemiFinal) {
 
   // fortsatt runde
   if (t.currentMatch < t.matches.length) {
+    save();
     renderTournament();
     return;
   }
@@ -534,6 +539,7 @@ if (isSemiFinal) {
   // ROUND DONE
   advanceRound();
 
+  save();
   renderTournament();
 }
 
@@ -686,6 +692,7 @@ if (next.length === 1) {
 
     t.phase = "thirdPlace";
 
+    save();
     return;
   }
 
@@ -766,6 +773,7 @@ export function pickThirdPlaceWinner(side){
     afterRatings
   };
 
+  save();
   renderTournament();
 }
 
