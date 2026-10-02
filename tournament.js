@@ -395,6 +395,10 @@ export function startTournament(){
   state.tournament.participants = participants;
   state.tournament.originalParticipants = [...participants];
 
+  participants.forEach(item => {
+    item.tournamentsPlayed = (item.tournamentsPlayed || 0) + 1;
+  });
+
   state.tournament.round = 1;
   state.tournament.currentMatch = 0;
 
@@ -669,12 +673,6 @@ if (next.length === 1) {
     state.tournament.originalParticipants.map(p => [p.name, p.rating])
   );
 
-  applyTournamentElo(next, avg);
-
-  const afterRatings = new Map(
-    state.tournament.originalParticipants.map(p => [p.name, p.rating])
-  );
-
   // 🥉 CREATE 3RD PLACE MATCH
   t.thirdPlaceMatch = null;
 
@@ -691,6 +689,12 @@ if (next.length === 1) {
   }
 
   // fallback (shouldn't happen)
+  applyTournamentElo(next, avg);
+
+  const afterRatings = new Map(
+    state.tournament.originalParticipants.map(p => [p.name, p.rating])
+  );
+
   t.phase = "finished";
   t.finalResults = {
     first: next[0],
@@ -743,7 +747,9 @@ export function pickThirdPlaceWinner(side){
     state.tournament.originalParticipants.map(p => [p.name, p.rating])
   );
 
-  const avg = getTournamentAverageElo([final]);
+  const avg = getTournamentAverageElo(
+    state.tournament.originalParticipants
+  );
 
   applyTournamentElo([final, winner, loser], avg);
 
