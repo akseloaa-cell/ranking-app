@@ -945,18 +945,27 @@ export function filterTournamentCategories(query){
   state.tournament.categorySearch = query;
 
   const q = String(query || "").trim().toLowerCase();
-  document.querySelectorAll("#tournamentCategoryDropdownOptions .tournamentDropdownOption").forEach(option => {
+  const optionsBox = document.getElementById("tournamentCategoryDropdownOptions");
+  if (!optionsBox) return;
+
+  if (!q) {
+    const categories = [...new Set(state.items.flatMap(item => item.categories || []))];
+    const selected = state.tournament.category || "";
+    const selectedIndex = categories.findIndex(category => category === selected);
+
+    optionsBox.innerHTML = categories.map((category, index) => `
+      <div class="tournamentDropdownOption ${index === selectedIndex ? "active" : ""}" onclick="selectTournamentDropdown('category', ${index})">
+        ${category}
+      </div>
+    `).join("");
+    return;
+  }
+
+  optionsBox.querySelectorAll(".tournamentDropdownOption").forEach(option => {
     const text = option.textContent.trim().toLowerCase();
-    if (!q) {
-      option.removeAttribute("hidden");
-      option.style.display = "";
-    } else if (text.includes(q)) {
-      option.removeAttribute("hidden");
-      option.style.display = "";
-    } else {
-      option.setAttribute("hidden", "");
-      option.style.display = "none";
-    }
+    option.removeAttribute("hidden");
+    option.style.display = text.includes(q) ? "" : "none";
+    if (!text.includes(q)) option.setAttribute("hidden", "");
   });
 }
 
