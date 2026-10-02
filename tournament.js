@@ -64,8 +64,15 @@ onclick="selectTournamentMode('category')"
         )
       )];
 
-    const pool =
-      getTournamentPool();
+    // In setup, the category select has not been created yet.
+    // Use the first category as the initial pool.
+    let pool = [...state.items];
+
+    if (state.tournament.mode === "category" && categories.length) {
+      pool = pool.filter(item =>
+        item.categories?.includes(categories[0])
+      );
+    }
 
     const sizes =
       getAllowedSizes(
