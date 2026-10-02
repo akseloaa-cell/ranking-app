@@ -476,7 +476,7 @@ root.innerHTML = `
 
 <br><br>
 
-<button onclick="backTournament()">
+<button class="tournamentFinishedBack" onclick="backTournament()">
 Tilbake
 </button>
 
