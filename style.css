@@ -1273,6 +1273,7 @@ button:active {
 .dailySetupName{font-size:20px;font-weight:700;}
 .dailySetupMeta{margin-top:4px;margin-bottom:16px;font-size:12px;opacity:.55;}
 .dailyRuleList{display:flex;flex-direction:column;gap:7px;}
+.dailyRuleItem{display:flex;flex-direction:column;gap:7px;}
 .dailyRuleRow{width:100%;padding:11px 10px;display:flex;align-items:center;gap:11px;text-align:left;border:1px solid #2e2b25;border-radius:11px;background:#171820;color:inherit;font:inherit;cursor:pointer;}
 .dailyRuleRow > span:first-child{width:27px;text-align:center;font-size:17px;}
 .dailyRuleRow > span:nth-child(2){min-width:0;flex:1;display:flex;flex-direction:column;gap:2px;}
@@ -1280,4 +1281,4 @@ button:active {
 .dailyRuleRow strong{font-size:13px;font-weight:600;}
 .dailyRuleRow b{font-size:19px;font-weight:400;opacity:.35;}
 .dailyRuleRow:hover{border-color:#6a5729;background:#1c1b1a;}
-.dailySetupCard .dailyRuleExplanation{margin:9px 0 0;}
+.dailySetupCard .dailyRuleExplanation{margin:0;padding:10px 12px;border:1px solid #2e2b25;border-radius:10px;background:#171820;line-height:1.4;font-size:12px;opacity:.8;}
