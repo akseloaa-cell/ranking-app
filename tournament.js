@@ -447,13 +447,13 @@ function renderTournamentDropdown(id, selected, options, type){
   const selectedIndex = options.findIndex(option => String(option) === String(selected));
   return `
 <div class="tournamentDropdown">
-  <button type="button" class="tournamentDropdownButton" onclick="toggleTournamentDropdown('${id}Menu')" ontouchend="toggleTournamentDropdown('${id}Menu')">
+  <button type="button" class="tournamentDropdownButton" onclick="toggleTournamentDropdown('${id}Menu')">
     <span>${selected || "Velg..."}</span>
     <span>⌄</span>
   </button>
   <div id="${id}Menu" class="tournamentDropdownMenu hidden">
     ${options.map((option, index) => `
-      <div class="tournamentDropdownOption ${index === selectedIndex ? "active" : ""}" onclick="selectTournamentDropdown('${type}', ${index})" ontouchend="selectTournamentDropdown('${type}', ${index})">
+      <div class="tournamentDropdownOption ${index === selectedIndex ? "active" : ""}" onclick="selectTournamentDropdown('${type}', ${index})">
         ${option}
       </div>
     `).join("")}
