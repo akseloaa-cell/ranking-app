@@ -1494,3 +1494,8 @@ button:active {
   margin-left:auto;
   margin-right:auto;
 }
+
+
+.randomSetupParticipants .tournamentDropdown{
+  width:80%;
+}
