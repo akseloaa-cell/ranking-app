@@ -854,3 +854,22 @@ button:active {
 .categoryManagerSortMenu div:hover{
   background:#2a3142;
 }
+
+.categoryManagerCount{
+  opacity:.6;
+  font-size:.9em;
+}
+
+.categoryManagerOption{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.categoryManagerOptionCount{
+  min-width:24px;
+  text-align:center;
+  opacity:.6;
+  font-size:12px;
+}
