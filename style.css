@@ -1143,6 +1143,16 @@ button:active {
   background:#302817;
 }
 
+.dailyTournamentCountdown{
+  margin-left:auto;
+  margin-right:10px;
+  font-size:11px;
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+  color:#b9a66d;
+  white-space:nowrap;
+}
+
 .dailyTournamentCard .tournamentModeStatus{
   font-size:10px;
   font-weight:800;
