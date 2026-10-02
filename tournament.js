@@ -92,7 +92,7 @@ const DAILY_RULE_DESCRIPTIONS = {
     "Random matchups": "Deltakerne blandes tilfeldig før første runde.",
     "ELO Clash": "Høyest ELO møter lavest ELO, nest høyest møter nest lavest, osv.",
     "Close ELO": "Deltakere med nærmest mulig ELO pares mot hverandre.",
-    Seeded: "Deltakerne seedes etter ELO."
+    Seeded: "Deltakerne sorteres fra høyest til lavest ELO og fordeles i bracketet som seeds: høyest ELO får seed 1, nest høyest seed 2, osv. Seed 1 møter seed 16, seed 2 møter seed 15, osv. i første runde."
   },
   rewards: {
     "Normal Daily": "Vinner, andreplass og tredjeplass får 45 / 30 / 15 ELO før multiplikatoren.",
