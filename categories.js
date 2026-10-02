@@ -128,7 +128,7 @@ export function renderCategoryManager(){
         <span>⌄</span>
       </button>
       <div id="categoryManagerDropdownMenu" class="categoryManagerDropdownMenu hidden">
-        <input class="categoryManagerCategorySearch" placeholder="Søk kategori..." value="${state.categoryManagerCategorySearch || ""}" oninput="searchCategoryManagerCategory(this.value)" onclick="event.stopPropagation()">
+        <input class="categoryManagerCategorySearch" placeholder="Søk kategori..." value="${state.categoryManagerCategorySearch || ""}" onfocus="document.getElementById('categoryManagerDropdownMenu')?.classList.remove('hidden')" onmousedown="event.stopPropagation()" onclick="event.stopPropagation()" oninput="event.stopPropagation(); searchCategoryManagerCategory(this.value)">
         ${visibleCategories.map(category => {
           const count = state.items.filter(item => (item.categories || []).includes(category)).length;
           return `
