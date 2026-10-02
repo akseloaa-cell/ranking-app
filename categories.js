@@ -26,3 +26,98 @@ export function toggleCat(el){
   el.classList.toggle("active");
 }
 
+
+
+export function openCategoryManager(){
+  state.categoryManagerCategory = state.categories[0] || "";
+  state.categoryManagerSearch = "";
+  renderCategoryManager();
+}
+
+export function selectCategoryManagerCategory(category){
+  state.categoryManagerCategory = category;
+  state.categoryManagerSearch = "";
+  renderCategoryManager();
+}
+
+export function toggleItemInCategory(itemId){
+  const item = state.items.find(x => x.id === itemId);
+  const category = state.categoryManagerCategory;
+  if(!item || !category) return;
+
+  if(!item.categories) item.categories = [];
+
+  if(item.categories.includes(category)){
+    item.categories = item.categories.filter(c => c !== category);
+  } else {
+    item.categories.push(category);
+  }
+
+  save();
+  renderCategoryManager();
+}
+
+export function searchCategoryManager(query){
+  state.categoryManagerSearch = query;
+  renderCategoryManager();
+}
+
+export function renderCategoryManager(){
+  const box = document.getElementById("categoryManagerContent");
+  if(!box) return;
+
+  const categories = [...state.categories];
+  const selected = state.categoryManagerCategory || categories[0] || "";
+  const q = (state.categoryManagerSearch || "").trim().toLowerCase();
+
+  const items = state.items.filter(item =>
+    !q || item.name.toLowerCase().includes(q)
+  );
+
+  box.innerHTML = `
+    <h2>🏷️ Kategorier</h2>
+
+    <p style="opacity:.65;">Velg kategori</p>
+
+    <div class="categoryManagerDropdown">
+      <button type="button" class="categoryManagerDropdownButton" onclick="toggleCategoryManagerDropdown()">
+        <span>${selected || "Ingen kategorier"}</span>
+        <span>⌄</span>
+      </button>
+      <div id="categoryManagerDropdownMenu" class="categoryManagerDropdownMenu hidden">
+        ${categories.map(category => `
+          <div class="categoryManagerOption ${category === selected ? "active" : ""}" onclick="selectCategoryManagerCategory('${category.replace(/'/g, "\\'")}')">
+            ${category}
+          </div>
+        `).join("")}
+      </div>
+    </div>
+
+    ${selected ? `
+      <input
+        class="categoryManagerSearch"
+        placeholder="Søk item..."
+        value="${state.categoryManagerSearch || ""}"
+        oninput="searchCategoryManager(this.value)"
+      >
+
+      <div class="categoryManagerItems">
+        ${items.map(item => {
+          const active = (item.categories || []).includes(selected);
+          return `
+            <div class="categoryManagerItem ${active ? "active" : ""}" onclick="toggleItemInCategory(${item.id})">
+              <span>${item.name}</span>
+              <span class="categoryManagerCheck">${active ? "✓" : ""}</span>
+            </div>
+          `;
+        }).join("") || '<div style="opacity:.5;padding:15px;">Ingen items funnet</div>'}
+      </div>
+    ` : '<p style="opacity:.5;">Opprett en kategori først.</p>'}
+  `;
+}
+
+export function toggleCategoryManagerDropdown(){
+  const menu = document.getElementById("categoryManagerDropdownMenu");
+  if(!menu) return;
+  menu.classList.toggle("hidden");
+}
