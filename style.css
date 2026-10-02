@@ -1176,3 +1176,57 @@ button:active {
   font-size:18px;
   letter-spacing:0;
 }
+
+
+.dailyRuleButton{
+  border:0;
+  background:transparent;
+  color:inherit;
+  padding:3px 5px;
+  margin:-3px -2px;
+  font:inherit;
+  cursor:pointer;
+  border-radius:6px;
+  transition:background .15s, opacity .15s;
+}
+
+.dailyRuleButton:hover{
+  background:rgba(255,255,255,.07);
+}
+
+.dailyRuleExplanation{
+  margin:10px 0 14px;
+  padding:10px 12px;
+  border-radius:10px;
+  background:#141a26;
+  border:1px solid #2a3344;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  animation:dailyRuleExplanationIn .15s ease-out;
+}
+
+.dailyRuleExplanation.hidden{
+  display:none;
+}
+
+.dailyRuleExplanationTitle{
+  font-size:.9rem;
+}
+
+.dailyRuleExplanationText{
+  opacity:.72;
+  font-size:.85rem;
+  line-height:1.4;
+}
+
+@keyframes dailyRuleExplanationIn{
+  from{
+    opacity:0;
+    transform:translateY(-3px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
