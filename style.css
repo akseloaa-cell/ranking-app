@@ -1383,3 +1383,33 @@ button:active {
   color:#4caf50;
   font-size:13px;
 }
+
+
+.randomSetupHeader{
+  margin-bottom:18px;
+}
+
+.randomSetupIcon{
+  background:#1d2535;
+}
+
+.randomSetupSubtitle{
+  display:block;
+  margin-top:2px;
+  font-size:12px;
+  opacity:.55;
+}
+
+.randomSetupCard{
+  border-color:#2e374a;
+  background:linear-gradient(135deg,#1b2230,#151820);
+}
+
+.randomSetupInfoRow{
+  cursor:default;
+}
+
+.randomSetupInfoRow:hover{
+  border-color:#2e2b25;
+  background:#171820;
+}
