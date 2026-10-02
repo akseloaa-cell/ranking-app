@@ -1740,3 +1740,60 @@ button:active {
   width:80%;
   margin:0 auto;
 }
+
+.categoryManagerPageTop{
+  width:80%;
+  margin:18px auto 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+
+.categoryManagerPageTop h2{
+  margin:0;
+  font-size:22px;
+}
+
+.categoryManagerAddButton{
+  flex:0 0 auto;
+  padding:10px 15px;
+  margin:0;
+  border:1px solid #4f8cff;
+  border-radius:10px;
+  background:#4f8cff;
+  color:white;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 5px 18px rgba(0,0,0,.22);
+  transition:transform .15s, background .15s, border-color .15s;
+}
+
+.categoryManagerAddButton:hover{
+  background:#5b94ff;
+  border-color:#5b94ff;
+}
+
+.categoryManagerAddButton:active{
+  transform:translateY(1px);
+}
+
+@media (max-width:600px){
+  .categoryManagerPageTop{
+    width:100%;
+    flex-direction:column;
+    align-items:stretch;
+    text-align:center;
+    margin:16px auto 18px;
+  }
+
+  .categoryManagerPageTop h2{
+    font-size:20px;
+  }
+
+  .categoryManagerAddButton{
+    width:100%;
+  }
+}
+
