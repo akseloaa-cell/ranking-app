@@ -37,6 +37,7 @@ import {
   confirmTournamentSetup,
   backTournament,
   pickWinner,
+  pickThirdPlaceWinner,
 } from "./tournament.js";
 
 import { load } from "./storage.js";
@@ -46,6 +47,7 @@ window.selectTournamentMode = selectTournamentMode;
 window.confirmTournamentSetup = confirmTournamentSetup;
 window.backTournament = backTournament;
 window.pickWinner = pickWinner;
+window.pickThirdPlaceWinner = pickThirdPlaceWinner;
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
 window.setActiveMenu = ui.setActiveMenu;
