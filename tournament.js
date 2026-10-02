@@ -316,7 +316,6 @@ ${state.tournament.mode === "daily" ? `<div class="dailySetupHeader">
   <div class="dailySetupIcon">🌟</div>
   <div>
     <h2>Daily Tournament</h2>
-    <p>Dagens spesialturnering</p>
   </div>
   <span id="dailyTournamentSetupCountdown" class="dailyTournamentSetupCountdown"></span>
 </div>
