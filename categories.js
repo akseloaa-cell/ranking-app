@@ -156,7 +156,7 @@ export function renderCategoryManager(){
     });
 
   box.innerHTML = `
-    <h2>🏷️ Kategorier</h2>
+    <h2>🏷️ Kategorier/items</h2>
 
     <p style="opacity:.65;">Velg kategori</p>
 
