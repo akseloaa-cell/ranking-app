@@ -395,17 +395,18 @@ function renderBracket(){
 
   const scrollBox = root.querySelector(".tournamentBracketScroll");
   const roundElements = root.querySelectorAll(".tournamentBracketRound");
+  const thirdPlaceElement = root.querySelector(".tournamentThirdPlaceBracket");
 
   if(scrollBox && roundElements.length){
-    let targetIndex = history.length - 1;
+    let target = null;
 
-    if(t.phase === "active"){
-      targetIndex = history.length - 1;
+    if(t.phase === "thirdPlace"){
+      target = thirdPlaceElement;
     } else if(t.phase === "finished"){
-      targetIndex = history.length - 1;
+      target = roundElements[history.length - 1];
+    } else {
+      target = roundElements[history.length - 1];
     }
-
-    const target = roundElements[targetIndex];
 
     if(target){
       requestAnimationFrame(() => {
