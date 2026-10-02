@@ -1129,6 +1129,44 @@ button:active {
 }
 
 @media (max-width:600px){
+  .dailyTournamentCard{
+    display:grid;
+    grid-template-columns:44px minmax(0,1fr);
+    align-items:center;
+    column-gap:12px;
+    row-gap:6px;
+  }
+
+  .dailyTournamentCard .tournamentModeIcon{
+    grid-column:1;
+    grid-row:1 / span 2;
+  }
+
+  .dailyTournamentCard .tournamentModeText{
+    grid-column:2;
+    grid-row:1;
+  }
+
+  .dailyTournamentCard .dailyTournamentCountdown{
+    grid-column:2;
+    grid-row:2;
+    margin:0;
+    font-size:10px;
+    justify-self:start;
+  }
+
+  .dailyTournamentCard .tournamentModeStatus{
+    position:absolute;
+    right:14px;
+    bottom:12px;
+  }
+
+  .dailyTournamentCard{
+    position:relative;
+    padding-right:72px;
+  }
+
+@media (max-width:600px){
   .tournamentBracket{
     padding:0 20px;
     gap:14px;
