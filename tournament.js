@@ -298,6 +298,12 @@ function renderBracket(){
   if(!root) return;
 
   const t = state.tournament;
+
+  if(!["active", "thirdPlace", "finished"].includes(t.phase)){
+    root.innerHTML = "";
+    return;
+  }
+
   const history = t.bracketHistory || [];
 
   if(!history.length){
