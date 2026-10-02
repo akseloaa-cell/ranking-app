@@ -26,8 +26,6 @@ export function toggleCat(el){
   el.classList.toggle("active");
 }
 
-
-
 export function openCategoryManager(){
   state.categoryManagerCategory = state.categories[0] || "";
   state.categoryManagerSearch = "";
@@ -97,6 +95,9 @@ export function renderCategoryManager(){
   const q = (state.categoryManagerSearch || "").trim().toLowerCase();
   const categoryQuery = (state.categoryManagerCategorySearch || "").trim().toLowerCase();
   const visibleCategories = categories.filter(category => !categoryQuery || category.toLowerCase().includes(categoryQuery));
+  const categoryItemCount = selected
+    ? state.items.filter(item => (item.categories || []).includes(selected)).length
+    : 0;
 
   const items = [...state.items]
     .filter(item => !q || item.name.toLowerCase().includes(q))
@@ -123,16 +124,20 @@ export function renderCategoryManager(){
 
     <div class="categoryManagerDropdown">
       <button type="button" class="categoryManagerDropdownButton" onclick="toggleCategoryManagerDropdown()">
-        <span>${selected || "Ingen kategorier"}</span>
+        <span>${selected || "Ingen kategorier"}${selected ? ` <span class="categoryManagerCount">(${categoryItemCount})</span>` : ""}</span>
         <span>⌄</span>
       </button>
       <div id="categoryManagerDropdownMenu" class="categoryManagerDropdownMenu hidden">
         <input class="categoryManagerCategorySearch" placeholder="Søk kategori..." value="${state.categoryManagerCategorySearch || ""}" oninput="searchCategoryManagerCategory(this.value)" onclick="event.stopPropagation()">
-        ${visibleCategories.map(category => `
-          <div class="categoryManagerOption ${category === selected ? "active" : ""}" onclick="selectCategoryManagerCategory('${category.replace(/'/g, "\\'")}')">
-            ${category}
-          </div>
-        `).join("")}
+        ${visibleCategories.map(category => {
+          const count = state.items.filter(item => (item.categories || []).includes(category)).length;
+          return `
+            <div class="categoryManagerOption ${category === selected ? "active" : ""}" onclick="selectCategoryManagerCategory('${category.replace(/'/g, "\'")}')">
+              <span>${category}</span>
+              <span class="categoryManagerOptionCount">${count}</span>
+            </div>
+          `;
+        }).join("")}
       </div>
     </div>
 
