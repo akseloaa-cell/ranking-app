@@ -68,8 +68,8 @@ onclick="selectTournamentMode('category')"
     // selection until the user chooses another one.
     if (
       state.tournament.mode === "category" &&
-      !state.tournament.category &&
-      categories.length
+      categories.length &&
+      !categories.includes(state.tournament.category)
     ) {
       state.tournament.category = categories[0];
     }
@@ -117,14 +117,16 @@ ${renderTournamentDropdown("tournamentCategoryDropdown", state.tournament.catego
 
 <p>Antall deltakere</p>
 
-${renderTournamentDropdown("tournamentSizeDropdown", sizes.includes(state.tournament.size) ? state.tournament.size : (sizes[0] || ""), sizes, "size")}
+${sizes.length
+  ? renderTournamentDropdown("tournamentSizeDropdown", sizes.includes(state.tournament.size) ? state.tournament.size : sizes[0], sizes, "size")
+  : '<p style="opacity:.6;">Du trenger minst 4 items for å starte en turnering.</p>'
+}
 
 <br><br>
 
 <button
-onclick="
-confirmTournamentSetup()
-"
+onclick="confirmTournamentSetup()"
+${sizes.length ? "" : " disabled"}
 >
 Start
 </button>
@@ -485,6 +487,10 @@ export function updateTournamentSizeOptions(){
   renderTournament();
 }
 export function confirmTournamentSetup(){
+  const pool = getTournamentPool();
+  if (pool.length < 4) {
+    return;
+  }
   startTournament();
 }
 export function backTournament(){
