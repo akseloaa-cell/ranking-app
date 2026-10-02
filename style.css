@@ -719,42 +719,100 @@ button:active {
 
 .categoryManagerDropdownButton{
   width:100%;
+  min-height:40px;
   margin:0;
   display:flex;
   align-items:center;
   justify-content:space-between;
+  gap:12px;
   box-sizing:border-box;
-  background:#1f1f1f;
-  border:1px solid #2a3142;
+  padding:8px 10px 8px 11px;
+  background:linear-gradient(180deg,#202633,#1a1f29);
+  border:1px solid #343d4e;
+  border-radius:10px;
+  color:inherit;
+  box-shadow:0 3px 10px rgba(0,0,0,.18);
+  transition:border-color .15s,background .15s,transform .15s;
+}
+
+.categoryManagerDropdownButton:hover{
+  background:linear-gradient(180deg,#252c39,#1d232e);
+  border-color:#465268;
+}
+
+.categoryManagerDropdownButton:active{
+  transform:translateY(1px);
+}
+
+.categoryManagerSelected{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+  font-size:12px;
+  font-weight:600;
+}
+
+.categoryManagerSelectedIcon{
+  width:20px;
+  height:20px;
+  flex:0 0 20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:6px;
+  background:#2b3443;
+  font-size:12px;
+}
+
+.categoryManagerDropdownChevron{
+  font-size:14px;
+  opacity:.55;
+  line-height:1;
+  transform:translateY(-1px);
 }
 
 .categoryManagerDropdownMenu{
   position:absolute;
   left:0;
   right:0;
-  top:calc(100% + 6px);
+  top:calc(100% + 7px);
+  padding:5px;
   background:#151a24;
-  border:1px solid #2a3142;
+  border:1px solid #30394a;
   border-radius:12px;
   overflow:hidden;
-  box-shadow:0 10px 30px rgba(0,0,0,.45);
-  z-index:100;
+  box-shadow:0 14px 34px rgba(0,0,0,.45);
+  z-index:1000;
   max-height:300px;
   overflow-y:auto;
 }
 
 .categoryManagerOption{
-  padding:12px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:9px 10px;
+  border-radius:8px;
   cursor:pointer;
+  font-size:12px;
+  transition:background .12s;
 }
 
 .categoryManagerOption:hover{
-  background:#2a3142;
+  background:#232b38;
 }
 
 .categoryManagerOption.active{
-  background:#4f8cff;
+  background:#252e3d;
   font-weight:600;
+}
+
+.categoryManagerOption.active::after{
+  content:"✓";
+  opacity:.75;
+  font-size:12px;
 }
 
 .categoryManagerSearch{
