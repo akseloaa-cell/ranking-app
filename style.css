@@ -928,10 +928,14 @@ button:active {
 .tournamentBracketMatches{
   display:flex;
   flex-direction:column;
-  gap:14px;
+  gap:var(--round-gap,14px);
+  padding-top:var(--round-offset,0px);
+  box-sizing:border-box;
 }
 
 .tournamentBracketMatch{
+  height:72px;
+  box-sizing:border-box;
   background:#141a26;
   border:1px solid #2a3142;
   border-radius:12px;
