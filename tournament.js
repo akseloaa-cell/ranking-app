@@ -941,17 +941,14 @@ function renderTournamentDropdown(id, selected, options, type){
 export function filterTournamentCategories(query){
   const menu = document.getElementById("tournamentCategoryDropdownMenu");
   if(menu) menu.classList.remove("hidden");
+
   state.tournament.categorySearch = query;
-  const q = query.trim().toLowerCase();
-  const allCategories = [...new Set(state.items.flatMap(x => x.categories || []))];
-  const options = allCategories.filter(option => String(option).toLowerCase().includes(q));
-  const container = document.getElementById("tournamentCategoryDropdownOptions");
-  if(!container) return;
-  const selected = state.tournament.category;
-  container.innerHTML = options.map(option => {
-    const index = allCategories.findIndex(x => x === option);
-    return `<div class="tournamentDropdownOption ${String(option) === String(selected) ? "active" : ""}" onclick="selectTournamentDropdown('category', ${index})">${option}</div>`;
-  }).join("");
+
+  const q = String(query || "").trim().toLowerCase();
+  document.querySelectorAll("#tournamentCategoryDropdownOptions .tournamentDropdownOption").forEach(option => {
+    const text = option.textContent.trim().toLowerCase();
+    option.style.display = !q || text.includes(q) ? "" : "none";
+  });
 }
 
 export function updateTournamentSizeOptions(){
