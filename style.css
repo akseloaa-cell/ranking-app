@@ -736,7 +736,7 @@ border:2px solid #4f8cff;
   border:1px solid #2a3142;
   border-radius:12px;
   overflow:hidden;
-  box-shadow:0 10px 30px rgba(0,0,0,0.45);
+  box-shadow:0 10px 30px rgba(0,0,0,.45);
   z-index:100;
   max-height:300px;
   overflow-y:auto;
@@ -792,8 +792,22 @@ border:2px solid #4f8cff;
   font-weight:bold;
 }
 
+.categoryManagerCategorySearch{
+  width:100%;
+  box-sizing:border-box;
+  margin:0;
+  padding:12px 14px;
+  border:0;
+  border-bottom:1px solid #2a3142;
+  border-radius:0;
+  background:#151a24;
+  color:white;
+  outline:none;
+}
 
-.categoryManagerCategorySearch{\n  width:100%;\n  box-sizing:border-box;\n  margin:0;\n  padding:12px 14px;\n  border:0;\n  border-bottom:1px solid #2a3142;\n  border-radius:0;\n  background:#151a24;\n  color:white;\n  outline:none;\n}\n\n.categoryManagerCategorySearch:focus{\n  border-bottom-color:#4f8cff;\n}\n
+.categoryManagerCategorySearch:focus{
+  border-bottom-color:#4f8cff;
+}
 
 .categoryManagerSort{
   width:80%;
@@ -803,29 +817,39 @@ border:2px solid #4f8cff;
   gap:8px;
   position:relative;
   text-align:left;
+  box-sizing:border-box;
 }
+
 .categoryManagerSortButton{
   width:auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:space-between;
   margin:0;
   padding:9px 12px;
   background:#1f1f1f;
   border:1px solid #2a3142;
 }
+
 .categoryManagerSortMenu{
   position:absolute;
   top:calc(100% + 4px);
   left:55px;
+  min-width:140px;
   background:#151a24;
   border:1px solid #2a3142;
   border-radius:10px;
   overflow:hidden;
   box-shadow:0 10px 30px rgba(0,0,0,.4);
-  z-index:110;
+  z-index:1000;
 }
+
 .categoryManagerSortMenu div{
   padding:10px 14px;
   cursor:pointer;
+  white-space:nowrap;
 }
+
 .categoryManagerSortMenu div:hover{
   background:#2a3142;
 }
