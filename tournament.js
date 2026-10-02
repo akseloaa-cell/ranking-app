@@ -67,6 +67,54 @@ function getDailyConfig(dateKey = getTodayKey()){
   return DAILY_CONFIGS[order[position]];
 }
 
+const DAILY_RULE_DESCRIPTIONS = {
+  participants: {
+    Random: "Alle items kan bli valgt som deltakere.",
+    Underdogs: "Kun items med ELO på 1000 eller lavere kan delta.",
+    Elite: "Kun items med ELO på 1100 eller høyere kan delta.",
+    "Fresh Blood": "Kun items som er lagt til de siste 30 dagene kan delta.",
+    Unplayed: "Items med færrest tidligere turneringsdeltakelser prioriteres.",
+    Category: "Deltakerne hentes fra én tilfeldig valgt kategori.",
+    "Category Mix": "Deltakerne hentes fra to tilfeldig valgte kategorier.",
+    Comeback: "Items med flest tidligere turneringstap prioriteres.",
+    Revenge: "Items som tapte sin forrige turnering prioriteres.",
+    Veterans: "Kun items som har deltatt i minst 5 turneringer kan delta.",
+    Undefeated: "Kun items som aldri har tapt en turnering kan delta."
+  },
+  matchups: {
+    "Random matchups": "Deltakerne blandes tilfeldig før første runde.",
+    "ELO Clash": "Høyest ELO møter lavest ELO, nest høyest møter nest lavest, osv.",
+    "Close ELO": "Deltakere med nærmest mulig ELO pares mot hverandre.",
+    Seeded: "Deltakerne seedes etter ELO."
+  },
+  rewards: {
+    "Normal Daily": "Vinner, andreplass og tredjeplass får 45 / 30 / 15 ELO før multiplikatoren.",
+    "Daily Plus": "Vinner, andreplass og tredjeplass får 55 / 35 / 20 ELO før multiplikatoren.",
+    Double: "Vinner, andreplass og tredjeplass får 90 / 60 / 30 ELO før multiplikatoren.",
+    "Winner Bonus": "Vinneren får 75 ELO, andreplass 30 og tredjeplass 15 før multiplikatoren.",
+    "Podium Bonus": "Vinner, andreplass og tredjeplass får 60 / 40 / 25 ELO før multiplikatoren."
+  }
+};
+
+export function toggleDailyRule(type){
+  const el = document.getElementById("dailyRuleExplanation");
+  if(!el) return;
+  if(!el.classList.contains("hidden") && el.dataset.type === type){
+    el.classList.add("hidden");
+    return;
+  }
+  const rules = getDailyRuleText(getDailyConfig());
+  const value = rules[type];
+  const description = DAILY_RULE_DESCRIPTIONS[type]?.[value];
+  if(!value || !description) return;
+  el.dataset.type = type;
+  el.querySelector(".dailyRuleExplanationTitle").textContent =
+    type === "participants" ? "Deltakere" :
+    type === "matchups" ? "Matchups" : "ELO-belønning";
+  el.querySelector(".dailyRuleExplanationText").textContent = description;
+  el.classList.remove("hidden");
+}
+
 function getDailyRuleText(config){
   const participantNames = {
     random:"Random",
@@ -262,7 +310,7 @@ export function renderTournament(){
 ${state.tournament.mode === "daily" ? "🌟 Daily Tournament" : state.tournament.mode}
 </h3>
 
-${state.tournament.mode === "daily" ? (() => { const config = getDailyConfig(); const rules = getDailyRuleText(config); const sizeText = config.size === "random" ? "Tilfeldig størrelse" : config.size + " deltakere"; return "<p><strong>" + config.name + "</strong><br>" + sizeText + " · 👥 " + rules.participants + " · ⚔️ " + rules.matchups + " · 💰 " + rules.rewards + "</p>"; })() : ""}
+${state.tournament.mode === "daily" ? (() => { const config = getDailyConfig(); const rules = getDailyRuleText(config); const sizeText = config.size === "random" ? "Tilfeldig størrelse" : config.size + " deltakere"; return `<p><strong>${config.name}</strong><br>${sizeText} · <button type="button" class="dailyRuleButton" onclick="toggleDailyRule("participants")">👥 ${rules.participants}</button> · <button type="button" class="dailyRuleButton" onclick="toggleDailyRule("matchups")">⚔️ ${rules.matchups}</button> · <button type="button" class="dailyRuleButton" onclick="toggleDailyRule("rewards")">💰 ${rules.rewards}</button></p><div id="dailyRuleExplanation" class="dailyRuleExplanation hidden"><strong class="dailyRuleExplanationTitle"></strong><span class="dailyRuleExplanationText"></span></div>`; })() : ""}
 
 ${
 state.tournament.mode === "category"
