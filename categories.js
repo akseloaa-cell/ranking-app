@@ -29,6 +29,7 @@ export function toggleCat(el){
 export function openCategoryManager(){
   state.categoryManagerCategory = state.categories[0] || "";
   state.categoryManagerSearch = "";
+  state.categoryManagerCategorySearch = "";
   state.categoryManagerItemSort = "elo";
   state.categoryManagerItemSortDir = "asc";
   renderCategoryManager();
