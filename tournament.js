@@ -329,6 +329,32 @@ ${state.tournament.mode === "random" ? `<div class="dailySetupHeader randomSetup
   </div>
 </div>` : ""}
 
+${state.tournament.mode === "category" ? `<div class="dailySetupHeader categorySetupHeader">
+  <div class="dailySetupIcon categorySetupIcon">🏷️</div>
+  <div>
+    <h2>Category Tournament</h2>
+    <span class="categorySetupSubtitle">Velg en kategori og hvor mange som skal delta</span>
+  </div>
+</div>
+
+<div class="dailySetupCard categorySetupCard">
+  <div class="dailySetupName">Turneringsoppsett</div>
+  <div class="dailySetupMeta">Velg kategori og antall deltakere</div>
+  <div class="categorySetupFields">
+    <div class="categorySetupField">
+      <small>Kategori</small>
+      ${renderTournamentDropdown("tournamentCategoryDropdown", state.tournament.category || categories[0] || "", categories, "category")}
+    </div>
+    <div class="categorySetupField">
+      <small>Deltakere</small>
+      ${sizes.length
+        ? renderTournamentDropdown("tournamentSizeDropdown", sizes.includes(state.tournament.size) ? state.tournament.size : sizes[0], sizes, "size")
+        : '<p class="categorySetupEmpty">Du trenger minst 4 items i kategorien.</p>'
+      }
+    </div>
+  </div>
+</div>` : ""}
+
 ${state.tournament.mode === "daily" ? `<div class="dailySetupHeader">
   <div class="dailySetupIcon">🌟</div>
   <div>
@@ -341,12 +367,20 @@ ${(() => { const config = getDailyConfig(); const rules = getDailyRuleText(confi
   <div class="dailySetupName">${config.name}</div>
   <div class="dailySetupMeta">${sizeText}</div>
   <div class="dailyRuleList">
-    <div class="dailyRuleItem">\n    <button type="button" class="dailyRuleRow" onclick="toggleDailyRule('participants')"><span>👥</span><span><small>Deltakere</small><strong>${rules.participants}</strong></span><b>›</b></button>\n    <div id="dailyRuleExplanation-participants" class="dailyRuleExplanation hidden"><span class="dailyRuleExplanationText"></span></div>\n  </div>
-    <div class="dailyRuleItem">\n    <button type="button" class="dailyRuleRow" onclick="toggleDailyRule('matchups')"><span>⚔️</span><span><small>Matchups</small><strong>${rules.matchups}</strong></span><b>›</b></button>\n    <div id="dailyRuleExplanation-matchups" class="dailyRuleExplanation hidden"><span class="dailyRuleExplanationText"></span></div>\n  </div>
-    <div class="dailyRuleItem">\n    <button type="button" class="dailyRuleRow" onclick="toggleDailyRule('rewards')"><span>💰</span><span><small>ELO-belønning</small><strong>${rules.rewards}</strong></span><b>›</b></button>\n    <div id="dailyRuleExplanation-rewards" class="dailyRuleExplanation hidden"><span class="dailyRuleExplanationText"></span></div>\n  </div>
+    <div class="dailyRuleItem">
+    <button type="button" class="dailyRuleRow" onclick="toggleDailyRule('participants')"><span>👥</span><span><small>Deltakere</small><strong>${rules.participants}</strong></span><b>›</b></button>
+    <div id="dailyRuleExplanation-participants" class="dailyRuleExplanation hidden"><span class="dailyRuleExplanationText"></span></div>
   </div>
-</div>`; })()}` : state.tournament.mode === "category" ? `<h3>${state.tournament.mode}</h3>` : ""}
-</div>
+    <div class="dailyRuleItem">
+    <button type="button" class="dailyRuleRow" onclick="toggleDailyRule('matchups')"><span>⚔️</span><span><small>Matchups</small><strong>${rules.matchups}</strong></span><b>›</b></button>
+    <div id="dailyRuleExplanation-matchups" class="dailyRuleExplanation hidden"><span class="dailyRuleExplanationText"></span></div>
+  </div>
+    <div class="dailyRuleItem">
+    <button type="button" class="dailyRuleRow" onclick="toggleDailyRule('rewards')"><span>💰</span><span><small>ELO-belønning</small><strong>${rules.rewards}</strong></span><b>›</b></button>
+    <div id="dailyRuleExplanation-rewards" class="dailyRuleExplanation hidden"><span class="dailyRuleExplanationText"></span></div>
+  </div>
+  </div>
+</div>`; })()}` : state.tournament.mode === "random" ? "" : ""}</div>
 
 ${state.tournament.mode !== "daily" ? `
 <div class="${state.tournament.mode === "random" ? "randomSetupParticipants" : ""}">
