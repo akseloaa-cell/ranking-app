@@ -1464,3 +1464,26 @@ button:active {
 .randomSetupCard .dailyRuleRow{
   box-sizing:border-box;
 }
+
+
+/* Random Tournament setup alignment */
+.randomSetupCard{
+  width:100%;
+  box-sizing:border-box;
+}
+
+.randomSetupCard .dailyRuleRow{
+  position:relative;
+  justify-content:center;
+}
+
+.randomSetupCard .dailyRuleRow > span:first-child{
+  position:absolute;
+  left:10px;
+}
+
+.randomSetupCard .dailyRuleRow > span:nth-child(2){
+  flex:0 1 auto;
+  text-align:center;
+  align-items:center;
+}
