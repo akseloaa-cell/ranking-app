@@ -144,7 +144,7 @@ export function toggleSortType(){
     state.categorySortType = "items";
   }
 
-  const label = document.getElementById("sortTypeLabel");
+  const label = document.getElementById("sortLabel");
   if(label){
     label.innerText =
       state.categorySortType === "items"
