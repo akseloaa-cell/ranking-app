@@ -40,7 +40,6 @@ export function searchCategoryManagerCategory(query){
   if(menu) menu.classList.remove("hidden");
 
   const q = String(query || "").trim().toLowerCase();
-  const menu = document.getElementById("categoryManagerDropdownMenu");
   if (!menu) return;
 
   if (!q) {
