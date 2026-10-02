@@ -54,7 +54,8 @@ const views = [
   "homeView",
   "categorySelectView",
   "categoryBattleView",
-  "tournamentSection"
+  "tournamentSection",
+  "categoryManagerView"
 ];
 
   views.forEach(id => {
@@ -86,6 +87,11 @@ if (mode === "tournament"){
 
   if (mode === "categoryBattle"){
     const el = document.getElementById("categoryBattleView");
+    if (el) el.style.display = "block";
+  }
+
+  if (mode === "categoryManager"){
+    const el = document.getElementById("categoryManagerView");
     if (el) el.style.display = "block";
   }
 }
