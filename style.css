@@ -965,6 +965,13 @@ button:active {
   font-size:13px;
 }
 
+.tournamentBracketPlayer > span:first-child{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
 .tournamentBracketPlayer.winner{
   font-weight:700;
 }
