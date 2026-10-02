@@ -403,7 +403,7 @@ function renderBracket(){
     if(t.phase === "thirdPlace"){
       target = thirdPlaceElement;
     } else if(t.phase === "finished"){
-      target = roundElements[history.length - 1];
+      target = thirdPlaceElement || roundElements[history.length - 1];
     } else {
       target = roundElements[history.length - 1];
     }
