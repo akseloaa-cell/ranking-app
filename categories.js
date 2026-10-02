@@ -31,6 +31,7 @@ export function toggleCat(el){
 export function openCategoryManager(){
   state.categoryManagerCategory = state.categories[0] || "";
   state.categoryManagerSearch = "";
+  state.categoryManagerItemSort = "elo";
   renderCategoryManager();
 }
 
@@ -63,6 +64,17 @@ export function toggleItemInCategory(itemId){
   renderCategoryManager();
 }
 
+export function setCategoryManagerItemSort(sort){
+  state.categoryManagerItemSort = sort;
+  renderCategoryManager();
+}
+
+export function toggleCategoryManagerSortDropdown(){
+  const menu = document.getElementById("categoryManagerSortMenu");
+  if(!menu) return;
+  menu.classList.toggle("hidden");
+}
+
 export function searchCategoryManager(query){
   state.categoryManagerSearch = query;
   renderCategoryManager();
@@ -78,9 +90,23 @@ export function renderCategoryManager(){
   const categoryQuery = (state.categoryManagerCategorySearch || "").trim().toLowerCase();
   const visibleCategories = categories.filter(category => !categoryQuery || category.toLowerCase().includes(categoryQuery));
 
-  const items = state.items.filter(item =>
-    !q || item.name.toLowerCase().includes(q)
-  );
+  const items = state.items
+    .filter(item => !q || item.name.toLowerCase().includes(q))
+    .sort((a, b) => {
+      const aActive = (a.categories || []).includes(selected);
+      const bActive = (b.categories || []).includes(selected);
+      if(aActive !== bActive) return aActive ? -1 : 1;
+
+      switch(state.categoryManagerItemSort || "elo"){
+        case "name":
+          return a.name.localeCompare(b.name, "nb", { sensitivity: "base" });
+        case "createdAt":
+          return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+        case "elo":
+        default:
+          return (b.rating || 0) - (a.rating || 0);
+      }
+    });
 
   box.innerHTML = `
     <h2>🏷️ Kategorier</h2>
@@ -109,6 +135,18 @@ export function renderCategoryManager(){
         value="${state.categoryManagerSearch || ""}"
         oninput="searchCategoryManager(this.value)"
       >
+
+      <div class="categoryManagerSort">
+        <span>Sorter:</span>
+        <button type="button" class="categoryManagerSortButton" onclick="toggleCategoryManagerSortDropdown()">
+          \${(state.categoryManagerItemSort === "name" ? "Alfabetisk" : state.categoryManagerItemSort === "createdAt" ? "Lagt til" : "Elo")} <span>⌄</span>
+        </button>
+        <div id="categoryManagerSortMenu" class="categoryManagerSortMenu hidden">
+          <div onclick="setCategoryManagerItemSort('name')">Alfabetisk</div>
+          <div onclick="setCategoryManagerItemSort('createdAt')">Lagt til</div>
+          <div onclick="setCategoryManagerItemSort('elo')">Elo</div>
+        </div>
+      </div>
 
       <div class="categoryManagerItems">
         ${items.map(item => {
