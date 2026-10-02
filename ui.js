@@ -77,10 +77,8 @@ export function setMode(mode, menuEl = null){
     const el = document.getElementById("tournamentSection");
     if (el) el.style.display = "block";
 
-    // Always start at the gamemode selection when entering the tournament page.
-    state.tournament.phase = "hub";
-    state.tournament.mode = null;
-    state.tournament.category = null;
+    // Show the gamemode hub without deleting an unfinished tournament.
+    state.tournament.showTournamentHub = true;
 
     renderTournament();
   }
