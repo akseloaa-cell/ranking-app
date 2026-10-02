@@ -31,7 +31,8 @@ export const state = {
     nextRoundPool: [],
     bracketHistory: [],
     dailyDate: null,
-    dailyCompletedDate: null
+    dailyCompletedDate: null,
+    showTournamentHub: false
   }
 };
 
