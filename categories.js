@@ -34,9 +34,15 @@ export function openCategoryManager(){
   renderCategoryManager();
 }
 
+export function searchCategoryManagerCategory(query){
+  state.categoryManagerCategorySearch = query;
+  renderCategoryManager();
+}
+
 export function selectCategoryManagerCategory(category){
   state.categoryManagerCategory = category;
   state.categoryManagerSearch = "";
+  state.categoryManagerCategorySearch = "";
   renderCategoryManager();
 }
 
@@ -69,6 +75,8 @@ export function renderCategoryManager(){
   const categories = [...state.categories];
   const selected = state.categoryManagerCategory || categories[0] || "";
   const q = (state.categoryManagerSearch || "").trim().toLowerCase();
+  const categoryQuery = (state.categoryManagerCategorySearch || "").trim().toLowerCase();
+  const visibleCategories = categories.filter(category => !categoryQuery || category.toLowerCase().includes(categoryQuery));
 
   const items = state.items.filter(item =>
     !q || item.name.toLowerCase().includes(q)
@@ -85,7 +93,8 @@ export function renderCategoryManager(){
         <span>⌄</span>
       </button>
       <div id="categoryManagerDropdownMenu" class="categoryManagerDropdownMenu hidden">
-        ${categories.map(category => `
+        <input class="categoryManagerCategorySearch" placeholder="Søk kategori..." value="${state.categoryManagerCategorySearch || ""}" oninput="searchCategoryManagerCategory(this.value)" onclick="event.stopPropagation()">
+        ${visibleCategories.map(category => `
           <div class="categoryManagerOption ${category === selected ? "active" : ""}" onclick="selectCategoryManagerCategory('${category.replace(/'/g, "\\'")}')">
             ${category}
           </div>
