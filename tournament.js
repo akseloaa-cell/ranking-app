@@ -93,6 +93,7 @@ state.tournament.mode === "category"
 
 <select
 id="tournamentCategory"
+onchange="updateTournamentSizeOptions()"
 >
 
 ${categories.map(cat=>`
@@ -428,7 +429,14 @@ export function updateTournamentSizeOptions(){
   const sizeSelect = document.getElementById("tournamentSize");
   if(!sizeSelect) return;
 
-  const sizes = getAllowedSizes(getTournamentPool().length);
+  let poolLength = state.items.length;
+  if(state.tournament.mode === "category"){
+    const categorySelect = document.getElementById("tournamentCategory");
+    const category = categorySelect?.value;
+    poolLength = state.items.filter(item => item.categories?.includes(category)).length;
+  }
+
+  const sizes = getAllowedSizes(poolLength);
   const current = Number(sizeSelect.value);
 
   sizeSelect.innerHTML = sizes.map(size =>
