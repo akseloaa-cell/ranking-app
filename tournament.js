@@ -229,13 +229,11 @@ export function renderTournament(){
       state.tournament.category = categories[0];
     }
 
-    let pool = [...state.items];
+    let pool = getTournamentPool();
 
-    if (state.tournament.mode === "category") {
-      pool = pool.filter(item =>
-        item.categories?.includes(state.tournament.category)
-      );
-    }
+    const dailyConfig = state.tournament.mode === "daily"
+      ? getDailyConfig()
+      : null;
 
     const sizes =
       getAllowedSizes(
@@ -654,21 +652,42 @@ function drawTournamentBracketLines(){
 export function startTournament(){
 
   let pool = getTournamentPool();
+  const dailyConfig = state.tournament.mode === "daily" ? getDailyConfig() : null;
 
-  pool = shuffle(pool);
+  if (dailyConfig) {
+    pool = getDailyParticipantPool(pool, dailyConfig);
+  } else {
+    pool = shuffle(pool);
+  }
 
   const maxPossible = pool.length;
   const allowedSizes = getAllowedSizes(maxPossible);
-  const requestedSize = Number(state.tournament.size);
-  const size = allowedSizes.includes(requestedSize)
-    ? requestedSize
-    : (allowedSizes[allowedSizes.length - 1] || 0);
+  let size;
 
-  if (size < 4) {
+  if (dailyConfig) {
+    if (dailyConfig.size === "random") {
+      const seed = getTodayKey().split("-").reduce((a, b) => a * 31 + Number(b), 17);
+      const random = seededRandom(seed);
+      size = allowedSizes[Math.floor(random() * allowedSizes.length)] || 0;
+    } else {
+      size = Number(dailyConfig.size);
+    }
+  } else {
+    const requestedSize = Number(state.tournament.size);
+    size = allowedSizes.includes(requestedSize)
+      ? requestedSize
+      : (allowedSizes[allowedSizes.length - 1] || 0);
+  }
+
+  if (size < 4 || (dailyConfig && pool.length < size)) {
     return;
   }
 
-  const participants = pool.slice(0, size);
+  let participants = pool.slice(0, size);
+
+  if (dailyConfig) {
+    participants = orderDailyParticipants(participants, dailyConfig);
+  }
 
   state.tournament.participants = participants;
   state.tournament.originalParticipants = [...participants];
@@ -782,8 +801,10 @@ export function updateTournamentSizeOptions(){
 }
 export function confirmTournamentSetup(){
   const pool = getTournamentPool();
-  if (pool.length < 4) {
-    return;
+  if (pool.length < 4) return;
+  if (state.tournament.mode === "daily") {
+    const filtered = getDailyParticipantPool(pool, getDailyConfig());
+    if (filtered.length < 4) return;
   }
   startTournament();
 }
@@ -865,6 +886,90 @@ if (isSemiFinal) {
 
   save();
   renderTournament();
+}
+
+function getDailyParticipantPool(pool, config){
+  if (!config) return pool;
+
+  let candidates = [...pool];
+
+  if (config.participants === "underdogs") {
+    candidates = candidates.filter(item => (item.rating || 1000) <= 1000);
+  } else if (config.participants === "elite") {
+    candidates = candidates.filter(item => (item.rating || 1000) >= 1100);
+  } else if (config.participants === "fresh") {
+    const cutoff = Date.now() - (30 * 24 * 60 * 60 * 1000);
+    candidates = candidates.filter(item => item.createdAt && new Date(item.createdAt).getTime() >= cutoff);
+  } else if (config.participants === "unplayed") {
+    candidates.sort((a, b) => (a.tournamentsPlayed || 0) - (b.tournamentsPlayed || 0));
+  } else if (config.participants === "comeback") {
+    candidates.sort((a, b) => ((b.tournamentsPlayed || 0) - (b.tournamentWins || 0)) - ((a.tournamentsPlayed || 0) - (a.tournamentWins || 0)));
+  } else if (config.participants === "revenge") {
+    candidates.sort((a, b) => ((b.tournamentsPlayed || 0) - (b.tournamentWins || 0)) - ((a.tournamentsPlayed || 0) - (a.tournamentWins || 0)));
+  } else if (config.participants === "veterans") {
+    candidates = candidates.filter(item => (item.tournamentsPlayed || 0) >= 5);
+  } else if (config.participants === "undefeated") {
+    candidates = candidates.filter(item => (item.tournamentsPlayed || 0) === (item.tournamentWins || 0));
+  } else if (config.participants === "category") {
+    const categories = [...new Set(candidates.flatMap(item => item.categories || []))];
+    const valid = categories.filter(category =>
+      candidates.filter(item => item.categories?.includes(category)).length >= 4
+    );
+    if (valid.length) {
+      const seed = getTodayKey().split("-").reduce((a, b) => a * 31 + Number(b), 17);
+      const category = dailyShuffle(valid, seed)[0];
+      candidates = candidates.filter(item => item.categories?.includes(category));
+    }
+  } else if (config.participants === "category_mix") {
+    const categories = [...new Set(candidates.flatMap(item => item.categories || []))];
+    const valid = categories.filter(category =>
+      candidates.filter(item => item.categories?.includes(category)).length >= 2
+    );
+    if (valid.length >= 2) {
+      const seed = getTodayKey().split("-").reduce((a, b) => a * 31 + Number(b), 17);
+      const chosen = dailyShuffle(valid, seed).slice(0, 2);
+      candidates = candidates.filter(item =>
+        item.categories?.some(category => chosen.includes(category))
+      );
+    }
+  }
+
+  return candidates;
+}
+
+function orderDailyParticipants(participants, config){
+  let result = [...participants];
+  const seed = getTodayKey().split("-").reduce((a, b) => a * 31 + Number(b), 17);
+
+  if (config.matchups === "seeded") {
+    result.sort((a, b) => (b.rating || 1000) - (a.rating || 1000));
+    const ordered = [];
+    const n = result.length;
+    for (let i = 0; i < n / 2; i++) {
+      ordered.push(result[i], result[n - 1 - i]);
+    }
+    return ordered;
+  }
+
+  if (config.matchups === "elo_clash") {
+    result.sort((a, b) => (b.rating || 1000) - (a.rating || 1000));
+    const ordered = [];
+    for (let i = 0; i < result.length / 2; i++) {
+      ordered.push(result[i], result[result.length - 1 - i]);
+    }
+    return ordered;
+  }
+
+  if (config.matchups === "close_elo") {
+    result.sort((a, b) => (a.rating || 1000) - (b.rating || 1000));
+    const ordered = [];
+    for (let i = 0; i < result.length; i += 2) {
+      ordered.push(result[i], result[i + 1]);
+    }
+    return ordered;
+  }
+
+  return dailyShuffle(result, seed);
 }
 
 function getTournamentPool(){
@@ -952,8 +1057,16 @@ function applyTournamentElo(participants, avg){
 
   // Participants are passed in final placement order:
   // 1st, 2nd, 3rd.
+  const dailyRewards = {
+    normal: [45, 30, 15],
+    plus: [55, 35, 20],
+    double: [90, 60, 30],
+    winner: [75, 30, 15],
+    podium: [60, 40, 25]
+  };
+
   const rewards = state.tournament.mode === "daily"
-    ? [45, 30, 15]
+    ? (dailyRewards[getDailyConfig().rewards] || dailyRewards.normal)
     : [30, 20, 10];
 
   participants.slice(0, 3).forEach((item, i) => {
