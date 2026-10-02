@@ -48,10 +48,23 @@ const DAILY_CONFIGS = [
 ];
 
 function getDailyConfig(dateKey = getTodayKey()){
-  const hash = Array.from(dateKey).reduce((hash, char) =>
-    ((hash << 5) - hash + char.charCodeAt(0)) | 0, 0);
-  const index = Math.abs(hash) % DAILY_CONFIGS.length;
-  return DAILY_CONFIGS[index];
+  const [year, month, day] = dateKey.split("-").map(Number);
+  const date = new Date(year, month - 1, day);
+  const epoch = new Date(2026, 0, 1);
+  const dayNumber = Math.floor((date - epoch) / 86400000);
+  const cycle = Math.floor(dayNumber / DAILY_CONFIGS.length);
+  const position = ((dayNumber % DAILY_CONFIGS.length) + DAILY_CONFIGS.length) % DAILY_CONFIGS.length;
+
+  let seed = Math.abs(cycle) + 1;
+  const order = DAILY_CONFIGS.map((_, index) => index);
+  const random = seededRandom(seed);
+
+  for(let i = order.length - 1; i > 0; i--){
+    const j = Math.floor(random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+
+  return DAILY_CONFIGS[order[position]];
 }
 
 function getDailyRuleText(config){
@@ -907,7 +920,7 @@ function getDailyParticipantPool(pool, config){
   } else if (config.participants === "comeback") {
     candidates.sort((a, b) => ((b.tournamentsPlayed || 0) - (b.tournamentWins || 0)) - ((a.tournamentsPlayed || 0) - (a.tournamentWins || 0)));
   } else if (config.participants === "revenge") {
-    candidates.sort((a, b) => ((b.tournamentsPlayed || 0) - (b.tournamentWins || 0)) - ((a.tournamentsPlayed || 0) - (a.tournamentWins || 0)));
+    candidates = candidates.filter(item => item.lastTournamentResult === "loss");
   } else if (config.participants === "veterans") {
     candidates = candidates.filter(item => (item.tournamentsPlayed || 0) >= 5);
   } else if (config.participants === "undefeated") {
@@ -1133,6 +1146,15 @@ if (next.length === 1) {
   );
 
   t.phase = "finished";
+
+  const winnerId = final.id;
+  state.tournament.originalParticipants.forEach(item => {
+    item.lastTournamentResult = item.id === winnerId ? "win" : "loss";
+    if (item.id !== winnerId) {
+      item.tournamentLosses = (item.tournamentLosses || 0) + 1;
+    }
+  });
+
   if (t.mode === "daily") {
     t.dailyCompletedDate = getTodayKey();
   }
