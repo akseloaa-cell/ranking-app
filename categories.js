@@ -40,18 +40,35 @@ export function searchCategoryManagerCategory(query){
   if(menu) menu.classList.remove("hidden");
 
   const q = String(query || "").trim().toLowerCase();
-  document.querySelectorAll(".categoryManagerOption").forEach(option => {
+  const menu = document.getElementById("categoryManagerDropdownMenu");
+  if (!menu) return;
+
+  if (!q) {
+    const categories = [...state.categories];
+    const selected = state.categoryManagerCategory || "";
+    const input = menu.querySelector(".categoryManagerCategorySearch");
+
+    menu.querySelectorAll(".categoryManagerOption").forEach(option => option.remove());
+
+    const html = categories.map(category => {
+      const count = state.items.filter(item => (item.categories || []).includes(category)).length;
+      const safeCategory = JSON.stringify(category).replace(/</g, "\\u003c");
+      return `
+        <div class="categoryManagerOption ${category === selected ? "active" : ""}" onclick="selectCategoryManagerCategory(${safeCategory})">
+          <span>${category}</span>
+          <span class="categoryManagerOptionCount">${count}</span>
+        </div>`;
+    }).join("");
+
+    if (input) input.insertAdjacentHTML("afterend", html);
+    return;
+  }
+
+  menu.querySelectorAll(".categoryManagerOption").forEach(option => {
     const text = option.querySelector("span")?.textContent?.toLowerCase() || option.textContent.toLowerCase();
-    if (!q) {
-      option.removeAttribute("hidden");
-      option.style.display = "";
-    } else if (text.includes(q)) {
-      option.removeAttribute("hidden");
-      option.style.display = "";
-    } else {
-      option.setAttribute("hidden", "");
-      option.style.display = "none";
-    }
+    option.removeAttribute("hidden");
+    option.style.display = text.includes(q) ? "" : "none";
+    if (!text.includes(q)) option.setAttribute("hidden", "");
   });
 }
 
