@@ -294,78 +294,94 @@ ${match.b.name}
 
 function renderBracket(){
 
-  const root =
-    document.getElementById(
-      "bracketView"
-    );
-
+  const root = document.getElementById("bracketView");
   if(!root) return;
 
-  if (
-  state.tournament.phase
-  !==
-  "active"
-){
+  const t = state.tournament;
+  const history = t.bracketHistory || [];
 
-  root.innerHTML = "";
-
-  return;
-
-}
-  
-  const t =
-    state.tournament;
-
-  if(
-    !t.matches
-    ||
-    !t.matches.length
-  ){
-
+  if(!history.length){
     root.innerHTML = "";
-
     return;
-
   }
 
-  root.innerHTML = `
+  const getRoundName = (round) => {
+    const count = round.matches?.length || 0;
+    if(count === 1) return "Final";
+    if(count === 2) return "Semifinals";
+    if(count === 4) return "Quarterfinals";
+    if(count === 8) return "Round of 16";
+    if(count === 16) return "Round of 32";
+    return "Round";
+  };
 
-<h3>
-Round ${t.round}
-</h3>
+  const itemId = item => String(item?.id);
 
-${t.matches.map((m,i)=>`
+  const renderMatch = (match, roundIndex, matchIndex) => {
+    const winnerId = match.winner ? itemId(match.winner) : null;
+    const isCurrent =
+      t.phase === "active" &&
+      roundIndex === history.length - 1 &&
+      matchIndex === t.currentMatch;
 
-<div
-class="
-bracketMatch
-${
-i===t.currentMatch
-?
-" active"
-:
-""
-}
-">
+    const player = item => {
+      if(!item) return "";
 
-<div>
+      const won = winnerId === itemId(item);
+      const lost = winnerId && !won;
 
-${m.a.name}
+      return '<div class="tournamentBracketPlayer ' + (won ? "winner" : "") + ' ' + (lost ? "loser" : "") + '">' +
+        '<span>' + item.name + '</span>' +
+        (won ? '<span class="tournamentBracketCheck">✓</span>' : "") +
+      '</div>';
+    };
 
-</div>
+    return '<div class="tournamentBracketMatch ' + (isCurrent ? "current" : "") + ' ' + (winnerId ? "completed" : "") + '">' +
+      player(match.a) +
+      '<div class="tournamentBracketDivider"></div>' +
+      player(match.b) +
+    '</div>';
+  };
 
-<div>
+  const roundsHtml = history.map((round, roundIndex) =>
+    '<div class="tournamentBracketRound">' +
+      '<div class="tournamentBracketRoundTitle">' + getRoundName(round) + '</div>' +
+      '<div class="tournamentBracketMatches">' +
+        (round.matches || []).map((match, matchIndex) =>
+          renderMatch(match, roundIndex, matchIndex)
+        ).join("") +
+      '</div>' +
+    '</div>'
+  ).join("");
 
-${m.b.name}
+  const thirdPlaceHtml = (t.thirdPlaceMatch && (t.phase === "thirdPlace" || t.phase === "finished"))
+    ? '<div class="tournamentThirdPlaceBracket">' +
+        '<div class="tournamentBracketRoundTitle">3rd Place</div>' +
+        '<div class="tournamentBracketMatch ' + (t.phase === "thirdPlace" ? "current" : "completed") + '">' +
+          '<div class="tournamentBracketPlayer ' + (t.thirdPlaceWinner?.id === t.thirdPlaceMatch.a?.id ? "winner" : "") + '">' +
+            '<span>' + t.thirdPlaceMatch.a.name + '</span>' +
+            (t.thirdPlaceWinner?.id === t.thirdPlaceMatch.a?.id ? '<span class="tournamentBracketCheck">✓</span>' : "") +
+          '</div>' +
+          '<div class="tournamentBracketDivider"></div>' +
+          '<div class="tournamentBracketPlayer ' + (t.thirdPlaceWinner?.id === t.thirdPlaceMatch.b?.id ? "winner" : "") + '">' +
+            '<span>' + t.thirdPlaceMatch.b.name + '</span>' +
+            (t.thirdPlaceWinner?.id === t.thirdPlaceMatch.b?.id ? '<span class="tournamentBracketCheck">✓</span>' : "") +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    : "";
 
-</div>
-
-</div>
-
-`).join("")}
-
-`;
-
+  root.innerHTML =
+    '<div class="tournamentBracketHeader">' +
+      '<h3>Bracket</h3>' +
+      '<span>' + (t.originalParticipants?.length || 0) + ' deltakere</span>' +
+    '</div>' +
+    '<div class="tournamentBracketScroll">' +
+      '<div class="tournamentBracket">' +
+        roundsHtml +
+        thirdPlaceHtml +
+      '</div>' +
+    '</div>';
 }
 
 export function startTournament(){
