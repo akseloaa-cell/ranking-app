@@ -98,22 +98,7 @@ state.tournament.mode === "category"
 
 <p>Velg kategori</p>
 
-<select
-id="tournamentCategory"
-onchange="updateTournamentSizeOptions()"
->
-
-${categories.map(cat=>`
-
-<option
-value="${cat}"
->
-${cat}
-</option>
-
-`).join("")}
-
-</select>
+${renderTournamentDropdown("tournamentCategoryDropdown", state.tournament.category || categories[0] || "", categories, "category")}
 
 `
 
@@ -124,19 +109,7 @@ ${cat}
 
 <p>Antall deltakere</p>
 
-<select id="tournamentSize">
-
-${sizes.map(s=>`
-
-<option
-value="${s}"
->
-${s}
-</option>
-
-`).join("")}
-
-</select>
+${renderTournamentDropdown("tournamentSizeDropdown", sizes.includes(state.tournament.size) ? state.tournament.size : (sizes[0] || ""), sizes, "size")}
 
 <br><br>
 
@@ -432,69 +405,61 @@ export function startTournament(){
   renderTournament();
 }
 
+export function toggleTournamentDropdown(id){
+  const menu = document.getElementById(id);
+  if(!menu) return;
+  document.querySelectorAll(".tournamentDropdownMenu").forEach(el => {
+    if(el !== menu) el.classList.add("hidden");
+  });
+  menu.classList.toggle("hidden");
+}
+
+export function selectTournamentDropdown(type, index){
+  if(type === "category"){
+    const categories = [...new Set(state.items.flatMap(x => x.categories || []))];
+    state.tournament.category = categories[index] || "";
+    save();
+    renderTournament();
+    return;
+  }
+
+  if(type === "size"){
+    const poolLength = state.tournament.mode === "category"
+      ? state.items.filter(item => item.categories?.includes(state.tournament.category)).length
+      : state.items.length;
+    const sizes = getAllowedSizes(poolLength);
+    state.tournament.size = Number(sizes[index]);
+    save();
+    document.querySelectorAll(".tournamentDropdownMenu").forEach(el => el.classList.add("hidden"));
+    renderTournament();
+  }
+}
+
+function renderTournamentDropdown(id, selected, options, type){
+  const selectedIndex = options.findIndex(option => String(option) === String(selected));
+  return `
+<div class="tournamentDropdown">
+  <button type="button" class="tournamentDropdownButton" onclick="toggleTournamentDropdown('${id}Menu')">
+    <span>${selected || "Velg..."}</span>
+    <span>⌄</span>
+  </button>
+  <div id="${id}Menu" class="tournamentDropdownMenu hidden">
+    ${options.map((option, index) => `
+      <div class="tournamentDropdownOption ${index === selectedIndex ? "active" : ""}" onclick="selectTournamentDropdown('${type}', ${index})">
+        ${option}
+      </div>
+    `).join("")}
+  </div>
+</div>
+`;
+}
+
 export function updateTournamentSizeOptions(){
-  const sizeSelect = document.getElementById("tournamentSize");
-  if(!sizeSelect) return;
-
-  let poolLength = state.items.length;
-  if(state.tournament.mode === "category"){
-    const categorySelect = document.getElementById("tournamentCategory");
-    const category = categorySelect?.value;
-    poolLength = state.items.filter(item => item.categories?.includes(category)).length;
-  }
-
-  const sizes = getAllowedSizes(poolLength);
-  const current = Number(sizeSelect.value);
-
-  sizeSelect.innerHTML = sizes.map(size =>
-    '<option value="' + size + '">' + size + '</option>'
-  ).join("");
-
-  if(sizes.includes(current)){
-    sizeSelect.value = String(current);
-  }
+  renderTournament();
 }
-
 export function confirmTournamentSetup(){
-
-  const size =
-    document.getElementById(
-      "tournamentSize"
-    );
-
-  if(size){
-
-    state.tournament.size =
-      Number(
-        size.value
-      );
-
-  }
-
-  if(
-    state.tournament.mode
-    ===
-    "category"
-  ){
-
-    const cat =
-      document.getElementById(
-        "tournamentCategory"
-      );
-
-    if(cat){
-
-      state.tournament.category =
-        cat.value;
-
-    }
-
-  }
-
   startTournament();
-
 }
-
 export function backTournament(){
 
   state.tournament.phase = "hub";
