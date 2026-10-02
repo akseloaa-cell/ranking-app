@@ -312,6 +312,23 @@ ${["active", "thirdPlace"].includes(state.tournament.phase) ? `<button class="to
 <div class="dailySetupView">
 <button class="dailySetupBack" onclick="backTournament()">← Tilbake</button>
 
+${state.tournament.mode === "random" ? `<div class="dailySetupHeader randomSetupHeader">
+  <div class="dailySetupIcon randomSetupIcon">🎲</div>
+  <div>
+    <h2>Random Tournament</h2>
+    <span class="randomSetupSubtitle">Tilfeldige deltakere fra alle items</span>
+  </div>
+</div>
+
+<div class="dailySetupCard randomSetupCard">
+  <div class="dailySetupName">Turneringsoppsett</div>
+  <div class="dailySetupMeta">Velg hvor mange som skal delta</div>
+  <div class="dailyRuleList">
+    <div class="dailyRuleItem"><div class="dailyRuleRow randomSetupInfoRow"><span>👥</span><span><small>Deltakere</small><strong>Tilfeldig utvalg</strong></span></div></div>
+    <div class="dailyRuleItem"><div class="dailyRuleRow randomSetupInfoRow"><span>🎯</span><span><small>Matchups</small><strong>Tilfeldige</strong></span></div></div>
+  </div>
+</div>` : ""}
+
 ${state.tournament.mode === "daily" ? `<div class="dailySetupHeader">
   <div class="dailySetupIcon">🌟</div>
   <div>
