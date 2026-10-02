@@ -188,17 +188,20 @@ export function renderCategoryManager(){
       >
 
       <div class="categoryManagerSort">
-        <span>Sorter:</span>
+        <span class="categoryManagerSortLabel">Sorter etter</span>
         <button type="button" class="categoryManagerSortButton" onclick="toggleCategoryManagerSortDropdown()">
-          ${(state.categoryManagerItemSort === "name" ? (state.categoryManagerItemSortDir === "desc" ? "Å–A" : "A–Å") : state.categoryManagerItemSort === "createdAt" ? "Lagt til" : "Elo")} <span>⌄</span>
+          <span class="categoryManagerSortCurrent">
+            <span class="categoryManagerSortCurrentIcon">↕</span>
+            <span>${(state.categoryManagerItemSort === "name" ? (state.categoryManagerItemSortDir === "desc" ? "Å–A" : "A–Å") : state.categoryManagerItemSort === "createdAt" ? "Lagt til" : "Elo")}</span>
+          </span>
+          <span class="categoryManagerSortChevron">⌄</span>
         </button>
         <div id="categoryManagerSortMenu" class="categoryManagerSortMenu hidden">
-          <div onclick="setCategoryManagerItemSort('name')">A–Å</div>
-          <div onclick="setCategoryManagerItemSort('name'); toggleCategoryManagerItemSortDir()">Å–A</div>
-          <div onclick="setCategoryManagerItemSort('createdAt')">Lagt til</div>
-          <div onclick="setCategoryManagerItemSort('elo')">Elo</div>
-        </div>
-      </div>
+          <div class="${state.categoryManagerItemSort === "name" && state.categoryManagerItemSortDir !== "desc" ? "active" : ""}" onclick="setCategoryManagerItemSort('name')"><span>A–Å</span><span>✓</span></div>
+          <div class="${state.categoryManagerItemSort === "name" && state.categoryManagerItemSortDir === "desc" ? "active" : ""}" onclick="setCategoryManagerItemSort('name'); toggleCategoryManagerItemSortDir()"><span>Å–A</span><span>✓</span></div>
+          <div class="${state.categoryManagerItemSort === "createdAt" ? "active" : ""}" onclick="setCategoryManagerItemSort('createdAt')"><span>Lagt til</span><span>✓</span></div>
+          <div class="${state.categoryManagerItemSort === "elo" ? "active" : ""}" onclick="setCategoryManagerItemSort('elo')"><span>Elo</span><span>✓</span></div>
+        </div>     </div>
 
       <div class="categoryManagerItems">
         ${items.map(item => {
