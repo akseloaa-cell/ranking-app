@@ -92,6 +92,7 @@ window.openCategoryManager = openCategoryManager;
 window.selectCategoryManagerCategory = selectCategoryManagerCategory;
 window.toggleItemInCategory = toggleItemInCategory;
 window.searchCategoryManager = searchCategoryManager;
+window.searchCategoryManagerCategory = searchCategoryManagerCategory;
 window.renderCategoryManager = renderCategoryManager;
 window.toggleCategoryManagerDropdown = toggleCategoryManagerDropdown;
 
