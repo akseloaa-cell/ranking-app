@@ -341,12 +341,14 @@ ${renderTournamentDropdown("tournamentCategoryDropdown", state.tournament.catego
 ""
 }
 
+${state.tournament.mode !== "daily" ? `
 <p>Antall deltakere</p>
 
 ${sizes.length
   ? renderTournamentDropdown("tournamentSizeDropdown", sizes.includes(state.tournament.size) ? state.tournament.size : sizes[0], sizes, "size")
   : '<p style="opacity:.6;">Du trenger minst 4 items for å starte en turnering.</p>'
 }
+` : ""}
 
 <br><br>
 
