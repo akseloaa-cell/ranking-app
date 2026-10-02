@@ -36,7 +36,14 @@ export function openCategoryManager(){
 
 export function searchCategoryManagerCategory(query){
   state.categoryManagerCategorySearch = query;
-  renderCategoryManager();
+  const menu = document.getElementById("categoryManagerDropdownMenu");
+  if(menu) menu.classList.remove("hidden");
+
+  const q = String(query || "").trim().toLowerCase();
+  document.querySelectorAll(".categoryManagerOption").forEach(option => {
+    const text = option.querySelector("span")?.textContent?.toLowerCase() || option.textContent.toLowerCase();
+    option.style.display = !q || text.includes(q) ? "" : "none";
+  });
 }
 
 export function selectCategoryManagerCategory(category){
@@ -83,7 +90,12 @@ export function toggleCategoryManagerSortDropdown(){
 
 export function searchCategoryManager(query){
   state.categoryManagerSearch = query;
-  renderCategoryManager();
+
+  const q = String(query || "").trim().toLowerCase();
+  document.querySelectorAll(".categoryManagerItem").forEach(item => {
+    const text = item.querySelector("span")?.textContent?.toLowerCase() || item.textContent.toLowerCase();
+    item.style.display = !q || text.includes(q) ? "" : "none";
+  });
 }
 
 export function renderCategoryManager(){
@@ -146,7 +158,7 @@ export function renderCategoryManager(){
         class="categoryManagerSearch"
         placeholder="Søk item..."
         value="${state.categoryManagerSearch || ""}"
-        oninput="searchCategoryManager(this.value)"
+        oninput="event.stopPropagation(); searchCategoryManager(this.value)"
       >
 
       <div class="categoryManagerSort">
