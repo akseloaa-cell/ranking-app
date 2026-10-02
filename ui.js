@@ -13,11 +13,12 @@ export function openAddItem(){
     view.style.transform = "translateY(0)";
   }, 10);
   renderChips({
-  filter: "",
-  targetId: "chipBox",
-  mode: "select"
-});
+    filter: "",
+    targetId: "chipBox",
+    mode: "select"
+  });
 
+  renderItemSuggestions("");
 }
 
 export function closeAddItem(){
@@ -50,13 +51,13 @@ export function setMode(mode, menuEl = null){
 
   setActiveMenu(menuEl);
 
-const views = [
-  "homeView",
-  "categorySelectView",
-  "categoryBattleView",
-  "tournamentSection",
-  "categoryManagerView"
-];
+  const views = [
+    "homeView",
+    "categorySelectView",
+    "categoryBattleView",
+    "tournamentSection",
+    "categoryManagerView"
+  ];
 
   views.forEach(id => {
     const el = document.getElementById(id);
@@ -71,14 +72,10 @@ const views = [
     nextMatch();
   }
 
-if (mode === "tournament"){
-
-  const el =
-    document.getElementById("tournamentSection");
-
-  if (el) el.style.display = "block";
-
-}
+  if (mode === "tournament"){
+    const el = document.getElementById("tournamentSection");
+    if (el) el.style.display = "block";
+  }
 
   if (mode === "categorySelect"){
     const el = document.getElementById("categorySelectView");
@@ -111,7 +108,7 @@ export function scrollToTop(){
 export function renderChips({
   filter = "",
   targetId,
-  mode = "select", // select | add | filter
+  mode = "select",
   itemId = null
 }) {
   const box = document.getElementById(targetId);
@@ -121,7 +118,6 @@ export function renderChips({
 
   let list = state.categories.filter(c => c.toLowerCase().includes(f));
 
-  // 🔥 riktig toggle basert på hvor vi er
   let showAll =
     targetId === "chipBox" ? state.showAllAddChips :
     targetId === "statsChipBox" ? state.showAllStatsChips :
@@ -129,9 +125,9 @@ export function renderChips({
 
   if (!showAll) list = list.slice(0, 6);
 
-const selected = itemId
-  ? (state.items.find(x => x.id === itemId)?.categories || [])
-  : state.selectedCategories;
+  const selected = itemId
+    ? (state.items.find(x => x.id === itemId)?.categories || [])
+    : state.selectedCategories;
 
   box.innerHTML =
     list.map(c => {
@@ -164,7 +160,51 @@ const selected = itemId
     ` : "");
 }
 
-/* ================= TOGGLE ================= */
+export function renderItemSuggestions(query = ""){
+  const box = document.getElementById("itemSuggestions");
+  if(!box) return;
+
+  const q = query.trim().toLowerCase();
+  const matches = q
+    ? state.items
+        .filter(item => item.name.toLowerCase().includes(q))
+        .slice(0, 8)
+    : [];
+
+  if(!matches.length){
+    box.innerHTML = "";
+    box.style.display = "none";
+    return;
+  }
+
+  box.innerHTML = matches.map(item => `
+    <div class="itemSuggestion" onclick="selectItemSuggestion(${item.id})">
+      <span>${escapeHtml(item.name)}</span>
+      <span class="itemSuggestionStatus">Allerede lagt til</span>
+    </div>
+  `).join("");
+
+  box.style.display = "block";
+}
+
+export function selectItemSuggestion(itemId){
+  const item = state.items.find(x => x.id === itemId);
+  const input = document.getElementById("itemInput");
+  if(!item || !input) return;
+
+  input.value = item.name;
+  input.focus();
+  renderItemSuggestions(item.name);
+}
+
+function escapeHtml(value){
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 export function toggleAllChips(targetId, mode, itemId){
   if(targetId === "chipBox"){
@@ -184,8 +224,6 @@ export function toggleAllChips(targetId, mode, itemId){
     itemId
   });
 }
-
-/* ================= SELECT CHIP ================= */
 
 export function toggleChip(el){
 
