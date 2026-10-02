@@ -16,13 +16,11 @@ body {
   box-sizing: border-box;
 }
 
-/* HEADLINE */
 h2, h3 {
   font-weight: 700;
   letter-spacing: 0.5px;
 }
 
-/* INPUTS */
 input {
   width: 80%;
   margin: 8px auto;
@@ -41,7 +39,6 @@ input:focus {
   box-shadow: 0 0 0 2px rgba(79,140,255,0.2);
 }
 
-/* BUTTONS */
 button {
   width: 80%;
   margin: 8px auto;
@@ -64,7 +61,6 @@ button:active {
   transform: scale(0.98);
 }
 
-/* CHIPS */
 .chip-container {
   width: 80%;
   margin: 10px auto;
@@ -82,7 +78,7 @@ button:active {
   cursor: pointer;
   font-size: 13px;
   transition: 0.2s;
-   display: inline-flex;
+  display: inline-flex;
   align-items: center;
 }
 
@@ -92,7 +88,6 @@ button:active {
   color: white;
 }
 
-/* VS CARDS */
 .vs {
   width: 80%;
   margin: 20px auto;
@@ -121,7 +116,6 @@ button:active {
   transform: scale(0.97);
 }
 
-/* RANKING */
 #ranking {
   width: 80%;
   margin: 20px auto;
@@ -142,7 +136,6 @@ button:active {
   transform: translateX(2px);
 }
 
-/* BRACKET */
 .bracket {
   display: flex;
   overflow-x: auto;
@@ -171,7 +164,6 @@ button:active {
   box-shadow: 0 5px 20px rgba(0,0,0,0.4);
 }
 
-/* OVERLAY */
 #rankingOverlay,
 #statsOverlay {
   position: fixed;
@@ -179,14 +171,11 @@ button:active {
   left: 0;
   width: 100%;
   height: 100%;
-
   background: rgba(0,0,0,0.6);
   backdrop-filter: blur(6px);
-
   display: none;
   justify-content: center;
   align-items: flex-end;
-
   z-index: 999;
 }
 
@@ -194,10 +183,8 @@ button:active {
 #statsView {
   width: 100%;
   max-width: 460px;
-
   background: #0b0f1a;
   border-radius: 20px 20px 0 0;
-
   overflow-y: auto;
   transform: translateY(100%);
   transition: 0.3s ease;
@@ -211,7 +198,6 @@ button:active {
   height: 75%;
 }
 
-/* TOUCH */
 * {
   -webkit-tap-highlight-color: transparent;
 }
@@ -220,17 +206,13 @@ button:active {
   position: fixed;
   bottom: 20px;
   right: 20px;
-
   width: 56px;
   height: 56px;
-
   border-radius: 50%;
   font-size: 22px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 0;
 }
 
@@ -240,14 +222,11 @@ button:active {
   left: 0;
   width: 100%;
   height: 100%;
-
   background: rgba(0,0,0,0.6);
   backdrop-filter: blur(6px);
-
   display: none;
   justify-content: center;
   align-items: flex-end;
-
   z-index: 2000;
 }
 
@@ -255,15 +234,65 @@ button:active {
   width: 100%;
   max-width: 460px;
   height: 85%;
-
   background: #0b0f1a;
   border-radius: 20px 20px 0 0;
-
   padding: 15px;
   overflow-y: auto;
-
   transform: translateY(100%);
   transition: 0.3s ease;
+}
+
+.itemInputWrap {
+  position: relative;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.itemInputWrap input {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 8px 0 0;
+}
+
+#itemSuggestions {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 2px);
+  background: #151a24;
+  border: 1px solid #2a3142;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,.45);
+  z-index: 1100;
+  text-align: left;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.itemSuggestion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid #2a3142;
+  cursor: pointer;
+}
+
+.itemSuggestion:last-child {
+  border-bottom: none;
+}
+
+.itemSuggestion:hover {
+  background: #2a3142;
+}
+
+.itemSuggestionStatus {
+  font-size: 11px;
+  opacity: .55;
+  white-space: nowrap;
 }
 
 .modeBtn{
@@ -308,8 +337,6 @@ button:active {
   box-sizing: border-box;
 }
 
-/* ================= CATEGORY VS ================= */
-
 #categorySelectView,
 #categoryBattleView{
   padding:20px;
@@ -318,8 +345,6 @@ button:active {
   background:#0f1115;
   color:white;
 }
-
-/* ================= SELECT ================= */
 
 .vs-header{
   margin-bottom:20px;
@@ -349,8 +374,6 @@ button:active {
 .vs-category-card:hover{
   transform:scale(1.02);
 }
-
-/* ================= BATTLE ================= */
 
 .battle-topbar{
   display:flex;
@@ -464,7 +487,6 @@ button:active {
 }
 
 @media (max-width: 768px) {
-
   #battleArena {
     flex-direction: column;
     align-items: stretch;
@@ -480,7 +502,6 @@ button:active {
     width: 100%;
     box-sizing: border-box;
   }
-
 }
 
 .sortDropdown {
@@ -574,13 +595,9 @@ button:active {
 
 .tournamentMatch{
   display:flex;
-
   gap:10px;
-
   margin:12px 0;
-
   justify-content:center;
-
   align-items:center;
 }
 
@@ -601,28 +618,17 @@ button:active {
 }
 
 .bracketMatch{
-
-padding:12px;
-
-margin:10px 0;
-
-background:#1f1f1f;
-
-border-radius:12px;
-
-opacity:.5;
-
+  padding:12px;
+  margin:10px 0;
+  background:#1f1f1f;
+  border-radius:12px;
+  opacity:.5;
 }
 
 .bracketMatch.active{
-
-opacity:1;
-
-border:2px solid #4f8cff;
-
+  opacity:1;
+  border:2px solid #4f8cff;
 }
-
-/* ================= TOURNAMENT DROPDOWNS ================= */
 
 .tournamentDropdown{
   position:relative;
@@ -675,14 +681,12 @@ border:2px solid #4f8cff;
   font-weight:600;
 }
 
-
 .tournamentDropdownButton,
 .tournamentDropdownOption{
   touch-action: manipulation;
   -webkit-user-select: none;
   user-select: none;
 }
-
 
 .tournamentDropdownSearch{
   width:100%;
@@ -705,9 +709,6 @@ border:2px solid #4f8cff;
   max-height:300px;
   overflow-y:auto;
 }
-
-
-/* ================= CATEGORY MANAGER ================= */
 
 .categoryManagerDropdown{
   position:relative;
