@@ -29,7 +29,9 @@ export const state = {
     round: 1,
     currentMatch: 0,
     nextRoundPool: [],
-    bracketHistory: []
+    bracketHistory: [],
+    dailyDate: null,
+    dailyCompletedDate: null
   }
 };
 
