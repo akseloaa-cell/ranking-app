@@ -1451,3 +1451,16 @@ button:active {
 .randomSetupParticipants .tournamentDropdown{
   margin:0 auto;
 }
+
+.randomSetupCard .dailyRuleList{
+  align-items:center;
+}
+
+.randomSetupCard .dailyRuleItem{
+  width:100%;
+  max-width:340px;
+}
+
+.randomSetupCard .dailyRuleRow{
+  box-sizing:border-box;
+}
