@@ -1305,7 +1305,7 @@ button:active {
   margin:0 auto;
   display:flex;
   flex-direction:row;
-  align-items:center;
+  align-items:stretch;
   justify-content:center;
   gap:12px;
 }
@@ -1350,6 +1350,9 @@ button:active {
 
 .tournamentChoiceVs{
   flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   text-align:center;
   font-size:24px;
   font-weight:700;
