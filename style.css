@@ -791,3 +791,6 @@ border:2px solid #4f8cff;
   color:#4f8cff;
   font-weight:bold;
 }
+
+
+.categoryManagerCategorySearch{\n  width:100%;\n  box-sizing:border-box;\n  margin:0;\n  padding:12px 14px;\n  border:0;\n  border-bottom:1px solid #2a3142;\n  border-radius:0;\n  background:#151a24;\n  color:white;\n  outline:none;\n}\n\n.categoryManagerCategorySearch:focus{\n  border-bottom-color:#4f8cff;\n}\n
