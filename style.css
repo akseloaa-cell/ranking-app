@@ -1010,21 +1010,22 @@ button:active {
   position:relative;
 }
 
-.tournamentBracketRound.withConnector::before{
-  content:"";
-  position:absolute;
-  left:-9px;
-  top:0;
-  bottom:0;
-  width:18px;
-  pointer-events:none;
-}
-
-.tournamentBracketRound.withConnector .tournamentBracketMatch{
+.tournamentBracketMatches{
   position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:var(--round-gap, 14px);
+  padding-top:var(--round-offset, 0px);
+  box-sizing:border-box;
 }
 
-.tournamentBracketRound.withConnector .tournamentBracketMatch::before{
+.tournamentBracketMatch{
+  position:relative;
+  height:72px;
+  box-sizing:border-box;
+}
+
+.tournamentBracketRound:not(:first-child) .tournamentBracketMatch::before{
   content:"";
   position:absolute;
   left:-18px;
@@ -1044,29 +1045,25 @@ button:active {
   background:#465066;
 }
 
-.tournamentBracketRound:not(:first-child) .tournamentBracketMatch{
-  margin-top:28px;
-  margin-bottom:28px;
-}
-
-.tournamentBracketRound:not(:first-child) .tournamentBracketMatch:first-child{
-  margin-top:56px;
-}
-
-.tournamentBracketRound:not(:first-child) .tournamentBracketMatches{
-  position:relative;
-}
-
+/* Vertical connector between the two feeder matches */
 .tournamentBracketRound:not(:first-child) .tournamentBracketMatches::before{
   content:"";
   position:absolute;
   left:-18px;
-  top:84px;
+  top:calc(var(--round-offset, 0px) + 36px);
   width:1px;
-  height:calc(100% - 168px);
+  height:calc(var(--round-gap, 14px) + 36px);
   background:#465066;
 }
 
+/* Keep every bracket player exactly half the match height. */
+.tournamentBracketPlayer{
+  height:35px;
+  min-height:35px;
+  box-sizing:border-box;
+}
+
+/* 3rd-place match sits independently but uses the same horizontal connector spacing. */
 .tournamentThirdPlaceBracket{
   position:relative;
 }
@@ -1096,12 +1093,22 @@ button:active {
 }
 
 @media (max-width:600px){
-  .tournamentBracketRound:not(:first-child) .tournamentBracketMatch:first-child{
-    margin-top:42px;
+  .tournamentBracket{
+    gap:14px;
   }
 
-  .tournamentBracketRound:not(:first-child) .tournamentBracketMatch{
-    margin-top:22px;
-    margin-bottom:22px;
+  .tournamentBracketMatches{
+    gap:var(--round-gap, 14px);
+    padding-top:var(--round-offset, 0px);
+  }
+
+  .tournamentBracketRound,
+  .tournamentThirdPlaceBracket{
+    width:155px;
+    flex-basis:155px;
+  }
+
+  .tournamentBracketPlayer{
+    font-size:12px;
   }
 }
