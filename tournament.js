@@ -394,9 +394,9 @@ function renderBracket(){
     '</div>';
 
   const scrollBox = root.querySelector(".tournamentBracketScroll");
-  const rounds = root.querySelectorAll(".tournamentBracketRound");
+  const roundElements = root.querySelectorAll(".tournamentBracketRound");
 
-  if(scrollBox && rounds.length){
+  if(scrollBox && roundElements.length){
     let targetIndex = history.length - 1;
 
     if(t.phase === "active"){
@@ -405,7 +405,7 @@ function renderBracket(){
       targetIndex = history.length - 1;
     }
 
-    const target = rounds[targetIndex];
+    const target = roundElements[targetIndex];
 
     if(target){
       requestAnimationFrame(() => {
