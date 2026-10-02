@@ -26,25 +26,30 @@ export function renderTournament(){
   if (state.tournament.phase === "hub") {
 
     root.innerHTML = `
+<div class="tournamentModeHeader">
+  <h2>Velg gamemode</h2>
+  <p>Hvordan vil du spille turneringen?</p>
+</div>
 
-<h3>
-Velg gamemode
-</h3>
+<div class="tournamentModeCards">
+  <button class="tournamentModeCard" onclick="selectTournamentMode('random')">
+    <span class="tournamentModeIcon">🎲</span>
+    <span class="tournamentModeText">
+      <strong>Random</strong>
+      <small>Tilfeldige deltakere fra hele listen</small>
+    </span>
+    <span class="tournamentModeArrow">›</span>
+  </button>
 
-<button
-onclick="selectTournamentMode('random')"
->
-🎲 Random
-</button>
-
-<br><br>
-
-<button
-onclick="selectTournamentMode('category')"
->
-🏷️ Category
-</button>
-
+  <button class="tournamentModeCard" onclick="selectTournamentMode('category')">
+    <span class="tournamentModeIcon">🏷️</span>
+    <span class="tournamentModeText">
+      <strong>Category</strong>
+      <small>Velg en kategori og spill med dens deltakere</small>
+    </span>
+    <span class="tournamentModeArrow">›</span>
+  </button>
+</div>
 `;
 
     renderBracket();
