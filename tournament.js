@@ -424,6 +424,22 @@ export function startTournament(){
   renderTournament();
 }
 
+export function updateTournamentSizeOptions(){
+  const sizeSelect = document.getElementById("tournamentSize");
+  if(!sizeSelect) return;
+
+  const sizes = getAllowedSizes(getTournamentPool().length);
+  const current = Number(sizeSelect.value);
+
+  sizeSelect.innerHTML = sizes.map(size =>
+    '<option value="' + size + '">' + size + '</option>'
+  ).join("");
+
+  if(sizes.includes(current)){
+    sizeSelect.value = String(current);
+  }
+}
+
 export function confirmTournamentSetup(){
 
   const size =
