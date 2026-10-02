@@ -7,6 +7,15 @@ import { getH2H } from "./match.js";
 // ================= BASIC =================
 
 export function deleteItem(id){
+  const tournament = state.tournament;
+  const inTournament = tournament?.phase !== "hub"
+    && (tournament.originalParticipants || []).some(x => x.id === id);
+
+  if(inTournament){
+    alert("Dette itemet er med i en pågående turnering. Fullfør eller avslutt turneringen før du sletter det.");
+    return;
+  }
+
   if(!confirm("Er du sikker?")) return;
 
   state.items = state.items.filter(x => x.id !== id);
