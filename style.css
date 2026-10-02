@@ -935,7 +935,7 @@ button:active {
   background:#141a26;
   border:1px solid #2a3142;
   border-radius:12px;
-  overflow:hidden;
+  overflow:visible;
   opacity:.72;
   transition:.2s;
 }
