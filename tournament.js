@@ -759,20 +759,20 @@ if (next.length === 1) {
 
   t.participants = next;
 
-  const avg = getTournamentAverageElo(next);
-
-  const top3Before = getFinalTop3(state.tournament.originalParticipants);
+  const avg = getTournamentAverageElo(
+    state.tournament.originalParticipants
+  );
 
   const beforeRatings = Object.fromEntries(
     state.tournament.originalParticipants.map(p => [p.id, p.rating])
   );
 
-  // The final has already been played. Finish the tournament.
-  // The 3rd-place match is now handled before the final, so there is
-  // no need to create it here.
+  // The final has now been played, so the tournament can be finalized.
+  const final = next[0];
+  const second = t.thirdPlaceLoser;
+  const third = t.thirdPlaceWinner;
 
-  // fallback (shouldn't happen)
-  applyTournamentElo(next, avg);
+  applyTournamentElo([final, second, third], avg);
 
   const afterRatings = Object.fromEntries(
     state.tournament.originalParticipants.map(p => [p.id, p.rating])
@@ -780,9 +780,9 @@ if (next.length === 1) {
 
   t.phase = "finished";
   t.finalResults = {
-    first: next[0],
-    second: t.semiFinalLosers?.[0],
-    third: t.semiFinalLosers?.[1],
+    first: final,
+    second,
+    third,
     beforeRatings,
     afterRatings
   };
@@ -836,35 +836,6 @@ export function pickThirdPlaceWinner(side){
   // The 3rd-place match is finished. Now continue with the final.
   t.phase = "active";
   t.currentMatch = 0;
-
-  save();
-  renderTournament();
-  return;
-
-  // final ranking
-  const final = t.participants[0];
-
-  const beforeRatings = Object.fromEntries(
-    state.tournament.originalParticipants.map(p => [p.id, p.rating])
-  );
-
-  const avg = getTournamentAverageElo(
-    state.tournament.originalParticipants
-  );
-
-  applyTournamentElo([final, loser, winner], avg);
-
-  const afterRatings = Object.fromEntries(
-    state.tournament.originalParticipants.map(p => [p.id, p.rating])
-  );
-
-  t.finalResults = {
-    first: final,
-    second: loser,
-    third: winner,
-    beforeRatings,
-    afterRatings
-  };
 
   save();
   renderTournament();
