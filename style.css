@@ -1366,3 +1366,20 @@ button:active {
   opacity:.45;
   line-height:1;
 }
+
+
+.tournamentEloAnimation{
+  font-size:14px;
+  opacity:.8;
+}
+
+.tournamentEloAnimation span{
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+
+.tournamentEloAnimation strong{
+  margin-left:6px;
+  color:#4caf50;
+  font-size:13px;
+}
