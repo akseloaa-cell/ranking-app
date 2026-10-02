@@ -313,33 +313,28 @@ ${state.tournament.phase !== "hub" ? `<button class="tournamentResumeCard" oncli
 
     root.innerHTML = `
 
-<button onclick="backTournament()">
-← Tilbake
-</button>
+<div class="dailySetupView">
+<button class="dailySetupBack" onclick="backTournament()">← Tilbake</button>
 
-<h3>
-${state.tournament.mode === "daily" ? "🌟 Daily Tournament" : state.tournament.mode}
-</h3>
+\${state.tournament.mode === "daily" ? \`<div class="dailySetupHeader">
+  <div class="dailySetupIcon">🌟</div>
+  <div>
+    <h2>Daily Tournament</h2>
+    <p>Dagens spesialturnering</p>
+  </div>
+</div>
 
-${state.tournament.mode === "daily" ? (() => { const config = getDailyConfig(); const rules = getDailyRuleText(config); const sizeText = config.size === "random" ? "Tilfeldig størrelse" : config.size + " deltakere"; return `<p><strong>${config.name}</strong><br>${sizeText} · <button type="button" class="dailyRuleButton" onclick="toggleDailyRule(\'participants\')">👥 ${rules.participants}</button> · <button type="button" class="dailyRuleButton" onclick="toggleDailyRule(\'matchups\')">⚔️ ${rules.matchups}</button> · <button type="button" class="dailyRuleButton" onclick="toggleDailyRule(\'rewards\')">💰 ${rules.rewards}</button></p><div id="dailyRuleExplanation" class="dailyRuleExplanation hidden"><strong class="dailyRuleExplanationTitle"></strong><span class="dailyRuleExplanationText"></span></div>`; })() : ""}
-
-${
-state.tournament.mode === "category"
-
-?
-
-`
-
-<p>Velg kategori</p>
-
-${renderTournamentDropdown("tournamentCategoryDropdown", state.tournament.category || categories[0] || "", categories, "category")}
-
-`
-
-:
-
-""
-}
+\${(() => { const config = getDailyConfig(); const rules = getDailyRuleText(config); const sizeText = config.size === "random" ? "Tilfeldig størrelse" : config.size + " deltakere"; return \`<div class="dailySetupCard">
+  <div class="dailySetupName">\${config.name}</div>
+  <div class="dailySetupMeta">\${sizeText}</div>
+  <div class="dailyRuleList">
+    <button type="button" class="dailyRuleRow" onclick="toggleDailyRule('participants')"><span>👥</span><span><small>Deltakere</small><strong>\${rules.participants}</strong></span><b>›</b></button>
+    <button type="button" class="dailyRuleRow" onclick="toggleDailyRule('matchups')"><span>⚔️</span><span><small>Matchups</small><strong>\${rules.matchups}</strong></span><b>›</b></button>
+    <button type="button" class="dailyRuleRow" onclick="toggleDailyRule('rewards')"><span>💰</span><span><small>ELO-belønning</small><strong>\${rules.rewards}</strong></span><b>›</b></button>
+  </div>
+  <div id="dailyRuleExplanation" class="dailyRuleExplanation hidden"><strong class="dailyRuleExplanationTitle"></strong><span class="dailyRuleExplanationText"></span></div>
+</div>\`; })()}\` : \`<h3>\${state.tournament.mode}</h3>\`}
+</div>
 
 ${state.tournament.mode !== "daily" ? `
 <p>Antall deltakere</p>
