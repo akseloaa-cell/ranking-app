@@ -63,6 +63,11 @@
   🏆 Tournament
 </div>
 
+<div class="menuItem"
+     onclick="setMode('categoryManager'); openCategoryManager(); setActiveMenu(this); closeMenu();">
+  🏷️ Kategorier
+</div>
+
 </div>
 
 <div id="homeView" class="container">
@@ -177,7 +182,18 @@
 
 </div>
  
- <!-- CATEGORY SELECT -->
+ <!-- CATEGORY MANAGER -->
+
+<div id="categoryManagerView" style="display:none; min-height:100vh; box-sizing:border-box; padding:20px;">
+
+  <button onclick="setMode('home'); closeMenu();">← Tilbake</button>
+
+  <div id="categoryManagerContent"></div>
+
+</div>
+
+
+<!-- CATEGORY SELECT -->
 
 <div id="categorySelectView" style="display:none;">
 
