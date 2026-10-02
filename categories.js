@@ -162,8 +162,11 @@ export function renderCategoryManager(){
 
     <div class="categoryManagerDropdown">
       <button type="button" class="categoryManagerDropdownButton" onclick="toggleCategoryManagerDropdown()">
-        <span>${selected || "Ingen kategorier"}${selected ? ` <span class="categoryManagerCount">(${categoryItemCount})</span>` : ""}</span>
-        <span>⌄</span>
+        <span class="categoryManagerSelected">
+          <span class="categoryManagerSelectedIcon">🏷</span>
+          <span>${selected || "Ingen kategorier"}${selected ? ` <span class="categoryManagerCount">(${categoryItemCount})</span>` : ""}</span>
+        </span>
+        <span class="categoryManagerDropdownChevron">⌄</span>
       </button>
       <div id="categoryManagerDropdownMenu" class="categoryManagerDropdownMenu hidden">
         <input class="categoryManagerCategorySearch" placeholder="Søk kategori..." value="${state.categoryManagerCategorySearch || ""}" onfocus="document.getElementById('categoryManagerDropdownMenu')?.classList.remove('hidden')" onmousedown="event.stopPropagation()" onclick="event.stopPropagation()" oninput="event.stopPropagation(); searchCategoryManagerCategory(this.value)">
