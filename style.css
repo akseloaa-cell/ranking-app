@@ -1050,7 +1050,7 @@ button:active {
   content:"";
   position:absolute;
   left:-18px;
-  top:calc(var(--round-offset, 0px) + 36px);
+  top:var(--connector-top, 36px);
   width:1px;
   height:var(--connector-height, 86px);
   background:#465066;
