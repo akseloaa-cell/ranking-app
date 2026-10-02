@@ -345,16 +345,18 @@ ${(() => { const config = getDailyConfig(); const rules = getDailyRuleText(confi
     <div class="dailyRuleItem">\n    <button type="button" class="dailyRuleRow" onclick="toggleDailyRule('matchups')"><span>⚔️</span><span><small>Matchups</small><strong>${rules.matchups}</strong></span><b>›</b></button>\n    <div id="dailyRuleExplanation-matchups" class="dailyRuleExplanation hidden"><span class="dailyRuleExplanationText"></span></div>\n  </div>
     <div class="dailyRuleItem">\n    <button type="button" class="dailyRuleRow" onclick="toggleDailyRule('rewards')"><span>💰</span><span><small>ELO-belønning</small><strong>${rules.rewards}</strong></span><b>›</b></button>\n    <div id="dailyRuleExplanation-rewards" class="dailyRuleExplanation hidden"><span class="dailyRuleExplanationText"></span></div>\n  </div>
   </div>
-</div>`; })()}` : `<h3>${state.tournament.mode}</h3>`}
+</div>`; })()}` : state.tournament.mode === "category" ? `<h3>${state.tournament.mode}</h3>` : ""}
 </div>
 
 ${state.tournament.mode !== "daily" ? `
+<div class="${state.tournament.mode === "random" ? "randomSetupParticipants" : ""}">
 <p>Antall deltakere</p>
 
 ${sizes.length
   ? renderTournamentDropdown("tournamentSizeDropdown", sizes.includes(state.tournament.size) ? state.tournament.size : sizes[0], sizes, "size")
   : '<p style="opacity:.6;">Du trenger minst 4 items for å starte en turnering.</p>'
 }
+</div>
 ` : ""}
 
 <br><br>
