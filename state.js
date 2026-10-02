@@ -11,6 +11,8 @@ export const state = {
   showAllAddChips: false,
   showAllStatsChips: false,
   showAllRankingChips: false,
+  showAllH2H: false,
+  h2hSearch: "",
   rankingFilter: "all",
   rankingSort: "elo",
   selectedCategories: [],
