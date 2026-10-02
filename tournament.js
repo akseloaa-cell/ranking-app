@@ -271,6 +271,9 @@ ${state.tournament.phase !== "hub" ? `<button class="tournamentResumeCard" oncli
 </div>
 `;
 
+    const bracketView = document.getElementById("bracketView");
+    if (bracketView) bracketView.innerHTML = "";
+
     startDailyCountdown();
 
     return;
