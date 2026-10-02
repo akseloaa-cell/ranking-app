@@ -947,7 +947,8 @@ export function filterTournamentCategories(query){
   const q = String(query || "").trim().toLowerCase();
   document.querySelectorAll("#tournamentCategoryDropdownOptions .tournamentDropdownOption").forEach(option => {
     const text = option.textContent.trim().toLowerCase();
-    option.hidden = Boolean(q) && !text.includes(q);\n    option.style.display = option.hidden ? "none" : "";
+    option.hidden = Boolean(q) && !text.includes(q);
+    option.style.display = option.hidden ? "none" : "";
   });
 }
 
