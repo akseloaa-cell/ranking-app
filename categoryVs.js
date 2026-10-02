@@ -189,6 +189,12 @@ export function startCategoryVs(category){
 
 export function setSortType(type){
   state.categorySortType = type;
+
+  const label = document.getElementById("sortLabel");
+  if(label){
+    label.innerText = type === "items" ? "📦 Items" : "🔤 A–Z";
+  }
+
   renderCategoryList(document.getElementById("categorySearch")?.value || "");
 }
 /* =========================
