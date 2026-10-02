@@ -375,12 +375,14 @@ export function startTournament(){
   pool = shuffle(pool);
 
   const maxPossible = pool.length;
+  const allowedSizes = getAllowedSizes(maxPossible);
+  const requestedSize = Number(state.tournament.size);
+  const size = allowedSizes.includes(requestedSize)
+    ? requestedSize
+    : (allowedSizes[allowedSizes.length - 1] || 0);
 
-  let size = Math.min(state.tournament.size, maxPossible);
-
-  // sørg for par
-  if (size % 2 !== 0) {
-    size -= 1;
+  if (size < 4) {
+    return;
   }
 
   const participants = pool.slice(0, size);
