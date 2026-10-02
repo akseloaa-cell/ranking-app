@@ -5,7 +5,7 @@ import * as ui from "./ui.js";
 import * as stats from "./stats.js";
 import * as tournament from "./tournament.js";
 import { addItem } from "./items.js";
-import { addCategory } from "./categories.js";
+import { addCategory, openCategoryManager, selectCategoryManagerCategory, toggleItemInCategory, searchCategoryManager, renderCategoryManager, toggleCategoryManagerDropdown } from "./categories.js";
 import {
   renameItem,
   deleteItem,
@@ -88,6 +88,12 @@ window.openAddItem = openAddItem;
 window.closeAddItem = closeAddItem;
 window.addItem = addItem;
 window.addCategory = addCategory;
+window.openCategoryManager = openCategoryManager;
+window.selectCategoryManagerCategory = selectCategoryManagerCategory;
+window.toggleItemInCategory = toggleItemInCategory;
+window.searchCategoryManager = searchCategoryManager;
+window.renderCategoryManager = renderCategoryManager;
+window.toggleCategoryManagerDropdown = toggleCategoryManagerDropdown;
 
 window.openRankingView = openRankingView;
 window.closeRankingView = closeRankingView;
