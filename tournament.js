@@ -14,6 +14,98 @@ export function selectTournamentMode(mode){
 
 }
 
+const DAILY_CONFIGS = [
+  { name:"Chaos", size:16, participants:"random", matchups:"random", rewards:"normal" },
+  { name:"Fresh Blood", size:16, participants:"fresh", matchups:"random", rewards:"plus" },
+  { name:"ELO Clash", size:16, participants:"random", matchups:"elo_clash", rewards:"normal" },
+  { name:"Underdogs", size:16, participants:"underdogs", matchups:"random", rewards:"plus" },
+  { name:"Close Call", size:8, participants:"random", matchups:"close_elo", rewards:"winner" },
+  { name:"Elite Eight", size:8, participants:"elite", matchups:"seeded", rewards:"plus" },
+  { name:"Comeback", size:16, participants:"comeback", matchups:"random", rewards:"podium" },
+  { name:"Category War", size:16, participants:"category_mix", matchups:"random", rewards:"normal" },
+  { name:"The Unplayed", size:16, participants:"unplayed", matchups:"random", rewards:"plus" },
+  { name:"The Gauntlet", size:32, participants:"random", matchups:"seeded", rewards:"normal" },
+  { name:"Revenge", size:8, participants:"revenge", matchups:"random", rewards:"winner" },
+  { name:"Undefeated", size:8, participants:"undefeated", matchups:"close_elo", rewards:"plus" },
+  { name:"Lucky Eight", size:"random", participants:"random", matchups:"random", rewards:"double" },
+  { name:"Cold Blood", size:16, participants:"underdogs", matchups:"elo_clash", rewards:"normal" },
+  { name:"Veterans", size:16, participants:"veterans", matchups:"seeded", rewards:"plus" },
+  { name:"Category Clash", size:8, participants:"category", matchups:"close_elo", rewards:"winner" },
+  { name:"Fresh Start", size:8, participants:"fresh", matchups:"close_elo", rewards:"plus" },
+  { name:"David vs Goliath", size:16, participants:"random", matchups:"elo_clash", rewards:"double" },
+  { name:"Last Chance", size:16, participants:"comeback", matchups:"elo_clash", rewards:"plus" },
+  { name:"Two Worlds", size:16, participants:"category_mix", matchups:"seeded", rewards:"normal" },
+  { name:"Kings Only", size:8, participants:"elite", matchups:"close_elo", rewards:"double" },
+  { name:"Hidden Gems", size:16, participants:"unplayed", matchups:"seeded", rewards:"plus" },
+  { name:"Revenge Tour", size:16, participants:"revenge", matchups:"close_elo", rewards:"podium" },
+  { name:"Underdog Derby", size:8, participants:"underdogs", matchups:"close_elo", rewards:"winner" },
+  { name:"Grand Seeding", size:32, participants:"random", matchups:"seeded", rewards:"plus" },
+  { name:"Perfect Balance", size:16, participants:"random", matchups:"close_elo", rewards:"normal" },
+  { name:"Category Roulette", size:"random", participants:"category", matchups:"random", rewards:"plus" },
+  { name:"Second Chance", size:16, participants:"comeback", matchups:"close_elo", rewards:"double" },
+  { name:"Pure Chaos", size:"random", participants:"random", matchups:"elo_clash", rewards:"double" },
+  { name:"Daily Finale", size:32, participants:"random", matchups:"seeded", rewards:"double" }
+];
+
+function getDailyConfig(dateKey = getTodayKey()){
+  const hash = Array.from(dateKey).reduce((hash, char) =>
+    ((hash << 5) - hash + char.charCodeAt(0)) | 0, 0);
+  const index = Math.abs(hash) % DAILY_CONFIGS.length;
+  return DAILY_CONFIGS[index];
+}
+
+function getDailyRuleText(config){
+  const participantNames = {
+    random:"Random",
+    underdogs:"Underdogs",
+    elite:"Elite",
+    fresh:"Fresh Blood",
+    unplayed:"Unplayed",
+    category:"Category",
+    category_mix:"Category Mix",
+    comeback:"Comeback",
+    revenge:"Revenge",
+    veterans:"Veterans",
+    undefeated:"Undefeated"
+  };
+  const matchupNames = {
+    random:"Random matchups",
+    elo_clash:"ELO Clash",
+    close_elo:"Close ELO",
+    seeded:"Seeded"
+  };
+  const rewardNames = {
+    normal:"Normal Daily",
+    plus:"Daily Plus",
+    double:"Double",
+    winner:"Winner Bonus",
+    podium:"Podium Bonus"
+  };
+  return {
+    participants: participantNames[config.participants] || config.participants,
+    matchups: matchupNames[config.matchups] || config.matchups,
+    rewards: rewardNames[config.rewards] || config.rewards
+  };
+}
+
+function seededRandom(seed){
+  let value = Math.abs(seed) || 1;
+  return () => {
+    value = (value * 1664525 + 1013904223) % 4294967296;
+    return value / 4294967296;
+  };
+}
+
+function dailyShuffle(arr, seed){
+  const copy = [...arr];
+  const random = seededRandom(seed);
+  for(let i = copy.length - 1; i > 0; i--){
+    const j = Math.floor(random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 export function getTodayKey(){
   const now = new Date();
   const year = now.getFullYear();
