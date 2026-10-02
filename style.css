@@ -682,3 +682,26 @@ border:2px solid #4f8cff;
   -webkit-user-select: none;
   user-select: none;
 }
+
+
+.tournamentDropdownSearch{
+  width:100%;
+  margin:0;
+  padding:12px 14px;
+  box-sizing:border-box;
+  border:0;
+  border-bottom:1px solid #2a3142;
+  border-radius:0;
+  background:#151a24;
+  color:white;
+  outline:none;
+}
+
+.tournamentDropdownSearch:focus{
+  border-bottom-color:#4f8cff;
+}
+
+.tournamentDropdownMenu{
+  max-height:300px;
+  overflow-y:auto;
+}
