@@ -674,3 +674,11 @@ border:2px solid #4f8cff;
   color:white;
   font-weight:600;
 }
+
+
+.tournamentDropdownButton,
+.tournamentDropdownOption{
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
