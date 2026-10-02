@@ -42,8 +42,16 @@ export function searchCategoryManagerCategory(query){
   const q = String(query || "").trim().toLowerCase();
   document.querySelectorAll(".categoryManagerOption").forEach(option => {
     const text = option.querySelector("span")?.textContent?.toLowerCase() || option.textContent.toLowerCase();
-    option.hidden = Boolean(q) && !text.includes(q);
-    option.style.display = option.hidden ? "none" : "";
+    if (!q) {
+      option.removeAttribute("hidden");
+      option.style.display = "";
+    } else if (text.includes(q)) {
+      option.removeAttribute("hidden");
+      option.style.display = "";
+    } else {
+      option.setAttribute("hidden", "");
+      option.style.display = "none";
+    }
   });
 }
 
