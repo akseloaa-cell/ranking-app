@@ -382,8 +382,8 @@ ${(() => { const config = getDailyConfig(); const rules = getDailyRuleText(confi
   </div>
 </div>`; })()}` : state.tournament.mode === "random" ? "" : ""}</div>
 
-${state.tournament.mode !== "daily" ? `
-<div class="${state.tournament.mode === "random" ? "randomSetupParticipants" : ""}">
+${state.tournament.mode === "random" ? `
+<div class="randomSetupParticipants">
 <p>Antall deltakere</p>
 
 ${sizes.length
