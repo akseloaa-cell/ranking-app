@@ -9,37 +9,28 @@ export const state = {
   lastRankingDate: localStorage.getItem("lastRankingDate") || null,
   recentMatches: JSON.parse(localStorage.getItem("recentMatches")) || [],
 
-   showAllAddChips: false,
+  showAllAddChips: false,
   showAllStatsChips: false,
   showAllRankingChips: false,
   rankingFilter: "all",
   rankingSort: "elo",
   selectedCategories: [],
-    categorySortType: "items", // "items" | "alpha"
-  categorySortDir: "desc",   // "asc" | "desc"
+  categorySortType: "items",
+  categorySortDir: "desc",
 
-tournament: {
-  phase: "hub" | "setup" | "active",
-
-  mode: null,
-  category: null,
-  size: 8,
-
-  participants: [],
-
-  matches: [],
-
-  round: 1,
-
-  currentMatch: 0,
-
-  nextRoundPool: [],
-
-  bracketHistory: []
-}
-  
+  tournament: {
+    phase: "hub",
+    mode: null,
+    category: null,
+    size: 8,
+    participants: [],
+    matches: [],
+    round: 1,
+    currentMatch: 0,
+    nextRoundPool: [],
+    bracketHistory: []
+  }
 };
-
 
 export function commit(changeFn) {
   changeFn();
