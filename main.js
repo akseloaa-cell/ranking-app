@@ -14,6 +14,8 @@ import {
   renderStatsChips,
   toggleStatsChips,
   toggleCatSection,
+  toggleH2H,
+  searchH2H,
 } from "./stats.js";
 import { renderChips, toggleAllChips } from "./ui.js";
 import { 
@@ -72,6 +74,8 @@ window.removeCatFromItem = removeCatFromItem;
 window.renderStatsChips = renderStatsChips;
 window.toggleStatsChips = toggleStatsChips;
 window.toggleCatSection = toggleCatSection;
+window.toggleH2H = toggleH2H;
+window.searchH2H = searchH2H;
 
 window.renderChips = ui.renderChips;
 
