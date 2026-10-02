@@ -78,14 +78,12 @@
   <div id="rankingView">
     <button onclick="closeRankingView()">⬅️ Tilbake</button>
 
-    <!-- SORTERING -->
     <div style="margin:10px 0;">
       <button onclick="setSort('elo')">⭐ ELO</button>
       <button onclick="setSort('wins')">🏆 Wins</button>
       <button onclick="setSort('top3')">🥇 Top 3</button>
     </div>
 
-    <!-- FILTER -->
    <input
   id="rankingCatSearch"
   placeholder="Søk kategori..."
@@ -116,7 +114,7 @@
 
 <div class="vs">
   <div class="choice" id="a"></div>
-<div class="choice" id="b"></div>
+  <div class="choice" id="b"></div>
 </div>
 
 <button onclick="draw()">🤝 Uavgjort</button>
@@ -177,13 +175,10 @@
 
 </div>
 
-<!-- 👇 HER legger vi bracket UI -->
 <div id="bracketView"></div>
 
 </div>
  
- <!-- CATEGORY MANAGER -->
-
 <div id="categoryManagerView" style="display:none; min-height:100vh; box-sizing:border-box; padding:20px;">
 
   <button onclick="setMode('home'); closeMenu();">← Tilbake</button>
@@ -191,9 +186,6 @@
   <div id="categoryManagerContent"></div>
 
 </div>
-
-
-<!-- CATEGORY SELECT -->
 
 <div id="categorySelectView" style="display:none;">
 
@@ -210,9 +202,6 @@
   <div id="vsCategoryList"></div>
 
 </div>
-
-
-<!-- CATEGORY BATTLE -->
 
 <div id="categoryBattleView" style="display:none;">
 
@@ -266,28 +255,33 @@
   ⬆
 </button>
 
- <div id="addOverlay">
+<div id="addOverlay">
   <div id="addView">
 
     <button onclick="closeAddItem()">⬇️ Lukk</button>
 
     <h3>Legg til item</h3>
 
-    <input id="itemInput" placeholder="Navn">
+    <div class="itemInputWrap">
+      <input
+        id="itemInput"
+        placeholder="Navn"
+        autocomplete="off"
+        oninput="renderItemSuggestions(this.value)"
+      >
+      <div id="itemSuggestions"></div>
+    </div>
 
-    <!-- SØK -->
-   <input id="catSearch" placeholder="Søk kategori..."
-  oninput="renderChips({
-    filter: this.value,
-    targetId: 'chipBox',
-    mode: 'select'
-  })"
-/>
+    <input id="catSearch" placeholder="Søk kategori..."
+      oninput="renderChips({
+        filter: this.value,
+        targetId: 'chipBox',
+        mode: 'select'
+      })"
+    />
 
-    <!-- CHIPS -->
     <div class="chip-container" id="chipBox"></div>
 
-    <!-- NY CATEGORY -->
     <input id="catInput" placeholder="Ny kategori">
     <button onclick="addCategory()">+ Kategori</button>
 
