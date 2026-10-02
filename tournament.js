@@ -767,21 +767,9 @@ if (next.length === 1) {
     state.tournament.originalParticipants.map(p => [p.id, p.rating])
   );
 
-  // 🥉 CREATE 3RD PLACE MATCH
-  t.thirdPlaceMatch = null;
-
-  if (t.semiFinalLosers?.length === 2) {
-    t.thirdPlaceMatch = {
-      a: t.semiFinalLosers[0],
-      b: t.semiFinalLosers[1],
-      winner: null
-    };
-
-    t.phase = "thirdPlace";
-
-    save();
-    return;
-  }
+  // The final has already been played. Finish the tournament.
+  // The 3rd-place match is now handled before the final, so there is
+  // no need to create it here.
 
   // fallback (shouldn't happen)
   applyTournamentElo(next, avg);
@@ -808,6 +796,18 @@ if (next.length === 1) {
   t.participants = next;
   t.matches = createMatches(next);
 
+  // After the semifinals, prepare the final but play the 3rd-place
+  // match first. The final remains in the bracket and is played last.
+  if (next.length === 2 && t.semiFinalLosers?.length === 2) {
+    t.thirdPlaceMatch = {
+      a: t.semiFinalLosers[0],
+      b: t.semiFinalLosers[1],
+      winner: null
+    };
+
+    t.phase = "thirdPlace";
+  }
+
   t.bracketHistory.push({
     round: t.round,
     matches: t.matches.map(m => ({
@@ -833,7 +833,13 @@ export function pickThirdPlaceWinner(side){
   t.thirdPlaceWinner = winner;
   t.thirdPlaceLoser = loser;
 
-  t.phase = "finished";
+  // The 3rd-place match is finished. Now continue with the final.
+  t.phase = "active";
+  t.currentMatch = 0;
+
+  save();
+  renderTournament();
+  return;
 
   // final ranking
   const final = t.participants[0];
