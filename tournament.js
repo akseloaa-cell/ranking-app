@@ -349,7 +349,7 @@ function renderBracket(){
     '</div>';
   };
 
-  const roundsHtml = history.map((round, roundIndex) =>
+  const rounds = history.map((round, roundIndex) =>
     '<div class="tournamentBracketRound">' +
       '<div class="tournamentBracketRoundTitle">' + getRoundName(round) + '</div>' +
       '<div class="tournamentBracketMatches">' +
@@ -358,7 +358,7 @@ function renderBracket(){
         ).join("") +
       '</div>' +
     '</div>'
-  ).join("");
+  );
 
   const thirdPlaceHtml = (t.thirdPlaceMatch && (t.phase === "thirdPlace" || t.phase === "finished"))
     ? '<div class="tournamentThirdPlaceBracket">' +
@@ -377,6 +377,9 @@ function renderBracket(){
       '</div>'
     : "";
 
+  const finalRound = rounds.length ? rounds[rounds.length - 1] : "";
+  const earlierRounds = rounds.slice(0, -1).join("");
+
   root.innerHTML =
     '<div class="tournamentBracketHeader">' +
       '<h3>Bracket</h3>' +
@@ -384,8 +387,9 @@ function renderBracket(){
     '</div>' +
     '<div class="tournamentBracketScroll">' +
       '<div class="tournamentBracket">' +
-        roundsHtml +
+        earlierRounds +
         thirdPlaceHtml +
+        finalRound +
       '</div>' +
     '</div>';
 
