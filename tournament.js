@@ -448,19 +448,19 @@ root.innerHTML = `
 
 <h1>🏆 Winner</h1>
 <h2>${results.first.name}</h2>
-<p>+${getBoost(results.first)} ELO</p>
+<p class="tournamentEloAnimation"><span id="tournamentElo-first" data-from="${results.beforeRatings?.[results.first.id] ?? results.first.rating}" data-to="${results.afterRatings?.[results.first.id] ?? results.first.rating}">${results.beforeRatings?.[results.first.id] ?? results.first.rating}</span> ELO <strong>+${getBoost(results.first)}</strong></p>
 
 <hr>
 
 <h3>🥈 2nd Place</h3>
 <p>${results.second.name}</p>
-<p>+${getBoost(results.second)} ELO</p>
+<p class="tournamentEloAnimation"><span id="tournamentElo-second" data-from="${results.beforeRatings?.[results.second.id] ?? results.second.rating}" data-to="${results.afterRatings?.[results.second.id] ?? results.second.rating}">${results.beforeRatings?.[results.second.id] ?? results.second.rating}</span> ELO <strong>+${getBoost(results.second)}</strong></p>
 
 <hr>
 
 <h3>🥉 3rd Place</h3>
 <p>${results.third.name}</p>
-<p>+${getBoost(results.third)} ELO</p>
+<p class="tournamentEloAnimation"><span id="tournamentElo-third" data-from="${results.beforeRatings?.[results.third.id] ?? results.third.rating}" data-to="${results.afterRatings?.[results.third.id] ?? results.third.rating}">${results.beforeRatings?.[results.third.id] ?? results.third.rating}</span> ELO <strong>+${getBoost(results.third)}</strong></p>
 
 <br><br>
 
@@ -471,6 +471,7 @@ Tilbake
 `;
 
 renderBracket();
+animateTournamentElo();
 
 return;
 
@@ -504,6 +505,47 @@ return;
   return;
 }
   
+}
+
+function animateTournamentElo(){
+
+  const entries = ["first", "second", "third"];
+
+  entries.forEach((place, index) => {
+
+    const el = document.getElementById("tournamentElo-" + place);
+    if(!el) return;
+
+    const from = Number(el.dataset.from);
+    const to = Number(el.dataset.to);
+
+    if(!Number.isFinite(from) || !Number.isFinite(to)){
+      return;
+    }
+
+    const duration = 900;
+    const delay = index * 180;
+    const start = performance.now() + delay;
+
+    const tick = now => {
+      if(now < start){
+        requestAnimationFrame(tick);
+        return;
+      }
+
+      const progress = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const value = Math.round(from + (to - from) * eased);
+
+      el.textContent = value;
+
+      if(progress < 1){
+        requestAnimationFrame(tick);
+      }
+    };
+
+    requestAnimationFrame(tick);
+  });
 }
 
 function renderBracket(){
