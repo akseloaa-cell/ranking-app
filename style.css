@@ -1269,6 +1269,7 @@ button:active {
 .dailySetupIcon{width:46px;height:46px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:#302817;font-size:22px;}
 .dailySetupHeader h2{margin:0 0 3px;font-size:22px;}
 .dailySetupHeader p{margin:0;opacity:.55;font-size:13px;}
+.dailyTournamentSetupCountdown{margin-left:auto;white-space:nowrap;font-size:11px;opacity:.55;align-self:flex-end;padding-bottom:2px;}
 .dailySetupCard{padding:18px;border:1px solid #3d3525;border-radius:16px;background:linear-gradient(135deg,#211d16,#151820);box-shadow:0 8px 24px rgba(0,0,0,.16);}
 .dailySetupName{font-size:20px;font-weight:700;}
 .dailySetupMeta{margin-top:4px;margin-bottom:16px;font-size:12px;opacity:.55;}
