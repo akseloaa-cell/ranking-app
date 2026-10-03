@@ -2184,3 +2184,68 @@ button:active {
 .dailySetupBack.categorySetupBack:active{
   transform:translateY(0);
 }
+
+
+/* Categories and items page back button */
+.categoryManagerBackButton{
+  width:auto;
+  margin:0 0 2px;
+  padding:9px 14px 9px 10px;
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  box-sizing:border-box;
+  border:1px solid #30394a;
+  border-radius:12px;
+  background:linear-gradient(180deg,#1b2230,#141a24);
+  color:#eaeaea;
+  font:inherit;
+  font-size:13px;
+  font-weight:600;
+  line-height:1;
+  box-shadow:0 5px 16px rgba(0,0,0,.18);
+  cursor:pointer;
+  transition:transform .16s ease,border-color .16s ease,background .16s ease,box-shadow .16s ease;
+}
+
+.categoryManagerBackButton:hover{
+  transform:translateX(-2px);
+  border-color:#4a5870;
+  background:linear-gradient(180deg,#222b3b,#181f2b);
+  box-shadow:0 7px 20px rgba(0,0,0,.24);
+}
+
+.categoryManagerBackButton:active{
+  transform:translateX(0) scale(.98);
+}
+
+.categoryManagerBackIcon{
+  width:25px;
+  height:25px;
+  flex:0 0 25px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  background:#252e3d;
+  font-size:16px;
+  transition:transform .16s ease,background .16s ease;
+}
+
+.categoryManagerBackButton:hover .categoryManagerBackIcon{
+  transform:translateX(-2px);
+  background:#303b4d;
+}
+
+@media(max-width:600px){
+  .categoryManagerBackButton{
+    margin-bottom:0;
+    padding:8px 13px 8px 9px;
+  }
+
+  .categoryManagerBackIcon{
+    width:24px;
+    height:24px;
+    flex-basis:24px;
+  }
+}
