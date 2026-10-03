@@ -45,7 +45,11 @@ export const state = {
     activeItems: [],
     rankedItems: [],
     lockedCount: 0,
-    activeScenario: ""
+    activeScenario: "",
+    endlessScenarioOrder: "random",
+    tournamentMode: "random",
+    tournamentSize: 8,
+    tournamentScenarioMode: "new"
   }
 };
 
