@@ -658,8 +658,9 @@ function renderBracket(){
 
       const won = winnerId === itemId(item);
       const lost = winnerId && !won;
+      const winnerPosition = won ? (match.a && itemId(match.a) === itemId(item) ? "winnerTop" : "winnerBottom") : "";
 
-      return '<div class="tournamentBracketPlayer ' + (won ? "winner" : "") + ' ' + (lost ? "loser" : "") + '">' +
+      return '<div class="tournamentBracketPlayer ' + (won ? "winner " + winnerPosition : "") + ' ' + (lost ? "loser" : "") + '">' +
         '<span>' + item.name + '</span>' +
         (won ? '<span class="tournamentBracketCheck">✓</span>' : "") +
       '</div>';
