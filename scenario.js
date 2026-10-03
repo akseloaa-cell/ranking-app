@@ -25,6 +25,7 @@ export function openScenarioRankingSetup(){
 
   save();
   setMode("scenarioRankingSetup");
+  setupScenarioCategoryDropdown();
 }
 
 export function backToScenarioHub(){
