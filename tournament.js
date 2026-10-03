@@ -405,13 +405,18 @@ ${sizes.length
 <br><br>
 
 <button
-onclick="confirmTournamentSetup()"
+id="confirmTournamentSetupButton"
 ${sizes.length ? "" : " disabled"}
 >
 Start
 </button>
 
 `;
+
+    const startButton = document.getElementById("confirmTournamentSetupButton");
+    if (startButton) {
+      startButton.onclick = () => confirmTournamentSetup();
+    }
 
     renderBracket();
 
