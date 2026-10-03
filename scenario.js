@@ -82,6 +82,7 @@ function renderScenarioSetup(){
 }
 export function openScenarioRankingSetup(){
   ensureScenarioRankingState();
+  state.scenarioRanking.mode = "ranking";
   save();
   setMode("scenarioRankingSetup");
   renderScenarioSetup();
