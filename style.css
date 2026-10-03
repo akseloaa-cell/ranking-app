@@ -2340,3 +2340,23 @@ button:active {
     animation:none;
   }
 }
+
+
+.pageBackButton{
+  width:auto;
+  margin:0 auto 20px;
+  padding:9px 14px;
+  background:linear-gradient(180deg,#1b2230,#141a24);
+  border:1px solid #30394a;
+  border-radius:12px;
+  color:#eaeaea;
+  font:inherit;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.pageBackButton:hover{
+  background:linear-gradient(180deg,#232b3a,#1a202b);
+  border-color:#465268;
+}
