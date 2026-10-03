@@ -49,7 +49,7 @@ import {
 } from "./tournament.js";
 
 import { load } from "./storage.js";
-import { openScenarioRankingSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, filterScenarioCategories, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown } from "./scenario.js";
+import { openScenarioRankingSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, clearScenarioCategories, filterScenarioCategories, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown } from "./scenario.js";
 
 window.startTournament = startTournament;
 window.selectTournamentMode = selectTournamentMode;
@@ -67,6 +67,7 @@ window.openScenarioRankingSetup = openScenarioRankingSetup;
 window.backToScenarioHub = backToScenarioHub;
 window.toggleScenarioCategoryDropdown = toggleScenarioCategoryDropdown;
 window.selectScenarioCategory = selectScenarioCategory;
+window.clearScenarioCategories = clearScenarioCategories;
 window.filterScenarioCategories = filterScenarioCategories;
 window.renderScenarioCategoryDropdown = renderScenarioCategoryDropdown;
 window.setupScenarioCategoryDropdown = setupScenarioCategoryDropdown;
