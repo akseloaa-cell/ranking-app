@@ -237,6 +237,28 @@
     </div>
 
     <div class="scenarioSetupSection">
+      <div class="scenarioSetupLabel">Kategori</div>
+      <div class="scenarioCategoryDropdown">
+        <button type="button" class="scenarioCategoryDropdownButton" onclick="toggleScenarioCategoryDropdown()">
+          <span id="scenarioCategoryDropdownText">Velg kategori...</span>
+          <span>⌄</span>
+        </button>
+
+        <div id="scenarioCategoryDropdownMenu" class="scenarioCategoryDropdownMenu hidden" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()">
+          <input
+            id="scenarioCategorySearch"
+            type="search"
+            placeholder="Søk kategori..."
+            onclick="event.stopPropagation()"
+            onmousedown="event.stopPropagation()"
+            oninput="filterScenarioCategories(this.value)"
+          >
+          <div id="scenarioCategoryDropdownOptions"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scenarioSetupSection">
       <div class="scenarioSetupLabel">Scenario</div>
       <button type="button" class="scenarioSetupSelect">🎲 Tilfeldig scenario</button>
     </div>
