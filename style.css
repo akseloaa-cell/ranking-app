@@ -1165,6 +1165,7 @@ button:active {
     position:relative;
     padding-right:72px;
   }
+}
 
 @media (max-width:600px){
   .tournamentBracket{
