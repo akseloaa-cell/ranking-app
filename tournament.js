@@ -406,7 +406,7 @@ ${sizes.length
 
 <button
 id="confirmTournamentSetupButton"
-${sizes.length ? "" : " disabled"}
+${state.tournament.mode !== "daily" && !sizes.length ? " disabled" : ""}
 >
 Start
 </button>
