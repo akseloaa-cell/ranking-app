@@ -49,7 +49,7 @@ import {
 } from "./tournament.js";
 
 import { load } from "./storage.js";
-import { openScenarioRankingSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, clearScenarioCategories, filterScenarioCategories, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown } from "./scenario.js";
+import { openScenarioRankingSetup, openScenarioModeSetup, selectScenarioItemCount, selectScenarioRankingType, cycleScenario, startScenario, renderScenarioGame, placeScenarioItem, moveScenarioItem, finishScenario, backToScenarioSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, clearScenarioCategories, filterScenarioCategories, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown } from "./scenario.js";
 
 window.startTournament = startTournament;
 window.selectTournamentMode = selectTournamentMode;
@@ -64,6 +64,16 @@ window.toggleDailyRule = toggleDailyRule;
 window.resumeTournament = resumeTournament;
 window.filterTournamentCategories = filterTournamentCategories;
 window.openScenarioRankingSetup = openScenarioRankingSetup;
+window.openScenarioModeSetup = openScenarioModeSetup;
+window.selectScenarioItemCount = selectScenarioItemCount;
+window.selectScenarioRankingType = selectScenarioRankingType;
+window.cycleScenario = cycleScenario;
+window.startScenario = startScenario;
+window.renderScenarioGame = renderScenarioGame;
+window.placeScenarioItem = placeScenarioItem;
+window.moveScenarioItem = moveScenarioItem;
+window.finishScenario = finishScenario;
+window.backToScenarioSetup = backToScenarioSetup;
 window.backToScenarioHub = backToScenarioHub;
 window.toggleScenarioCategoryDropdown = toggleScenarioCategoryDropdown;
 window.selectScenarioCategory = selectScenarioCategory;
