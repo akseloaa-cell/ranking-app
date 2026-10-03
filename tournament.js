@@ -229,42 +229,29 @@ export function renderTournament(){
   if (state.tournament.phase === "hub" || state.tournament.showTournamentHub) {
 
     root.innerHTML = `
-<div class="tournamentModeHeader">
-  <h2>Velg gamemode</h2>
-  <p>Hvordan vil du spille turneringen?</p>
-</div>
 
-<div class="tournamentModeCards">
-${["active", "thirdPlace"].includes(state.tournament.phase) ? `<button class="tournamentResumeCard" onclick="resumeTournament()">↩️ Fortsett ${state.tournament.mode === "daily" ? "Daily Tournament" : state.tournament.mode === "category" ? "Category Tournament" : "Random Tournament"} <span>›</span></button>` : ""}
+<h3>
+Velg gamemode
+</h3>
 
-  <button class="tournamentModeCard" onclick="selectTournamentMode('random')">
-    <span class="tournamentModeIcon">🎲</span>
-    <span class="tournamentModeText">
-      <strong>Random</strong>
-      <small>Tilfeldige deltakere fra hele listen</small>
-    </span>
-    <span class="tournamentModeArrow">›</span>
-  </button>
+<button onclick="selectTournamentMode('random')">
+🎲 Random
+</button>
 
-  <button class="tournamentModeCard" onclick="selectTournamentMode('category')">
-    <span class="tournamentModeIcon">🏷️</span>
-    <span class="tournamentModeText">
-      <strong>Category</strong>
-      <small>Velg en kategori og spill med dens deltakere</small>
-    </span>
-    <span class="tournamentModeArrow">›</span>
-  </button>
+<br><br>
 
-  <button class="tournamentModeCard dailyTournamentCard ${isDailyCompletedToday() ? "completed" : ""}" onclick="${isDailyCompletedToday() ? "" : "selectTournamentMode('daily')"}" ${isDailyCompletedToday() ? "disabled" : ""}>
-    <span class="tournamentModeIcon">🌟</span>
-    <span class="tournamentModeText">
-      <strong>Daily Tournament</strong>
-      <small>${isDailyCompletedToday() ? "Fullført i dag · Kom tilbake i morgen" : "Dagens spesialturnering · Større ELO-belønninger"}</small>
-    </span>
-    <span id="dailyTournamentCountdown" class="dailyTournamentCountdown"></span>
-    <span class="tournamentModeStatus">${isDailyCompletedToday() ? "✓" : "DAILY"}</span>
-  </button>
-</div>
+<button onclick="selectTournamentMode('category')">
+🏷️ Category
+</button>
+
+<br><br>
+
+<button onclick="selectTournamentMode('daily')">
+🌟 Daily Tournament
+</button>
+
+<div id="dailyTournamentCountdown" style="text-align:center;opacity:.55;font-size:11px;"></div>
+
 `;
 
     const bracketView = document.getElementById("bracketView");
