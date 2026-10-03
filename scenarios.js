@@ -4,7 +4,7 @@
 export const SCENARIOS = [
   { id: "scenario_001", text: "Du får bare velge én. Hvilket item velger du?" },
   { id: "scenario_002", text: "Du skal ta med deg ett item videre. Hvilket velger du?" },
-  { id: "scenario_003", text: "Du trenger noe du kan stole på. Hvilket item velger du?" },
+  { id: "scenario_003", text: "Hva stoler du mest på?" },
   { id: "scenario_004", text: "Du får muligheten til å beholde bare ett av disse. Hvilket beholder du?" },
   { id: "scenario_005", text: "Hvilket item ville du helst hatt tilgjengelig?" },
   { id: "scenario_006", text: "Du havner i en situasjon der du trenger hjelp. Hvilket item ville vært mest nyttig?" },
