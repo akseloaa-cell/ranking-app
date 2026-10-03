@@ -12,8 +12,19 @@ export function selectTournamentMode(mode){
 
   if (mode === "daily" && isDailyCompletedToday()) return;
 
-  state.tournament.mode = mode;
+  // A started Daily Tournament is locked for the rest of the day.
+  // Re-entering Daily should resume the exact same participant pool.
+  if (
+    mode === "daily" &&
+    ["active", "thirdPlace"].includes(state.tournament.phase) &&
+    state.tournament.dailyDate === getTodayKey() &&
+    state.tournament.participants?.length
+  ) {
+    resumeTournament();
+    return;
+  }
 
+  state.tournament.mode = mode;
   state.tournament.phase = "setup";
 
   save();
@@ -1073,13 +1084,19 @@ export function confirmTournamentSetup(){
 }
 export function backTournament(){
 
+  const keepDailyTournament =
+    state.tournament.mode === "daily" &&
+    ["active", "thirdPlace"].includes(state.tournament.phase) &&
+    state.tournament.dailyDate === getTodayKey();
+
   state.tournament.showTournamentHub = false;
-  state.tournament.phase = "hub";
 
-  state.tournament.mode = null;
-
-  state.tournament.category = null;
-  state.tournament.dailyDate = null;
+  if (!keepDailyTournament) {
+    state.tournament.phase = "hub";
+    state.tournament.mode = null;
+    state.tournament.category = null;
+    state.tournament.dailyDate = null;
+  }
 
   save();
   renderTournament();
