@@ -9,126 +9,106 @@ function getScenarioCategories(){
   ])].filter(Boolean);
 }
 
-export function openScenarioRankingSetup(){
-  const categories = getScenarioCategories();
-
+function ensureScenarioRankingState(){
   if(!state.scenarioRanking){
-    state.scenarioRanking = {
-      category: categories[0] || "",
-      categorySearch: ""
-    };
+    state.scenarioRanking = { selectedCategories: [], categorySearch: "" };
   }
 
-  if(!categories.includes(state.scenarioRanking.category)){
-    state.scenarioRanking.category = categories[0] || "";
+  if(!Array.isArray(state.scenarioRanking.selectedCategories)){
+    const oldCategory = state.scenarioRanking.category || "";
+    state.scenarioRanking.selectedCategories = oldCategory ? [oldCategory] : [];
   }
 
+  state.scenarioRanking.selectedCategories = state.scenarioRanking.selectedCategories
+    .filter(category => getScenarioCategories().includes(category));
+
+  delete state.scenarioRanking.category;
+}
+
+export function openScenarioRankingSetup(){
+  ensureScenarioRankingState();
   save();
   setMode("scenarioRankingSetup");
   setupScenarioCategoryDropdown();
 }
 
-export function backToScenarioHub(){
-  setMode("scenario");
-}
+export function backToScenarioHub(){ setMode("scenario"); }
 
 export function toggleScenarioCategoryDropdown(){
   const menu = document.getElementById("scenarioCategoryDropdownMenu");
   if(!menu) return;
-
   document.querySelectorAll(".scenarioCategoryDropdownMenu").forEach(el => {
     if(el !== menu) el.classList.add("hidden");
   });
-
   menu.classList.toggle("hidden");
+}
+
+export function clearScenarioCategories(){
+  ensureScenarioRankingState();
+  state.scenarioRanking.selectedCategories = [];
+  state.scenarioRanking.categorySearch = "";
+  save();
+  renderScenarioCategoryDropdown();
 }
 
 export function selectScenarioCategory(index){
   const categories = getScenarioCategories();
-  const category = categories[index] || "";
-
-  if(!state.scenarioRanking){
-    state.scenarioRanking = {
-      category: "",
-      categorySearch: ""
-    };
-  }
-
-  state.scenarioRanking.category = category;
+  const category = categories[index];
+  if(!category) return;
+  ensureScenarioRankingState();
+  const selected = state.scenarioRanking.selectedCategories;
+  const existingIndex = selected.indexOf(category);
+  if(existingIndex >= 0) selected.splice(existingIndex, 1);
+  else selected.push(category);
   state.scenarioRanking.categorySearch = "";
-
   save();
   renderScenarioCategoryDropdown();
 }
 
 export function filterScenarioCategories(query){
-  if(!state.scenarioRanking){
-    state.scenarioRanking = {
-      category: "",
-      categorySearch: ""
-    };
-  }
-
+  ensureScenarioRankingState();
   state.scenarioRanking.categorySearch = query || "";
-
   const menu = document.getElementById("scenarioCategoryDropdownMenu");
   if(menu) menu.classList.remove("hidden");
-
   renderScenarioCategoryOptions(query);
 }
 
 function renderScenarioCategoryOptions(query = ""){
   const optionsBox = document.getElementById("scenarioCategoryDropdownOptions");
   if(!optionsBox) return;
-
+  ensureScenarioRankingState();
   const categories = getScenarioCategories();
-  const selected = state.scenarioRanking?.category || "";
+  const selected = state.scenarioRanking.selectedCategories;
   const q = String(query || "").trim().toLowerCase();
+  const filtered = categories.filter(category => !q || category.toLowerCase().includes(q));
 
-  const filtered = categories.filter(category =>
-    !q || category.toLowerCase().includes(q)
-  );
-
-  optionsBox.innerHTML = filtered.length
-    ? filtered.map(category => {
-        const index = categories.indexOf(category);
-        return `
-          <div class="scenarioCategoryDropdownOption ${category === selected ? "active" : ""}" onclick="selectScenarioCategory(${index})">
-            ${category}
-          </div>
-        `;
-      }).join("")
-    : '<div class="scenarioCategoryDropdownEmpty">Ingen kategorier funnet</div>';
+  let html = '<div class="scenarioCategoryDropdownOption scenarioCategoryAllOption ' + (selected.length === 0 ? "active" : "") + '" onclick="clearScenarioCategories()"><span>Alle kategorier</span><span>✓</span></div>';
+  if(filtered.length){
+    html += filtered.map(category => {
+      const index = categories.indexOf(category);
+      const isSelected = selected.includes(category);
+      return '<div class="scenarioCategoryDropdownOption ' + (isSelected ? "active" : "") + '" onclick="selectScenarioCategory(' + index + ')"><span>' + category + '</span><span>' + (isSelected ? "✓" : "") + '</span></div>';
+    }).join("");
+  } else {
+    html += '<div class="scenarioCategoryDropdownEmpty">Ingen kategorier funnet</div>';
+  }
+  optionsBox.innerHTML = html;
 }
 
 export function renderScenarioCategoryDropdown(){
   const buttonText = document.getElementById("scenarioCategoryDropdownText");
   if(!buttonText) return;
-
-  buttonText.textContent =
-    state.scenarioRanking?.category || "Velg kategori...";
-
+  ensureScenarioRankingState();
+  const selected = state.scenarioRanking.selectedCategories;
+  if(selected.length === 0) buttonText.textContent = "Alle kategorier";
+  else if(selected.length === 1) buttonText.textContent = selected[0];
+  else buttonText.textContent = selected.length + " kategorier valgt";
   const search = document.getElementById("scenarioCategorySearch");
-  if(search){
-    search.value = state.scenarioRanking?.categorySearch || "";
-  }
-
-  renderScenarioCategoryOptions(state.scenarioRanking?.categorySearch || "");
+  if(search) search.value = state.scenarioRanking.categorySearch || "";
+  renderScenarioCategoryOptions(state.scenarioRanking.categorySearch || "");
 }
 
 export function setupScenarioCategoryDropdown(){
-  const categories = getScenarioCategories();
-
-  if(!state.scenarioRanking){
-    state.scenarioRanking = {
-      category: categories[0] || "",
-      categorySearch: ""
-    };
-  }
-
-  if(!categories.includes(state.scenarioRanking.category)){
-    state.scenarioRanking.category = categories[0] || "";
-  }
-
+  ensureScenarioRankingState();
   renderScenarioCategoryDropdown();
 }
