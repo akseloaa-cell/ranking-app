@@ -260,7 +260,8 @@ Velg gamemode
       resume.onclick = () => resumeTournament();
       root.insertBefore(resume, root.firstChild);
     }
-\n    const bracketView = document.getElementById("bracketView");
+
+    const bracketView = document.getElementById("bracketView");
     if (bracketView) bracketView.innerHTML = "";
 
     startDailyCountdown();
