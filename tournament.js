@@ -1016,6 +1016,30 @@ export function filterTournamentCategories(query){
 export function updateTournamentSizeOptions(){
   renderTournament();
 }
+function showTournamentWarning(title, message){
+  const existing = document.getElementById("tournamentWarningModal");
+  if(existing) existing.remove();
+
+  const modal = document.createElement("div");
+  modal.id = "tournamentWarningModal";
+  modal.className = "tournamentWarningOverlay";
+  modal.innerHTML = `
+    <div class="tournamentWarningModal">
+      <div class="tournamentWarningIcon">⚠️</div>
+      <h3>${title}</h3>
+      <p>${message}</p>
+      <button type="button" class="tournamentWarningButton">OK</button>
+    </div>
+  `;
+
+  modal.querySelector(".tournamentWarningButton").onclick = () => modal.remove();
+  modal.addEventListener("click", event => {
+    if(event.target === modal) modal.remove();
+  });
+
+  document.body.appendChild(modal);
+}
+
 export function confirmTournamentSetup(){
   const pool = getTournamentPool();
 
@@ -1024,17 +1048,17 @@ export function confirmTournamentSetup(){
     const filtered = getDailyParticipantPool(pool, config);
 
     if (filtered.length < 4) {
-      alert(
-        "Dagens turnering kan ikke startes ennå.\n\n" +
-        "Regelen «" + getDailyRuleText(config).participants + "» gir bare " +
-        filtered.length + " tilgjengelige deltakere, men du trenger minst 4."
+      showTournamentWarning(
+        "Ikke nok deltakere",
+        "Dagens regel «" + getDailyRuleText(config).participants + "» gir bare " +
+        filtered.length + " tilgjengelige deltakere. Du trenger minst 4."
       );
       return;
     }
 
     if (config.size !== "random" && filtered.length < Number(config.size)) {
-      alert(
-        "Dagens turnering kan ikke startes.\n\n" +
+      showTournamentWarning(
+        "Ikke nok deltakere",
         "Dagens turnering krever " + config.size + " deltakere, men bare " +
         filtered.length + " oppfyller dagens deltakerregel."
       );
