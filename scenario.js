@@ -55,6 +55,31 @@ function ensureScenarioRankingState(){
   }
 }
 
+function renderScenarioSetup(){
+  const s=state.scenarioRanking;
+  const box=document.getElementById("scenarioSetupDynamic");
+  if(!box) return;
+  document.getElementById("scenarioSetupTitle").textContent=s.mode==="ranking"?"Scenario Ranking":s.mode==="endless"?"Scenario Endless":"Scenario Tournament";
+  document.getElementById("scenarioSetupIcon").textContent=s.mode==="ranking"?"📊":s.mode==="endless"?"♾️":"🏆";
+  let html="";
+  if(s.mode==="ranking"){
+    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Antall items</div><div class="scenarioSetupOptions">';
+    [3,4,5,6,8].forEach(n=>html+='<button type="button" class="scenarioSetupOption '+(s.itemCount===n?"active":"")+'" onclick="selectScenarioItemCount('+n+')">'+n+'</button>');
+    html+='<button type="button" class="scenarioSetupOption '+(s.itemCount==="random"?"active":"")+'" onclick="selectScenarioItemCount(\'random\')">Random</button></div></div>';
+    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario</div><button type="button" class="scenarioSetupSelect" onclick="cycleScenario">'+(s.scenarioIndex<0?"🎲 Tilfeldig scenario":"🎭 "+SCENARIOS[s.scenarioIndex])+'</button></div>';
+    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Rankingtype</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.rankingType==="free"?"active":"")+'" onclick="selectScenarioRankingType(\'free\')">🔓 Free Ranking</button><button type="button" class="scenarioSetupOption '+(s.rankingType==="locked"?"active":"")+'" onclick="selectScenarioRankingType(\'locked\')">🔒 Locked Ranking</button></div></div>';
+  } else if(s.mode==="endless"){
+    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario</div><button type="button" class="scenarioSetupSelect" onclick="cycleScenario()">'+(s.scenarioIndex<0?"🎲 Nytt scenario hver runde":"🎭 "+SCENARIOS[s.scenarioIndex])+'</button></div>';
+    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario-rekkefølge</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.endlessScenarioOrder==="random"?"active":"")+'" onclick="selectScenarioEndlessOrder(\'random\')">🎲 Tilfeldig</button><button type="button" class="scenarioSetupOption '+(s.endlessScenarioOrder==="avoidRecent"?"active":"")+'" onclick="selectScenarioEndlessOrder(\'avoidRecent\')">🔄 Unngå nylig brukte</button></div></div>';
+  } else {
+    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Modus</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.tournamentMode==="random"?"active":"")+'" onclick="selectScenarioTournamentMode(\'random\')">🎲 Random items</button><button type="button" class="scenarioSetupOption '+(s.tournamentMode==="category"?"active":"")+'" onclick="selectScenarioTournamentMode(\'category\')">🏷️ Velg kategori</button></div></div>';
+    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Antall deltakere</div><div class="scenarioSetupOptions">';
+    [4,8,16,32].forEach(n=>html+='<button type="button" class="scenarioSetupOption '+(s.tournamentSize===n?"active":"")+'" onclick="selectScenarioTournamentSize('+n+')">'+n+'</button>');
+    html+='<button type="button" class="scenarioSetupOption '+(s.tournamentSize==="random"?"active":"")+'" onclick="selectScenarioTournamentSize(\'random\')">Random</button></div></div>';
+    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.tournamentScenarioMode==="new"?"active":"")+'" onclick="selectScenarioTournamentScenario(\'new\')">🎲 Nytt scenario hver kamp</button><button type="button" class="scenarioSetupOption '+(s.tournamentScenarioMode==="same"?"active":"")+'" onclick="selectScenarioTournamentScenario(\'same\')">🔒 Samme scenario hele turneringen</button></div></div>';
+  }
+  box.innerHTML=html;
+}
 export function openScenarioRankingSetup(){
   ensureScenarioRankingState();
   save();
