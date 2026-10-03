@@ -195,7 +195,7 @@
         <span style="font-size:25px; opacity:.45;">›</span>
       </button>
 
-      <button type="button" style="width:100%; margin:0; padding:16px 18px; box-sizing:border-box; display:flex; align-items:center; gap:14px; text-align:left; background:linear-gradient(135deg,#1d2332,#141923); border:1px solid #30394c; border-radius:16px; color:white; font:inherit; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,.18);">
+      <button type="button" onclick="openScenarioModeSetup('endless')" style="width:100%; margin:0; padding:16px 18px; box-sizing:border-box; display:flex; align-items:center; gap:14px; text-align:left; background:linear-gradient(135deg,#1d2332,#141923); border:1px solid #30394c; border-radius:16px; color:white; font:inherit; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,.18);">
         <span style="width:44px; height:44px; flex:0 0 44px; display:flex; align-items:center; justify-content:center; border-radius:13px; background:#293451; font-size:22px;">♾️</span>
         <span style="min-width:0; flex:1; display:flex; flex-direction:column; gap:3px;">
           <strong style="font-size:16px;">Scenario Endless</strong>
@@ -204,7 +204,7 @@
         <span style="font-size:25px; opacity:.45;">›</span>
       </button>
 
-      <button type="button" style="width:100%; margin:0; padding:16px 18px; box-sizing:border-box; display:flex; align-items:center; gap:14px; text-align:left; background:linear-gradient(135deg,#1d2332,#141923); border:1px solid #30394c; border-radius:16px; color:white; font:inherit; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,.18);">
+      <button type="button" onclick="openScenarioModeSetup('tournament')" style="width:100%; margin:0; padding:16px 18px; box-sizing:border-box; display:flex; align-items:center; gap:14px; text-align:left; background:linear-gradient(135deg,#1d2332,#141923); border:1px solid #30394c; border-radius:16px; color:white; font:inherit; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,.18);">
         <span style="width:44px; height:44px; flex:0 0 44px; display:flex; align-items:center; justify-content:center; border-radius:13px; background:#293451; font-size:22px;">🏆</span>
         <span style="min-width:0; flex:1; display:flex; flex-direction:column; gap:3px;">
           <strong style="font-size:16px;">Scenario Tournament</strong>
@@ -229,10 +229,10 @@
     <div class="scenarioSetupSection">
       <div class="scenarioSetupLabel">Antall items</div>
       <div class="scenarioSetupOptions">
-        <button type="button" class="scenarioSetupOption active">5</button>
-        <button type="button" class="scenarioSetupOption">6</button>
-        <button type="button" class="scenarioSetupOption">8</button>
-        <button type="button" class="scenarioSetupOption">Random</button>
+        <button type="button" class="scenarioSetupOption active" onclick="selectScenarioItemCount(5)">5</button>
+        <button type="button" class="scenarioSetupOption" onclick="selectScenarioItemCount(6)">6</button>
+        <button type="button" class="scenarioSetupOption" onclick="selectScenarioItemCount(8)">8</button>
+        <button type="button" class="scenarioSetupOption" onclick="selectScenarioItemCount('random')">Random</button>
       </div>
     </div>
 
@@ -260,18 +260,25 @@
 
     <div class="scenarioSetupSection">
       <div class="scenarioSetupLabel">Scenario</div>
-      <button type="button" class="scenarioSetupSelect">🎲 Tilfeldig scenario</button>
+      <button type="button" class="scenarioSetupSelect" onclick="cycleScenario()">🎲 Tilfeldig scenario</button>
     </div>
 
     <div class="scenarioSetupSection">
       <div class="scenarioSetupLabel">Rankingtype</div>
       <div class="scenarioSetupModes">
-        <button type="button" class="scenarioSetupMode active"><span>🔓</span><span><strong>Free Ranking</strong><small>Flytt items fritt til riktig plassering.</small></span></button>
-        <button type="button" class="scenarioSetupMode"><span>🔒</span><span><strong>Locked Ranking</strong><small>Plasseringen låses når et item er lagt inn.</small></span></button>
+        <button type="button" class="scenarioSetupMode active" onclick="selectScenarioRankingType('free')"><span>🔓</span><span><strong>Free Ranking</strong><small>Flytt items fritt til riktig plassering.</small></span></button>
+        <button type="button" class="scenarioSetupMode" onclick="selectScenarioRankingType('locked')"><span>🔒</span><span><strong>Locked Ranking</strong><small>Plasseringen låses når et item er lagt inn.</small></span></button>
       </div>
     </div>
 
-    <button type="button" class="scenarioStartButton">▶ Start</button>
+    <button type="button" class="scenarioStartButton" onclick="startScenario()">▶ Start</button>
+  </div>
+</div>
+
+<div id="scenarioGameView" style="display:none; min-height:100vh; box-sizing:border-box; padding:20px; color:white;">
+  <div style="width:90%; max-width:620px; margin:0 auto;">
+    <button onclick="backToScenarioSetup()" class="pageBackButton">← Tilbake</button>
+    <div id="scenarioGameContent"></div>
   </div>
 </div>
 
