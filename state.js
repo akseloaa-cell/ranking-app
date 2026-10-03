@@ -37,7 +37,15 @@ export const state = {
 
   scenarioRanking: {
     selectedCategories: [],
-    categorySearch: ""
+    categorySearch: "",
+    itemCount: 5,
+    rankingType: "free",
+    scenarioIndex: -1,
+    mode: "ranking",
+    activeItems: [],
+    rankedItems: [],
+    lockedCount: 0,
+    activeScenario: ""
   }
 };
 
