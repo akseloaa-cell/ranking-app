@@ -1105,7 +1105,24 @@ button:active {
 }
 
 .tournamentBracketPlayer.winner{
-  font-weight:700;
+  font-weight:800;
+  color:#f4f7ff;
+  background:linear-gradient(90deg,rgba(79,140,255,.16),rgba(79,140,255,.05));
+  border-radius:8px;
+  box-shadow:inset 3px 0 0 #4f8cff;
+}
+
+.tournamentBracketPlayer.winner .tournamentBracketCheck{
+  width:22px;
+  height:22px;
+  flex:0 0 22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:#4f8cff;
+  color:white;
+  box-shadow:0 3px 10px rgba(79,140,255,.28);
 }
 
 .tournamentBracketPlayer.loser{
