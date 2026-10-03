@@ -1018,11 +1018,32 @@ export function updateTournamentSizeOptions(){
 }
 export function confirmTournamentSetup(){
   const pool = getTournamentPool();
-  if (pool.length < 4) return;
+
   if (state.tournament.mode === "daily") {
-    const filtered = getDailyParticipantPool(pool, getDailyConfig());
-    if (filtered.length < 4) return;
+    const config = getDailyConfig();
+    const filtered = getDailyParticipantPool(pool, config);
+
+    if (filtered.length < 4) {
+      alert(
+        "Dagens turnering kan ikke startes ennå.\n\n" +
+        "Regelen «" + getDailyRuleText(config).participants + "» gir bare " +
+        filtered.length + " tilgjengelige deltakere, men du trenger minst 4."
+      );
+      return;
+    }
+
+    if (config.size !== "random" && filtered.length < Number(config.size)) {
+      alert(
+        "Dagens turnering kan ikke startes.\n\n" +
+        "Dagens turnering krever " + config.size + " deltakere, men bare " +
+        filtered.length + " oppfyller dagens deltakerregel."
+      );
+      return;
+    }
+  } else if (pool.length < 4) {
+    return;
   }
+
   startTournament();
 }
 export function backTournament(){
