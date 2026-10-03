@@ -2253,11 +2253,11 @@ button:active {
 
 /* Top 10 ranking position-change animation */
 .rankingMoveUp{
-  animation:rankingMoveUp .45s cubic-bezier(.2,.8,.2,1);
+  animation:rankingMoveUp .7s cubic-bezier(.2,.8,.2,1);
 }
 
 .rankingMoveDown{
-  animation:rankingMoveDown .45s cubic-bezier(.2,.8,.2,1);
+  animation:rankingMoveDown .7s cubic-bezier(.2,.8,.2,1);
 }
 
 @keyframes rankingMoveUp{
