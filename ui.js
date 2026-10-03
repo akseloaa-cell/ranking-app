@@ -57,6 +57,7 @@ export function setMode(mode, menuEl = null){
     "categorySelectView",
     "categoryBattleView",
     "tournamentSection",
+    "scenarioView",
     "categoryManagerView"
   ];
 
@@ -81,6 +82,11 @@ export function setMode(mode, menuEl = null){
     state.tournament.showTournamentHub = true;
 
     renderTournament();
+  }
+
+  if (mode === "scenario"){
+    const el = document.getElementById("scenarioView");
+    if (el) el.style.display = "block";
   }
 
   if (mode === "categorySelect"){
