@@ -33,6 +33,11 @@ export const state = {
     dailyDate: null,
     dailyCompletedDate: null,
     showTournamentHub: false
+  },
+
+  scenarioRanking: {
+    category: "",
+    categorySearch: ""
   }
 };
 
