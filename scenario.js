@@ -84,7 +84,7 @@ export function openScenarioRankingSetup(){
   ensureScenarioRankingState();
   save();
   setMode("scenarioRankingSetup");
-  setupScenarioCategoryDropdown();
+  renderScenarioSetup();
 }
 
 export function backToScenarioHub(){
@@ -210,34 +210,33 @@ export function openScenarioModeSetup(mode){
   ensureScenarioRankingState();
   state.scenarioRanking.mode = mode;
   setMode("scenarioRankingSetup");
-  setupScenarioCategoryDropdown();
-  renderScenarioSetupControls();
+  renderScenarioSetup();
 }
 
 export function selectScenarioItemCount(count){
   ensureScenarioRankingState();
   state.scenarioRanking.itemCount = count;
-  renderScenarioSetupControls();
+  renderScenarioSetup();
   save();
 }
 
 export function selectScenarioRankingType(type){
   ensureScenarioRankingState();
   state.scenarioRanking.rankingType = type;
-  renderScenarioSetupControls();
+  renderScenarioSetup();
   save();
 }
+
+export function selectScenarioEndlessOrder(order){ ensureScenarioRankingState(); state.scenarioRanking.endlessScenarioOrder=order; renderScenarioSetup(); save(); }
+export function selectScenarioTournamentMode(mode){ ensureScenarioRankingState(); state.scenarioRanking.tournamentMode=mode; renderScenarioSetup(); save(); }
+export function selectScenarioTournamentSize(size){ ensureScenarioRankingState(); state.scenarioRanking.tournamentSize=size; renderScenarioSetup(); save(); }
+export function selectScenarioTournamentScenario(mode){ ensureScenarioRankingState(); state.scenarioRanking.tournamentScenarioMode=mode; renderScenarioSetup(); save(); }
 
 export function cycleScenario(){
   ensureScenarioRankingState();
   state.scenarioRanking.scenarioIndex =
     (state.scenarioRanking.scenarioIndex + 1) % SCENARIOS.length;
-  const button = document.querySelector(".scenarioSetupSelect");
-  if(button){
-    button.textContent = state.scenarioRanking.scenarioIndex < 0
-      ? "🎲 Tilfeldig scenario"
-      : "🎭 " + SCENARIOS[state.scenarioRanking.scenarioIndex];
-  }
+  renderScenarioSetup();
   save();
 }
 
