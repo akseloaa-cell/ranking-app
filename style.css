@@ -1107,9 +1107,8 @@ button:active {
 .tournamentBracketPlayer.winner{
   font-weight:800;
   color:#f4f7ff;
-  background:linear-gradient(90deg,rgba(79,140,255,.16),rgba(79,140,255,.05));
-  border-radius:8px;
-
+  background:rgba(79,140,255,.09);
+  border-radius:inherit;
 }
 
 .tournamentBracketPlayer.winner .tournamentBracketCheck{
