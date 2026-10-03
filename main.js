@@ -49,6 +49,7 @@ import {
 } from "./tournament.js";
 
 import { load } from "./storage.js";
+import { openScenarioRankingSetup, backToScenarioHub } from "./scenario.js";
 
 window.startTournament = startTournament;
 window.selectTournamentMode = selectTournamentMode;
@@ -62,6 +63,8 @@ window.selectTournamentDropdown = selectTournamentDropdown;
 window.toggleDailyRule = toggleDailyRule;
 window.resumeTournament = resumeTournament;
 window.filterTournamentCategories = filterTournamentCategories;
+window.openScenarioRankingSetup = openScenarioRankingSetup;
+window.backToScenarioHub = backToScenarioHub;
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
 window.setActiveMenu = ui.setActiveMenu;
