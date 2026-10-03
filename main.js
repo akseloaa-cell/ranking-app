@@ -49,7 +49,7 @@ import {
 } from "./tournament.js";
 
 import { load } from "./storage.js";
-import { openScenarioRankingSetup, openScenarioModeSetup, selectScenarioItemCount, selectScenarioRankingType, cycleScenario, startScenario, renderScenarioGame, placeScenarioItem, moveScenarioItem, finishScenario, backToScenarioSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, clearScenarioCategories, filterScenarioCategories, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown } from "./scenario.js";
+import { openScenarioRankingSetup, openScenarioModeSetup, selectScenarioItemCount, selectScenarioRankingType, cycleScenario, selectScenarioEndlessOrder, selectScenarioTournamentMode, selectScenarioTournamentSize, selectScenarioTournamentScenario, startScenario, renderScenarioGame, placeScenarioItem, moveScenarioItem, finishScenario, backToScenarioSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, clearScenarioCategories, filterScenarioCategories, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown } from "./scenario.js";
 
 window.startTournament = startTournament;
 window.selectTournamentMode = selectTournamentMode;
@@ -68,6 +68,10 @@ window.openScenarioModeSetup = openScenarioModeSetup;
 window.selectScenarioItemCount = selectScenarioItemCount;
 window.selectScenarioRankingType = selectScenarioRankingType;
 window.cycleScenario = cycleScenario;
+window.selectScenarioEndlessOrder = selectScenarioEndlessOrder;
+window.selectScenarioTournamentMode = selectScenarioTournamentMode;
+window.selectScenarioTournamentSize = selectScenarioTournamentSize;
+window.selectScenarioTournamentScenario = selectScenarioTournamentScenario;
 window.startScenario = startScenario;
 window.renderScenarioGame = renderScenarioGame;
 window.placeScenarioItem = placeScenarioItem;
