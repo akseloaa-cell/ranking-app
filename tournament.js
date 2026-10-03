@@ -745,6 +745,36 @@ function renderBracket(){
           left,
           behavior: "smooth"
         });
+
+        // Also keep the currently relevant match vertically in view.
+        // The bracket itself scrolls horizontally, while the page handles
+        // the vertical movement.
+        const matchTarget =
+          t.phase === "thirdPlace"
+            ? thirdPlaceElement?.querySelector(".tournamentBracketMatch")
+            : t.phase === "finished"
+              ? (thirdPlaceElement?.querySelector(".tournamentBracketMatch") || target.querySelector(".tournamentBracketMatch"))
+              : target.querySelector(".tournamentBracketMatch.current");
+
+        if(matchTarget){
+          const rect = matchTarget.getBoundingClientRect();
+          const viewportPadding = 90;
+          const visibleTop = viewportPadding;
+          const visibleBottom = window.innerHeight - viewportPadding;
+
+          if(rect.top < visibleTop || rect.bottom > visibleBottom){
+            const targetY =
+              window.scrollY +
+              rect.top -
+              (window.innerHeight / 2) +
+              (rect.height / 2);
+
+            window.scrollTo({
+              top: Math.max(0, targetY),
+              behavior: "smooth"
+            });
+          }
+        }
       });
     }
   }
