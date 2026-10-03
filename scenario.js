@@ -54,7 +54,6 @@ function ensureScenarioRankingState(){
     state.scenarioRanking.mode = "ranking";
   }
 }
-}
 
 export function openScenarioRankingSetup(){
   ensureScenarioRankingState();
