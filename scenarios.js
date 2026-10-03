@@ -12,7 +12,9 @@ export const SCENARIOS = [
   { id: "scenario_037", text: "Hva trenger du mest akkurat nå?" },
   { id: "scenario_038", text: "Hva gjør deg mest lykkelig" },
   { id: "scenario_039", text: "Hva gir deg mest energi?" },
-  { id: "scenario_040", text: "Hva ville du reddet fra et brennende hus?" }
+  { id: "scenario_040", text: "Hva ville du reddet fra et brennende hus?" },
+  { id: "scenario_041", text: "Hva er vakrest?" },
+  { id: "scenario_042", text: "Hva er mest estetisk?" }
 ];
 
 export function getRandomScenario(list = SCENARIOS) {
