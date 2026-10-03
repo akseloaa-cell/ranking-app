@@ -102,7 +102,7 @@ export function update(){
     }
 
     return `
-      <div onclick="showStats(${item.id})"
+      <div data-ranking-item="${item.id}" data-rank="${currentRank}" onclick="showStats(${item.id})"
         style="display:flex;justify-content:space-between;align-items:center;
         padding:6px 10px;background:#141a26;border:1px solid #2a3142;
         border-radius:10px;margin:4px 0;cursor:pointer;font-size:14px;">
@@ -121,7 +121,25 @@ export function update(){
     `;
   }).join("");
 
-  document.getElementById("ranking").innerHTML = renderDailyMVPCard() + html;
+  const rankingElement = document.getElementById("ranking");
+  const previousTop10 = [...rankingElement.querySelectorAll("[data-ranking-item]")].map(el => Number(el.dataset.rankingItem));
+
+  rankingElement.innerHTML = renderDailyMVPCard() + html;
+
+  const previousPositions = new Map(previousTop10.map((id, index) => [id, index + 1]));
+  rankingElement.querySelectorAll("[data-ranking-item]").forEach(row => {
+    const id = Number(row.dataset.rankingItem);
+    const oldPosition = previousPositions.get(id);
+    const newPosition = Number(row.dataset.rank);
+
+    if(oldPosition !== undefined && oldPosition !== newPosition){
+      row.classList.add(newPosition < oldPosition ? "rankingMoveUp" : "rankingMoveDown");
+      row.addEventListener("animationend", () => {
+        row.classList.remove("rankingMoveUp", "rankingMoveDown");
+      }, { once:true });
+    }
+  });
+
   document.getElementById("a").innerHTML = "";
 document.getElementById("b").innerHTML = "";
   
