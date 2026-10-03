@@ -1108,7 +1108,7 @@ button:active {
   font-weight:800;
   color:#f4f7ff;
   background:rgba(79,140,255,.09);
-  border-radius:inherit;
+  border-radius:8px 0 0 8px;
 }
 
 .tournamentBracketPlayer.winner .tournamentBracketCheck{
