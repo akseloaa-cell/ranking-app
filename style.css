@@ -2249,3 +2249,56 @@ button:active {
     flex-basis:24px;
   }
 }
+
+
+/* Top 10 ranking position-change animation */
+.rankingMoveUp{
+  animation:rankingMoveUp .45s cubic-bezier(.2,.8,.2,1);
+}
+
+.rankingMoveDown{
+  animation:rankingMoveDown .45s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes rankingMoveUp{
+  0%{
+    transform:translateY(16px) scale(.985);
+    opacity:.45;
+    box-shadow:0 0 0 rgba(79,140,255,0);
+  }
+  55%{
+    transform:translateY(-2px) scale(1.01);
+    opacity:1;
+    box-shadow:0 8px 24px rgba(79,140,255,.16);
+  }
+  100%{
+    transform:translateY(0) scale(1);
+    opacity:1;
+    box-shadow:none;
+  }
+}
+
+@keyframes rankingMoveDown{
+  0%{
+    transform:translateY(-16px) scale(.985);
+    opacity:.45;
+    box-shadow:0 0 0 rgba(244,67,54,0);
+  }
+  55%{
+    transform:translateY(2px) scale(1.01);
+    opacity:1;
+    box-shadow:0 8px 24px rgba(244,67,54,.12);
+  }
+  100%{
+    transform:translateY(0) scale(1);
+    opacity:1;
+    box-shadow:none;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .rankingMoveUp,
+  .rankingMoveDown{
+    animation:none;
+  }
+}
