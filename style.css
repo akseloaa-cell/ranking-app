@@ -1097,9 +1097,11 @@ button:active {
 
 .tournamentBracketPlayer > span:first-child{
   min-width:0;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
+  flex:1;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  white-space:normal;
+  line-height:1.25;
 }
 
 .tournamentBracketPlayer.winner{
@@ -2042,5 +2044,37 @@ button:active {
 
   .tournamentHub .tournamentModeText small{
     font-size:10px;
+  }
+}
+
+
+/* Keep tournament item names readable on small screens */
+.tournamentChoiceName{
+  overflow:visible;
+  text-overflow:clip;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  line-height:1.25;
+}
+
+@media (max-width:600px){
+  .tournamentBracketPlayer{
+    align-items:flex-start;
+    font-size:11px;
+    line-height:1.25;
+  }
+
+  .tournamentBracketPlayer > span:first-child{
+    white-space:normal;
+    overflow-wrap:anywhere;
+    word-break:break-word;
+  }
+
+  .tournamentChoiceName{
+    font-size:15px;
+    white-space:normal;
+    overflow-wrap:anywhere;
+    word-break:break-word;
   }
 }
