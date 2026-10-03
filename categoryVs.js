@@ -27,6 +27,8 @@ export function renderCategorySelectScreen(){
   if (!container) return;
 
   container.innerHTML = `
+    <button onclick="setMode('home'); closeMenu();" class="pageBackButton">← Tilbake</button>
+
     <div class="vs-select">
 
       <h2>🎮 Select Category</h2>
