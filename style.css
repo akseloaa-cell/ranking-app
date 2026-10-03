@@ -2360,3 +2360,97 @@ button:active {
   background:linear-gradient(180deg,#232b3a,#1a202b);
   border-color:#465268;
 }
+
+
+/* Scenario Ranking setup */
+
+.scenarioSetupSection{
+  margin:0 0 18px;
+  padding:15px;
+  background:linear-gradient(135deg,#171e2b,#111620);
+  border:1px solid #2d374b;
+  border-radius:16px;
+  text-align:left;
+}
+
+.scenarioSetupLabel{
+  margin-bottom:10px;
+  font-size:13px;
+  font-weight:700;
+  opacity:.7;
+}
+
+.scenarioSetupOptions{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+
+.scenarioSetupOption{
+  width:auto;
+  margin:0;
+  padding:10px 6px;
+  background:#1d2534;
+  border:1px solid #303b50;
+  border-radius:10px;
+  font-size:13px;
+}
+
+.scenarioSetupOption.active{
+  background:#4f8cff;
+  border-color:#4f8cff;
+}
+
+.scenarioSetupSelect{
+  width:100%;
+  margin:0;
+  box-sizing:border-box;
+  text-align:left;
+  background:#1d2534;
+  border:1px solid #303b50;
+}
+
+.scenarioSetupModes{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.scenarioSetupMode{
+  width:100%;
+  margin:0;
+  padding:12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  box-sizing:border-box;
+  text-align:left;
+  background:#1d2534;
+  border:1px solid #303b50;
+}
+
+.scenarioSetupMode > span:first-child{
+  font-size:22px;
+}
+
+.scenarioSetupMode strong,
+.scenarioSetupMode small{
+  display:block;
+}
+
+.scenarioSetupMode small{
+  margin-top:3px;
+  font-size:11px;
+  opacity:.5;
+  font-weight:400;
+}
+
+.scenarioSetupMode.active{
+  border-color:#4f8cff;
+  background:rgba(79,140,255,.10);
+}
+
+.scenarioStartButton{
+  margin-top:8px;
+  width:100%;
+}
