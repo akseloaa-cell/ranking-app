@@ -219,58 +219,12 @@
 <div id="scenarioRankingSetupView" style="display:none; min-height:100vh; box-sizing:border-box; padding:20px; color:white;">
   <div style="width:90%; max-width:460px; margin:0 auto;">
     <button onclick="backToScenarioHub()" class="pageBackButton">← Tilbake</button>
-
     <div style="text-align:center; margin-bottom:24px;">
-      <div style="width:58px; height:58px; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; border-radius:18px; background:linear-gradient(135deg,#4b3b70,#252038); border:1px solid #6b5899; font-size:28px;">📊</div>
-      <h2 style="margin:0; font-size:25px;">Scenario Ranking</h2>
-      <p style="margin:5px 0 0; opacity:.5; font-size:13px;">Sett opp hvordan du vil rangere items</p>
+      <div id="scenarioSetupIcon" style="width:58px;height:58px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;border-radius:18px;background:#252038;border:1px solid #6b5899;font-size:28px;">📊</div>
+      <h2 id="scenarioSetupTitle" style="margin:0;font-size:25px;">Scenario Ranking</h2>
+      <p id="scenarioSetupSubtitle" style="margin:5px 0 0;opacity:.5;font-size:13px;">Sett opp hvordan du vil bruke scenarioene</p>
     </div>
-
-    <div class="scenarioSetupSection">
-      <div class="scenarioSetupLabel">Antall items</div>
-      <div class="scenarioSetupOptions">
-        <button type="button" class="scenarioSetupOption active" onclick="selectScenarioItemCount(5)">5</button>
-        <button type="button" class="scenarioSetupOption" onclick="selectScenarioItemCount(6)">6</button>
-        <button type="button" class="scenarioSetupOption" onclick="selectScenarioItemCount(8)">8</button>
-        <button type="button" class="scenarioSetupOption" onclick="selectScenarioItemCount('random')">Random</button>
-      </div>
-    </div>
-
-    <div class="scenarioSetupSection">
-      <div class="scenarioSetupLabel">Kategori</div>
-      <div class="scenarioCategoryDropdown">
-        <button type="button" class="scenarioCategoryDropdownButton" onclick="toggleScenarioCategoryDropdown()">
-          <span id="scenarioCategoryDropdownText">Alle kategorier</span>
-          <span>⌄</span>
-        </button>
-
-        <div id="scenarioCategoryDropdownMenu" class="scenarioCategoryDropdownMenu hidden" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()">
-          <input
-            id="scenarioCategorySearch"
-            type="search"
-            placeholder="Søk kategori..."
-            onclick="event.stopPropagation()"
-            onmousedown="event.stopPropagation()"
-            oninput="filterScenarioCategories(this.value)"
-          >
-          <div id="scenarioCategoryDropdownOptions"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="scenarioSetupSection">
-      <div class="scenarioSetupLabel">Scenario</div>
-      <button type="button" class="scenarioSetupSelect" onclick="cycleScenario()">🎲 Tilfeldig scenario</button>
-    </div>
-
-    <div class="scenarioSetupSection">
-      <div class="scenarioSetupLabel">Rankingtype</div>
-      <div class="scenarioSetupModes">
-        <button type="button" class="scenarioSetupMode active" onclick="selectScenarioRankingType('free')"><span>🔓</span><span><strong>Free Ranking</strong><small>Flytt items fritt til riktig plassering.</small></span></button>
-        <button type="button" class="scenarioSetupMode" onclick="selectScenarioRankingType('locked')"><span>🔒</span><span><strong>Locked Ranking</strong><small>Plasseringen låses når et item er lagt inn.</small></span></button>
-      </div>
-    </div>
-
+    <div id="scenarioSetupDynamic"></div>
     <button type="button" class="scenarioStartButton" onclick="startScenario()">▶ Start</button>
   </div>
 </div>
