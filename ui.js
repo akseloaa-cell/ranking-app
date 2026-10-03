@@ -58,6 +58,7 @@ export function setMode(mode, menuEl = null){
     "categoryBattleView",
     "tournamentSection",
     "scenarioView",
+    "scenarioRankingSetupView",
     "categoryManagerView"
   ];
 
