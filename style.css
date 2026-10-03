@@ -1105,12 +1105,18 @@ button:active {
 }
 
 .tournamentBracketPlayer.winner{
+  position:relative;
   font-weight:800;
   color:#f4f7ff;
   background:rgba(79,140,255,.09);
   height:35px;
   min-height:35px;
   overflow:hidden;
+}
+
+.tournamentBracketPlayer.winner > span:first-child{
+  width:100%;
+  text-align:center;
 }
 
 .tournamentBracketPlayer.winnerTop{
@@ -1122,6 +1128,10 @@ button:active {
 }
 
 .tournamentBracketPlayer.winner .tournamentBracketCheck{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
   width:22px;
   height:22px;
   flex:0 0 22px;
@@ -1136,6 +1146,8 @@ button:active {
 
 .tournamentBracketPlayer.loser{
   opacity:.45;
+  text-decoration:line-through;
+  text-decoration-thickness:1px;
 }
 
 .tournamentBracketCheck{
