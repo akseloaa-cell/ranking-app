@@ -1108,8 +1108,8 @@ button:active {
   font-weight:800;
   color:#f4f7ff;
   background:rgba(79,140,255,.09);
-  height:34px;
-  min-height:34px;
+  height:35px;
+  min-height:35px;
   overflow:hidden;
 }
 
