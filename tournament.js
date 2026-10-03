@@ -229,34 +229,49 @@ export function renderTournament(){
   if (state.tournament.phase === "hub" || state.tournament.showTournamentHub) {
 
     root.innerHTML = `
+      <div class="tournamentHub">
+        <div class="tournamentHubHeader">
+          <div class="tournamentHubTrophy">🏆</div>
+          <h2>Turnering</h2>
+          <p>Velg hvordan du vil konkurrere</p>
+        </div>
 
-<h3>
-Velg gamemode
-</h3>
+        <div class="tournamentModeCards">
+          <button class="tournamentModeCard randomModeCard" onclick="selectTournamentMode('random')">
+            <span class="tournamentModeIcon randomModeIcon">🎲</span>
+            <span class="tournamentModeText">
+              <strong>Random</strong>
+              <small>Tilfeldige deltakere fra alle items</small>
+            </span>
+            <span class="tournamentModeArrow">›</span>
+          </button>
 
-<button onclick="selectTournamentMode('random')">
-🎲 Random
-</button>
+          <button class="tournamentModeCard categoryModeCard" onclick="selectTournamentMode('category')">
+            <span class="tournamentModeIcon categoryModeIcon">🏷️</span>
+            <span class="tournamentModeText">
+              <strong>Category</strong>
+              <small>Velg en kategori og bygg din egen turnering</small>
+            </span>
+            <span class="tournamentModeArrow">›</span>
+          </button>
 
-<br><br>
-
-<button onclick="selectTournamentMode('category')">
-🏷️ Category
-</button>
-
-<br><br>
-
-<button onclick="selectTournamentMode('daily')">
-🌟 Daily Tournament
-</button>
-
-<div id="dailyTournamentCountdown" style="text-align:center;opacity:.55;font-size:11px;"></div>
-
-`;
+          <button class="tournamentModeCard dailyTournamentCard" onclick="selectTournamentMode('daily')">
+            <span class="tournamentModeIcon dailyModeIcon">🌟</span>
+            <span class="tournamentModeText">
+              <strong>Daily Tournament</strong>
+              <small>Dagens unike regler og belønninger</small>
+            </span>
+            <span id="dailyTournamentCountdown" class="dailyTournamentCountdown"></span>
+            <span class="tournamentModeArrow">›</span>
+          </button>
+        </div>
+      </div>
+    `;
 
     if (["active", "thirdPlace"].includes(state.tournament.phase)) {
       const resume = document.createElement("button");
-      resume.textContent = "↩️ Fortsett turnering";
+      resume.className = "tournamentResumeCard";
+      resume.innerHTML = '<span class="tournamentResumeIcon">↩️</span><span class="tournamentResumeText"><strong>Fortsett turnering</strong><small>Gå tilbake til turneringen du startet</small></span><span class="tournamentResumeArrow">›</span>';
       resume.onclick = () => resumeTournament();
       root.insertBefore(resume, root.firstChild);
     }
