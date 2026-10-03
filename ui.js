@@ -90,6 +90,11 @@ export function setMode(mode, menuEl = null){
     if (el) el.style.display = "block";
   }
 
+  if (mode === "scenarioRankingSetup"){
+    const el = document.getElementById("scenarioRankingSetupView");
+    if (el) el.style.display = "block";
+  }
+
   if (mode === "categorySelect"){
     const el = document.getElementById("categorySelectView");
     if (el) el.style.display = "block";
