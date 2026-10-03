@@ -319,7 +319,7 @@ export function renderTournament(){
     root.innerHTML = `
 
 <div class="dailySetupView">
-<button class="dailySetupBack" onclick="backTournament()">← Tilbake</button>
+<button class="dailySetupBack ${state.tournament.mode === "category" ? "categorySetupBack" : ""}" onclick="backTournament()"><span class="categorySetupBackIcon">←</span><span>Tilbake til turneringer</span></button>
 
 ${state.tournament.mode === "random" ? `<div class="dailySetupHeader randomSetupHeader">
   <div class="dailySetupIcon randomSetupIcon">🎲</div>
