@@ -254,7 +254,13 @@ Velg gamemode
 
 `;
 
-    if (["active", "thirdPlace"].includes(state.tournament.phase)) {\n      const resume = document.createElement("button");\n      resume.textContent = "↩️ Fortsett turnering";\n      resume.onclick = () => resumeTournament();\n      root.insertBefore(resume, root.firstChild);\n    }\n\n    const bracketView = document.getElementById("bracketView");
+    if (["active", "thirdPlace"].includes(state.tournament.phase)) {
+      const resume = document.createElement("button");
+      resume.textContent = "↩️ Fortsett turnering";
+      resume.onclick = () => resumeTournament();
+      root.insertBefore(resume, root.firstChild);
+    }
+\n    const bracketView = document.getElementById("bracketView");
     if (bracketView) bracketView.innerHTML = "";
 
     startDailyCountdown();
