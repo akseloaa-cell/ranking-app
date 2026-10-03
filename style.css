@@ -2454,3 +2454,84 @@ button:active {
   margin-top:8px;
   width:100%;
 }
+
+
+/* Scenario Ranking category selector */
+
+.scenarioCategoryDropdown{
+  position:relative;
+  width:100%;
+}
+
+.scenarioCategoryDropdownButton{
+  width:100%;
+  margin:0;
+  padding:11px 12px;
+  box-sizing:border-box;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  text-align:left;
+  background:#1d2534;
+  border:1px solid #303b50;
+  border-radius:10px;
+  color:inherit;
+  font:inherit;
+  cursor:pointer;
+}
+
+.scenarioCategoryDropdownButton:hover{
+  border-color:#4f8cff;
+  background:#202a3b;
+}
+
+.scenarioCategoryDropdownMenu{
+  position:absolute;
+  left:0;
+  right:0;
+  top:calc(100% + 6px);
+  z-index:100;
+  padding:7px;
+  box-sizing:border-box;
+  background:#171d29;
+  border:1px solid #303b50;
+  border-radius:12px;
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
+}
+
+.scenarioCategoryDropdownMenu.hidden{
+  display:none;
+}
+
+#scenarioCategorySearch{
+  width:100%;
+  margin:0 0 7px;
+  padding:9px 10px;
+  box-sizing:border-box;
+  background:#111722;
+  border:1px solid #2d374b;
+  border-radius:9px;
+  color:white;
+  font:inherit;
+  font-size:12px;
+}
+
+.scenarioCategoryDropdownOption{
+  padding:10px 11px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:13px;
+}
+
+.scenarioCategoryDropdownOption:hover,
+.scenarioCategoryDropdownOption.active{
+  background:#293650;
+}
+
+.scenarioCategoryDropdownEmpty{
+  padding:10px 11px;
+  font-size:12px;
+  opacity:.5;
+  text-align:center;
+}
