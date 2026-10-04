@@ -206,6 +206,35 @@ export function saveDailyRanking(){
   localStorage.setItem("lastRankingDate", today);
 }
 
+function buildScenarioRankingSnapshot(){
+  const sorted = [...state.items].sort((a,b) => {
+    const ar = Number.isFinite(a.scenarioRating) ? a.scenarioRating : 1000;
+    const br = Number.isFinite(b.scenarioRating) ? b.scenarioRating : 1000;
+    return br - ar || a.name.localeCompare(b.name);
+  });
+
+  const rankingMap = {};
+  sorted.forEach((item, i) => {
+    rankingMap[String(item.id)] = i + 1;
+  });
+
+  return rankingMap;
+}
+
+export function saveDailyScenarioRanking(){
+  const today = getTodayKey();
+
+  if(state.lastScenarioRankingDate === today) return;
+
+  const rankingMap = buildScenarioRankingSnapshot();
+
+  state.previousScenarioRanking = rankingMap;
+  state.lastScenarioRankingDate = today;
+
+  localStorage.setItem("previousScenarioRanking", JSON.stringify(rankingMap));
+  localStorage.setItem("lastScenarioRankingDate", today);
+}
+
 const saved = load();
 if(saved) Object.assign(state, saved);
 
@@ -267,5 +296,6 @@ if(!state.previousRankingByCategory || !Object.keys(state.previousRankingByCateg
 }
 
 saveDailyRanking();
+saveDailyScenarioRanking();
 update();
 nextMatch();
