@@ -366,6 +366,52 @@ export function renderScenarioSetupControls(){
   }
 }
 
+function ensureScenarioElo(item){
+  if(!item) return 1000;
+  if(!Number.isFinite(item.scenarioRating)) item.scenarioRating = 1000;
+  return item.scenarioRating;
+}
+
+function updateScenarioElo(rankedItems){
+  if(!Array.isArray(rankedItems) || rankedItems.length < 2) return;
+  const K = 32;
+  const ratings = new Map(rankedItems.map(item => [item.id, ensureScenarioElo(item)]));
+  const changes = new Map(rankedItems.map(item => [item.id, 0]));
+
+  for(let i = 0; i < rankedItems.length; i++){
+    for(let j = i + 1; j < rankedItems.length; j++){
+      const a = rankedItems[i];
+      const b = rankedItems[j];
+      const ra = ratings.get(a.id);
+      const rb = ratings.get(b.id);
+      const expectedA = 1 / (1 + Math.pow(10, (rb - ra) / 400));
+      const expectedB = 1 - expectedA;
+      changes.set(a.id, changes.get(a.id) + K * (1 - expectedA));
+      changes.set(b.id, changes.get(b.id) + K * (0 - expectedB));
+    }
+  }
+
+  rankedItems.forEach(item => {
+    item.scenarioRating = Math.max(100, Math.round(ratings.get(item.id) + changes.get(item.id)));
+  });
+}
+
+function updateScenarioEloMatch(winner, loser){
+  if(!winner || !loser) return;
+  const K = 32;
+  const winnerRating = ensureScenarioElo(winner);
+  const loserRating = ensureScenarioElo(loser);
+  const expectedWinner = 1 / (1 + Math.pow(10, (loserRating - winnerRating) / 400));
+  const change = Math.round(K * (1 - expectedWinner));
+  winner.scenarioRating = Math.max(100, winnerRating + change);
+  loser.scenarioRating = Math.max(100, loserRating - change);
+}
+
+function getScenarioEloRank(item){
+  ensureScenarioElo(item);
+  return [...state.items].sort((a,b) => ensureScenarioElo(b) - ensureScenarioElo(a)).findIndex(x => x.id === item.id) + 1;
+}
+
 function getScenarioPool(){
   const selected = state.scenarioRanking.selectedCategories || [];
   if(!selected.length) return [...state.items];
@@ -470,6 +516,7 @@ export function renderScenarioEndlessGame(){
 
   const items = state.scenarioRanking.activeItems || [];
   if(items.length < 2) return;
+  items.forEach(ensureScenarioElo);
 
   box.innerHTML = `
     <div style="text-align:center;margin-bottom:24px;">
@@ -479,13 +526,13 @@ export function renderScenarioEndlessGame(){
 
     <div style="display:flex;align-items:stretch;gap:12px;width:100%;max-width:760px;margin:0 auto;">
       <button type="button" onclick="chooseScenarioEndlessWinner(${items[0].id})" style="flex:1;min-width:0;min-height:190px;padding:28px 18px;border:1px solid rgba(255,255,255,.12);border-radius:20px;background:linear-gradient(145deg,#202a3d,#171e2b);box-shadow:0 8px 24px rgba(0,0,0,.22);color:inherit;display:flex;align-items:center;justify-content:center;text-align:center;font-size:20px;font-weight:650;line-height:1.3;cursor:pointer;overflow:hidden;">
-        <span style="max-width:18em;overflow-wrap:anywhere;">${items[0].name}</span>
+        <span style="max-width:18em;overflow-wrap:anywhere;"><span style="display:block;">${items[0].name}</span><small style="display:block;margin-top:8px;opacity:.45;font-size:11px;">⭐ ${Math.round(items[0].scenarioRating)}</small></span>
       </button>
 
       <div style="align-self:center;flex:0 0 auto;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#171e2b;border:1px solid rgba(255,255,255,.12);box-shadow:0 4px 14px rgba(0,0,0,.18);font-size:10px;font-weight:800;letter-spacing:.04em;opacity:.7;">VS</div>
 
       <button type="button" onclick="chooseScenarioEndlessWinner(${items[1].id})" style="flex:1;min-width:0;min-height:190px;padding:28px 18px;border:1px solid rgba(255,255,255,.12);border-radius:20px;background:linear-gradient(145deg,#202a3d,#171e2b);box-shadow:0 8px 24px rgba(0,0,0,.22);color:inherit;display:flex;align-items:center;justify-content:center;text-align:center;font-size:20px;font-weight:650;line-height:1.3;cursor:pointer;overflow:hidden;">
-        <span style="max-width:18em;overflow-wrap:anywhere;">${items[1].name}</span>
+        <span style="max-width:18em;overflow-wrap:anywhere;"><span style="display:block;">${items[1].name}</span><small style="display:block;margin-top:8px;opacity:.45;font-size:11px;">⭐ ${Math.round(items[1].scenarioRating)}</small></span>
       </button>
     </div>
 
@@ -497,6 +544,8 @@ function recordScenarioEndlessResult(winner){
   if(!state.scenarioStats) state.scenarioStats = { games:0, byItem:{}, byScenario:{} };
   const scenario = state.scenarioRanking.activeScenario || "Ukjent scenario";
   state.scenarioStats.byScenario[scenario] = (state.scenarioStats.byScenario[scenario] || 0) + 1;
+  const loser = (state.scenarioRanking.activeItems || []).find(item => item.id !== winner.id);
+  updateScenarioEloMatch(winner, loser);
   state.scenarioRanking.endlessGames = (state.scenarioRanking.endlessGames || 0) + 1;
   state.scenarioRanking.endlessWins = (state.scenarioRanking.endlessWins || 0) + 1;
 
@@ -718,6 +767,7 @@ export function finishScenario(){
 
   if(ranked.length !== active.length || !ranked.every(Boolean)) return;
 
+  updateScenarioElo(ranked);
   recordScenarioStats();
   save();
 
