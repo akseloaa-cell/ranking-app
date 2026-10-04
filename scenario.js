@@ -467,6 +467,7 @@ export function renderScenarioEndlessGame(){
   const box = document.getElementById("scenarioGameContent");
   if(!box) return;
   setMode("scenarioGame");
+
   const items = state.scenarioRanking.activeItems || [];
   const wins = state.scenarioRanking.endlessWins || 0;
   const games = state.scenarioRanking.endlessGames || 0;
@@ -476,13 +477,22 @@ export function renderScenarioEndlessGame(){
       <div style="font-size:13px;opacity:.5;margin-bottom:7px;">Scenario Endless</div>
       <h2 style="margin:0;line-height:1.25;">${state.scenarioRanking.activeScenario || "Scenario"}</h2>
       <div style="display:flex;justify-content:center;gap:18px;margin-top:12px;font-size:13px;opacity:.75;">
-        <span>🏆 Seire: ${wins}</span><span>🎮 Matcher: ${games}</span>
+        <span>🏆 Seire: ${wins}</span>
+        <span>🎮 Matcher: ${games}</span>
       </div>
-      <p style="opacity:.55;font-size:12px;margin-bottom:0;">Hvilket item passer best til scenarioet?</p>
     </div>
-    <div style="display:flex;flex-direction:column;gap:10px;">
-      ${items.map(item => `<button type="button" onclick="chooseScenarioEndlessWinner(${item.id})" style="width:100%;text-align:left;padding:16px 14px;font-size:16px;line-height:1.3;">${item.name}</button>`).join("")}
+
+    <div style="display:flex;align-items:center;gap:10px;width:100%;">
+      ${items.map((item,index) => `
+        <button type="button"
+          onclick="chooseScenarioEndlessWinner(${item.id})"
+          style="flex:1;min-width:0;min-height:150px;padding:20px 12px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:18px;font-weight:600;line-height:1.3;">
+          ${item.name}
+        </button>
+        ${index === 0 ? '<div style="flex:0 0 auto;font-size:14px;font-weight:700;opacity:.5;">VS</div>' : ''}
+      `).join("")}
     </div>
+
     <button type="button" onclick="exitScenarioEndless()" style="width:100%;margin-top:14px;">← Avslutt Endless</button>
   `;
 }
