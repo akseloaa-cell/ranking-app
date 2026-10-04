@@ -321,7 +321,6 @@ export function showStats(id){
   openStats();
   const statsOverlayTest = document.getElementById("statsOverlay");
   const statsViewTest = document.getElementById("statsView");
-  alert("OPENSTATS KJØRT! Overlay: " + (statsOverlayTest?.style.display || "ingen") + " | View: " + (statsViewTest?.style.transform || "ingen"));
   renderStatsChips(id);
   if(state.showAllH2H) renderH2HList(item, state.h2hSearch || "");
 }
