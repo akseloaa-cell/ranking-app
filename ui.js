@@ -60,6 +60,7 @@ export function setMode(mode, menuEl = null){
     "scenarioView",
     "scenarioRankingSetupView",
     "scenarioGameView",
+    "scenarioResultView",
     "categoryManagerView"
   ];
 
@@ -98,6 +99,11 @@ export function setMode(mode, menuEl = null){
 
   if (mode === "scenarioGame"){
     const el = document.getElementById("scenarioGameView");
+    if (el) el.style.display = "block";
+  }
+
+  if (mode === "scenarioResult"){
+    const el = document.getElementById("scenarioResultView");
     if (el) el.style.display = "block";
   }
 
