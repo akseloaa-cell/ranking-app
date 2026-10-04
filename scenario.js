@@ -1,6 +1,7 @@
 import { state } from "./state.js";
 import { save } from "./storage.js";
 import { setMode } from "./ui.js";
+import { showStats } from "./stats.js";
 
 const SCENARIOS = [
   "Hva stoler du mest på?",
@@ -165,7 +166,7 @@ function setupScenarioLeaderboardClicks(){
   box.querySelectorAll("[data-scenario-item-id]").forEach(row => {
     row.addEventListener("click", () => {
       const id = row.dataset.scenarioItemId;
-      if(typeof window.showStats === "function") window.showStats(id);
+      showStats(id);
     });
   });
 }
