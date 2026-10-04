@@ -6,6 +6,8 @@ export const state = {
   previousRanking: JSON.parse(localStorage.getItem("previousRanking")) || {},
   previousRankingByCategory: JSON.parse(localStorage.getItem("previousRankingByCategory")) || {},
   lastRankingDate: localStorage.getItem("lastRankingDate") || null,
+  previousScenarioRanking: JSON.parse(localStorage.getItem("previousScenarioRanking")) || {},
+  lastScenarioRankingDate: localStorage.getItem("lastScenarioRankingDate") || null,
   recentMatches: JSON.parse(localStorage.getItem("recentMatches")) || [],
 
   showAllAddChips: false,
