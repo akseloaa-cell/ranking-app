@@ -49,7 +49,8 @@ export const state = {
     endlessScenarioOrder: "random",
     tournamentMode: "random",
     tournamentSize: 8,
-    tournamentScenarioMode: "new"
+    tournamentScenarioMode: "new",
+    endlessScenarioMode: "fixed"
   },
 
   scenarioStats: {
