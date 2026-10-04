@@ -50,6 +50,12 @@ export const state = {
     tournamentMode: "random",
     tournamentSize: 8,
     tournamentScenarioMode: "new"
+  },
+
+  scenarioStats: {
+    games: 0,
+    byItem: {},
+    byScenario: {}
   }
 };
 
