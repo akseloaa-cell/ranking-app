@@ -49,7 +49,7 @@ import {
 } from "./tournament.js";
 
 import { load } from "./storage.js";
-import { openScenarioRankingSetup, openScenarioModeSetup, selectScenarioItemCount, selectScenarioRankingType, selectScenarioMode, selectScenario, cycleScenario, selectScenarioEndlessOrder, selectScenarioEndlessMode, selectScenarioTournamentMode, selectScenarioTournamentSize, selectScenarioTournamentScenario, startScenario, renderScenarioGame, placeScenarioItem, moveScenarioItem, dragScenarioItem, allowScenarioDrop, dropScenarioItem, finishScenario, backToScenarioSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, clearScenarioCategories, filterScenarioCategories, filterScenarios, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown, renderScenarioResult, scenarioPlayAgain, scenarioNewSettings } from "./scenario.js";
+import { openScenarioRankingSetup, openScenarioModeSetup, selectScenarioItemCount, selectScenarioRankingType, selectScenarioMode, selectScenario, cycleScenario, selectScenarioEndlessOrder, selectScenarioEndlessMode, selectScenarioTournamentMode, selectScenarioTournamentSize, selectScenarioTournamentScenario, startScenario, renderScenarioGame, renderScenarioEndlessGame, chooseScenarioEndlessWinner, exitScenarioEndless, placeScenarioItem, moveScenarioItem, dragScenarioItem, allowScenarioDrop, dropScenarioItem, finishScenario, backToScenarioSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, clearScenarioCategories, filterScenarioCategories, filterScenarios, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown, renderScenarioResult, scenarioPlayAgain, scenarioNewSettings } from "./scenario.js";
 
 window.startTournament = startTournament;
 window.selectTournamentMode = selectTournamentMode;
@@ -77,6 +77,9 @@ window.selectScenarioTournamentSize = selectScenarioTournamentSize;
 window.selectScenarioTournamentScenario = selectScenarioTournamentScenario;
 window.startScenario = startScenario;
 window.renderScenarioGame = renderScenarioGame;
+window.renderScenarioEndlessGame = renderScenarioEndlessGame;
+window.chooseScenarioEndlessWinner = chooseScenarioEndlessWinner;
+window.exitScenarioEndless = exitScenarioEndless;
 window.placeScenarioItem = placeScenarioItem;
 window.moveScenarioItem = moveScenarioItem;
 window.dragScenarioItem = dragScenarioItem;
