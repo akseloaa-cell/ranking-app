@@ -318,6 +318,7 @@ export function showStats(id){
     </div>
   `;
 
+  alert("SHOWSTATS FUNGERER! Statistikkinnholdet er laget.");
   openStats();
   renderStatsChips(id);
   if(state.showAllH2H) renderH2HList(item, state.h2hSearch || "");
