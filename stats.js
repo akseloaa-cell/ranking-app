@@ -318,8 +318,9 @@ export function showStats(id){
     </div>
   `;
 
-  alert("SHOWSTATS FUNGERER! Statistikkinnholdet er laget.");
   openStats();
-  renderStatsChips(id);
+  const statsOverlayTest = document.getElementById("statsOverlay");
+  const statsViewTest = document.getElementById("statsView");
+  alert("OPENSTATS KJØRT! Overlay: " + (statsOverlayTest?.style.display || "ingen") + " | View: " + (statsViewTest?.style.transform || "ingen"));\n  renderStatsChips(id);
   if(state.showAllH2H) renderH2HList(item, state.h2hSearch || "");
 }
