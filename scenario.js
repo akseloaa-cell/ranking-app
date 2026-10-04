@@ -200,8 +200,6 @@ export function showScenarioStats(id){
     <p><b>🎭 Scenario Ranking</b></p>
     <p>📊 Gj.snitt i ranking: ${hasRanking ? "#" + average : "-"}</p>
     <p>🥇 1.plasser i ranking: ${firsts}</p>
-    <p>🥈 2.plasser i ranking: ${seconds}</p>
-    <p>🥉 3.plasser i ranking: ${thirds}</p>
     <p>🎭 Antall rankinger: ${s?.appearances || 0}</p>
 
     <hr style="border:none;border-top:1px solid #2d374b;margin:18px 0;">
