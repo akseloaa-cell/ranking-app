@@ -346,16 +346,38 @@ function getScenarioText(){
 export function startScenario(){
   ensureScenarioRankingState();
   const pool = getScenarioPool();
-  if(pool.length < 2){
-    alert("Du trenger minst 2 items for å starte et scenario.");
+
+  if(state.scenarioRanking.mode === "tournament"){
+    const requestedSize = state.scenarioRanking.tournamentSize === "random"
+      ? 4
+      : Number(state.scenarioRanking.tournamentSize);
+
+    if(pool.length < requestedSize){
+      alert("Du har ikke nok gyldige deltakere til å starte turneringen. Du trenger minst " + requestedSize + " items, men har bare " + pool.length + ".");
+      return;
+    }
+  } else if(pool.length < 2){
+    alert("Du har ikke nok gyldige deltakere til å starte. Du trenger minst 2 items, men har bare " + pool.length + ".");
     return;
   }
 
-  let count = state.scenarioRanking.itemCount === "random"
-    ? Math.floor(Math.random() * Math.min(8, pool.length - 1)) + 2
-    : Number(state.scenarioRanking.itemCount);
+  let count;
+  if(state.scenarioRanking.mode === "tournament"){
+    count = state.scenarioRanking.tournamentSize === "random"
+      ? Math.max(4, Math.min(32, pool.length))
+      : Number(state.scenarioRanking.tournamentSize);
+  } else if(state.scenarioRanking.mode === "endless"){
+    count = Math.min(5, pool.length);
+  } else {
+    count = state.scenarioRanking.itemCount === "random"
+      ? Math.floor(Math.random() * Math.min(8, pool.length - 1)) + 2
+      : Number(state.scenarioRanking.itemCount);
 
-  count = Math.max(2, Math.min(count, pool.length));
+    if(count > pool.length){
+      alert("Du har ikke nok gyldige deltakere til å starte. Du har valgt " + count + " items, men har bare " + pool.length + " tilgjengelige.");
+      return;
+    }
+  }
 
   const shuffled = [...pool].sort(() => Math.random() - 0.5).slice(0, count);
   state.scenarioRanking.activeItems = shuffled;
