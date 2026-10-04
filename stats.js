@@ -246,19 +246,25 @@ export function showStats(id){
 
       <hr>
 
-      <p><b>🎭 Scenario Ranking</b></p>
+      <p><b>🎭 Scenario</b></p>
       ${(() => {
         const s = state.scenarioStats?.byItem?.[String(item.id)];
-        if(!s || !s.appearances){
-          return '<p style="opacity:.5;">Ingen Scenario Ranking-statistikk ennå.</p>';
-        }
-        const average = (s.totalRank / s.appearances).toFixed(1);
+        const hasRanking = !!(s && s.appearances);
+        const average = hasRanking ? (s.totalRank / s.appearances).toFixed(1) : "-";
+        const firsts = s?.firsts || 0;
+        const tournamentWins = s?.tournamentWins || 0;
+        const tournamentsPlayed = s?.tournamentsPlayed || 0;
+        const endlessWins = s?.endlessWins || 0;
+        const endlessGames = s?.endlessGames || 0;
+        const endlessWinrate = endlessGames ? ((endlessWins / endlessGames) * 100).toFixed(1) + "%" : "-";
+
         return `
-          <p>🎭 Rankinger: ${s.appearances}</p>
-          <p>📊 Gjennomsnittsplassering: #${average}</p>
-          <p>🥇 1.-plasser: ${s.firsts}</p>
-          <p>🥈 2.-plasser: ${s.seconds}</p>
-          <p>🥉 3.-plasser: ${s.thirds}</p>
+          <p>📊 Gj.snitt i ranking: ${hasRanking ? "#" + average : "-"}</p>
+          <p>🥇 1.plasser i ranking: ${firsts}</p>
+          <p>🎭 Antall rankinger: ${s?.appearances || 0}</p>
+          <p>🏆 Turneringsseiere: ${tournamentWins}</p>
+          <p>🎮 Antall turneringer: ${tournamentsPlayed}</p>
+          <p>♾️ Endless Winrate: ${endlessWinrate}</p>
         `;
       })()}
 
