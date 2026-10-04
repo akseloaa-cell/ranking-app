@@ -240,9 +240,10 @@ export function showStats(id){
 
       <hr>
 
-      <p>🏆 Wins: ${item.tournamentWins || 0}</p>
+      <p><b>🏆 Turnering</b></p>
+      <p>🏆 Turneringsseiere: ${item.tournamentWins || 0}</p>
       <p>🥇 Top 3: ${item.top3 || 0}</p>
-      <p>🎮 Played: ${item.tournamentsPlayed || 0}</p>
+      <p>🎮 Antall turneringer: ${item.tournamentsPlayed || 0}</p>
 
       <hr>
 
