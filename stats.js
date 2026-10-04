@@ -293,7 +293,7 @@ export function showStats(id){
       <div id="catSection" style="display:none;">
 
         <p>
-          ${item.categories.map(c => `
+          ${(item.categories || []).map(c => `
             <span onclick="removeCatFromItem(${item.id}, '${c}')">
               ${c} ✕
             </span>
