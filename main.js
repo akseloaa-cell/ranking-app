@@ -49,7 +49,7 @@ import {
 } from "./tournament.js";
 
 import { load } from "./storage.js";
-import { openScenarioRankingSetup, openScenarioModeSetup, selectScenarioItemCount, selectScenarioRankingType, selectScenarioMode, selectScenario, cycleScenario, selectScenarioEndlessOrder, selectScenarioTournamentMode, selectScenarioTournamentSize, selectScenarioTournamentScenario, startScenario, renderScenarioGame, placeScenarioItem, moveScenarioItem, dragScenarioItem, allowScenarioDrop, dropScenarioItem, finishScenario, backToScenarioSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, clearScenarioCategories, filterScenarioCategories, filterScenarios, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown, renderScenarioResult, scenarioPlayAgain, scenarioNewSettings } from "./scenario.js";
+import { openScenarioRankingSetup, openScenarioModeSetup, selectScenarioItemCount, selectScenarioRankingType, selectScenarioMode, selectScenario, cycleScenario, selectScenarioEndlessOrder, selectScenarioEndlessMode, selectScenarioTournamentMode, selectScenarioTournamentSize, selectScenarioTournamentScenario, startScenario, renderScenarioGame, placeScenarioItem, moveScenarioItem, dragScenarioItem, allowScenarioDrop, dropScenarioItem, finishScenario, backToScenarioSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, clearScenarioCategories, filterScenarioCategories, filterScenarios, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown, renderScenarioResult, scenarioPlayAgain, scenarioNewSettings } from "./scenario.js";
 
 window.startTournament = startTournament;
 window.selectTournamentMode = selectTournamentMode;
@@ -71,6 +71,7 @@ window.selectScenarioMode = selectScenarioMode;
 window.selectScenario = selectScenario;
 window.cycleScenario = cycleScenario;
 window.selectScenarioEndlessOrder = selectScenarioEndlessOrder;
+window.selectScenarioEndlessMode = selectScenarioEndlessMode;
 window.selectScenarioTournamentMode = selectScenarioTournamentMode;
 window.selectScenarioTournamentSize = selectScenarioTournamentSize;
 window.selectScenarioTournamentScenario = selectScenarioTournamentScenario;
