@@ -414,12 +414,16 @@ export function renderScenarioGame(){
       <div style="background:#171e2b;border:1px solid #2d374b;border-radius:16px;padding:12px;">
         <div style="font-size:12px;opacity:.55;margin:0 0 8px;">Din rangering</div>
         ${ranked.map((item,index) => `
-          <div style="display:flex;align-items:center;gap:8px;padding:10px;background:#20283a;border-radius:10px;margin:6px 0;">
-            <b style="width:28px;">#${index+1}</b>
-            <span style="flex:1;">${item.name}</span>
-            <button type="button" onclick="moveScenarioItem(${index},-1)" ${index===0?"disabled":""}>↑</button>
-            <button type="button" onclick="moveScenarioItem(${index},1)" ${index===ranked.length-1?"disabled":""}>↓</button>
+          <div draggable="true" ondragstart="dragScenarioItem(${index},event)" ondragover="allowScenarioDrop(event)" ondrop="dropScenarioItem(${index},event)" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#20283a;border-radius:10px;margin:6px 0;cursor:grab;user-select:none;">
+            <span style="width:22px;flex:0 0 22px;text-align:center;opacity:.45;">☷</span>
+            <b style="width:28px;flex:0 0 28px;">#${index+1}</b>
+            <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${item.name}</span>
+            <div style="width:56px;flex:0 0 56px;display:flex;gap:4px;justify-content:flex-end;">
+              <button type="button" style="width:26px;height:26px;padding:0;font-size:13px;" onclick="event.stopPropagation();moveScenarioItem(${index},-1)" ${index===0?"disabled":""}>↑</button>
+              <button type="button" style="width:26px;height:26px;padding:0;font-size:13px;" onclick="event.stopPropagation();moveScenarioItem(${index},1)" ${index===ranked.length-1?"disabled":""}>↓</button>
+            </div>
           </div>`).join("")}
+      </div>`).join("")}
       </div>
 
       <button type="button" onclick="finishScenario()" style="width:100%;margin-top:12px;">✓ Ferdig</button>
@@ -496,6 +500,34 @@ export function placeScenarioItem(id, position){
   if((state.scenarioRanking.rankedItems || []).some(x => x.id === id)) return;
 
   state.scenarioRanking.rankedItems.push(item);
+  renderScenarioGame();
+  save();
+}
+
+let draggedScenarioIndex = null;
+
+export function dragScenarioItem(index, event){
+  if(!Number.isInteger(index)) return;
+  draggedScenarioIndex = index;
+  if(event?.dataTransfer){
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/plain", String(index));
+  }
+}
+
+export function allowScenarioDrop(event){
+  if(event) event.preventDefault();
+}
+
+export function dropScenarioItem(targetIndex, event){
+  if(event) event.preventDefault();
+  const list = state.scenarioRanking?.rankedItems;
+  const sourceIndex = draggedScenarioIndex !== null ? draggedScenarioIndex : Number(event?.dataTransfer?.getData("text/plain"));
+  draggedScenarioIndex = null;
+  if(!Array.isArray(list) || !Number.isInteger(sourceIndex) || !Number.isInteger(targetIndex)) return;
+  if(sourceIndex < 0 || sourceIndex >= list.length || targetIndex < 0 || targetIndex >= list.length || sourceIndex === targetIndex) return;
+  const [item] = list.splice(sourceIndex, 1);
+  list.splice(targetIndex, 0, item);
   renderScenarioGame();
   save();
 }
