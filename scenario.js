@@ -161,6 +161,74 @@ export function openScenarioLeaderboard(){
 }
 
 
+
+export function showScenarioStats(id){
+  const item = state.items.find(x => String(x.id) === String(id));
+  if(!item) return;
+
+  ensureScenarioElo(item);
+
+  const s = state.scenarioStats?.byItem?.[String(item.id)];
+  const hasRanking = !!(s && s.appearances);
+  const average = hasRanking ? (s.totalRank / s.appearances).toFixed(1) : "-";
+  const firsts = s?.firsts || 0;
+  const seconds = s?.seconds || 0;
+  const thirds = s?.thirds || 0;
+  const endlessWins = s?.endlessWins || 0;
+  const endlessGames = s?.endlessGames || 0;
+  const endlessWinrate = endlessGames ? ((endlessWins / endlessGames) * 100).toFixed(1) + "%" : "-";
+  const scenarioRank = getScenarioEloRank(item);
+
+  const box = document.getElementById("scenarioStatsContent");
+  const overlay = document.getElementById("scenarioStatsOverlay");
+  const view = document.getElementById("scenarioStatsView");
+  if(!box || !overlay || !view) return;
+
+  box.innerHTML = `
+    <div style="text-align:center;margin:8px 0 22px;">
+      <div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.45;margin-bottom:7px;">Scenario statistikk</div>
+      <h2 style="margin:0;line-height:1.25;overflow-wrap:anywhere;">${item.name}</h2>
+    </div>
+
+    <div style="background:#20283a;border:1px solid #303b52;border-radius:16px;padding:14px;">
+      <p style="margin:0 0 10px;"><b>⭐ Scenario ELO:</b> ${Math.round(item.scenarioRating)}</p>
+      <p style="margin:0;"><b>🏆 Scenario Rank:</b> #${scenarioRank}</p>
+    </div>
+
+    <hr style="border:none;border-top:1px solid #2d374b;margin:18px 0;">
+
+    <p><b>🎭 Scenario Ranking</b></p>
+    <p>📊 Gj.snitt i ranking: ${hasRanking ? "#" + average : "-"}</p>
+    <p>🥇 1.plasser i ranking: ${firsts}</p>
+    <p>🥈 2.plasser i ranking: ${seconds}</p>
+    <p>🥉 3.plasser i ranking: ${thirds}</p>
+    <p>🎭 Antall rankinger: ${s?.appearances || 0}</p>
+
+    <hr style="border:none;border-top:1px solid #2d374b;margin:18px 0;">
+
+    <p><b>♾️ Scenario Endless</b></p>
+    <p>🏆 Seire: ${endlessWins}</p>
+    <p>🎮 Matcher: ${endlessGames}</p>
+    <p>📈 Winrate: ${endlessWinrate}</p>
+  `;
+
+  overlay.style.display = "flex";
+  requestAnimationFrame(() => {
+    view.style.transform = "translateY(0)";
+  });
+}
+
+export function closeScenarioStats(){
+  const overlay = document.getElementById("scenarioStatsOverlay");
+  const view = document.getElementById("scenarioStatsView");
+  if(!overlay || !view) return;
+
+  view.style.transform = "translateY(100%)";
+  setTimeout(() => {
+    overlay.style.display = "none";
+  }, 300);
+}
+
 export function renderScenarioLeaderboard(){
   const box = document.getElementById("scenarioLeaderboardContent");
   if(!box) return;
@@ -176,7 +244,7 @@ export function renderScenarioLeaderboard(){
   box.innerHTML = '<div style="background:#171e2b;border:1px solid #2d374b;border-radius:16px;padding:10px;">' +
     ranked.map(({item,rating}, index) => {
       const medal = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "#" + (index + 1);
-      return '<div onclick="showStats(' + item.id + ')" style="display:flex;align-items:center;gap:12px;padding:12px 10px;background:#20283a;border-radius:11px;margin:5px 0;min-width:0;cursor:pointer;" title="Trykk for statistikk">' +
+      return '<div onclick="showScenarioStats(' + item.id + ')" style="display:flex;align-items:center;gap:12px;padding:12px 10px;background:#20283a;border-radius:11px;margin:5px 0;min-width:0;cursor:pointer;" title="Trykk for statistikk">' +
         '<span style="width:32px;flex:0 0 32px;text-align:center;font-weight:700;">' + medal + '</span>' +
         '<span style="flex:1;min-width:0;overflow-wrap:anywhere;line-height:1.3;">' + item.name + '</span>' +
         '<span style="font-weight:700;white-space:nowrap;">⭐ ' + Math.round(rating) + '</span>' +
