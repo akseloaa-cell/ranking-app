@@ -385,32 +385,40 @@ export function startScenario(){
   ensureScenarioRankingState();
   const pool = getScenarioPool();
 
-  if(state.scenarioRanking.mode === "tournament"){
-    const requestedSize = state.scenarioRanking.tournamentSize === "random"
-      ? 4
-      : Number(state.scenarioRanking.tournamentSize);
-
-    if(pool.length < requestedSize){
-      alert("Du har ikke nok gyldige deltakere til å starte turneringen. Du trenger minst " + requestedSize + " items, men har bare " + pool.length + ".");
-      return;
-    }
-  } else if(pool.length < 2){
+  if(pool.length < 2){
     alert("Du har ikke nok gyldige deltakere til å starte. Du trenger minst 2 items, men har bare " + pool.length + ".");
     return;
   }
 
+  if(state.scenarioRanking.mode === "endless"){
+    state.scenarioRanking.endlessWins = 0;
+    state.scenarioRanking.endlessGames = 0;
+    state.scenarioRanking.endlessPreviousItemIds = [];
+    state.scenarioRanking.endlessFixedScenario =
+      state.scenarioRanking.endlessScenarioMode === "fixed"
+        ? (state.scenarioRanking.scenarioIndex >= 0
+          ? SCENARIOS[state.scenarioRanking.scenarioIndex]
+          : SCENARIOS[Math.floor(Math.random() * SCENARIOS.length)])
+        : "";
+    startNextEndlessMatch();
+    return;
+  }
+
+  if(state.scenarioRanking.mode === "tournament"){
+    const requestedSize = state.scenarioRanking.tournamentSize === "random" ? 4 : Number(state.scenarioRanking.tournamentSize);
+    if(pool.length < requestedSize){
+      alert("Du har ikke nok gyldige deltakere til å starte turneringen. Du trenger minst " + requestedSize + " items, men har bare " + pool.length + ".");
+      return;
+    }
+  }
+
   let count;
   if(state.scenarioRanking.mode === "tournament"){
-    count = state.scenarioRanking.tournamentSize === "random"
-      ? Math.max(4, Math.min(32, pool.length))
-      : Number(state.scenarioRanking.tournamentSize);
-  } else if(state.scenarioRanking.mode === "endless"){
-    count = Math.min(5, pool.length);
+    count = state.scenarioRanking.tournamentSize === "random" ? Math.max(4, Math.min(32, pool.length)) : Number(state.scenarioRanking.tournamentSize);
   } else {
     count = state.scenarioRanking.itemCount === "random"
       ? Math.floor(Math.random() * Math.min(8, pool.length - 1)) + 2
       : Number(state.scenarioRanking.itemCount);
-
     if(count > pool.length){
       alert("Du har ikke nok gyldige deltakere til å starte. Du har valgt " + count + " items, men har bare " + pool.length + " tilgjengelige.");
       return;
@@ -431,6 +439,87 @@ export function startScenario(){
   }
   save();
   renderScenarioGame();
+}
+
+function getEndlessScenario(){
+  if(state.scenarioRanking.endlessScenarioMode === "fixed"){
+    return state.scenarioRanking.endlessFixedScenario;
+  }
+  const choices = SCENARIOS.filter(s => s !== state.scenarioRanking.activeScenario);
+  return (choices.length ? choices : SCENARIOS)[Math.floor(Math.random() * (choices.length || SCENARIOS.length))];
+}
+
+function startNextEndlessMatch(){
+  const pool = getScenarioPool();
+  const previousIds = state.scenarioRanking.endlessPreviousItemIds || [];
+  let candidates = pool.filter(item => !previousIds.includes(item.id));
+  if(candidates.length < 2) candidates = pool;
+  const shuffled = [...candidates].sort(() => Math.random() - 0.5).slice(0, 2);
+
+  state.scenarioRanking.activeItems = shuffled;
+  state.scenarioRanking.activeScenario = getEndlessScenario();
+  state.scenarioRanking.endlessPreviousItemIds = shuffled.map(item => item.id);
+  save();
+  renderScenarioEndlessGame();
+}
+
+export function renderScenarioEndlessGame(){
+  const box = document.getElementById("scenarioGameContent");
+  if(!box) return;
+  setMode("scenarioGame");
+  const items = state.scenarioRanking.activeItems || [];
+  const wins = state.scenarioRanking.endlessWins || 0;
+  const games = state.scenarioRanking.endlessGames || 0;
+
+  box.innerHTML = `
+    <div style="text-align:center;margin-bottom:20px;">
+      <div style="font-size:13px;opacity:.5;margin-bottom:7px;">Scenario Endless</div>
+      <h2 style="margin:0;line-height:1.25;">${state.scenarioRanking.activeScenario || "Scenario"}</h2>
+      <div style="display:flex;justify-content:center;gap:18px;margin-top:12px;font-size:13px;opacity:.75;">
+        <span>🏆 Seire: ${wins}</span><span>🎮 Matcher: ${games}</span>
+      </div>
+      <p style="opacity:.55;font-size:12px;margin-bottom:0;">Hvilket item passer best til scenarioet?</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      ${items.map(item => `<button type="button" onclick="chooseScenarioEndlessWinner(${item.id})" style="width:100%;text-align:left;padding:16px 14px;font-size:16px;line-height:1.3;">${item.name}</button>`).join("")}
+    </div>
+    <button type="button" onclick="exitScenarioEndless()" style="width:100%;margin-top:14px;">← Avslutt Endless</button>
+  `;
+}
+
+function recordScenarioEndlessResult(winner){
+  if(!state.scenarioStats) state.scenarioStats = { games:0, byItem:{}, byScenario:{} };
+  const scenario = state.scenarioRanking.activeScenario || "Ukjent scenario";
+  state.scenarioStats.byScenario[scenario] = (state.scenarioStats.byScenario[scenario] || 0) + 1;
+  state.scenarioRanking.endlessGames = (state.scenarioRanking.endlessGames || 0) + 1;
+  state.scenarioRanking.endlessWins = (state.scenarioRanking.endlessWins || 0) + 1;
+
+  for(const item of state.scenarioRanking.activeItems || []){
+    const key = String(item.id);
+    if(!state.scenarioStats.byItem[key]) state.scenarioStats.byItem[key] = {appearances:0,totalRank:0,firsts:0,seconds:0,thirds:0,tournamentWins:0,tournamentsPlayed:0,endlessWins:0,endlessGames:0};
+    const stats = state.scenarioStats.byItem[key];
+    stats.endlessGames = (stats.endlessGames || 0) + 1;
+    if(item.id === winner.id) stats.endlessWins = (stats.endlessWins || 0) + 1;
+  }
+}
+
+export function chooseScenarioEndlessWinner(itemId){
+  if(state.scenarioRanking.mode !== "endless") return;
+  const winner = (state.scenarioRanking.activeItems || []).find(item => item.id === itemId);
+  if(!winner) return;
+  recordScenarioEndlessResult(winner);
+  startNextEndlessMatch();
+}
+
+export function exitScenarioEndless(){
+  state.scenarioRanking.endlessFixedScenario = "";
+  state.scenarioRanking.endlessWins = 0;
+  state.scenarioRanking.endlessGames = 0;
+  state.scenarioRanking.endlessPreviousItemIds = [];
+  state.scenarioRanking.activeItems = [];
+  state.scenarioRanking.activeScenario = "";
+  save();
+  backToScenarioHub();
 }
 
 export function renderScenarioGame(){
