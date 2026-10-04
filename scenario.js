@@ -82,10 +82,10 @@ function renderScenarioSetup(){
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Antall items</div><div class="scenarioSetupOptions">';
     [3,4,5,6,8].forEach(n=>html+='<button type="button" class="scenarioSetupOption '+(s.itemCount===n?"active":"")+'" onclick="selectScenarioItemCount('+n+')">'+n+'</button>');
     html+='<button type="button" class="scenarioSetupOption '+(s.itemCount==="random"?"active":"")+'" onclick="selectScenarioItemCount(\'random\')">Random</button></div></div>';
-    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.scenarioIndex<0?"active":"")+'" onclick="selectScenarioMode(\'random\')">🎲 Tilfeldig scenario</button><button type="button" class="scenarioSetupOption '+(s.scenarioIndex>=0?"active":"")+'" onclick="selectScenarioMode(\'select\')">🎭 Velg selv</button></div>'+(s.scenarioIndex>=0?'<input id="scenarioSearch" type="text" placeholder="Søk etter scenario..." oninput="filterScenarios(this.value)" style="width:100%;box-sizing:border-box;margin-top:10px;margin-bottom:8px;"><div id="scenarioOptions" class="scenarioSetupOptions" style="margin-top:0;"></div>':"")+'</div>';
+    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">🎭 Scenario</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.scenarioIndex<0?"active":"")+'" onclick="selectScenarioMode(\'random\')">🎲 Tilfeldig scenario</button><button type="button" class="scenarioSetupOption '+(s.scenarioIndex>=0?"active":"")+'" onclick="selectScenarioMode(\'select\')">🎭 Velg selv</button></div>'+(s.scenarioIndex>=0?'<input id="scenarioSearch" type="text" placeholder="Søk etter scenario..." oninput="filterScenarios(this.value)" style="width:100%;box-sizing:border-box;margin-top:10px;margin-bottom:8px;"><div id="scenarioOptions" class="scenarioSetupOptions" style="margin-top:0;"></div>':"")+'</div>';
     html+=`
       <div class="scenarioSetupSection">
-        <div class="scenarioSetupLabel">Kategorier</div>
+        <div class="scenarioSetupLabel">🏷️ Kategorier</div>
         <div style="position:relative;">
           <button id="scenarioCategoryDropdownButton" type="button" class="scenarioSetupSelect" onclick="toggleScenarioCategoryDropdown()" style="width:100%;text-align:left;">
             <span id="scenarioCategoryDropdownText">Alle kategorier</span>
