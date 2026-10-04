@@ -108,7 +108,10 @@ function renderScenarioSetup(){
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.tournamentScenarioMode==="new"?"active":"")+'" onclick="selectScenarioTournamentScenario(\'new\')">🎲 Nytt scenario hver kamp</button><button type="button" class="scenarioSetupOption '+(s.tournamentScenarioMode==="same"?"active":"")+'" onclick="selectScenarioTournamentScenario(\'same\')">🔒 Samme scenario hele turneringen</button></div></div>';
   }
   box.innerHTML=html;
-  if(s.mode==="ranking") renderScenarioCategoryDropdown();
+  if(s.mode==="ranking"){
+    renderScenarioCategoryDropdown();
+    if(s.scenarioIndex>=0) filterScenarios("");
+  }
 }
 export function openScenarioRankingSetup(){
   ensureScenarioRankingState();
