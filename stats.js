@@ -236,6 +236,7 @@ export function showStats(id){
 
       <p>🏆 Rank: ${rank}</p>
       <p>⭐ ELO: ${Math.floor(item.rating)}</p>
+      <p>🎭 Scenario ELO: ${Math.round(Number.isFinite(item.scenarioRating) ? item.scenarioRating : 1000)}</p>
       <p>📊 Winrate: ${(getWinrate(item)*100).toFixed(1)}%</p>
       <p>🔥 Streak: ${streakText}</p>
       <p>📈 ${trend.map(x => Math.floor(x)).join(" → ")}</p>
