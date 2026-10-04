@@ -100,7 +100,7 @@ function renderScenarioSetup(){
   } else if(s.mode==="endless"){
     html+=`
       <div class="scenarioSetupSection">
-        <div class="scenarioSetupLabel">Kategorier</div>
+        <div class="scenarioSetupLabel">🏷️ Kategorier</div>
         <div style="position:relative;">
           <button id="scenarioCategoryDropdownButton" type="button" class="scenarioSetupSelect" onclick="toggleScenarioCategoryDropdown()" style="width:100%;text-align:left;">
             <span id="scenarioCategoryDropdownText">Alle kategorier</span>
@@ -113,13 +113,13 @@ function renderScenarioSetup(){
       </div>`;
     html+=`
       <div class="scenarioSetupSection">
-        <div class="scenarioSetupLabel">Scenario</div>
+        <div class="scenarioSetupLabel">🎭 Scenario</div>
         <div class="scenarioSetupOptions">
           <button type="button" class="scenarioSetupOption ${s.endlessScenarioMode==="fixed"?"active":""}" onclick="selectScenarioEndlessMode('fixed')">🎯 Ett scenario</button>
           <button type="button" class="scenarioSetupOption ${s.endlessScenarioMode==="each"?"active":""}" onclick="selectScenarioEndlessMode('each')">🔄 Bytt scenario hver match</button>
         </div>
         ${s.endlessScenarioMode==="fixed" ? `
-          <div class="scenarioSetupOptions" style="margin-top:8px;">
+          <div class="scenarioSetupOptions" style="margin-top:8px;font-size:inherit;">
             <button type="button" class="scenarioSetupOption ${s.scenarioIndex<0?"active":""}" onclick="selectScenarioMode('random')">🎲 Tilfeldig</button>
             <button type="button" class="scenarioSetupOption ${s.scenarioIndex>=0?"active":""}" onclick="selectScenarioMode('select')">🎭 Velg selv</button>
           </div>
