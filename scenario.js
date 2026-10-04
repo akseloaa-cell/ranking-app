@@ -670,7 +670,7 @@ export function renderScenarioEndlessGame(){
           const previousRank=previousRanks[String(item.id)];
           const delta=Number.isFinite(previousRank) ? previousRank-currentRank : 0;
           const change=delta>0 ? '<span style="color:#4caf50;font-size:11px;font-weight:700;white-space:nowrap;">▲ '+delta+'</span>' : delta<0 ? '<span style="color:#f44336;font-size:11px;font-weight:700;white-space:nowrap;">▼ '+Math.abs(delta)+'</span>' : '<span style="font-size:11px;opacity:.35;white-space:nowrap;">—</span>';
-          return '<div data-scenario-ranking-item="'+item.id+'" data-rank="'+currentRank+'" style="display:flex;align-items:center;gap:10px;padding:9px 8px;background:#20283a;border-radius:10px;margin:4px 0;min-width:0;"><span style="width:28px;flex:0 0 28px;text-align:center;font-weight:700;">'+(currentRank===1?"🥇":currentRank===2?"🥈":currentRank===3?"🥉":"#"+currentRank)+'</span><span style="flex:1;min-width:0;overflow-wrap:anywhere;line-height:1.25;">'+item.name+'</span>'+change+'<span style="font-weight:700;white-space:nowrap;">⭐ '+Math.round(rating)+'</span></div>';
+          return '<div data-scenario-ranking-item="'+item.id+'" data-rank="'+currentRank+'" style="display:flex;align-items:center;gap:10px;padding:9px 8px;background:#20283a;border-radius:10px;margin:4px 0;min-width:0;"><span style="width:34px;flex:0 0 34px;text-align:center;font-weight:700;">'+(currentRank===1?"🥇":currentRank===2?"🥈":currentRank===3?"🥉":"#"+currentRank)+'</span>'+change+'<span style="flex:1;min-width:0;overflow-wrap:anywhere;line-height:1.25;">'+item.name+'</span><span style="font-weight:700;white-space:nowrap;">⭐ '+Math.round(rating)+'</span></div>';
         }).join("")}
       </div>
     </div>
