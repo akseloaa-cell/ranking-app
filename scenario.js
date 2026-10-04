@@ -66,7 +66,7 @@ function renderScenarioSetup(){
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Antall items</div><div class="scenarioSetupOptions">';
     [3,4,5,6,8].forEach(n=>html+='<button type="button" class="scenarioSetupOption '+(s.itemCount===n?"active":"")+'" onclick="selectScenarioItemCount('+n+')">'+n+'</button>');
     html+='<button type="button" class="scenarioSetupOption '+(s.itemCount==="random"?"active":"")+'" onclick="selectScenarioItemCount(\'random\')">Random</button></div></div>';
-    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario</div><button type="button" class="scenarioSetupSelect" onclick="cycleScenario()">'+(s.scenarioIndex<0?"🎲 Tilfeldig scenario":"🎭 "+SCENARIOS[s.scenarioIndex])+'</button></div>';
+    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.scenarioIndex<0?"active":"")+'" onclick="selectScenarioMode(\'random\')">🎲 Tilfeldig scenario</button><button type="button" class="scenarioSetupOption '+(s.scenarioIndex>=0?"active":"")+'" onclick="selectScenarioMode(\'select\')">🎭 Velg selv</button></div>'+(s.scenarioIndex>=0?'<div class="scenarioSetupOptions" style="margin-top:8px;">'+SCENARIOS.map((scenario,i)=>'<button type="button" class="scenarioSetupOption '+(s.scenarioIndex===i?"active":"")+'" onclick="selectScenario('+i+')">'+scenario+'</button>').join("")+'</div>':"")+'</div>';
     html+=`
       <div class="scenarioSetupSection">
         <div class="scenarioSetupLabel">Kategorier</div>
@@ -246,6 +246,21 @@ export function selectScenarioEndlessOrder(order){ ensureScenarioRankingState();
 export function selectScenarioTournamentMode(mode){ ensureScenarioRankingState(); state.scenarioRanking.tournamentMode=mode; renderScenarioSetup(); save(); }
 export function selectScenarioTournamentSize(size){ ensureScenarioRankingState(); state.scenarioRanking.tournamentSize=size; renderScenarioSetup(); save(); }
 export function selectScenarioTournamentScenario(mode){ ensureScenarioRankingState(); state.scenarioRanking.tournamentScenarioMode=mode; renderScenarioSetup(); save(); }
+
+export function selectScenarioMode(mode){
+  ensureScenarioRankingState();
+  state.scenarioRanking.scenarioIndex = mode === "random" ? -1 : (state.scenarioRanking.scenarioIndex >= 0 ? state.scenarioRanking.scenarioIndex : 0);
+  renderScenarioSetup();
+  save();
+}
+
+export function selectScenario(index){
+  ensureScenarioRankingState();
+  if(index < 0 || index >= SCENARIOS.length) return;
+  state.scenarioRanking.scenarioIndex = index;
+  renderScenarioSetup();
+  save();
+}
 
 export function cycleScenario(){
   ensureScenarioRankingState();
