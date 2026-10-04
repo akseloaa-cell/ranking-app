@@ -87,6 +87,13 @@ export function searchH2H(id, query){
 export function openStats(){
   const overlay = document.getElementById("statsOverlay");
   const view = document.getElementById("statsView");
+  if(!overlay || !view) return;
+
+  // Stats-popupen må ligge utenfor et view som kan være skjult.
+  // Dette gjør at den fungerer likt fra Home, Scenario, Ranking osv.
+  if(overlay.parentElement !== document.body){
+    document.body.appendChild(overlay);
+  }
 
   overlay.style.display = "flex";
 
