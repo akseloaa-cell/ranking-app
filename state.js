@@ -54,7 +54,8 @@ export const state = {
     endlessFixedScenario: "",
     endlessWins: 0,
     endlessGames: 0,
-    endlessPreviousItemIds: []
+    endlessPreviousItemIds: [],
+    endlessPreviousRanks: {}
   },
 
   scenarioStats: {
