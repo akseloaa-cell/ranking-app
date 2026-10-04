@@ -210,7 +210,7 @@ export function toggleStatsChips(id){
 // ================= MAIN VIEW =================
 
 export function showStats(id){
-  const item = state.items.find(x => x.id === id);
+  const item = state.items.find(x => String(x.id) === String(id));
   if(!item) return;
 
   const rank = [...state.items]
