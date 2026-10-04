@@ -215,7 +215,7 @@ export function showStats(id){
 
   const rank = [...state.items]
     .sort((a,b)=>b.rating-a.rating)
-    .findIndex(x => x.id === id) + 1;
+    .findIndex(x => String(x.id) === String(id)) + 1;
 
   const trend = item.history?.slice(-5) || [];
 
@@ -280,7 +280,7 @@ export function showStats(id){
       </button>
 
       <div id="h2hSection" style="display:${state.showAllH2H ? "block" : "none"};">
-        <input placeholder="Søk motstander..." value="${state.h2hSearch || ""}" oninput="searchH2H(${item.id}, this.value)">
+        <input id="statsH2HSearch" name="statsH2HSearch" placeholder="Søk motstander..." value="${state.h2hSearch || ""}" oninput="searchH2H(${item.id}, this.value)">
         <div id="h2hList"></div>
       </div>
 
@@ -300,10 +300,10 @@ export function showStats(id){
           `).join("")}
         </p>
 
-        <input id="newCatInput" placeholder="Ny kategori">
+        <input id="newCatInput" name="newCatInput" placeholder="Ny kategori">
         <button onclick="addCatToItem(${item.id})">+</button>
 
-        <input id="statsCatSearch"
+        <input id="statsCatSearch" name="statsCatSearch"
           placeholder="Søk..."
           oninput="renderStatsChips(${item.id}, this.value)">
 
