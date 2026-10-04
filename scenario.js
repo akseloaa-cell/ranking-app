@@ -205,8 +205,6 @@ export function showScenarioStats(id){
     <hr style="border:none;border-top:1px solid #2d374b;margin:18px 0;">
 
     <p><b>♾️ Scenario Endless</b></p>
-    <p>🏆 Seire: ${endlessWins}</p>
-    <p>🎮 Matcher: ${endlessGames}</p>
     <p>📈 Winrate: ${endlessWinrate}</p>
   `;
 
