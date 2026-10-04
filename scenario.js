@@ -166,7 +166,6 @@ function setupScenarioLeaderboardClicks(){
   box.querySelectorAll("[data-scenario-item-id]").forEach(row => {
     row.addEventListener("click", () => {
       const id = row.dataset.scenarioItemId;
-      alert("KLIKK FUNGERER! Item-ID: " + id);
       showStats(id);
     });
   });
