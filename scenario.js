@@ -184,6 +184,13 @@ export function showScenarioStats(id){
   const view = document.getElementById("scenarioStatsView");
   if(!box || !overlay || !view) return;
 
+  if(!document.getElementById("scenarioRankChangeAnimations")){
+    const style=document.createElement("style");
+    style.id="scenarioRankChangeAnimations";
+    style.textContent="@keyframes scenarioRankUp{0%{transform:translateY(10px);opacity:.45}60%{transform:translateY(-3px);opacity:1}100%{transform:translateY(0);opacity:1}}@keyframes scenarioRankDown{0%{transform:translateY(-10px);opacity:.45}60%{transform:translateY(3px);opacity:1}100%{transform:translateY(0);opacity:1}}";
+    document.head.appendChild(style);
+  }
+
   box.innerHTML = `
     <div style="text-align:center;margin:8px 0 22px;">
       <div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.45;margin-bottom:7px;">Scenario statistikk</div>
@@ -626,6 +633,7 @@ export function renderScenarioEndlessGame(){
     .map(item => ({item,rating:ensureScenarioElo(item)}))
     .sort((x,y)=>y.rating-x.rating || x.item.name.localeCompare(y.item.name))
     .slice(0,10);
+  const previousRanks=state.scenarioRanking.endlessPreviousRanks || {};
 
   box.innerHTML = `
     <div style="text-align:center;margin-bottom:24px;">
@@ -648,13 +656,14 @@ export function renderScenarioEndlessGame(){
     <div style="width:100%;max-width:760px;margin:22px auto 0;">
       <div style="font-size:12px;opacity:.5;margin:0 0 8px;text-transform:uppercase;letter-spacing:.08em;">Scenario Ranking · Topp 10</div>
       <div style="background:#171e2b;border:1px solid #2d374b;border-radius:16px;padding:8px;">
-        ${top10.map(({item,rating},index)=>`
-          <div style="display:flex;align-items:center;gap:10px;padding:9px 8px;background:#20283a;border-radius:10px;margin:4px 0;min-width:0;">
-            <span style="width:28px;flex:0 0 28px;text-align:center;font-weight:700;">${index===0?"🥇":index===1?"🥈":index===2?"🥉":"#"+(index+1)}</span>
-            <span style="flex:1;min-width:0;overflow-wrap:anywhere;line-height:1.25;">${item.name}</span>
-            <span style="font-weight:700;white-space:nowrap;">⭐ ${Math.round(rating)}</span>
-          </div>
-        `).join("")}
+        ${top10.map(({item,rating},index)=>{
+          const currentRank=index+1;
+          const previousRank=previousRanks[String(item.id)];
+          const delta=Number.isFinite(previousRank) ? previousRank-currentRank : 0;
+          const change=delta>0 ? '<span style="color:#4caf50;font-size:11px;font-weight:700;white-space:nowrap;">▲ '+delta+'</span>' : delta<0 ? '<span style="color:#f44336;font-size:11px;font-weight:700;white-space:nowrap;">▼ '+Math.abs(delta)+'</span>' : '<span style="font-size:11px;opacity:.35;white-space:nowrap;">—</span>';
+          const animation=delta>0 ? "animation:scenarioRankUp .55s ease;" : delta<0 ? "animation:scenarioRankDown .55s ease;" : "";
+          return '<div style="display:flex;align-items:center;gap:10px;padding:9px 8px;background:#20283a;border-radius:10px;margin:4px 0;min-width:0;'+animation+'"><span style="width:28px;flex:0 0 28px;text-align:center;font-weight:700;">'+(currentRank===1?"🥇":currentRank===2?"🥈":currentRank===3?"🥉":"#"+currentRank)+'</span><span style="flex:1;min-width:0;overflow-wrap:anywhere;line-height:1.25;">'+item.name+'</span>'+change+'<span style="font-weight:700;white-space:nowrap;">⭐ '+Math.round(rating)+'</span></div>';
+        }).join("")}
       </div>
     </div>
 
@@ -666,6 +675,11 @@ function recordScenarioEndlessResult(winner){
   const scenario = state.scenarioRanking.activeScenario || "Ukjent scenario";
   state.scenarioStats.byScenario[scenario] = (state.scenarioStats.byScenario[scenario] || 0) + 1;
   const loser = (state.scenarioRanking.activeItems || []).find(item => item.id !== winner.id);
+
+  const before = [...state.items].map(item => ({ item, rating: ensureScenarioElo(item) })).sort((a,b) => b.rating - a.rating || a.item.name.localeCompare(b.item.name));
+  state.scenarioRanking.endlessPreviousRanks = {};
+  before.forEach((entry,index) => { state.scenarioRanking.endlessPreviousRanks[String(entry.item.id)] = index + 1; });
+
   updateScenarioEloMatch(winner, loser);
   state.scenarioRanking.endlessGames = (state.scenarioRanking.endlessGames || 0) + 1;
   state.scenarioRanking.endlessWins = (state.scenarioRanking.endlessWins || 0) + 1;
