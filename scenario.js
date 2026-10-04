@@ -620,7 +620,8 @@ export function renderScenarioEndlessGame(){
   items.forEach(ensureScenarioElo);
 
   const a=items[0], b=items[1];
-  const changes=getScenarioEloChange(a,b);
+  const changesA=getScenarioEloChange(a,b);
+  const changesB=getScenarioEloChange(b,a);
   const top10=[...state.items]
     .map(item => ({item,rating:ensureScenarioElo(item)}))
     .sort((x,y)=>y.rating-x.rating || x.item.name.localeCompare(y.item.name))
@@ -634,13 +635,13 @@ export function renderScenarioEndlessGame(){
 
     <div style="display:flex;align-items:stretch;gap:12px;width:100%;max-width:760px;margin:0 auto;">
       <button type="button" onclick="chooseScenarioEndlessWinner(${a.id})" style="flex:1;min-width:0;min-height:190px;padding:28px 18px;border:1px solid rgba(255,255,255,.12);border-radius:20px;background:linear-gradient(145deg,#202a3d,#171e2b);box-shadow:0 8px 24px rgba(0,0,0,.22);color:inherit;display:flex;align-items:center;justify-content:center;text-align:center;font-size:20px;font-weight:650;line-height:1.3;cursor:pointer;overflow:hidden;">
-        <span style="max-width:18em;overflow-wrap:anywhere;"><span style="display:block;">${a.name}</span><small style="display:block;margin-top:8px;opacity:.45;font-size:11px;">⭐ ${Math.round(a.scenarioRating)}</small><small style="display:block;margin-top:4px;opacity:.6;font-size:11px;">${changes.winner >= 0 ? "+" : ""}${changes.winner} ELO ved seier</small></span>
+        <span style="max-width:18em;overflow-wrap:anywhere;"><span style="display:block;">${a.name}</span><small style="display:block;margin-top:8px;opacity:.45;font-size:11px;">⭐ ${Math.round(a.scenarioRating)}</small><small style="display:block;margin-top:4px;opacity:.6;font-size:11px;"><span style="color:#4caf50;">+${changesA.winner}</span> / <span style="color:#f44336;">${changesA.loser}</span></small></span>
       </button>
 
       <div style="align-self:center;flex:0 0 auto;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#171e2b;border:1px solid rgba(255,255,255,.12);box-shadow:0 4px 14px rgba(0,0,0,.18);font-size:10px;font-weight:800;letter-spacing:.04em;opacity:.7;">VS</div>
 
       <button type="button" onclick="chooseScenarioEndlessWinner(${b.id})" style="flex:1;min-width:0;min-height:190px;padding:28px 18px;border:1px solid rgba(255,255,255,.12);border-radius:20px;background:linear-gradient(145deg,#202a3d,#171e2b);box-shadow:0 8px 24px rgba(0,0,0,.22);color:inherit;display:flex;align-items:center;justify-content:center;text-align:center;font-size:20px;font-weight:650;line-height:1.3;cursor:pointer;overflow:hidden;">
-        <span style="max-width:18em;overflow-wrap:anywhere;"><span style="display:block;">${b.name}</span><small style="display:block;margin-top:8px;opacity:.45;font-size:11px;">⭐ ${Math.round(b.scenarioRating)}</small><small style="display:block;margin-top:4px;opacity:.6;font-size:11px;">${changes.loser >= 0 ? "+" : ""}${changes.loser} ELO ved seier</small></span>
+        <span style="max-width:18em;overflow-wrap:anywhere;"><span style="display:block;">${b.name}</span><small style="display:block;margin-top:8px;opacity:.45;font-size:11px;">⭐ ${Math.round(b.scenarioRating)}</small><small style="display:block;margin-top:4px;opacity:.6;font-size:11px;"><span style="color:#4caf50;">+${changesB.winner}</span> / <span style="color:#f44336;">${changesB.loser}</span></small></span>
       </button>
     </div>
 
