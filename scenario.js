@@ -469,31 +469,27 @@ export function renderScenarioEndlessGame(){
   setMode("scenarioGame");
 
   const items = state.scenarioRanking.activeItems || [];
-  const wins = state.scenarioRanking.endlessWins || 0;
-  const games = state.scenarioRanking.endlessGames || 0;
+  if(items.length < 2) return;
 
   box.innerHTML = `
-    <div style="text-align:center;margin-bottom:20px;">
-      <div style="font-size:13px;opacity:.5;margin-bottom:7px;">Scenario Endless</div>
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.45;margin-bottom:8px;">Scenario Endless</div>
       <h2 style="margin:0;line-height:1.25;">${state.scenarioRanking.activeScenario || "Scenario"}</h2>
-      <div style="display:flex;justify-content:center;gap:18px;margin-top:12px;font-size:13px;opacity:.75;">
-        <span>🏆 Seire: ${wins}</span>
-        <span>🎮 Matcher: ${games}</span>
-      </div>
     </div>
 
-    <div style="display:flex;align-items:center;gap:10px;width:100%;">
-      ${items.map((item,index) => `
-        <button type="button"
-          onclick="chooseScenarioEndlessWinner(${item.id})"
-          style="flex:1;min-width:0;min-height:150px;padding:20px 12px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:18px;font-weight:600;line-height:1.3;">
-          ${item.name}
-        </button>
-        ${index === 0 ? '<div style="flex:0 0 auto;font-size:14px;font-weight:700;opacity:.5;">VS</div>' : ''}
-      `).join("")}
+    <div style="display:flex;align-items:stretch;gap:12px;width:100%;max-width:760px;margin:0 auto;">
+      <button type="button" onclick="chooseScenarioEndlessWinner(${items[0].id})" style="flex:1;min-width:0;min-height:190px;padding:28px 18px;border:1px solid rgba(255,255,255,.12);border-radius:20px;background:linear-gradient(145deg,#202a3d,#171e2b);box-shadow:0 8px 24px rgba(0,0,0,.22);color:inherit;display:flex;align-items:center;justify-content:center;text-align:center;font-size:20px;font-weight:650;line-height:1.3;cursor:pointer;overflow:hidden;">
+        <span style="max-width:18em;overflow-wrap:anywhere;">${items[0].name}</span>
+      </button>
+
+      <div style="align-self:center;flex:0 0 auto;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#171e2b;border:1px solid rgba(255,255,255,.12);box-shadow:0 4px 14px rgba(0,0,0,.18);font-size:10px;font-weight:800;letter-spacing:.04em;opacity:.7;">VS</div>
+
+      <button type="button" onclick="chooseScenarioEndlessWinner(${items[1].id})" style="flex:1;min-width:0;min-height:190px;padding:28px 18px;border:1px solid rgba(255,255,255,.12);border-radius:20px;background:linear-gradient(145deg,#202a3d,#171e2b);box-shadow:0 8px 24px rgba(0,0,0,.22);color:inherit;display:flex;align-items:center;justify-content:center;text-align:center;font-size:20px;font-weight:650;line-height:1.3;cursor:pointer;overflow:hidden;">
+        <span style="max-width:18em;overflow-wrap:anywhere;">${items[1].name}</span>
+      </button>
     </div>
 
-    <button type="button" onclick="exitScenarioEndless()" style="width:100%;margin-top:14px;">← Avslutt Endless</button>
+    <button type="button" onclick="exitScenarioEndless()" style="width:100%;max-width:760px;margin:18px auto 0;display:block;opacity:.65;">← Avslutt Endless</button>
   `;
 }
 
