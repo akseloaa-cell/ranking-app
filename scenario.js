@@ -82,7 +82,7 @@ function renderScenarioSetup(){
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Antall items</div><div class="scenarioSetupOptions">';
     [3,4,5,6,8].forEach(n=>html+='<button type="button" class="scenarioSetupOption '+(s.itemCount===n?"active":"")+'" onclick="selectScenarioItemCount('+n+')">'+n+'</button>');
     html+='<button type="button" class="scenarioSetupOption '+(s.itemCount==="random"?"active":"")+'" onclick="selectScenarioItemCount(\'random\')">Random</button></div></div>';
-    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.scenarioIndex<0?"active":"")+'" onclick="selectScenarioMode(\'random\')">🎲 Tilfeldig scenario</button><button type="button" class="scenarioSetupOption '+(s.scenarioIndex>=0?"active":"")+'" onclick="selectScenarioMode(\'select\')">🎭 Velg selv</button></div>'+(s.scenarioIndex>=0?'<div class="scenarioSetupOptions" style="margin-top:8px;">'+SCENARIOS.map((scenario,i)=>'<button type="button" class="scenarioSetupOption '+(s.scenarioIndex===i?"active":"")+'" onclick="selectScenario('+i+')">'+scenario+'</button>').join("")+'</div>':"")+'</div>';
+    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.scenarioIndex<0?"active":"")+'" onclick="selectScenarioMode(\'random\')">🎲 Tilfeldig scenario</button><button type="button" class="scenarioSetupOption '+(s.scenarioIndex>=0?"active":"")+'" onclick="selectScenarioMode(\'select\')">🎭 Velg selv</button></div>'+(s.scenarioIndex>=0?'<input id="scenarioSearch" type="text" placeholder="Søk etter scenario..." oninput="filterScenarios(this.value)" style="width:100%;box-sizing:border-box;margin-top:10px;margin-bottom:8px;"><div id="scenarioOptions" class="scenarioSetupOptions" style="margin-top:0;"></div>':"")+'</div>';
     html+=`
       <div class="scenarioSetupSection">
         <div class="scenarioSetupLabel">Kategorier</div>
@@ -268,6 +268,17 @@ export function selectScenarioMode(mode){
   state.scenarioRanking.scenarioIndex = mode === "random" ? -1 : (state.scenarioRanking.scenarioIndex >= 0 ? state.scenarioRanking.scenarioIndex : 0);
   renderScenarioSetup();
   save();
+}
+
+export function filterScenarios(query){
+  ensureScenarioRankingState();
+  const q = String(query || "").trim().toLowerCase();
+  const box = document.getElementById("scenarioOptions");
+  if(!box) return;
+  const filtered = SCENARIOS.map((scenario,index) => ({scenario,index})).filter(x => !q || x.scenario.toLowerCase().includes(q));
+  box.innerHTML = filtered.length
+    ? filtered.map(({scenario,index}) => '<button type="button" class="scenarioSetupOption '+(state.scenarioRanking.scenarioIndex===index?"active":"")+'" onclick="selectScenario('+index+')">'+scenario+'</button>').join("")
+    : '<div style="opacity:.5;padding:10px;text-align:center;">Ingen scenarioer funnet</div>';
 }
 
 export function selectScenario(index){
