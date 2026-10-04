@@ -100,6 +100,19 @@ function renderScenarioSetup(){
   } else if(s.mode==="endless"){
     html+=`
       <div class="scenarioSetupSection">
+        <div class="scenarioSetupLabel">Kategorier</div>
+        <div style="position:relative;">
+          <button id="scenarioCategoryDropdownButton" type="button" class="scenarioSetupSelect" onclick="toggleScenarioCategoryDropdown()" style="width:100%;text-align:left;">
+            <span id="scenarioCategoryDropdownText">Alle kategorier</span>
+          </button>
+          <div id="scenarioCategoryDropdownMenu" class="hidden" style="position:absolute;z-index:20;left:0;right:0;margin-top:6px;background:#171e2b;border:1px solid #2d374b;border-radius:12px;padding:8px;">
+            <input id="scenarioCategorySearch" type="text" placeholder="Søk etter kategori..." value="" oninput="filterScenarioCategories(this.value)" style="width:100%;box-sizing:border-box;margin-bottom:8px;">
+            <div id="scenarioCategoryDropdownOptions"></div>
+          </div>
+        </div>
+      </div>`;
+    html+=`
+      <div class="scenarioSetupSection">
         <div class="scenarioSetupLabel">Scenario</div>
         <div class="scenarioSetupOptions">
           <button type="button" class="scenarioSetupOption ${s.endlessScenarioMode==="fixed"?"active":""}" onclick="selectScenarioEndlessMode('fixed')">🎯 Ett scenario</button>
