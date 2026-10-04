@@ -618,8 +618,6 @@ export function renderScenarioResult(){
 
   const ranking = state.scenarioRanking.resultRanking || [];
   const scenario = state.scenarioRanking.resultScenario || "Scenario";
-  const stats = state.scenarioStats || { games: 0, byItem: {} };
-
   box.innerHTML = `
     <div style="text-align:center;margin-bottom:22px;">
       <div style="font-size:13px;opacity:.5;margin-bottom:7px;">Scenario fullført</div>
@@ -634,31 +632,6 @@ export function renderScenarioResult(){
           <span style="flex:1;min-width:0;overflow-wrap:anywhere;">${item.name}</span>
         </div>
       `).join("")}
-    </div>
-
-    <div style="margin-top:14px;background:#171e2b;border:1px solid #2d374b;border-radius:16px;padding:14px;">
-      <div style="font-size:12px;opacity:.55;margin-bottom:10px;">📊 Statistikk</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
-        <div style="background:#20283a;border-radius:10px;padding:10px;text-align:center;">
-          <div style="font-size:20px;font-weight:700;">${stats.games || 0}</div>
-          <div style="font-size:11px;opacity:.5;">Totale rankinger</div>
-        </div>
-        <div style="background:#20283a;border-radius:10px;padding:10px;text-align:center;">
-          <div style="font-size:20px;font-weight:700;">${ranking.length}</div>
-          <div style="font-size:11px;opacity:.5;">Items i denne</div>
-        </div>
-      </div>
-      ${ranking.map(item => {
-        const s = stats.byItem?.[String(item.id)];
-        if(!s || !s.appearances) return "";
-        const average = (s.totalRank / s.appearances).toFixed(1);
-        return `
-          <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid #2d374b;">
-            <span style="flex:1;min-width:0;overflow-wrap:anywhere;">${item.name}</span>
-            <span style="font-size:11px;opacity:.55;white-space:nowrap;">Snitt #${average} · 🥇 ${s.firsts}</span>
-          </div>
-        `;
-      }).join("")}
     </div>
 
     <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;">
