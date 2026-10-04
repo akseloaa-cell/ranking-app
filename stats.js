@@ -122,7 +122,7 @@ export function toggleCatSection(){
 }
 
 export function addCatToItem(id, valOverride){
-  const item = state.items.find(x => x.id === id);
+  const item = state.items.find(x => String(x.id) === String(id));
   if(!item) return;
 
   let val = valOverride || document.getElementById("newCatInput")?.value;
