@@ -28,7 +28,7 @@ export function deleteItem(id){
 }
 
 export function renameItem(id, newName){
-  const item = state.items.find(x => x.id === id);
+  const item = state.items.find(x => String(x.id) === String(id));
   if(!item) return;
 
   newName = newName.trim();
