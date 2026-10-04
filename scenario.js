@@ -98,7 +98,14 @@ function renderScenarioSetup(){
       </div>`;
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Rankingtype</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.rankingType==="free"?"active":"")+'" onclick="selectScenarioRankingType(\'free\')">🔓 Free Ranking</button><button type="button" class="scenarioSetupOption '+(s.rankingType==="locked"?"active":"")+'" onclick="selectScenarioRankingType(\'locked\')">🔒 Locked Ranking</button></div></div>';
   } else if(s.mode==="endless"){
-    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario</div><button type="button" class="scenarioSetupSelect" onclick="cycleScenario()">'+(s.scenarioIndex<0?"🎲 Nytt scenario hver runde":"🎭 "+SCENARIOS[s.scenarioIndex])+'</button></div>';
+    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.endlessScenarioMode==="fixed"?"active":"")+'" onclick="selectScenarioEndlessMode(\\'fixed\\')">🎯 Ett scenario</button><button type="button" class="scenarioSetupOption '+(s.endlessScenarioMode==="each"?"active":"")+'" onclick="selectScenarioEndlessMode(\\'each\\')">🔄 Bytt scenario hver match</button></div>';
+    if(s.endlessScenarioMode==="fixed"){
+      html+='<div class="scenarioSetupOptions" style="margin-top:8px;"><button type="button" class="scenarioSetupOption '+(s.scenarioIndex<0?"active":"")+'" onclick="selectScenarioMode(\\'random\\')">🎲 Tilfeldig</button><button type="button" class="scenarioSetupOption '+(s.scenarioIndex>=0?"active":"")+'" onclick="selectScenarioMode(\\'select\\')">🎭 Velg selv</button></div>';
+      if(s.scenarioIndex>=0){
+        html+='<input id="scenarioSearch" type="text" placeholder="Søk etter scenario..." oninput="filterScenarios(this.value)" style="width:100%;box-sizing:border-box;margin-top:10px;margin-bottom:8px;"><div id="scenarioOptions" class="scenarioSetupOptions" style="margin-top:0;"></div>';
+      }
+    }
+    html+='</div>';
     html+=
       '<div class="scenarioSetupSection">' +
         '<div class="scenarioSetupLabel">Kategorier</div>' +
@@ -123,7 +130,7 @@ function renderScenarioSetup(){
   box.innerHTML=html;
   if(s.mode==="ranking" || s.mode==="endless"){
     renderScenarioCategoryDropdown();
-    if(s.mode==="ranking" && s.scenarioIndex>=0) filterScenarios("");
+    if(s.scenarioIndex>=0 && (s.mode==="ranking" || (s.mode==="endless" && s.endlessScenarioMode==="fixed"))) filterScenarios("");
   }
 }
 export function openScenarioRankingSetup(){
@@ -282,6 +289,7 @@ export function selectScenarioRankingType(type){
   save();
 }
 
+export function selectScenarioEndlessMode(mode){ ensureScenarioRankingState(); state.scenarioRanking.endlessScenarioMode=mode; if(mode==="each") state.scenarioRanking.scenarioIndex=-1; renderScenarioSetup(); save(); }
 export function selectScenarioEndlessOrder(order){ ensureScenarioRankingState(); state.scenarioRanking.endlessScenarioOrder=order; renderScenarioSetup(); save(); }
 export function selectScenarioTournamentMode(mode){ ensureScenarioRankingState(); state.scenarioRanking.tournamentMode=mode; renderScenarioSetup(); save(); }
 export function selectScenarioTournamentSize(size){ ensureScenarioRankingState(); state.scenarioRanking.tournamentSize=size; renderScenarioSetup(); save(); }
