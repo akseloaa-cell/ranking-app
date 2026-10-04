@@ -32,6 +32,7 @@ export function addItem(){
       name,
       categories: selected,
       rating: 1000,
+      scenarioRating: 1000,
       createdAt: new Date().toISOString(),
       history: [1000],
       tournamentsPlayed: 0,
