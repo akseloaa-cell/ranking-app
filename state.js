@@ -1,14 +1,26 @@
+function readLocalJSON(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    if(raw === null) return fallback;
+    const parsed = JSON.parse(raw);
+    return parsed ?? fallback;
+  } catch(error) {
+    console.warn("Could not read localStorage key:", key, error);
+    return fallback;
+  }
+}
+
 export const state = {
   mode: "home",
-  items: JSON.parse(localStorage.getItem("items")) || [],
-  categories: JSON.parse(localStorage.getItem("categories")) || [],
+  items: readLocalJSON("items", []),
+  categories: readLocalJSON("categories", []),
   current: [],
-  previousRanking: JSON.parse(localStorage.getItem("previousRanking")) || {},
-  previousRankingByCategory: JSON.parse(localStorage.getItem("previousRankingByCategory")) || {},
+  previousRanking: readLocalJSON("previousRanking", {}),
+  previousRankingByCategory: readLocalJSON("previousRankingByCategory", {}),
   lastRankingDate: localStorage.getItem("lastRankingDate") || null,
-  previousScenarioRanking: JSON.parse(localStorage.getItem("previousScenarioRanking")) || {},
+  previousScenarioRanking: readLocalJSON("previousScenarioRanking", {}),
   lastScenarioRankingDate: localStorage.getItem("lastScenarioRankingDate") || null,
-  recentMatches: JSON.parse(localStorage.getItem("recentMatches")) || [],
+  recentMatches: readLocalJSON("recentMatches", []),
 
   showAllAddChips: false,
   showAllStatsChips: false,
