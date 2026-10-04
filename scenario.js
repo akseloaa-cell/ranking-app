@@ -67,6 +67,20 @@ function renderScenarioSetup(){
     [3,4,5,6,8].forEach(n=>html+='<button type="button" class="scenarioSetupOption '+(s.itemCount===n?"active":"")+'" onclick="selectScenarioItemCount('+n+')">'+n+'</button>');
     html+='<button type="button" class="scenarioSetupOption '+(s.itemCount==="random"?"active":"")+'" onclick="selectScenarioItemCount(\'random\')">Random</button></div></div>';
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario</div><button type="button" class="scenarioSetupSelect" onclick="cycleScenario()">'+(s.scenarioIndex<0?"🎲 Tilfeldig scenario":"🎭 "+SCENARIOS[s.scenarioIndex])+'</button></div>';
+    html+=`
+      <div class="scenarioSetupSection">
+        <div class="scenarioSetupLabel">Kategorier</div>
+        <div style="position:relative;">
+          <button type="button" class="scenarioSetupSelect" onclick="toggleScenarioCategoryDropdown()" style="width:100%;text-align:left;">
+            <span id="scenarioCategoryDropdownText">Alle kategorier</span>
+          </button>
+          <div id="scenarioCategoryDropdownMenu" class="hidden" style="position:absolute;z-index:20;left:0;right:0;margin-top:6px;background:#171e2b;border:1px solid #2d374b;border-radius:12px;padding:8px;">
+            <input id="scenarioCategorySearch" type="text" placeholder="Søk etter kategori..." value="" oninput="filterScenarioCategories(this.value)" style="width:100%;box-sizing:border-box;margin-bottom:8px;">
+            <div id="scenarioCategoryDropdownOptions"></div>
+          </div>
+        </div>
+      </div>`;
+    renderScenarioCategoryDropdown();
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Rankingtype</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.rankingType==="free"?"active":"")+'" onclick="selectScenarioRankingType(\'free\')">🔓 Free Ranking</button><button type="button" class="scenarioSetupOption '+(s.rankingType==="locked"?"active":"")+'" onclick="selectScenarioRankingType(\'locked\')">🔒 Locked Ranking</button></div></div>';
   } else if(s.mode==="endless"){
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario</div><button type="button" class="scenarioSetupSelect" onclick="cycleScenario()">'+(s.scenarioIndex<0?"🎲 Nytt scenario hver runde":"🎭 "+SCENARIOS[s.scenarioIndex])+'</button></div>';
