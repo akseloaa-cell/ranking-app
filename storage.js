@@ -12,7 +12,18 @@ export function load() {
   const raw = localStorage.getItem("rankingApp");
   if (!raw) return null;
 
-  const data = JSON.parse(raw);
+  let data;
+  try {
+    data = JSON.parse(raw);
+  } catch(error) {
+    console.warn("Could not parse saved app state – starting with current state", error);
+    return null;
+  }
+
+  if(!data || typeof data !== "object" || Array.isArray(data)) {
+    console.warn("Saved app state has an invalid format – starting with current state");
+    return null;
+  }
 
   if (data.version !== STATE_VERSION) {
     console.warn("State version mismatch – resetting or migrating");
