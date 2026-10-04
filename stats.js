@@ -130,6 +130,8 @@ export function addCatToItem(id, valOverride){
 
   val = val.trim().toLowerCase();
 
+  if(!Array.isArray(item.categories)) item.categories = [];
+
   if(!item.categories.includes(val)){
     item.categories.push(val);
   }
