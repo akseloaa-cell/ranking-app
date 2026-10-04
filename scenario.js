@@ -3,11 +3,27 @@ import { save } from "./storage.js";
 import { setMode } from "./ui.js";
 
 const SCENARIOS = [
-  "Du skal velge hvem som passer best til en lang biltur.",
-  "Hvilket item passer best til en perfekt sommerdag?",
-  "Hvilket item ville du helst hatt med på en øde øy?",
-  "Hvilket item passer best til en rolig søndagskveld?",
-  "Hvilket item passer best når alt går galt?"
+  "Hva stoler du mest på?",
+  "Hva gir deg mest glede?",
+  "Hva gir deg mest kjærlighet?",
+  "Hva ville du hatt med på en øde øy?",
+  "Hva har du mest lyst på akkurat nå?",
+  "Hva betyr mest for deg?",
+  "Hva savner du mest?",
+  "Hva trenger du mest akkurat nå?",
+  "Hva gjør deg mest lykkelig?",
+  "Hva gir deg mest energi?",
+  "Hva ville du reddet fra et brennende hus?",
+  "Hva er vakrest?",
+  "Hva er mest estetisk?",
+  "Hva hadde hjulpet deg mest i et bankran?",
+  "Hva trenger du mest på øverommet?",
+  "Hva ville du tatt med på ferie?",
+  "Hva gir deg mest glede i hverdagen?",
+  "Hva er mest praktisk?",
+  "Hva kunne du lagd en film av?",
+  "Hva passer best til en lang biltur?",
+  "Hva passer best til en perfekt sommerdag?"
 ];
 
 function getScenarioCategories(){
