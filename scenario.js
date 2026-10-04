@@ -99,6 +99,19 @@ function renderScenarioSetup(){
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Rankingtype</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.rankingType==="free"?"active":"")+'" onclick="selectScenarioRankingType(\'free\')">🔓 Free Ranking</button><button type="button" class="scenarioSetupOption '+(s.rankingType==="locked"?"active":"")+'" onclick="selectScenarioRankingType(\'locked\')">🔒 Locked Ranking</button></div></div>';
   } else if(s.mode==="endless"){
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario</div><button type="button" class="scenarioSetupSelect" onclick="cycleScenario()">'+(s.scenarioIndex<0?"🎲 Nytt scenario hver runde":"🎭 "+SCENARIOS[s.scenarioIndex])+'</button></div>';
+    html+=
+      '<div class="scenarioSetupSection">' +
+        '<div class="scenarioSetupLabel">Kategorier</div>' +
+        '<div style="position:relative;">' +
+          '<button id="scenarioCategoryDropdownButton" type="button" class="scenarioSetupSelect" onclick="toggleScenarioCategoryDropdown()" style="width:100%;text-align:left;">' +
+            '<span id="scenarioCategoryDropdownText">Alle kategorier</span>' +
+          '</button>' +
+          '<div id="scenarioCategoryDropdownMenu" class="hidden" style="position:absolute;z-index:20;left:0;right:0;margin-top:6px;background:#171e2b;border:1px solid #2d374b;border-radius:12px;padding:8px;">' +
+            '<input id="scenarioCategorySearch" type="text" placeholder="Søk etter kategori..." value="" oninput="filterScenarioCategories(this.value)" style="width:100%;box-sizing:border-box;margin-bottom:8px;">' +
+            '<div id="scenarioCategoryDropdownOptions"></div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario-rekkefølge</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.endlessScenarioOrder==="random"?"active":"")+'" onclick="selectScenarioEndlessOrder(\'random\')">🎲 Tilfeldig</button><button type="button" class="scenarioSetupOption '+(s.endlessScenarioOrder==="avoidRecent"?"active":"")+'" onclick="selectScenarioEndlessOrder(\'avoidRecent\')">🔄 Unngå nylig brukte</button></div></div>';
   } else {
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Modus</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.tournamentMode==="random"?"active":"")+'" onclick="selectScenarioTournamentMode(\'random\')">🎲 Random items</button><button type="button" class="scenarioSetupOption '+(s.tournamentMode==="category"?"active":"")+'" onclick="selectScenarioTournamentMode(\'category\')">🏷️ Velg kategori</button></div></div>';
@@ -108,9 +121,9 @@ function renderScenarioSetup(){
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.tournamentScenarioMode==="new"?"active":"")+'" onclick="selectScenarioTournamentScenario(\'new\')">🎲 Nytt scenario hver kamp</button><button type="button" class="scenarioSetupOption '+(s.tournamentScenarioMode==="same"?"active":"")+'" onclick="selectScenarioTournamentScenario(\'same\')">🔒 Samme scenario hele turneringen</button></div></div>';
   }
   box.innerHTML=html;
-  if(s.mode==="ranking"){
+  if(s.mode==="ranking" || s.mode==="endless"){
     renderScenarioCategoryDropdown();
-    if(s.scenarioIndex>=0) filterScenarios("");
+    if(s.mode==="ranking" && s.scenarioIndex>=0) filterScenarios("");
   }
 }
 export function openScenarioRankingSetup(){
