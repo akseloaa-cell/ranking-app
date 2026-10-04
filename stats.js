@@ -318,9 +318,14 @@ export function showStats(id){
     </div>
   `;
 
-  openStats();
-  const statsOverlayTest = document.getElementById("statsOverlay");
-  const statsViewTest = document.getElementById("statsView");
+  const statsOverlay = document.getElementById("statsOverlay");
+  const statsView = document.getElementById("statsView");
+  if(statsOverlay && statsView){
+    statsOverlay.style.display = "flex";
+    statsOverlay.style.visibility = "visible";
+    statsOverlay.style.opacity = "1";
+    statsView.style.transform = "translateY(0)";
+  }
   renderStatsChips(id);
   if(state.showAllH2H) renderH2HList(item, state.h2hSearch || "");
 }
