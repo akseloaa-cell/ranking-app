@@ -359,9 +359,16 @@ export function startScenario(){
 
   const shuffled = [...pool].sort(() => Math.random() - 0.5).slice(0, count);
   state.scenarioRanking.activeItems = shuffled;
-  state.scenarioRanking.rankedItems = [];
   state.scenarioRanking.lockedCount = 0;
   state.scenarioRanking.activeScenario = getScenarioText();
+
+  if(state.scenarioRanking.rankingType === "locked"){
+    state.scenarioRanking.rankedItems = Array(count).fill(null);
+    state.scenarioRanking.lockedCurrentItem = shuffled[0] || null;
+  } else {
+    state.scenarioRanking.rankedItems = [...shuffled];
+    state.scenarioRanking.lockedCurrentItem = null;
+  }
   save();
   renderScenarioGame();
 }
@@ -372,47 +379,101 @@ export function renderScenarioGame(){
   setMode("scenarioGame");
   const items = state.scenarioRanking.activeItems || [];
   const ranked = state.scenarioRanking.rankedItems || [];
-  const remaining = items.filter(item => !ranked.some(x => x.id === item.id));
   const locked = state.scenarioRanking.rankingType === "locked";
+
+  if(!locked){
+    box.innerHTML = `
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-size:13px;opacity:.5;margin-bottom:7px;">Scenario</div>
+        <h2 style="margin:0;line-height:1.25;">${state.scenarioRanking.activeScenario || getScenarioText()}</h2>
+        <p style="opacity:.55;font-size:12px;">Bygg rangeringen ved å flytte items opp og ned.</p>
+      </div>
+
+      <div style="background:#171e2b;border:1px solid #2d374b;border-radius:16px;padding:12px;">
+        <div style="font-size:12px;opacity:.55;margin:0 0 8px;">Din rangering</div>
+        ${ranked.map((item,index) => `
+          <div style="display:flex;align-items:center;gap:8px;padding:10px;background:#20283a;border-radius:10px;margin:6px 0;">
+            <b style="width:28px;">#${index+1}</b>
+            <span style="flex:1;">${item.name}</span>
+            <button type="button" onclick="moveScenarioItem(${index},-1)" ${index===0?"disabled":""}>↑</button>
+            <button type="button" onclick="moveScenarioItem(${index},1)" ${index===ranked.length-1?"disabled":""}>↓</button>
+          </div>`).join("")}
+      </div>
+
+      <button type="button" onclick="finishScenario()" style="width:100%;margin-top:12px;">✓ Ferdig</button>
+    `;
+    return;
+  }
+
+  const currentItem = state.scenarioRanking.lockedCurrentItem;
+  const isComplete = ranked.length === items.length && ranked.every(Boolean);
 
   box.innerHTML = `
     <div style="text-align:center;margin-bottom:20px;">
       <div style="font-size:13px;opacity:.5;margin-bottom:7px;">Scenario</div>
       <h2 style="margin:0;line-height:1.25;">${state.scenarioRanking.activeScenario || getScenarioText()}</h2>
-      <p style="opacity:.55;font-size:12px;">${locked ? "Velg ett item om gangen. Plasseringen låses." : "Bygg rangeringen ved å flytte items opp og ned."}</p>
+      <p style="opacity:.55;font-size:12px;">Plasser ett item om gangen. Når det er plassert, kommer neste item.</p>
     </div>
 
     <div style="background:#171e2b;border:1px solid #2d374b;border-radius:16px;padding:12px;">
       <div style="font-size:12px;opacity:.55;margin:0 0 8px;">Din rangering</div>
-      ${ranked.map((item,index) => `
-        <div style="display:flex;align-items:center;gap:8px;padding:10px;background:#20283a;border-radius:10px;margin:6px 0;">
-          <b style="width:28px;">#${index+1}</b>
-          <span style="flex:1;">${item.name}</span>
-          ${!locked ? `
-            <button type="button" onclick="moveScenarioItem(${index},-1)" ${index===0?"disabled":""}>↑</button>
-            <button type="button" onclick="moveScenarioItem(${index},1)" ${index===ranked.length-1?"disabled":""}>↓</button>
-          ` : ""}
-        </div>`).join("") || '<div style="opacity:.45;padding:12px;text-align:center;">Ingen items valgt ennå</div>'}
+      ${ranked.map((item,index) => item
+        ? `
+          <div style="display:flex;align-items:center;gap:8px;padding:10px;background:#20283a;border-radius:10px;margin:6px 0;">
+            <b style="width:28px;">#${index+1}</b>
+            <span style="flex:1;">${item.name}</span>
+          </div>`
+        : `
+          <button type="button" onclick="placeScenarioItem(null,${index})" style="width:100%;margin:6px 0;text-align:left;padding:10px;">
+            <b style="display:inline-block;width:28px;">#${index+1}</b> Plasser item her
+          </button>`
+      ).join("")}
     </div>
 
-    <div style="margin-top:14px;">
-      ${remaining.map(item => `
-        <button type="button" onclick="placeScenarioItem(${item.id})" style="width:100%;margin:6px 0;text-align:left;">${item.name}</button>
-      `).join("")}
+    <div style="margin-top:14px;background:#20283a;border-radius:12px;padding:14px;text-align:center;">
+      ${currentItem
+        ? `
+          <div style="font-size:12px;opacity:.55;margin-bottom:6px;">Neste item</div>
+          <div style="font-size:18px;font-weight:600;">${currentItem.name}</div>
+          <div style="font-size:12px;opacity:.5;margin-top:6px;">Velg plassen over der du vil sette itemet.</div>
+        `
+        : `
+          <div style="opacity:.55;">Alle items er plassert.</div>
+        `}
     </div>
 
-    ${!remaining.length ? '<button type="button" onclick="finishScenario()" style="width:100%;margin-top:12px;">✓ Ferdig</button>' : ""}
+    ${isComplete ? '<button type="button" onclick="finishScenario()" style="width:100%;margin-top:12px;">✓ Ferdig</button>' : ""}
   `;
 }
 
-export function placeScenarioItem(id){
+export function placeScenarioItem(id, position){
   ensureScenarioRankingState();
+
+  if(state.scenarioRanking.rankingType === "locked"){
+    const item = state.scenarioRanking.lockedCurrentItem;
+    if(!item || !Number.isInteger(position)) return;
+
+    const list = state.scenarioRanking.rankedItems || [];
+    if(position < 0 || position >= list.length || list[position]) return;
+
+    list[position] = item;
+    state.scenarioRanking.lockedCount++;
+
+    const next = (state.scenarioRanking.activeItems || []).find(candidate =>
+      !list.some(placed => placed && placed.id === candidate.id)
+    );
+    state.scenarioRanking.lockedCurrentItem = next || null;
+
+    renderScenarioGame();
+    save();
+    return;
+  }
+
   const item = state.scenarioRanking.activeItems.find(x => x.id === id);
   if(!item) return;
   if((state.scenarioRanking.rankedItems || []).some(x => x.id === id)) return;
 
   state.scenarioRanking.rankedItems.push(item);
-  state.scenarioRanking.lockedCount++;
   renderScenarioGame();
   save();
 }
