@@ -108,6 +108,11 @@ export function setMode(mode, menuEl = null){
     if (el) el.style.display = "block";
   }
 
+  if (mode === "scenarioLeaderboard"){
+    const el = document.getElementById("scenarioLeaderboardView");
+    if (el) el.style.display = "block";
+  }
+
   if (mode === "categorySelect"){
     const el = document.getElementById("categorySelectView");
     if (el) el.style.display = "block";
