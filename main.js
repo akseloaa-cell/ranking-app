@@ -49,7 +49,7 @@ import {
 } from "./tournament.js";
 
 import { load } from "./storage.js";
-import { openScenarioRankingSetup, openScenarioModeSetup, selectScenarioItemCount, selectScenarioRankingType, selectScenarioMode, selectScenario, cycleScenario, selectScenarioEndlessOrder, selectScenarioTournamentMode, selectScenarioTournamentSize, selectScenarioTournamentScenario, startScenario, renderScenarioGame, placeScenarioItem, moveScenarioItem, finishScenario, backToScenarioSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, clearScenarioCategories, filterScenarioCategories, filterScenarios, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown } from "./scenario.js";
+import { openScenarioRankingSetup, openScenarioModeSetup, selectScenarioItemCount, selectScenarioRankingType, selectScenarioMode, selectScenario, cycleScenario, selectScenarioEndlessOrder, selectScenarioTournamentMode, selectScenarioTournamentSize, selectScenarioTournamentScenario, startScenario, renderScenarioGame, placeScenarioItem, moveScenarioItem, dragScenarioItem, allowScenarioDrop, dropScenarioItem, finishScenario, backToScenarioSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, clearScenarioCategories, filterScenarioCategories, filterScenarios, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown } from "./scenario.js";
 
 window.startTournament = startTournament;
 window.selectTournamentMode = selectTournamentMode;
@@ -78,6 +78,9 @@ window.startScenario = startScenario;
 window.renderScenarioGame = renderScenarioGame;
 window.placeScenarioItem = placeScenarioItem;
 window.moveScenarioItem = moveScenarioItem;
+window.dragScenarioItem = dragScenarioItem;
+window.allowScenarioDrop = allowScenarioDrop;
+window.dropScenarioItem = dropScenarioItem;
 window.finishScenario = finishScenario;
 window.backToScenarioSetup = backToScenarioSetup;
 window.backToScenarioHub = backToScenarioHub;
