@@ -49,7 +49,7 @@ import {
 } from "./tournament.js";
 
 import { load } from "./storage.js";
-import { openScenarioRankingSetup, openScenarioModeSetup, selectScenarioItemCount, selectScenarioRankingType, selectScenarioMode, selectScenario, cycleScenario, selectScenarioEndlessOrder, selectScenarioTournamentMode, selectScenarioTournamentSize, selectScenarioTournamentScenario, startScenario, renderScenarioGame, placeScenarioItem, moveScenarioItem, dragScenarioItem, allowScenarioDrop, dropScenarioItem, finishScenario, backToScenarioSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, clearScenarioCategories, filterScenarioCategories, filterScenarios, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown } from "./scenario.js";
+import { openScenarioRankingSetup, openScenarioModeSetup, selectScenarioItemCount, selectScenarioRankingType, selectScenarioMode, selectScenario, cycleScenario, selectScenarioEndlessOrder, selectScenarioTournamentMode, selectScenarioTournamentSize, selectScenarioTournamentScenario, startScenario, renderScenarioGame, placeScenarioItem, moveScenarioItem, dragScenarioItem, allowScenarioDrop, dropScenarioItem, finishScenario, backToScenarioSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, clearScenarioCategories, filterScenarioCategories, filterScenarios, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown, renderScenarioResult, scenarioPlayAgain, scenarioNewSettings } from "./scenario.js";
 
 window.startTournament = startTournament;
 window.selectTournamentMode = selectTournamentMode;
@@ -91,6 +91,9 @@ window.filterScenarioCategories = filterScenarioCategories;
 window.filterScenarios = filterScenarios;
 window.renderScenarioCategoryDropdown = renderScenarioCategoryDropdown;
 window.setupScenarioCategoryDropdown = setupScenarioCategoryDropdown;
+window.renderScenarioResult = renderScenarioResult;
+window.scenarioPlayAgain = scenarioPlayAgain;
+window.scenarioNewSettings = scenarioNewSettings;
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
 window.setActiveMenu = ui.setActiveMenu;
