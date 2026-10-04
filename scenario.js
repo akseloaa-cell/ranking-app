@@ -549,15 +549,135 @@ export function moveScenarioItem(index, direction){
   save();
 }
 
+function recordScenarioStats(){
+  if(!state.scenarioStats){
+    state.scenarioStats = { games: 0, byItem: {}, byScenario: {} };
+  }
+
+  const ranked = state.scenarioRanking.rankedItems || [];
+  const scenario = state.scenarioRanking.activeScenario || "Ukjent scenario";
+
+  state.scenarioStats.games++;
+  state.scenarioStats.byScenario[scenario] =
+    (state.scenarioStats.byScenario[scenario] || 0) + 1;
+
+  ranked.forEach((item, index) => {
+    if(!item) return;
+
+    const key = String(item.id);
+    if(!state.scenarioStats.byItem[key]){
+      state.scenarioStats.byItem[key] = {
+        appearances: 0,
+        totalRank: 0,
+        firsts: 0,
+        seconds: 0,
+        thirds: 0
+      };
+    }
+
+    const stats = state.scenarioStats.byItem[key];
+    const rank = index + 1;
+
+    stats.appearances++;
+    stats.totalRank += rank;
+    if(rank === 1) stats.firsts++;
+    if(rank === 2) stats.seconds++;
+    if(rank === 3) stats.thirds++;
+  });
+}
+
 export function finishScenario(){
   ensureScenarioRankingState();
-  if((state.scenarioRanking.rankedItems || []).length !== (state.scenarioRanking.activeItems || []).length) return;
-  alert("Scenario fullført!");
+  const ranked = state.scenarioRanking.rankedItems || [];
+  const active = state.scenarioRanking.activeItems || [];
+
+  if(ranked.length !== active.length || !ranked.every(Boolean)) return;
+
+  recordScenarioStats();
+  save();
+
+  state.scenarioRanking.resultRanking = ranked.map((item, index) => ({
+    id: item.id,
+    name: item.name,
+    rank: index + 1
+  }));
+  state.scenarioRanking.resultScenario =
+    state.scenarioRanking.activeScenario || "Scenario";
+
   if(state.scenarioRanking.mode === "endless"){
-    startScenario();
+    renderScenarioResult();
     return;
   }
-  backToScenarioHub();
+
+  renderScenarioResult();
+}
+
+export function renderScenarioResult(){
+  const box = document.getElementById("scenarioResultContent");
+  if(!box) return;
+
+  const ranking = state.scenarioRanking.resultRanking || [];
+  const scenario = state.scenarioRanking.resultScenario || "Scenario";
+  const stats = state.scenarioStats || { games: 0, byItem: {} };
+
+  box.innerHTML = `
+    <div style="text-align:center;margin-bottom:22px;">
+      <div style="font-size:13px;opacity:.5;margin-bottom:7px;">Scenario fullført</div>
+      <h2 style="margin:0;line-height:1.25;">${scenario}</h2>
+    </div>
+
+    <div style="background:#171e2b;border:1px solid #2d374b;border-radius:16px;padding:12px;">
+      <div style="font-size:12px;opacity:.55;margin:0 0 8px;">Din rangering</div>
+      ${ranking.map(item => `
+        <div style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:#20283a;border-radius:10px;margin:6px 0;">
+          <b style="width:30px;flex:0 0 30px;">#${item.rank}</b>
+          <span style="flex:1;min-width:0;overflow-wrap:anywhere;">${item.name}</span>
+        </div>
+      `).join("")}
+    </div>
+
+    <div style="margin-top:14px;background:#171e2b;border:1px solid #2d374b;border-radius:16px;padding:14px;">
+      <div style="font-size:12px;opacity:.55;margin-bottom:10px;">📊 Statistikk</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:#20283a;border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:20px;font-weight:700;">${stats.games || 0}</div>
+          <div style="font-size:11px;opacity:.5;">Totale rankinger</div>
+        </div>
+        <div style="background:#20283a;border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:20px;font-weight:700;">${ranking.length}</div>
+          <div style="font-size:11px;opacity:.5;">Items i denne</div>
+        </div>
+      </div>
+      ${ranking.map(item => {
+        const s = stats.byItem?.[String(item.id)];
+        if(!s || !s.appearances) return "";
+        const average = (s.totalRank / s.appearances).toFixed(1);
+        return `
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid #2d374b;">
+            <span style="flex:1;min-width:0;overflow-wrap:anywhere;">${item.name}</span>
+            <span style="font-size:11px;opacity:.55;white-space:nowrap;">Snitt #${average} · 🥇 ${s.firsts}</span>
+          </div>
+        `;
+      }).join("")}
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;">
+      <button type="button" onclick="scenarioPlayAgain()">🔄 Spill igjen</button>
+      <button type="button" onclick="scenarioNewSettings()">⚙️ Nye innstillinger</button>
+      <button type="button" onclick="backToScenarioHub()">🎭 Tilbake til Scenario</button>
+    </div>
+  `;
+  setMode("scenarioResult");
+}
+
+export function scenarioPlayAgain(){
+  startScenario();
+}
+
+export function scenarioNewSettings(){
+  setMode("scenarioRankingSetup");
+  renderScenarioSetup();
+  save();
 }
 
 export function backToScenarioSetup(){
