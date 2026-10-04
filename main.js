@@ -49,7 +49,7 @@ import {
 } from "./tournament.js";
 
 import { load } from "./storage.js";
-import { openScenarioRankingSetup, openScenarioModeSetup, selectScenarioItemCount, selectScenarioRankingType, selectScenarioMode, selectScenario, cycleScenario, selectScenarioEndlessOrder, selectScenarioEndlessMode, selectScenarioTournamentMode, selectScenarioTournamentSize, selectScenarioTournamentScenario, startScenario, renderScenarioGame, renderScenarioEndlessGame, chooseScenarioEndlessWinner, exitScenarioEndless, placeScenarioItem, moveScenarioItem, dragScenarioItem, allowScenarioDrop, dropScenarioItem, finishScenario, backToScenarioSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, clearScenarioCategories, filterScenarioCategories, filterScenarios, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown, renderScenarioResult, scenarioPlayAgain, scenarioNewSettings, openScenarioLeaderboard, renderScenarioLeaderboard } from "./scenario.js";
+import { openScenarioRankingSetup, openScenarioModeSetup, selectScenarioItemCount, selectScenarioRankingType, selectScenarioMode, selectScenario, cycleScenario, selectScenarioEndlessOrder, selectScenarioEndlessMode, selectScenarioTournamentMode, selectScenarioTournamentSize, selectScenarioTournamentScenario, startScenario, renderScenarioGame, renderScenarioEndlessGame, chooseScenarioEndlessWinner, exitScenarioEndless, placeScenarioItem, moveScenarioItem, dragScenarioItem, allowScenarioDrop, dropScenarioItem, finishScenario, backToScenarioSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, clearScenarioCategories, filterScenarioCategories, filterScenarios, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown, renderScenarioResult, scenarioPlayAgain, scenarioNewSettings, openScenarioLeaderboard, renderScenarioLeaderboard, showScenarioStats, closeScenarioStats } from "./scenario.js";
 
 window.startTournament = startTournament;
 window.selectTournamentMode = selectTournamentMode;
@@ -100,6 +100,8 @@ window.scenarioPlayAgain = scenarioPlayAgain;
 window.scenarioNewSettings = scenarioNewSettings;
 window.openScenarioLeaderboard = openScenarioLeaderboard;
 window.renderScenarioLeaderboard = renderScenarioLeaderboard;
+window.showScenarioStats = showScenarioStats;
+window.closeScenarioStats = closeScenarioStats;
 window.toggleMenu = ui.toggleMenu;
 window.setMode = ui.setMode;
 window.setActiveMenu = ui.setActiveMenu;
