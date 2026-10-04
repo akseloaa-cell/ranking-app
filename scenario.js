@@ -174,7 +174,7 @@ export function renderScenarioLeaderboard(){
   box.innerHTML = '<div style="background:#171e2b;border:1px solid #2d374b;border-radius:16px;padding:10px;">' +
     ranked.map(({item,rating}, index) => {
       const medal = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "#" + (index + 1);
-      return '<div onclick="showStats(' + JSON.stringify(String(item.id)) + ')" style="display:flex;align-items:center;gap:12px;padding:12px 10px;background:#20283a;border-radius:11px;margin:5px 0;min-width:0;cursor:pointer;" title="Trykk for statistikk">' +
+      return '<div onclick=\'showStats("' + String(item.id) + '")\' style="display:flex;align-items:center;gap:12px;padding:12px 10px;background:#20283a;border-radius:11px;margin:5px 0;min-width:0;cursor:pointer;" title="Trykk for statistikk">' +
         '<span style="width:32px;flex:0 0 32px;text-align:center;font-weight:700;">' + medal + '</span>' +
         '<span style="flex:1;min-width:0;overflow-wrap:anywhere;line-height:1.3;">' + item.name + '</span>' +
         '<span style="font-weight:700;white-space:nowrap;">⭐ ' + Math.round(rating) + '</span>' +
