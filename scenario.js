@@ -87,7 +87,7 @@ function renderScenarioSetup(){
       <div class="scenarioSetupSection">
         <div class="scenarioSetupLabel">Kategorier</div>
         <div style="position:relative;">
-          <button type="button" class="scenarioSetupSelect" onclick="toggleScenarioCategoryDropdown()" style="width:100%;text-align:left;">
+          <button id="scenarioCategoryDropdownButton" type="button" class="scenarioSetupSelect" onclick="toggleScenarioCategoryDropdown()" style="width:100%;text-align:left;">
             <span id="scenarioCategoryDropdownText">Alle kategorier</span>
           </button>
           <div id="scenarioCategoryDropdownMenu" class="hidden" style="position:absolute;z-index:20;left:0;right:0;margin-top:6px;background:#171e2b;border:1px solid #2d374b;border-radius:12px;padding:8px;">
@@ -124,6 +124,14 @@ export function openScenarioRankingSetup(){
 export function backToScenarioHub(){
   setMode("scenario");
 }
+
+document.addEventListener("click", event => {
+  const menu = document.getElementById("scenarioCategoryDropdownMenu");
+  const button = document.getElementById("scenarioCategoryDropdownButton");
+  if(!menu || menu.classList.contains("hidden")) return;
+  if(menu.contains(event.target) || button?.contains(event.target)) return;
+  menu.classList.add("hidden");
+});
 
 export function toggleScenarioCategoryDropdown(){
   const menu = document.getElementById("scenarioCategoryDropdownMenu");
