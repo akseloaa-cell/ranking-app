@@ -98,28 +98,24 @@ function renderScenarioSetup(){
       </div>`;
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Rankingtype</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.rankingType==="free"?"active":"")+'" onclick="selectScenarioRankingType(\'free\')">🔓 Free Ranking</button><button type="button" class="scenarioSetupOption '+(s.rankingType==="locked"?"active":"")+'" onclick="selectScenarioRankingType(\'locked\')">🔒 Locked Ranking</button></div></div>';
   } else if(s.mode==="endless"){
-    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.endlessScenarioMode==="fixed"?"active":"")+'" onclick="selectScenarioEndlessMode('fixed')">🎯 Ett scenario</button><button type="button" class="scenarioSetupOption '+(s.endlessScenarioMode==="each"?"active":"")+'" onclick="selectScenarioEndlessMode('each')">🔄 Bytt scenario hver match</button></div>';
-    if(s.endlessScenarioMode==="fixed"){
-      html+='<div class="scenarioSetupOptions" style="margin-top:8px;"><button type="button" class="scenarioSetupOption '+(s.scenarioIndex<0?"active":"")+'" onclick="selectScenarioMode('random')">🎲 Tilfeldig</button><button type="button" class="scenarioSetupOption '+(s.scenarioIndex>=0?"active":"")+'" onclick="selectScenarioMode('select')">🎭 Velg selv</button></div>';
-      if(s.scenarioIndex>=0){
-        html+='<input id="scenarioSearch" type="text" placeholder="Søk etter scenario..." oninput="filterScenarios(this.value)" style="width:100%;box-sizing:border-box;margin-top:10px;margin-bottom:8px;"><div id="scenarioOptions" class="scenarioSetupOptions" style="margin-top:0;"></div>';
-      }
-    }
-    html+='</div>';
-    html+=
-      '<div class="scenarioSetupSection">' +
-        '<div class="scenarioSetupLabel">Kategorier</div>' +
-        '<div style="position:relative;">' +
-          '<button id="scenarioCategoryDropdownButton" type="button" class="scenarioSetupSelect" onclick="toggleScenarioCategoryDropdown()" style="width:100%;text-align:left;">' +
-            '<span id="scenarioCategoryDropdownText">Alle kategorier</span>' +
-          '</button>' +
-          '<div id="scenarioCategoryDropdownMenu" class="hidden" style="position:absolute;z-index:20;left:0;right:0;margin-top:6px;background:#171e2b;border:1px solid #2d374b;border-radius:12px;padding:8px;">' +
-            '<input id="scenarioCategorySearch" type="text" placeholder="Søk etter kategori..." value="" oninput="filterScenarioCategories(this.value)" style="width:100%;box-sizing:border-box;margin-bottom:8px;">' +
-            '<div id="scenarioCategoryDropdownOptions"></div>' +
-          '</div>' +
-        '</div>' +
-      '</div>';
-    html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Scenario-rekkefølge</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.endlessScenarioOrder==="random"?"active":"")+'" onclick="selectScenarioEndlessOrder(\'random\')">🎲 Tilfeldig</button><button type="button" class="scenarioSetupOption '+(s.endlessScenarioOrder==="avoidRecent"?"active":"")+'" onclick="selectScenarioEndlessOrder(\'avoidRecent\')">🔄 Unngå nylig brukte</button></div></div>';
+    html+=`
+      <div class="scenarioSetupSection">
+        <div class="scenarioSetupLabel">Scenario</div>
+        <div class="scenarioSetupOptions">
+          <button type="button" class="scenarioSetupOption ${s.endlessScenarioMode==="fixed"?"active":""}" onclick="selectScenarioEndlessMode('fixed')">🎯 Ett scenario</button>
+          <button type="button" class="scenarioSetupOption ${s.endlessScenarioMode==="each"?"active":""}" onclick="selectScenarioEndlessMode('each')">🔄 Bytt scenario hver match</button>
+        </div>
+        ${s.endlessScenarioMode==="fixed" ? `
+          <div class="scenarioSetupOptions" style="margin-top:8px;">
+            <button type="button" class="scenarioSetupOption ${s.scenarioIndex<0?"active":""}" onclick="selectScenarioMode('random')">🎲 Tilfeldig</button>
+            <button type="button" class="scenarioSetupOption ${s.scenarioIndex>=0?"active":""}" onclick="selectScenarioMode('select')">🎭 Velg selv</button>
+          </div>
+          ${s.scenarioIndex>=0 ? `
+            <input id="scenarioSearch" type="text" placeholder="Søk etter scenario..." oninput="filterScenarios(this.value)" style="width:100%;box-sizing:border-box;margin-top:10px;margin-bottom:8px;">
+            <div id="scenarioOptions" class="scenarioSetupOptions" style="margin-top:0;"></div>
+          ` : ""}
+        ` : ""}
+      </div>`;
   } else {
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Modus</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.tournamentMode==="random"?"active":"")+'" onclick="selectScenarioTournamentMode(\'random\')">🎲 Random items</button><button type="button" class="scenarioSetupOption '+(s.tournamentMode==="category"?"active":"")+'" onclick="selectScenarioTournamentMode(\'category\')">🏷️ Velg kategori</button></div></div>';
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Antall deltakere</div><div class="scenarioSetupOptions">';
