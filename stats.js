@@ -246,6 +246,24 @@ export function showStats(id){
 
       <hr>
 
+      <p><b>🎭 Scenario Ranking</b></p>
+      ${(() => {
+        const s = state.scenarioStats?.byItem?.[String(item.id)];
+        if(!s || !s.appearances){
+          return '<p style="opacity:.5;">Ingen Scenario Ranking-statistikk ennå.</p>';
+        }
+        const average = (s.totalRank / s.appearances).toFixed(1);
+        return `
+          <p>🎭 Rankinger: ${s.appearances}</p>
+          <p>📊 Gjennomsnittsplassering: #${average}</p>
+          <p>🥇 1.-plasser: ${s.firsts}</p>
+          <p>🥈 2.-plasser: ${s.seconds}</p>
+          <p>🥉 3.-plasser: ${s.thirds}</p>
+        `;
+      })()}
+
+      <hr>
+
       <p><b>Head to Head:</b></p>
       <button onclick="toggleH2H(${item.id})">
         ${state.showAllH2H ? "− Skjul H2H" : "+ Vis alle H2H (" + Object.keys(item.h2h || {}).length + ")"}
