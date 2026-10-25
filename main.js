@@ -31,7 +31,7 @@ import {
   openCategoryVs,
   exitCategoryVs,
   backToCategorySelect
-} from "./categoryVs.js";
+} from "./categoryVs.js?v=20261025-versus-new-badge";
 
 import {
   startTournament,
