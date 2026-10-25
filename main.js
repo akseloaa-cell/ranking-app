@@ -4,7 +4,7 @@ import { update } from "./ranking.js";
 import * as ui from "./ui.js";
 import * as stats from "./stats.js";
 import * as tournament from "./tournament.js";
-import { addItem } from "./items.js";
+import { addItem, chooseEloPlacement, skipEloPlacement } from "./items.js";
 import { addCategory, openCategoryManager, selectCategoryManagerCategory, toggleItemInCategory, searchCategoryManager, searchCategoryManagerCategory, setCategoryManagerItemSort, toggleCategoryManagerItemSortDir, renderCategoryManager, toggleCategoryManagerSortDropdown, toggleCategoryManagerDropdown } from "./categories.js";
 import {
   renameItem,
@@ -131,6 +131,8 @@ window.update = update;
 window.openAddItem = openAddItem;
 window.closeAddItem = closeAddItem;
 window.addItem = addItem;
+window.chooseEloPlacement = chooseEloPlacement;
+window.skipEloPlacement = skipEloPlacement;
 window.addCategory = addCategory;
 window.renderItemSuggestions = ui.renderItemSuggestions;
 window.selectItemSuggestion = ui.selectItemSuggestion;
