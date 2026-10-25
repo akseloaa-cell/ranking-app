@@ -1,5 +1,16 @@
 import { state } from "./state.js";
 import { save } from "./storage.js";
+import { getH2H, isRival } from "./match.js";
+import { getRank } from "./ranking.js";
+
+function formatTournamentChoice(item, opponent){
+  const rival = isRival(item, opponent) ? '<span style="color:#ff4d4d;">🔥</span>' : "";
+  return `<span class="tournamentChoiceName">${item.name} ${rival}</span>
+    <span class="tournamentChoiceMeta">#${getRank(item.id)} • ⭐ ${Math.round(item.rating)}</span>
+    <span class="tournamentChoiceH2H">${getH2H(item, opponent)}</span>
+    <span class="tournamentChoiceBonus">ELO-bonus ved pallplass</span>`;
+}
+
 
 export function resumeTournament(){
   state.tournament.showTournamentHub = false;
@@ -488,15 +499,13 @@ state.tournament.matches.length
 
 <div class="tournamentMatchChoices">
 <button class="tournamentChoiceCard" onclick="pickWinner('a')">
-  <span class="tournamentChoiceName">${match.a.name}</span>
-  <span class="tournamentChoiceMeta">⭐ ${Math.round(match.a.rating)}</span>
+  ${formatTournamentChoice(match.a, match.b)}
 </button>
 
 <div class="tournamentChoiceVs">VS</div>
 
 <button class="tournamentChoiceCard" onclick="pickWinner('b')">
-  <span class="tournamentChoiceName">${match.b.name}</span>
-  <span class="tournamentChoiceMeta">⭐ ${Math.round(match.b.rating)}</span>
+  ${formatTournamentChoice(match.b, match.a)}
 </button>
 </div>
 
@@ -565,15 +574,13 @@ return;
 
 <div class="tournamentMatchChoices">
 <button class="tournamentChoiceCard" onclick="pickThirdPlaceWinner('a')">
-  <span class="tournamentChoiceName">${match.a.name}</span>
-  <span class="tournamentChoiceMeta">⭐ ${Math.round(match.a.rating)}</span>
+  ${formatTournamentChoice(match.a, match.b)}
 </button>
 
 <div class="tournamentChoiceVs">VS</div>
 
 <button class="tournamentChoiceCard" onclick="pickThirdPlaceWinner('b')">
-  <span class="tournamentChoiceName">${match.b.name}</span>
-  <span class="tournamentChoiceMeta">⭐ ${Math.round(match.b.rating)}</span>
+  ${formatTournamentChoice(match.b, match.a)}
 </button>
 </div>
 
