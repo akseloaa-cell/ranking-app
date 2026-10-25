@@ -30,6 +30,7 @@ export function openCategoryManager(){
   state.categoryManagerCategory = state.categories[0] || "";
   state.categoryManagerSearch = "";
   state.categoryManagerCategorySearch = "";
+  state.categoryManagerSourceFilter = "all";
   state.categoryManagerItemSort = "elo";
   state.categoryManagerItemSortDir = "asc";
   renderCategoryManager();
@@ -76,6 +77,12 @@ export function selectCategoryManagerCategory(category){
   state.categoryManagerCategory = category;
   state.categoryManagerSearch = "";
   state.categoryManagerCategorySearch = "";
+  renderCategoryManager();
+}
+
+export function setCategoryManagerSourceFilter(filter){
+  const allowed = new Set(["all", "uncategorized", ...state.categories]);
+  state.categoryManagerSourceFilter = allowed.has(filter) ? filter : "all";
   renderCategoryManager();
 }
 
@@ -131,6 +138,7 @@ export function renderCategoryManager(){
   const categories = [...state.categories];
   const selected = state.categoryManagerCategory || categories[0] || "";
   const q = (state.categoryManagerSearch || "").trim().toLowerCase();
+  const sourceFilter = state.categoryManagerSourceFilter || "all";
   const categoryQuery = (state.categoryManagerCategorySearch || "").trim().toLowerCase();
   const visibleCategories = categories.filter(category => !categoryQuery || category.toLowerCase().includes(categoryQuery));
   const categoryItemCount = selected
@@ -138,6 +146,8 @@ export function renderCategoryManager(){
     : 0;
 
   const items = [...state.items]
+    .filter(item => sourceFilter === "all"
+      || (sourceFilter === "uncategorized" ? !(item.categories || []).length : (item.categories || []).includes(sourceFilter)))
     .filter(item => !q || item.name.toLowerCase().includes(q))
     .sort((a, b) => {
       const aActive = (a.categories || []).includes(selected);
@@ -186,6 +196,13 @@ export function renderCategoryManager(){
         value="${state.categoryManagerSearch || ""}"
         oninput="event.stopPropagation(); searchCategoryManager(this.value)"
       >
+
+      <label class="categoryManagerSourceFilterLabel" for="categoryManagerSourceFilter">Vis items fra kategori</label>
+      <select id="categoryManagerSourceFilter" class="categoryManagerSourceFilter" onchange="setCategoryManagerSourceFilter(decodeURIComponent(this.value))">
+        <option value="all" ${sourceFilter === "all" ? "selected" : ""}>Alle kategorier</option>
+        <option value="uncategorized" ${sourceFilter === "uncategorized" ? "selected" : ""}>Uten kategori</option>
+        ${categories.map(category => `<option value="${encodeURIComponent(category).replace(/'/g, "%27")}" ${sourceFilter === category ? "selected" : ""}>${category.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")}</option>`).join("")}
+      </select>
 
       <div class="categoryManagerSort">
         <span class="categoryManagerSortLabel">Sorter etter</span>
