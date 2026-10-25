@@ -1402,8 +1402,21 @@ if (next.length === 1) {
 
   // The final has now been played, so the tournament can be finalized.
   const final = next[0];
-  const second = t.thirdPlaceLoser;
+  // The runner-up is the loser of the actual final, not the bronze match.
+  const finalMatch = t.matches?.[0];
+  const second = finalMatch && String(finalMatch.a?.id) === String(final.id)
+    ? finalMatch.b
+    : finalMatch && String(finalMatch.b?.id) === String(final.id)
+      ? finalMatch.a
+      : null;
   const third = t.thirdPlaceWinner;
+
+  if (!second || !third || new Set([final.id, second.id, third.id].map(String)).size !== 3) {
+    console.error("Invalid tournament podium; refusing to award incorrect placements.");
+    t.phase = "active";
+    t.nextRoundPool = [final];
+    return;
+  }
 
   applyTournamentElo([final, second, third], avg);
 
