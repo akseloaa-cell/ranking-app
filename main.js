@@ -1,7 +1,7 @@
 import { state } from "./state.js"; 
 import { nextMatch } from "./match.js";
 import { update } from "./ranking.js";
-import * as ui from "./ui.js";
+import * as ui from "./ui.js?v=20261025-hide-item-suggestions";
 import * as stats from "./stats.js";
 import * as tournament from "./tournament.js";
 import { addItem, chooseEloPlacement, skipEloPlacement } from "./items.js?v=elo-correction-20261025-fix1";
@@ -17,7 +17,7 @@ import {
   toggleH2H,
   searchH2H,
 } from "./stats.js";
-import { renderChips, toggleAllChips } from "./ui.js";
+import { renderChips, toggleAllChips } from "./ui.js?v=20261025-hide-item-suggestions";
 import { 
   openRankingView,
   closeRankingView,
@@ -25,7 +25,7 @@ import {
   setRankingFilter,
   toggleRankingChips
 } from "./ranking.js";
-import { openAddItem, closeAddItem } from "./ui.js";
+import { openAddItem, closeAddItem } from "./ui.js?v=20261025-hide-item-suggestions";
 import { draw } from "./match.js";
 import {
   openCategoryVs,
