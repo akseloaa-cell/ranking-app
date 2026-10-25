@@ -321,15 +321,12 @@ function renderScenarioCategoryOptions(query = ""){
   const selected = state.scenarioRanking.selectedCategories;
   const q = String(query || "").trim().toLowerCase();
 
-  const filtered = categories.filter(category =>
-    !q || category.toLowerCase().includes(q)
-  );
+  const filtered = categories
+    .filter(category => !q || category.toLowerCase().includes(q))
+    .sort((a, b) => Number(selected.includes(b)) - Number(selected.includes(a)));
 
-  let html =
-    '<div class="scenarioCategoryDropdownOption scenarioCategoryAllOption ' +
-    (selected.length === 0 ? "active" : "") +
-    '" onclick="clearScenarioCategories()">' +
-    '<span>Alle kategorier</span><span>✓</span></div>';
+  // Keep chosen categories at the top of the scrollable options list.
+  let html = "";
 
   if(filtered.length){
     html += filtered.map(category => {
@@ -343,9 +340,14 @@ function renderScenarioCategoryOptions(query = ""){
         (isSelected ? "✓" : "") +
         '</span></div>';
     }).join("");
-  } else {
+  } else if(q) {
     html += '<div class="scenarioCategoryDropdownEmpty">Ingen kategorier funnet</div>';
   }
+
+  html += '<div class="scenarioCategoryDropdownOption scenarioCategoryAllOption ' +
+    (selected.length === 0 ? "active" : "") +
+    '" onclick="clearScenarioCategories()">' +
+    '<span>Alle kategorier</span><span>' + (selected.length === 0 ? "✓" : "") + '</span></div>';
 
   optionsBox.innerHTML = html;
 }
