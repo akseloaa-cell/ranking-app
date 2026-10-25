@@ -61,7 +61,7 @@ function ensureScenarioRankingState(){
 
   delete state.scenarioRanking.category;
 
-  if(!Number.isInteger(state.scenarioRanking.itemCount) && state.scenarioRanking.itemCount !== "random"){
+  if(!Number.isInteger(state.scenarioRanking.itemCount) && !["random","all"].includes(state.scenarioRanking.itemCount)){
     state.scenarioRanking.itemCount = 5;
   }
   if(!["free","locked"].includes(state.scenarioRanking.rankingType)){
@@ -82,7 +82,8 @@ function renderScenarioSetup(){
   if(s.mode==="ranking"){
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">Antall items</div><div class="scenarioSetupOptions">';
     [3,4,5,6,8].forEach(n=>html+='<button type="button" class="scenarioSetupOption '+(s.itemCount===n?"active":"")+'" onclick="selectScenarioItemCount('+n+')">'+n+'</button>');
-    html+='<button type="button" class="scenarioSetupOption '+(s.itemCount==="random"?"active":"")+'" onclick="selectScenarioItemCount(\'random\')">Random</button></div></div>';
+    html+='<button type="button" class="scenarioSetupOption '+(s.itemCount==="random"?"active":"")+'" onclick="selectScenarioItemCount(\'random\')">Random</button>';
+    html+='<button type="button" class="scenarioSetupOption '+(s.itemCount==="all"?"active":"")+'" onclick="selectScenarioItemCount(\'all\')">Alle</button></div></div>';
     html+='<div class="scenarioSetupSection"><div class="scenarioSetupLabel">🎭 Scenario</div><div class="scenarioSetupOptions"><button type="button" class="scenarioSetupOption '+(s.scenarioIndex<0?"active":"")+'" onclick="selectScenarioMode(\'random\')">🎲 Tilfeldig scenario</button><button type="button" class="scenarioSetupOption '+(s.scenarioIndex>=0?"active":"")+'" onclick="selectScenarioMode(\'select\')">🎭 Velg selv</button></div>'+(s.scenarioIndex>=0?'<input id="scenarioSearch" type="text" placeholder="Søk etter scenario..." oninput="filterScenarios(this.value)" style="width:100%;box-sizing:border-box;margin-top:10px;margin-bottom:8px;"><div id="scenarioOptions" class="scenarioSetupOptions" style="margin-top:0;"></div>':"")+'</div>';
     html+=`
       <div class="scenarioSetupSection">
@@ -570,9 +571,11 @@ export function startScenario(){
   if(state.scenarioRanking.mode === "tournament"){
     count = state.scenarioRanking.tournamentSize === "random" ? Math.max(4, Math.min(32, pool.length)) : Number(state.scenarioRanking.tournamentSize);
   } else {
-    count = state.scenarioRanking.itemCount === "random"
-      ? Math.floor(Math.random() * Math.min(8, pool.length - 1)) + 2
-      : Number(state.scenarioRanking.itemCount);
+    count = state.scenarioRanking.itemCount === "all"
+      ? pool.length
+      : state.scenarioRanking.itemCount === "random"
+        ? Math.floor(Math.random() * Math.min(8, pool.length - 1)) + 2
+        : Number(state.scenarioRanking.itemCount);
     if(count > pool.length){
       alert("Du har ikke nok gyldige deltakere til å starte. Du har valgt " + count + " items, men har bare " + pool.length + " tilgjengelige.");
       return;
