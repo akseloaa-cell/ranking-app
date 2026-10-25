@@ -2585,3 +2585,52 @@ button:active {
   width:100%;margin:16px 0 0;padding:12px;border-radius:10px;
   border:1px solid #465168;background:#242b39;color:#fff;cursor:pointer;
 }
+
+
+/* Tournament matchup cards share the Home VS card presentation. */
+.tournamentMatchChoices{
+  width:80%;
+  max-width:none;
+  gap:10px;
+  align-items:stretch;
+}
+.tournamentChoiceCard{
+  flex:1 1 0;
+  width:0;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  gap:3px;
+  padding:20px;
+  background:#1f1f1f;
+  border:1px solid #2a3142;
+  border-radius:12px;
+  text-align:left;
+  font-weight:600;
+  transition:.2s;
+  user-select:none;
+}
+.tournamentChoiceCard:hover{
+  border-color:#4f8cff;
+  background:#1f1f1f;
+  transform:translateY(-2px);
+}
+.tournamentChoiceCard:active{transform:scale(.97);}
+.tournamentChoiceName{
+  display:block;
+  font-size:18px;
+  line-height:1.3;
+  font-weight:600;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+.tournamentChoiceMeta{font-size:12px;opacity:.6;}
+.tournamentChoiceH2H{font-size:11px;opacity:.5;font-weight:400;}
+.tournamentChoiceBonus{font-size:11px;opacity:.5;font-weight:400;}
+.tournamentChoiceVs{font-size:14px;opacity:.45;}
+@media(max-width:600px){
+  .tournamentChoiceCard{padding:14px 10px;}
+  .tournamentChoiceName{font-size:16px;}
+}
