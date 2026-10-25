@@ -2668,3 +2668,28 @@ button:active {
 .categoryManagerSourceWrap .categoryManagerSourceDropdown{width:100%;margin:0 0 16px;}
 .categoryManagerSourceWrap .categoryManagerDropdownButton{width:100%;}
 .categoryManagerSourceWrap .categoryManagerDropdownMenu{width:100%;box-sizing:border-box;}
+
+
+/* Scenario Ranking / Endless: bounded, touch-scrollable category picker. */
+#scenarioCategoryDropdownMenu{
+  box-sizing:border-box;
+  max-height:min(380px, 58dvh);
+  display:flex;
+  flex-direction:column;
+}
+#scenarioCategoryDropdownMenu.hidden{display:none;}
+#scenarioCategorySearch{flex:0 0 auto;}
+#scenarioCategoryDropdownOptions{
+  min-height:0;
+  max-height:min(280px, 42dvh);
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+}
+#scenarioCategoryDropdownOptions .scenarioCategoryDropdownOption{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
