@@ -248,8 +248,16 @@ export function renderScenarioLeaderboard(){
   box.innerHTML = '<div style="background:#171e2b;border:1px solid #2d374b;border-radius:16px;padding:10px;">' +
     ranked.map(({item,rating}, index) => {
       const medal = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "#" + (index + 1);
-      return '<div onclick="showScenarioStats(' + item.id + ')" style="display:flex;align-items:center;gap:12px;padding:12px 10px;background:#20283a;border-radius:11px;margin:5px 0;min-width:0;cursor:pointer;" title="Trykk for statistikk">' +
+      const baselineRank = Number(state.previousScenarioRanking?.[String(item.id)]);
+      const delta = Number.isFinite(baselineRank) && baselineRank > 0 ? baselineRank - (index + 1) : 0;
+      const change = delta > 0
+        ? '<span style="color:#4caf50;font-size:11px;font-weight:700;white-space:nowrap;">▲ ' + delta + '</span>'
+        : delta < 0
+          ? '<span style="color:#f44336;font-size:11px;font-weight:700;white-space:nowrap;">▼ ' + Math.abs(delta) + '</span>'
+          : '<span style="font-size:11px;opacity:.35;white-space:nowrap;">—</span>';
+      return '<div onclick="showScenarioStats(' + item.id + ')" style="display:flex;align-items:center;gap:10px;padding:12px 10px;background:#20283a;border-radius:11px;margin:5px 0;min-width:0;cursor:pointer;" title="Trykk for statistikk">' +
         '<span style="width:32px;flex:0 0 32px;text-align:center;font-weight:700;">' + medal + '</span>' +
+        change +
         '<span style="flex:1;min-width:0;overflow-wrap:anywhere;line-height:1.3;">' + item.name + '</span>' +
         '<span style="font-weight:700;white-space:nowrap;">⭐ ' + Math.round(rating) + '</span>' +
       '</div>';
