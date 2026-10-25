@@ -925,17 +925,21 @@ export function finishScenario(){
 
   if(ranked.length !== active.length || !ranked.every(Boolean)) return;
 
+  // Capture ratings before this ranking so the results show its exact ELO changes.
+  const previousRatings = new Map(ranked.map(item => [item.id, ensureScenarioElo(item)]));
   updateScenarioElo(ranked);
   recordScenarioStats();
-  save();
 
   state.scenarioRanking.resultRanking = ranked.map((item, index) => ({
     id: item.id,
     name: item.name,
-    rank: index + 1
+    rank: index + 1,
+    scenarioElo: Math.round(item.scenarioRating),
+    eloChange: Math.round(item.scenarioRating - previousRatings.get(item.id))
   }));
   state.scenarioRanking.resultScenario =
     state.scenarioRanking.activeScenario || "Scenario";
+  save();
 
   if(state.scenarioRanking.mode === "endless"){
     renderScenarioResult();
@@ -963,6 +967,10 @@ export function renderScenarioResult(){
         <div style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:#20283a;border-radius:10px;margin:6px 0;">
           <b style="width:30px;flex:0 0 30px;">#${item.rank}</b>
           <span style="flex:1;min-width:0;overflow-wrap:anywhere;">${item.name}</span>
+          ${Number.isFinite(item.eloChange) ? `
+            <span style="flex:0 0 auto;text-align:right;white-space:nowrap;font-size:12px;font-weight:700;color:${item.eloChange > 0 ? "#4caf50" : item.eloChange < 0 ? "#f44336" : "#9ca3af"};">
+              ${item.eloChange > 0 ? "+" : ""}${item.eloChange} ELO
+            </span>` : ""}
         </div>
       `).join("")}
     </div>
