@@ -479,7 +479,13 @@ function ensureScenarioElo(item){
 
 function updateScenarioElo(rankedItems){
   if(!Array.isArray(rankedItems) || rankedItems.length < 2) return;
-  const K = 32;
+  // A ranking contains many pairwise results. Without scaling, the ELO
+  // change grows linearly with the number of items. Preserve the normal
+  // K=32 for 2–4 items, then dampen larger rankings while still rewarding
+  // the extra evidence provided by more participants.
+  const opponentCount = rankedItems.length - 1;
+  const sizeFactor = Math.pow(Math.min(1, 3 / opponentCount), 0.8);
+  const K = 32 * sizeFactor;
   const ratings = new Map(rankedItems.map(item => [item.id, ensureScenarioElo(item)]));
   const changes = new Map(rankedItems.map(item => [item.id, 0]));
 
