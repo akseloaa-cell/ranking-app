@@ -2634,3 +2634,29 @@ button:active {
   .tournamentChoiceCard{padding:14px 10px;}
   .tournamentChoiceName{font-size:16px;}
 }
+
+
+/* Source-category filter in the category/items manager */
+.categoryManagerSourceFilterLabel{
+  display:block;
+  margin:14px 0 7px;
+  font-size:13px;
+  font-weight:600;
+  opacity:.75;
+}
+.categoryManagerSourceFilter{
+  display:block;
+  width:100%;
+  box-sizing:border-box;
+  padding:12px 14px;
+  color:#fff;
+  background:#1a2332;
+  border:1px solid #38455c;
+  border-radius:12px;
+  font:inherit;
+  cursor:pointer;
+}
+.categoryManagerSourceFilter:focus-visible{
+  outline:2px solid #739cf4;
+  outline-offset:2px;
+}
