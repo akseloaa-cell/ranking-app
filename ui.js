@@ -20,6 +20,24 @@ export function openAddItem(){
   });
 
   renderItemSuggestions("");
+
+  // Hide existing-item suggestions when the name field loses focus.
+  // Delay slightly so tapping a suggestion still registers its click.
+  const input = document.getElementById("itemInput");
+  if(input && !input.dataset.suggestionBlurBound){
+    input.dataset.suggestionBlurBound = "true";
+    input.addEventListener("blur", () => {
+      setTimeout(() => {
+        if(document.activeElement !== input){
+          const suggestions = document.getElementById("itemSuggestions");
+          if(suggestions) suggestions.style.display = "none";
+        }
+      }, 150);
+    });
+    input.addEventListener("focus", () => {
+      renderItemSuggestions(input.value);
+    });
+  }
 }
 
 export function closeAddItem(){
@@ -27,6 +45,8 @@ export function closeAddItem(){
   const view = document.getElementById("addView");
 
   view.style.transform = "translateY(100%)";
+  const suggestions = document.getElementById("itemSuggestions");
+  if(suggestions) suggestions.style.display = "none";
 
   setTimeout(() => {
     overlay.style.display = "none";
