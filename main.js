@@ -4,7 +4,7 @@ import { update } from "./ranking.js";
 import * as ui from "./ui.js";
 import * as stats from "./stats.js";
 import * as tournament from "./tournament.js";
-import { addItem, chooseEloPlacement, skipEloPlacement } from "./items.js";
+import { addItem, chooseEloPlacement, skipEloPlacement } from "./items.js?v=elo-correction-20261025-fix1";
 import { addCategory, openCategoryManager, selectCategoryManagerCategory, toggleItemInCategory, searchCategoryManager, searchCategoryManagerCategory, setCategoryManagerItemSort, toggleCategoryManagerItemSortDir, renderCategoryManager, toggleCategoryManagerSortDropdown, toggleCategoryManagerDropdown } from "./categories.js";
 import {
   renameItem,
