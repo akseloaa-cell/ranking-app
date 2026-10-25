@@ -355,7 +355,13 @@ function renderCategoryBattleRanking(){
 
       let indicator = "";
 
-      if(prevRank !== undefined){
+      // Match the Home ranking: items added today show NY instead of a rank delta.
+      const isNewToday = item.createdAt &&
+        item.createdAt.split("T")[0] === new Date().toISOString().split("T")[0];
+
+      if(isNewToday){
+        indicator = `<span style="background:#4f8cff;color:white;padding:2px 6px;border-radius:6px;font-size:11px;font-weight:bold;">NY</span>`;
+      } else if(prevRank !== undefined){
         const diff = prevRank - currentRank;
 
         if(diff > 0){
