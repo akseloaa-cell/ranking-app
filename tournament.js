@@ -7,8 +7,7 @@ function formatTournamentChoice(item, opponent){
   const rival = isRival(item, opponent) ? '<span style="color:#ff4d4d;">🔥</span>' : "";
   return `<span class="tournamentChoiceName">${item.name} ${rival}</span>
     <span class="tournamentChoiceMeta">#${getRank(item.id)} • ⭐ ${Math.round(item.rating)}</span>
-    <span class="tournamentChoiceH2H">${getH2H(item, opponent)}</span>
-    <span class="tournamentChoiceBonus">ELO-bonus ved pallplass</span>`;
+    <span class="tournamentChoiceH2H">${getH2H(item, opponent)}</span>`;
 }
 
 
