@@ -2660,3 +2660,11 @@ button:active {
   outline:2px solid #739cf4;
   outline-offset:2px;
 }
+
+
+/* Category source selector matches the manager's existing 80%-width controls. */
+.categoryManagerSourceWrap{width:80%;margin:14px auto 0;text-align:left;}
+.categoryManagerSourceWrap .categoryManagerSourceFilterLabel{margin:0 0 7px;}
+.categoryManagerSourceWrap .categoryManagerSourceDropdown{width:100%;margin:0 0 16px;}
+.categoryManagerSourceWrap .categoryManagerDropdownButton{width:100%;}
+.categoryManagerSourceWrap .categoryManagerDropdownMenu{width:100%;box-sizing:border-box;}
