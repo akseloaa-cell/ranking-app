@@ -86,6 +86,11 @@ export function setCategoryManagerSourceFilter(filter){
   renderCategoryManager();
 }
 
+export function toggleCategoryManagerSourceDropdown(){
+  const menu = document.getElementById("categoryManagerSourceDropdownMenu");
+  if(menu) menu.classList.toggle("hidden");
+}
+
 export function toggleItemInCategory(itemId){
   const item = state.items.find(x => x.id === itemId);
   const category = state.categoryManagerCategory;
@@ -197,12 +202,23 @@ export function renderCategoryManager(){
         oninput="event.stopPropagation(); searchCategoryManager(this.value)"
       >
 
-      <label class="categoryManagerSourceFilterLabel" for="categoryManagerSourceFilter">Vis items fra kategori</label>
-      <select id="categoryManagerSourceFilter" class="categoryManagerSourceFilter" onchange="setCategoryManagerSourceFilter(decodeURIComponent(this.value))">
-        <option value="all" ${sourceFilter === "all" ? "selected" : ""}>Alle kategorier</option>
-        <option value="uncategorized" ${sourceFilter === "uncategorized" ? "selected" : ""}>Uten kategori</option>
-        ${categories.map(category => `<option value="${encodeURIComponent(category).replace(/'/g, "%27")}" ${sourceFilter === category ? "selected" : ""}>${category.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")}</option>`).join("")}
-      </select>
+      <div class="categoryManagerSourceWrap">
+        <label class="categoryManagerSourceFilterLabel">Vis items fra kategori</label>
+        <div class="categoryManagerDropdown categoryManagerSourceDropdown">
+          <button type="button" class="categoryManagerDropdownButton" aria-expanded="false" onclick="toggleCategoryManagerSourceDropdown()">
+            <span class="categoryManagerSelected">${sourceFilter === "all" ? "Alle kategorier" : sourceFilter === "uncategorized" ? "Uten kategori" : sourceFilter.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")}</span>
+            <span class="categoryManagerDropdownChevron">⌄</span>
+          </button>
+          <div id="categoryManagerSourceDropdownMenu" class="categoryManagerDropdownMenu hidden">
+            ${[["all", "Alle kategorier"], ["uncategorized", "Uten kategori"], ...categories.map(category => [category, category])].map(([value,label]) => `
+              <div class="categoryManagerOption ${sourceFilter === value ? "active" : ""}"
+                   onclick="setCategoryManagerSourceFilter(decodeURIComponent('${encodeURIComponent(value).replace(/'/g, "%27")}'))">
+                <span>${label.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")}</span>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      </div>
 
       <div class="categoryManagerSort">
         <span class="categoryManagerSortLabel">Sorter etter</span>
