@@ -2535,3 +2535,13 @@ button:active {
   opacity:.5;
   text-align:center;
 }
+
+/* Keep the active tournament choice available while browsing a tall bracket. */
+#tournamentSection:has(.tournamentBracket) #tournamentContent{
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:#101722;
+  padding:10px 0;
+  border-radius:12px;
+}
