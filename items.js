@@ -63,6 +63,63 @@ export function addItem(){
 // A new item is placed against a small, evenly distributed sample of the
 // existing ranking. Other items' ratings are never changed.
 let pendingPlacement = null;
+let correctionQueue = [];
+let correctionIndex = 0;
+let correctionActive = false;
+
+function refillCorrectionQueue(){
+  // Shuffle one cycle, so every item gets a turn before repeating.
+  correctionQueue = state.items.map(item => item.id);
+  for(let i = correctionQueue.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [correctionQueue[i], correctionQueue[j]] = [correctionQueue[j], correctionQueue[i]];
+  }
+  correctionIndex = 0;
+}
+
+export function startEloCorrectionMode(){
+  if(state.items.length < 2){
+    alert("Du trenger minst 2 items for å bruke ELO Correction.");
+    return;
+  }
+  correctionActive = true;
+  pendingPlacement = null;
+  refillCorrectionQueue();
+  document.getElementById("modeMenu").style.display = "none";
+  // Show the familiar placement dialog, but cycle through existing items.
+  window.setMode("eloCorrection");
+  nextEloCorrection();
+}
+
+function nextEloCorrection(){
+  if(!correctionActive) return;
+  const overlay = document.getElementById("eloPlacementOverlay");
+  if(correctionIndex >= correctionQueue.length) refillCorrectionQueue();
+  let item = null;
+  while(correctionIndex < correctionQueue.length && !item){
+    const id = correctionQueue[correctionIndex++];
+    item = state.items.find(entry => String(entry.id) === String(id)) || null;
+  }
+  if(!item){
+    if(state.items.length < 2) return exitEloCorrectionMode();
+    refillCorrectionQueue();
+    return nextEloCorrection();
+  }
+  const refs = state.items.filter(entry => String(entry.id) !== String(item.id));
+  openEloPlacement(item.id, refs, true);
+  if(overlay) overlay.scrollTop = 0;
+}
+
+export function exitEloCorrectionMode(){
+  correctionActive = false;
+  correctionQueue = [];
+  correctionIndex = 0;
+  pendingPlacement = null;
+  const overlay = document.getElementById("eloPlacementOverlay");
+  if(overlay) overlay.style.display = "none";
+  window.setMode("home");
+}
+
 
 function safeText(value){
   return String(value).replace(/[&<>"']/g, character => ({
@@ -89,7 +146,7 @@ function placementRating(anchors, slot){
   return 1000;
 }
 
-function openEloPlacement(itemId, existingItems){
+function openEloPlacement(itemId, existingItems, isCorrectionMode = false){
   const overlay = document.getElementById("eloPlacementOverlay");
   const content = document.getElementById("eloPlacementContent");
   if(!overlay || !content || !existingItems.length) return;
@@ -104,16 +161,36 @@ function openEloPlacement(itemId, existingItems){
     count === 1 ? 0 : Math.round(i * (sorted.length - 1) / (count - 1))
   );
   const anchors = positions.map(index => sorted[index]);
-  pendingPlacement = {itemId, anchors};
+  // Work out which reference interval the item already occupies.
+  // Choosing that interval must never change its rating or history.
+  const current = state.items.find(item => String(item.id) === String(itemId));
+  const originalSlot = isCorrectionMode && current
+    ? anchors.filter(anchor => Number(anchor.rating) > Number(current.rating) ||
+        (Number(anchor.rating) === Number(current.rating) &&
+         String(anchor.name).localeCompare(String(current.name)) < 0)).length
+    : null;
+  pendingPlacement = {itemId, anchors, isCorrectionMode, originalSlot};
 
   const item = state.items.find(item => item.id === itemId);
   document.getElementById("eloPlacementTitle").textContent =
     "Plasser " + (item?.name || "nytt item");
+  const intro = document.getElementById("eloPlacementIntro");
+  const heading = document.getElementById("eloPlacementHeading");
+  const skip = document.getElementById("eloPlacementSkip");
+  const exit = document.getElementById("eloPlacementExit");
+  if(intro) intro.textContent = isCorrectionMode
+    ? "Hvor hører itemet hjemme? Velg mellom referanse-items. Samme plassering som nå gir ingen ELO-endring."
+    : "Hvor hører itemet hjemme? Velg en plass mellom referanse-items fra hele rankingen. Bare start-ELO til det nye itemet endres.";
+  if(heading) heading.textContent = isCorrectionMode ? "⭐ ELO Correction · Uendelig modus" : "⭐ ELO Correction";
+  if(skip) skip.textContent = isCorrectionMode ? "Hopp over · neste item" : "Hopp over · behold 1000 ELO";
+  if(exit) exit.hidden = !isCorrectionMode;
 
   const slotButton = index => {
     const estimated = placementRating(anchors,index);
+    const same = isCorrectionMode && index === originalSlot;
     return '<button type="button" class="eloPlacementSlot" onclick="chooseEloPlacement('+
-      index+')">＋ Plasser her <span>ca. ⭐ '+estimated+'</span></button>';
+      index+')">'+(same ? '✓ Behold plassering' : '＋ Plasser her')+
+      ' <span>'+(same ? 'Ingen ELO-endring' : 'ca. ⭐ '+estimated)+'</span></button>';
   };
 
   content.innerHTML = anchors.map((anchor,index) =>
@@ -127,16 +204,23 @@ function openEloPlacement(itemId, existingItems){
 
 export function chooseEloPlacement(slot){
   if(!pendingPlacement || !Number.isInteger(slot)) return;
-  const {itemId, anchors} = pendingPlacement;
+  const {itemId, anchors, isCorrectionMode, originalSlot} = pendingPlacement;
   if(slot < 0 || slot > anchors.length) return;
-  const item = state.items.find(item => item.id === itemId);
-  if(item){
-    const rating = Math.max(100,placementRating(anchors,slot));
-    item.rating = rating;
-    item.history = [rating];
+  const item = state.items.find(entry => String(entry.id) === String(itemId));
+  if(item && (!isCorrectionMode || slot !== originalSlot)){
+    const rating = Math.max(100, placementRating(anchors, slot));
+    if(!isCorrectionMode){
+      item.rating = rating;
+      item.history = [rating];
+    } else if(rating !== item.rating){
+      item.rating = rating;
+      if(!Array.isArray(item.history)) item.history = [];
+      item.history.push(rating);
+      if(item.history.length > 30) item.history.shift();
+    }
     save();
     update();
-    nextMatch();
+    if(!isCorrectionMode) nextMatch();
   }
   skipEloPlacement();
 }
@@ -144,5 +228,9 @@ export function chooseEloPlacement(slot){
 export function skipEloPlacement(){
   pendingPlacement = null;
   const overlay = document.getElementById("eloPlacementOverlay");
+  if(correctionActive){
+    nextEloCorrection();
+    return;
+  }
   if(overlay) overlay.style.display = "none";
 }
