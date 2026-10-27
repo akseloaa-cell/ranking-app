@@ -43,20 +43,11 @@ function shoutoutName(record){
 export function refreshDailyShoutout(){
   const badge = document.getElementById("dailyShoutoutBadge");
   const button = document.getElementById("dailyShoutoutButton");
-  const previousDisplay = document.getElementById("dailyShoutoutLast");
   if(!button || !badge) return;
-  const last = lastShoutout();
-  const locked = !availableNow() || Boolean(awardedToday());
-  const due = !locked;
+  const due = availableNow() && !awardedToday();
   badge.hidden = !due;
   button.title = awardedToday() ? "Dagens shoutout er utdelt" : due ? "Velg dagens shoutout" : "Dagens shoutout åpner kl. 18";
   button.setAttribute("aria-label", button.title);
-  if(previousDisplay){
-    previousDisplay.hidden = !locked || !last;
-    if(locked && last){
-      previousDisplay.textContent = "🌟 Siste shoutout: " + shoutoutName(last) + " · +100 ELO";
-    }
-  }
 }
 
 function escapeHtml(value){
