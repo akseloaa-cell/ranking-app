@@ -2813,3 +2813,64 @@ button:active {
   font-variant-numeric:tabular-nums;letter-spacing:.035em;color:#f1f5ff;
 }
 .dailyShoutoutAvailability{font-size:11px;color:#9baac2;margin-top:9px;}
+
+
+/* Two-step daily shoutout distribution */
+.dailyShoutoutSelection[hidden],.dailyShoutoutDistribution[hidden]{display:none!important;}
+.dailyShoutoutSelection,.dailyShoutoutDistribution{margin-top:12px;}
+.dailyShoutoutSelectedCount{
+  font-size:12px;font-weight:700;color:#adc7f8;margin-bottom:6px;
+}
+.dailyShoutoutOption{min-height:46px;}
+.dailyShoutoutOptionName{min-width:0;overflow-wrap:anywhere;}
+.dailyShoutoutOption.selected{background:#254268;border-color:#80b4ff;}
+#dailyShoutoutNext{width:100%;margin:14px 0 0;box-sizing:border-box;}
+#dailyShoutoutNext:disabled{opacity:.45;cursor:not-allowed;}
+.dailyShoutoutPreviousList{
+  display:flex;flex-direction:column;gap:7px;
+  max-height:min(260px,38dvh);overflow-y:auto;overscroll-behavior:contain;
+}
+.dailyShoutoutBudget{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  color:#dbe8ff;font-size:14px;
+}
+.dailyShoutoutBudget strong{font-variant-numeric:tabular-nums;}
+.dailyShoutoutBudgetTrack{
+  height:9px;margin:10px 0 12px;overflow:hidden;
+  border-radius:999px;background:#273447;
+}
+#dailyShoutoutBudgetFill{
+  height:100%;width:0%;background:#6fa1fa;border-radius:999px;
+  transition:width .1s ease-out;
+}
+.dailyShoutoutHint{color:#a6b7d0;font-size:12px;line-height:1.5;margin:0 0 12px;}
+.dailyShoutoutSliders{
+  display:flex;gap:10px;padding:5px 2px 14px;
+  overflow-x:auto;overscroll-behavior-x:contain;
+  scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
+}
+.dailyShoutoutSliderCard{
+  flex:0 0 125px;min-width:125px;min-height:210px;
+  box-sizing:border-box;padding:13px 11px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  scroll-snap-align:start;
+  background:#202c40;border:1px solid #394961;border-radius:14px;
+}
+.dailyShoutoutSliderAmount{
+  color:#69dd9f;font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;
+}
+.dailyShoutoutSlider{
+  writing-mode:vertical-lr;direction:rtl;
+  appearance:auto;
+  width:28px;height:122px;min-height:122px;margin:0;padding:0;
+  cursor:pointer;accent-color:#75a9ff;
+}
+.dailyShoutoutSliderName{
+  width:100%;text-align:center;overflow-wrap:anywhere;
+  color:#e9f1ff;font-size:12px;line-height:1.35;font-weight:700;
+}
+.dailyShoutoutDistributionError{font-size:12px;min-height:18px;margin-top:8px;color:#b5c6de;}
+.dailyShoutoutDistributionActions{display:flex;gap:8px;margin-top:12px;}
+.dailyShoutoutDistributionActions button{width:auto;flex:1;min-width:0;margin:0;padding:12px 8px;}
+.dailyShoutoutBack{background:#344157;}
+.dailyShoutoutPreviousBonus{white-space:nowrap;}
