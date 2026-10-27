@@ -76,7 +76,7 @@ function renderShoutoutResults(query = ""){
   const search = query.trim().toLocaleLowerCase("nb");
   // Selected options stay above the others, including when searching.
   const candidates = state.items
-    .filter(item => item.name.toLocaleLowerCase("nb").includes(search))
+    .filter(item => chosenIds.has(String(item.id)) || item.name.toLocaleLowerCase("nb").includes(search))
     .sort((a,b) => Number(chosenIds.has(String(b.id))) - Number(chosenIds.has(String(a.id)))
       || a.name.localeCompare(b.name, "nb"));
   list.innerHTML = candidates.length ? candidates.map(item => {
