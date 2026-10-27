@@ -79,7 +79,7 @@ export function openDailyShoutout(){
   } else if(!available){
     content.textContent = "Dagens shoutout åpner kl. 18. Du kan velge ett item hver dag som får +100 vanlig ELO.";
   } else {
-    content.textContent = "Velg dagens item. Shoutouten gir +100 vanlig ELO én gang i dag.";
+    content.textContent = "Velg dagens item. Shoutouten gir +100 ELO";
     renderShoutoutResults();
   }
   overlay.hidden = false;
