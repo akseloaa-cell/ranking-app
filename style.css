@@ -3141,3 +3141,34 @@ button:active {
     overflow-wrap:anywhere;
   }
 }
+
+
+/* Search within "Vis items fra kategori" source selector */
+#categoryManagerSourceDropdownMenu{
+  padding:0;
+  overflow:hidden;
+  max-height:min(330px, 56dvh);
+}
+#categoryManagerSourceSearch{
+  display:block;
+  width:100%;
+  margin:0;
+  border:0;
+  border-bottom:1px solid #30394a;
+  border-radius:0;
+  box-sizing:border-box;
+  background:#151d2a;
+}
+#categoryManagerSourceOptions{
+  max-height:min(270px, 43dvh);
+  overflow-y:auto;
+  padding:5px;
+  overscroll-behavior:contain;
+}
+.categoryManagerSourceEmpty{
+  padding:12px;
+  text-align:center;
+  color:#a9b5c8;
+  font-size:12px;
+}
+.categoryManagerSourceEmpty[hidden]{display:none!important;}
