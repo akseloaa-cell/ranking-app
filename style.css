@@ -2946,3 +2946,108 @@ button:active {
   margin-right:auto;
 }
 #eloPlacementOverlay.eloCorrectionFullscreen #eloPlacementIntro{padding-top:8px;}
+
+
+/* Versus category selection — matched to the dark app panels and dropdowns. */
+#categorySelectView{
+  background:radial-gradient(circle at top,#1a2334,#0b0f1a 75%);
+  color:#eef2fb;
+}
+.vsSelectShell{width:100%;max-width:520px;margin:0 auto;text-align:left;}
+.vsSelectShell .pageBackButton{margin:0 0 15px 0;}
+.vsSelectHeader{text-align:center;margin:8px 0 22px;}
+.vsSelectIcon{
+  display:flex;align-items:center;justify-content:center;
+  width:56px;height:56px;margin:0 auto 10px;
+  border-radius:17px;background:linear-gradient(140deg,#2a3c60,#182237);
+  border:1px solid #43577b;font-size:26px;
+}
+.vsSelectHeader h2{font-size:26px;margin:0 0 5px;}
+.vsSelectHeader p{font-size:13px;opacity:.6;margin:0;}
+.vsSelectCard{
+  background:linear-gradient(145deg,#171f2e,#111824);
+  border:1px solid #303c52;
+  border-radius:19px;padding:17px 14px;
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+}
+.vsSelectLabel{display:block;font-size:13px;font-weight:700;opacity:.78;margin:0 0 9px;}
+.vsSelectSearchWrap{position:relative;display:flex;align-items:center;}
+.vsSelectSearchWrap>span{
+  position:absolute;left:13px;pointer-events:none;
+  color:#9aacc8;font-size:24px;
+}
+#categorySelectView #categorySearch{
+  width:100%;box-sizing:border-box;
+  margin:0;padding:12px 13px 12px 39px;min-height:46px;
+  border:1px solid #35445d;border-radius:12px;
+  background:#111a29;color:#eff4ff;font-size:14px;
+}
+.vsSelectToolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;margin:17px 0 12px;
+}
+.vsSelectSortCaption{font-size:12px;font-weight:700;color:#a4b5cc;}
+.vsSelectSortControls{display:flex;align-items:center;gap:7px;min-width:0;}
+.vsSelectSortDropdown{position:relative;min-width:0;}
+#categorySelectView .vsSelectSortButton,
+#categorySelectView .vsSelectDirectionButton{
+  display:flex;align-items:center;justify-content:space-between;
+  width:auto;margin:0;padding:10px 12px;min-height:40px;
+  border:1px solid #36465f;border-radius:11px;
+  background:linear-gradient(180deg,#253249,#1a2638);
+  color:#e5edfc;box-shadow:0 3px 10px rgba(0,0,0,.15);
+  font-size:12px;font-weight:700;
+}
+#categorySelectView .vsSelectSortButton{gap:17px;}
+#categorySelectView .vsSelectDirectionButton{
+  width:42px;min-width:42px;justify-content:center;font-size:20px;padding:6px;
+}
+#categorySelectView .vsSelectSortButton:hover,
+#categorySelectView .vsSelectDirectionButton:hover{
+  border-color:#6484b6;background:#283954;
+}
+.vsSelectChevron{font-size:17px;opacity:.7;}
+.vsSelectSortMenu{
+  position:absolute;right:0;top:calc(100% + 7px);z-index:200;
+  width:max-content;min-width:190px;max-width:80vw;
+  padding:6px;background:#171f2e;border:1px solid #394961;
+  border-radius:12px;box-shadow:0 14px 32px rgba(0,0,0,.48);
+}
+.vsSelectSortMenu.hidden{display:none!important;}
+#categorySelectView .vsSelectSortOption{
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;margin:0;padding:12px;
+  background:transparent;border:0;border-radius:8px;
+  text-align:left;color:#e9f1ff;font-size:13px;font-weight:600;
+}
+#categorySelectView .vsSelectSortOption.active,
+#categorySelectView .vsSelectSortOption:hover{background:#293a57;}
+.vsSelectSortCheck{visibility:hidden;color:#84b5ff;margin-left:13px;}
+.vsSelectSortOption.active .vsSelectSortCheck{visibility:visible;}
+.vsSelectCategoryList{display:flex;flex-direction:column;gap:9px;}
+#categorySelectView .vs-category-card{
+  display:flex;align-items:center;gap:12px;
+  width:100%;box-sizing:border-box;margin:0;padding:14px 13px;
+  text-align:left;border:1px solid #303d51;border-radius:13px;
+  background:#1c2739;color:#f2f5fa;
+  box-shadow:none;
+}
+#categorySelectView .vs-category-card:hover{
+  border-color:#6b8fca;background:#253652;transform:translateY(-1px);
+}
+.vsCategoryFolder{
+  display:flex;align-items:center;justify-content:center;
+  width:39px;height:39px;flex:0 0 39px;
+  background:#2b3b54;border-radius:11px;font-size:18px;
+}
+.vsCategoryDetails{display:flex;flex:1;min-width:0;flex-direction:column;gap:4px;}
+.vsCategoryDetails strong{font-size:15px;overflow-wrap:anywhere;}
+.vsCategoryDetails small{font-size:12px;color:#9eafc6;font-weight:500;}
+.vsCategoryArrow{font-size:27px;line-height:1;color:#8fa7c9;}
+.vsCategoryEmpty{padding:22px 12px;text-align:center;color:#9eafc6;font-size:13px;}
+@media(max-width:380px){
+  .vsSelectToolbar{align-items:flex-start;flex-direction:column;}
+  .vsSelectSortControls{width:100%;}
+  .vsSelectSortDropdown{flex:1;}
+  #categorySelectView .vsSelectSortButton{width:100%;}
+}
