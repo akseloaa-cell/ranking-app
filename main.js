@@ -6,7 +6,7 @@ import * as ui from "./ui.js?v=20261025-hide-item-suggestions";
 import * as stats from "./stats.js";
 import * as tournament from "./tournament.js?v=20261027-no-tournament-h2h";
 import { addItem, chooseEloPlacement, skipEloPlacement, startEloCorrectionMode, exitEloCorrectionMode } from "./items.js?v=20261027-elo-fullscreen";
-import { addCategory, openCategoryManager, selectCategoryManagerCategory, toggleItemInCategory, searchCategoryManager, searchCategoryManagerCategory, setCategoryManagerItemSort, toggleCategoryManagerItemSortDir, renderCategoryManager, toggleCategoryManagerSortDropdown, toggleCategoryManagerDropdown, setCategoryManagerSourceFilter, toggleCategoryManagerSourceDropdown } from "./categories.js?v=20261025-custom-source-dropdown";
+import { addCategory, openCategoryManager, selectCategoryManagerCategory, toggleItemInCategory, searchCategoryManager, searchCategoryManagerCategory, setCategoryManagerItemSort, toggleCategoryManagerItemSortDir, renderCategoryManager, toggleCategoryManagerSortDropdown, toggleCategoryManagerDropdown, setCategoryManagerSourceFilter, toggleCategoryManagerSourceDropdown, searchCategoryManagerSource } from "./categories.js?v=20261027-category-source-search";
 import {
   renameItem,
   deleteItem,
@@ -157,6 +157,7 @@ window.renderCategoryManager = renderCategoryManager;
 window.toggleCategoryManagerDropdown = toggleCategoryManagerDropdown;
 window.setCategoryManagerSourceFilter = setCategoryManagerSourceFilter;
 window.toggleCategoryManagerSourceDropdown = toggleCategoryManagerSourceDropdown;
+window.searchCategoryManagerSource = searchCategoryManagerSource;
 
 window.openRankingView = openRankingView;
 window.closeRankingView = closeRankingView;
