@@ -15,26 +15,48 @@ function availableNow(){
   return new Date().getHours() >= 18;
 }
 
-function awardedToday(){
-  const key = todayKey();
-  // The separate key also guards against an old state snapshot being loaded.
+function lastShoutout(){
+  let saved = null;
   try {
-    const persisted = JSON.parse(localStorage.getItem("dailyShoutout") || "null");
-    if(persisted?.date === key) return persisted;
+    saved = JSON.parse(localStorage.getItem("dailyShoutout") || "null");
   } catch(error) {
     console.warn("Ugyldig shoutout-data i localStorage", error);
   }
-  return state.dailyShoutout?.date === key ? state.dailyShoutout : null;
+  const inState = state.dailyShoutout;
+  const valid = [saved, inState].filter(record =>
+    record && /^\\d{4}-\\d{2}-\\d{2}$/.test(record.date) && record.itemId != null
+  );
+  return valid.sort((a, b) => b.date.localeCompare(a.date))[0] || null;
+}
+
+function awardedToday(){
+  const last = lastShoutout();
+  return last?.date === todayKey() ? last : null;
+}
+
+function shoutoutName(record){
+  if(!record) return "";
+  const item = state.items.find(item => String(item.id) === String(record.itemId));
+  return item?.name || record.itemName || "Et item";
 }
 
 export function refreshDailyShoutout(){
   const badge = document.getElementById("dailyShoutoutBadge");
   const button = document.getElementById("dailyShoutoutButton");
+  const previousDisplay = document.getElementById("dailyShoutoutLast");
   if(!button || !badge) return;
-  const due = availableNow() && !awardedToday();
+  const last = lastShoutout();
+  const locked = !availableNow() || Boolean(awardedToday());
+  const due = !locked;
   badge.hidden = !due;
   button.title = awardedToday() ? "Dagens shoutout er utdelt" : due ? "Velg dagens shoutout" : "Dagens shoutout åpner kl. 18";
   button.setAttribute("aria-label", button.title);
+  if(previousDisplay){
+    previousDisplay.hidden = !locked || !last;
+    if(locked && last){
+      previousDisplay.textContent = "🌟 Siste shoutout: " + shoutoutName(last) + " · +100 ELO";
+    }
+  }
 }
 
 function escapeHtml(value){
@@ -74,10 +96,12 @@ export function openDailyShoutout(){
   document.getElementById("dailyShoutoutResults").hidden = !available || Boolean(already);
   document.getElementById("dailyShoutoutConfirm").hidden = !available || Boolean(already);
   if(already){
-    const item = state.items.find(item => String(item.id) === String(already.itemId));
-    content.textContent = "Dagens shoutout er allerede gitt til " + (item?.name || already.itemName || "et item") + " (+100 ELO). Ny shoutout i morgen kl. 18.";
+    content.textContent = "🌟 Dagens shoutout: " + shoutoutName(already) + " (+100 ELO). Ny shoutout i morgen kl. 18.";
   } else if(!available){
-    content.textContent = "Dagens shoutout åpner kl. 18. Du kan velge ett item hver dag som får +100 vanlig ELO.";
+    const last = lastShoutout();
+    content.textContent = last
+      ? "🌟 Siste shoutout: " + shoutoutName(last) + " (+100 ELO). Du kan velge en ny shoutout kl. 18."
+      : "Dagens shoutout åpner kl. 18. Shoutouten gir +100 ELO.";
   } else {
     content.textContent = "Velg dagens item. Shoutouten gir +100 ELO";
     renderShoutoutResults();
