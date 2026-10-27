@@ -56,12 +56,18 @@ export function addItem(){
   update();
   nextMatch();
   closeAddItem();
-  openEloPlacement(newId, existingItems);
+  // Compare a newly added item only against existing items in its selected
+  // categories. Items shared by multiple categories are included just once.
+  const selectedCategories = new Set(selected);
+  const categoryPeers = selectedCategories.size
+    ? existingItems.filter(item => (item.categories || []).some(category => selectedCategories.has(category)))
+    : existingItems;
+  openEloPlacement(newId, categoryPeers);
 }
 
  
-// A new item is placed against a small, evenly distributed sample of the
-// existing ranking. Other items' ratings are never changed.
+// A new item is placed against a small, evenly distributed sample of peers
+// from its chosen categories. Other items' ratings are never changed.
 let pendingPlacement = null;
 let correctionQueue = [];
 let correctionIndex = 0;
@@ -184,7 +190,7 @@ function openEloPlacement(itemId, existingItems, isCorrectionMode = false){
   const exit = document.getElementById("eloPlacementExit");
   if(intro) intro.textContent = isCorrectionMode
     ? "Hvor hører itemet hjemme? Velg mellom referanse-items. Samme plassering som nå gir ingen ELO-endring."
-    : "Hvor hører itemet hjemme? Velg en plass mellom referanse-items fra hele rankingen. Bare start-ELO til det nye itemet endres.";
+    : "Hvor hører itemet hjemme blant items i de valgte kategoriene? Bare start-ELO til det nye itemet endres.";
   if(heading) heading.textContent = isCorrectionMode ? "⭐ ELO Correction · Uendelig modus" : "⭐ ELO Correction";
   if(skip) skip.textContent = isCorrectionMode ? "Hopp over · neste item" : "Hopp over · behold 1000 ELO";
   if(exit) exit.hidden = !isCorrectionMode;
