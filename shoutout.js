@@ -83,6 +83,20 @@ function renderShoutoutResults(query = ""){
   confirm.textContent = selected ? "Gi +100 ELO til " + selected.name : "Velg et item";
 }
 
+function updateDailyShoutoutCountdown(){
+  const countdown = document.getElementById("dailyShoutoutCountdown");
+  if(!countdown) return;
+  const now = new Date();
+  const target = new Date(now);
+  target.setHours(12, 0, 0, 0);
+  if(now >= target) target.setDate(target.getDate() + 1);
+  const seconds = Math.max(0, Math.ceil((target - now) / 1000));
+  const hours = String(Math.floor(seconds / 3600)).padStart(2, "0");
+  const minutes = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
+  const remaining = String(seconds % 60).padStart(2, "0");
+  countdown.textContent = hours + ":" + minutes + ":" + remaining;
+}
+
 export function openDailyShoutout(){
   const overlay = document.getElementById("dailyShoutoutOverlay");
   const content = document.getElementById("dailyShoutoutContent");
@@ -92,22 +106,30 @@ export function openDailyShoutout(){
   input.value = "";
   const already = awardedToday();
   const available = availableNow();
-  input.hidden = !available || Boolean(already);
-  document.getElementById("dailyShoutoutResults").hidden = !available || Boolean(already);
-  document.getElementById("dailyShoutoutConfirm").hidden = !available || Boolean(already);
-  if(already){
-    content.textContent = "🌟 Dagens shoutout: " + shoutoutName(already) + " (+100 ELO). Ny shoutout i morgen kl. 18.";
-  } else if(!available){
+  const locked = !available || Boolean(already);
+  const lockedView = document.getElementById("dailyShoutoutLockedView");
+  input.hidden = locked;
+  document.getElementById("dailyShoutoutResults").hidden = locked;
+  document.getElementById("dailyShoutoutConfirm").hidden = locked;
+  lockedView.hidden = !locked;
+  overlay.dataset.shoutoutLocked = String(locked);
+  if(locked){
     const last = lastShoutout();
-    content.textContent = last
-      ? "🌟 Siste shoutout: " + shoutoutName(last) + " (+100 ELO). Du kan velge en ny shoutout kl. 18."
-      : "Dagens shoutout åpner kl. 18. Shoutouten gir +100 ELO.";
+    document.getElementById("dailyShoutoutPreviousName").textContent =
+      last ? shoutoutName(last) : "Ingen shoutout valgt ennå";
+    document.getElementById("dailyShoutoutPreviousBonus").hidden = !last;
+    document.getElementById("dailyShoutoutAvailability").textContent =
+      already ? "Neste shoutout åpner i morgen kl. 18" : "Neste shoutout åpner i dag kl. 18";
+    content.textContent = "";
+    content.hidden = true;
+    updateDailyShoutoutCountdown();
   } else {
+    content.hidden = false;
     content.textContent = "Velg dagens item. Shoutouten gir +100 ELO";
     renderShoutoutResults();
   }
   overlay.hidden = false;
-  if(available && !already) input.focus();
+  if(!locked) input.focus();
 }
 
 export function closeDailyShoutout(){
@@ -131,10 +153,27 @@ export function initDailyShoutout(){
     if(event.target.id === "dailyShoutoutOverlay") closeDailyShoutout();
   });
   refreshDailyShoutout();
-  // Keep the exclamation mark accurate if Home stays open past 18:00 or midnight.
-  setInterval(refreshDailyShoutout, 30000);
+  // Keep the badge and countdown live while the app remains open.
+  setInterval(() => {
+    refreshDailyShoutout();
+    const overlay = document.getElementById("dailyShoutoutOverlay");
+    if(!overlay || overlay.hidden) return;
+    const nowLocked = !availableNow() || Boolean(awardedToday());
+    if(overlay.dataset.shoutoutLocked !== String(nowLocked)){
+      openDailyShoutout();
+    } else if(nowLocked){
+      updateDailyShoutoutCountdown();
+    }
+  }, 1000);
   document.addEventListener("visibilitychange", () => {
-    if(!document.hidden) refreshDailyShoutout();
+    if(document.hidden) return;
+    refreshDailyShoutout();
+    const overlay = document.getElementById("dailyShoutoutOverlay");
+    if(overlay && !overlay.hidden){
+      const nowLocked = !availableNow() || Boolean(awardedToday());
+      if(overlay.dataset.shoutoutLocked !== String(nowLocked)) openDailyShoutout();
+      else if(nowLocked) updateDailyShoutoutCountdown();
+    }
   });
 }
 
