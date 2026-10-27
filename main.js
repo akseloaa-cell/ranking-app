@@ -1,4 +1,4 @@
-import { openDailyShoutout, closeDailyShoutout, confirmDailyShoutout, initDailyShoutout } from "./shoutout.js?v=20261027-shoutout-home-cleanup";
+import { openDailyShoutout, closeDailyShoutout, confirmDailyShoutout, initDailyShoutout, nextDailyShoutoutStep, backDailyShoutoutStep } from "./shoutout.js?v=20261027-shoutout-200-distribution";
 import { state } from "./state.js"; 
 import { nextMatch } from "./match.js";
 import { update } from "./ranking.js";
@@ -55,6 +55,8 @@ import { openScenarioRankingSetup, openScenarioModeSetup, selectScenarioItemCoun
 window.openDailyShoutout = openDailyShoutout;
 window.closeDailyShoutout = closeDailyShoutout;
 window.confirmDailyShoutout = confirmDailyShoutout;
+window.nextDailyShoutoutStep = nextDailyShoutoutStep;
+window.backDailyShoutoutStep = backDailyShoutoutStep;
 
 window.startTournament = startTournament;
 window.selectTournamentMode = selectTournamentMode;
