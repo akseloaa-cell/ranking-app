@@ -5,7 +5,7 @@ import { update } from "./ranking.js";
 import * as ui from "./ui.js?v=20261025-hide-item-suggestions";
 import * as stats from "./stats.js";
 import * as tournament from "./tournament.js?v=20261027-daily-category-mix-size";
-import { addItem, chooseEloPlacement, skipEloPlacement, startEloCorrectionMode, exitEloCorrectionMode } from "./items.js?v=20261027-endless-elo-correction";
+import { addItem, chooseEloPlacement, skipEloPlacement, startEloCorrectionMode, exitEloCorrectionMode } from "./items.js?v=20261027-elo-fullscreen";
 import { addCategory, openCategoryManager, selectCategoryManagerCategory, toggleItemInCategory, searchCategoryManager, searchCategoryManagerCategory, setCategoryManagerItemSort, toggleCategoryManagerItemSortDir, renderCategoryManager, toggleCategoryManagerSortDropdown, toggleCategoryManagerDropdown, setCategoryManagerSourceFilter, toggleCategoryManagerSourceDropdown } from "./categories.js?v=20261025-custom-source-dropdown";
 import {
   renameItem,
