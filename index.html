@@ -6,9 +6,9 @@
 
 <link rel="icon" type="image/png" href="file_000000006acc720aabe74bd60fd54078.png"> 
  
-<script type="module" src="main.js?v=20261027-shoutout-home-cleanup"></script>
+<script type="module" src="main.js?v=20261027-shoutout-200-distribution"></script>
 
-<link rel="stylesheet" href="./style.css?v=20261027-shoutout-timer-card">
+<link rel="stylesheet" href="./style.css?v=20261027-shoutout-200-distribution">
  
 </head>
 
@@ -164,20 +164,33 @@
     <p id="dailyShoutoutContent"></p>
     <div id="dailyShoutoutLockedView" class="dailyShoutoutLockedView" hidden>
       <div class="dailyShoutoutPreviewTitle">SISTE SHOUTOUT</div>
-      <div class="dailyShoutoutPreviewCard">
-        <span class="dailyShoutoutPreviewStar" aria-hidden="true">🌟</span>
-        <span id="dailyShoutoutPreviousName" class="dailyShoutoutPreviousName">Ingen shoutout ennå</span>
-        <span id="dailyShoutoutPreviousBonus" class="dailyShoutoutPreviousBonus" hidden>+100 ELO</span>
-      </div>
+      <div id="dailyShoutoutPreviousList" class="dailyShoutoutPreviousList"></div>
       <div class="dailyShoutoutTimerCard">
         <div class="dailyShoutoutTimerLabel">Nedtelling til neste shoutout kl. 18</div>
         <div id="dailyShoutoutCountdown" class="dailyShoutoutCountdown" role="timer">--:--:--</div>
         <div id="dailyShoutoutAvailability" class="dailyShoutoutAvailability">Neste shoutout åpner kl. 18</div>
       </div>
     </div>
-    <input id="dailyShoutoutSearch" type="search" placeholder="Søk etter item..." autocomplete="off">
-    <div id="dailyShoutoutResults" class="dailyShoutoutResults"></div>
-    <button id="dailyShoutoutConfirm" type="button" onclick="confirmDailyShoutout()" disabled>Velg et item</button>
+    <div id="dailyShoutoutSelection" class="dailyShoutoutSelection" hidden>
+      <div id="dailyShoutoutSelectedCount" class="dailyShoutoutSelectedCount"></div>
+      <input id="dailyShoutoutSearch" type="search" placeholder="Søk etter item..." autocomplete="off">
+      <div id="dailyShoutoutResults" class="dailyShoutoutResults"></div>
+      <button id="dailyShoutoutNext" type="button" onclick="nextDailyShoutoutStep()" disabled>Videre til fordeling</button>
+    </div>
+    <div id="dailyShoutoutDistribution" class="dailyShoutoutDistribution" hidden>
+      <div class="dailyShoutoutBudget">
+        <span>Fordelt ELO</span>
+        <strong id="dailyShoutoutBudgetAmount">0 / 200</strong>
+      </div>
+      <div class="dailyShoutoutBudgetTrack"><div id="dailyShoutoutBudgetFill"></div></div>
+      <p class="dailyShoutoutHint">Fordel 200 ELO mellom de valgte itemsene. Dra sliderne og scroll sidelengs for å se flere.</p>
+      <div id="dailyShoutoutSliders" class="dailyShoutoutSliders"></div>
+      <div id="dailyShoutoutDistributionError" class="dailyShoutoutDistributionError" role="status"></div>
+      <div class="dailyShoutoutDistributionActions">
+        <button type="button" class="dailyShoutoutBack" onclick="backDailyShoutoutStep()">← Tilbake</button>
+        <button id="dailyShoutoutConfirm" type="button" onclick="confirmDailyShoutout()" disabled>Bekreft utdeling</button>
+      </div>
+    </div>
   </div>
 </div>
 
