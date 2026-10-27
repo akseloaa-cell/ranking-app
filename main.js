@@ -1,4 +1,4 @@
-import { openDailyShoutout, closeDailyShoutout, confirmDailyShoutout, initDailyShoutout } from "./shoutout.js?v=20261027-countdown-18";
+import { openDailyShoutout, closeDailyShoutout, confirmDailyShoutout, initDailyShoutout } from "./shoutout.js?v=20261027-shoutout-home-cleanup";
 import { state } from "./state.js"; 
 import { nextMatch } from "./match.js";
 import { update } from "./ranking.js";
