@@ -27,50 +27,48 @@ export function renderCategorySelectScreen(){
   if (!container) return;
 
   container.innerHTML = `
-    <button onclick="setMode('home'); closeMenu();" class="pageBackButton">← Tilbake</button>
-
-    <div class="vs-select">
-
-      <h2>🎮 Select Category</h2>
-
-      <input
-        id="categorySearch"
-        placeholder="Search categories..."
-        oninput="filterCategories(this.value)"
-        style="
-          width:100%;
-          padding:12px;
-          margin:10px 0;
-          border-radius:10px;
-          border:none;
-          background:#1a1f2b;
-          color:white;
-        "
-      />
-
-<div class="sortBar">
-
-  <div class="sortDropdown" onclick="toggleCategorySortDropdown()">
-    <span id="sortLabel">📦 Items</span> ▾
-  </div>
-
-  <div id="sortDropdownMenu" class="sortMenu hidden">
-    <div onclick="toggleSortType()">📦 Items</div>
-    <div onclick="setSortType('alpha')">🔤 A–Z</div>
-  </div>
-
-  <div class="sortDir" onclick="toggleSortDir()">
-    <span id="sortDirLabel">↓</span>
-  </div>
-
-</div>
-
-      <div id="categoryList"></div>
-
+    <div class="vsSelectShell">
+      <button type="button" onclick="setMode('home'); closeMenu();" class="pageBackButton">← Tilbake</button>
+      <div class="vsSelectHeader">
+        <div class="vsSelectIcon">⚔️</div>
+        <h2>Versus</h2>
+        <p>Velg kategori for å starte en duell</p>
+      </div>
+      <div class="vsSelectCard">
+        <label class="vsSelectLabel" for="categorySearch">Kategorier</label>
+        <div class="vsSelectSearchWrap">
+          <span aria-hidden="true">⌕</span>
+          <input id="categorySearch" type="search" placeholder="Søk etter kategori..."
+            oninput="filterCategories(this.value)" autocomplete="off">
+        </div>
+        <div class="vsSelectToolbar">
+          <span class="vsSelectSortCaption">Sorter etter</span>
+          <div class="vsSelectSortControls">
+            <div class="vsSelectSortDropdown">
+              <button type="button" id="sortDropdownButton" class="vsSelectSortButton"
+                onclick="toggleCategorySortDropdown()" aria-expanded="false" aria-controls="sortDropdownMenu">
+                <span id="sortLabel">📦 Items</span><span class="vsSelectChevron">⌄</span>
+              </button>
+              <div id="sortDropdownMenu" class="vsSelectSortMenu hidden">
+                <button type="button" class="vsSelectSortOption" data-sort-type="items"
+                  onclick="setSortType('items')">📦 Antall items <span class="vsSelectSortCheck">✓</span></button>
+                <button type="button" class="vsSelectSortOption" data-sort-type="alpha"
+                  onclick="setSortType('alpha')">🔤 Navn <span class="vsSelectSortCheck">✓</span></button>
+              </div>
+            </div>
+            <button type="button" id="sortDirButton" class="vsSelectDirectionButton"
+              onclick="toggleSortDir()" aria-label="Endre sorteringsretning" title="Endre sorteringsretning">
+              <span id="sortDirLabel">↓</span>
+            </button>
+          </div>
+        </div>
+        <div id="categoryList" class="vsSelectCategoryList"></div>
+      </div>
     </div>
   `;
 
-  renderCategoryList("");
+  syncVsSortControls();
+    renderCategoryList("");
 }
 
 /* =========================
@@ -108,71 +106,55 @@ if(state.categorySortDir === "desc"){
   cats.reverse();
 }
 
-  box.innerHTML = cats.map(c => {
-
-    const count = state.items.filter(x =>
-      (x.categories || []).includes(c)
-    ).length;
-
+  box.innerHTML = cats.length ? cats.map(category => {
+    const count = getCount(category);
+    const safeName = category.replace(/[&<>"']/g, char => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    })[char]);
+    const safeEncoded = encodeURIComponent(category).replace(/'/g, "%27");
     return `
-      <div class="vs-category-card"
-        onclick="startCategoryVs('${c}')">
-
-        <div style="font-weight:700;font-size:18px;">
-          📂 ${c}
-        </div>
-
-        <div style="opacity:0.6;margin-top:4px;">
-          ${count} items
-        </div>
-
-      </div>
+      <button type="button" class="vs-category-card" onclick="startCategoryVs(decodeURIComponent('${safeEncoded}'))">
+        <span class="vsCategoryFolder">📁</span>
+        <span class="vsCategoryDetails">
+          <strong>${safeName}</strong>
+          <small>${count} items</small>
+        </span>
+        <span class="vsCategoryArrow" aria-hidden="true">›</span>
+      </button>
     `;
-  }).join("");
+  }).join("") : '<div class="vsCategoryEmpty">Ingen kategorier funnet</div>';
+}
+
+function syncVsSortControls(){
+  const type = state.categorySortType === "alpha" ? "alpha" : "items";
+  const direction = state.categorySortDir === "asc" ? "asc" : "desc";
+  const label = document.getElementById("sortLabel");
+  const dirLabel = document.getElementById("sortDirLabel");
+  const dirButton = document.getElementById("sortDirButton");
+  if(label) label.textContent = type === "items" ? "📦 Antall items" : "🔤 Navn";
+  if(dirLabel) dirLabel.textContent = direction === "asc" ? "↑" : "↓";
+  if(dirButton) dirButton.title = direction === "asc" ? "Stigende rekkefølge" : "Synkende rekkefølge";
+  document.querySelectorAll(".vsSelectSortOption").forEach(button => {
+    button.classList.toggle("active", button.dataset.sortType === type);
+  });
 }
 
 export function toggleCategorySortDropdown(){
-  const el = document.getElementById("sortDropdownMenu");
-  if(!el) return;
-
-  el.classList.toggle("hidden");
+  const menu = document.getElementById("sortDropdownMenu");
+  const button = document.getElementById("sortDropdownButton");
+  if(!menu) return;
+  menu.classList.toggle("hidden");
+  if(button) button.setAttribute("aria-expanded", String(!menu.classList.contains("hidden")));
 }
 
 export function toggleSortType(){
-
-  if(state.categorySortType === "items"){
-    state.categorySortType = "alpha";
-  } else {
-    state.categorySortType = "items";
-  }
-
-  const label = document.getElementById("sortLabel");
-  if(label){
-    label.innerText =
-      state.categorySortType === "items"
-        ? "📦 Items"
-        : "🔤 A–Z";
-  }
-
-  renderCategoryList(
-    document.getElementById("categorySearch")?.value || ""
-  );
+  setSortType(state.categorySortType === "items" ? "alpha" : "items");
 }
 
 export function toggleSortDir(){
-
-  state.categorySortDir =
-    state.categorySortDir === "asc" ? "desc" : "asc";
-
-  const label = document.getElementById("sortDirLabel");
-  if(label){
-    label.innerText =
-      state.categorySortDir === "asc" ? "↑" : "↓";
-  }
-
-  renderCategoryList(
-    document.getElementById("categorySearch")?.value || ""
-  );
+  state.categorySortDir = state.categorySortDir === "asc" ? "desc" : "asc";
+  syncVsSortControls();
+  renderCategoryList(document.getElementById("categorySearch")?.value || "");
 }
 /* =========================
    START MODE
@@ -190,13 +172,12 @@ export function startCategoryVs(category){
 }
 
 export function setSortType(type){
+  if(!["items", "alpha"].includes(type)) return;
   state.categorySortType = type;
-
-  const label = document.getElementById("sortLabel");
-  if(label){
-    label.innerText = type === "items" ? "📦 Items" : "🔤 A–Z";
-  }
-
+  const menu = document.getElementById("sortDropdownMenu");
+  if(menu) menu.classList.add("hidden");
+  document.getElementById("sortDropdownButton")?.setAttribute("aria-expanded", "false");
+  syncVsSortControls();
   renderCategoryList(document.getElementById("categorySearch")?.value || "");
 }
 /* =========================
