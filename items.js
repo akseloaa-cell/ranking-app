@@ -62,7 +62,8 @@ export function addItem(){
   const categoryPeers = selectedCategories.size
     ? existingItems.filter(item => (item.categories || []).some(category => selectedCategories.has(category)))
     : existingItems;
-  openEloPlacement(newId, categoryPeers);
+  // Fall back to the full ranking if none of the chosen categories has peers.
+  openEloPlacement(newId, categoryPeers.length ? categoryPeers : existingItems);
 }
 
  
