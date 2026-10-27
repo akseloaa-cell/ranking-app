@@ -88,7 +88,27 @@ export function setCategoryManagerSourceFilter(filter){
 
 export function toggleCategoryManagerSourceDropdown(){
   const menu = document.getElementById("categoryManagerSourceDropdownMenu");
-  if(menu) menu.classList.toggle("hidden");
+  if(!menu) return;
+  menu.classList.toggle("hidden");
+  if(!menu.classList.contains("hidden")){
+    const search = document.getElementById("categoryManagerSourceSearch");
+    if(search) search.focus();
+  }
+}
+
+export function searchCategoryManagerSource(query){
+  const menu = document.getElementById("categoryManagerSourceDropdownMenu");
+  if(!menu) return;
+  const q = String(query || "").trim().toLocaleLowerCase("nb");
+  let visible = 0;
+  menu.querySelectorAll(".categoryManagerSourceOption").forEach(option => {
+    const matches = option.textContent.toLocaleLowerCase("nb").includes(q);
+    option.hidden = !matches;
+    option.style.display = matches ? "" : "none";
+    if(matches) visible++;
+  });
+  const empty = document.getElementById("categoryManagerSourceEmpty");
+  if(empty) empty.hidden = visible > 0;
 }
 
 export function toggleItemInCategory(itemId){
@@ -210,12 +230,18 @@ export function renderCategoryManager(){
             <span class="categoryManagerDropdownChevron">⌄</span>
           </button>
           <div id="categoryManagerSourceDropdownMenu" class="categoryManagerDropdownMenu hidden">
+            <input id="categoryManagerSourceSearch" class="categoryManagerCategorySearch"
+                   type="search" placeholder="Søk etter kategori..." autocomplete="off"
+                   oninput="searchCategoryManagerSource(this.value)" onclick="event.stopPropagation()">
+            <div id="categoryManagerSourceOptions">
             ${[["all", "Alle kategorier"], ["uncategorized", "Uten kategori"], ...categories.map(category => [category, category])].map(([value,label]) => `
-              <div class="categoryManagerOption ${sourceFilter === value ? "active" : ""}"
+              <div class="categoryManagerOption categoryManagerSourceOption ${sourceFilter === value ? "active" : ""}"
                    onclick="setCategoryManagerSourceFilter(decodeURIComponent('${encodeURIComponent(value).replace(/'/g, "%27")}'))">
                 <span>${label.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")}</span>
               </div>
             `).join("")}
+            </div>
+            <div id="categoryManagerSourceEmpty" class="categoryManagerSourceEmpty" hidden>Ingen kategorier funnet.</div>
           </div>
         </div>
       </div>
