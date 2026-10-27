@@ -202,13 +202,11 @@ export function renderVsScreen(){
 
     </div>
 
-    <div id="battleArena">
+    <div id="battleArena" class="vs">
 
-      <div id="battleCardA" class="battle-card"></div>
+      <div id="battleCardA" class="choice battle-card"></div>
 
-      <div class="battle-vs">VS</div>
-
-      <div id="battleCardB" class="battle-card"></div>
+      <div id="battleCardB" class="choice battle-card"></div>
 
     </div>
 
