@@ -88,7 +88,9 @@ function updateDailyShoutoutCountdown(){
   if(!countdown) return;
   const now = new Date();
   const target = new Date(now);
-  target.setHours(12, 0, 0, 0);
+  target.setHours(18, 0, 0, 0);
+  // Once today's shoutout has been awarded, the next opportunity is tomorrow.
+  if(awardedToday()) target.setDate(target.getDate() + 1);
   if(now >= target) target.setDate(target.getDate() + 1);
   const seconds = Math.max(0, Math.ceil((target - now) / 1000));
   const hours = String(Math.floor(seconds / 3600)).padStart(2, "0");
