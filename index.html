@@ -6,9 +6,9 @@
 
 <link rel="icon" type="image/png" href="file_000000006acc720aabe74bd60fd54078.png"> 
  
-<script type="module" src="main.js?v=20261027-endless-elo-correction"></script>
+<script type="module" src="main.js?v=20261027-elo-fullscreen"></script>
 
-<link rel="stylesheet" href="./style.css?v=20261027-endless-elo-correction">
+<link rel="stylesheet" href="./style.css?v=20261027-elo-fullscreen">
  
 </head>
 
@@ -445,12 +445,14 @@
 
 <div id="eloPlacementOverlay" role="dialog" aria-modal="true" aria-labelledby="eloPlacementTitle">
   <div class="eloPlacementPanel">
-    <div id="eloPlacementHeading" class="eloPlacementHeading">⭐ ELO Correction</div>
-    <h2 id="eloPlacementTitle">Plasser nytt item</h2>
+    <div class="eloPlacementStickyHeader">
+      <button type="button" id="eloPlacementExit" class="eloPlacementExit" onclick="exitEloCorrectionMode()" hidden>← Avslutt ELO Correction</button>
+      <div id="eloPlacementHeading" class="eloPlacementHeading">⭐ ELO Correction</div>
+      <h2 id="eloPlacementTitle">Plasser nytt item</h2>
+    </div>
     <p id="eloPlacementIntro">Hvor hører itemet hjemme? Velg en plass mellom referanse-items fra hele rankingen. Bare start-ELO til det nye itemet endres.</p>
     <div id="eloPlacementContent"></div>
     <button type="button" id="eloPlacementSkip" class="eloPlacementSkip" onclick="skipEloPlacement()">Hopp over · behold 1000 ELO</button>
-    <button type="button" id="eloPlacementExit" class="eloPlacementExit" onclick="exitEloCorrectionMode()" hidden>← Avslutt ELO Correction</button>
   </div>
 </div>
 
