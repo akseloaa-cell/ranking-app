@@ -2757,3 +2757,8 @@ button:active {
 .dailyShoutoutEmpty{font-size:13px;opacity:.65;text-align:center;}
 #dailyShoutoutConfirm{width:100%;box-sizing:border-box;margin:14px 0 0;}
 #dailyShoutoutConfirm:disabled{opacity:.45;cursor:not-allowed;}
+
+/* Author display rules must not override the hidden attribute. */
+#dailyShoutoutSearch[hidden],
+#dailyShoutoutResults[hidden],
+#dailyShoutoutConfirm[hidden]{display:none!important;}
