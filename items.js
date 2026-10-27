@@ -107,7 +107,8 @@ function nextEloCorrection(){
   }
   const refs = state.items.filter(entry => String(entry.id) !== String(item.id));
   openEloPlacement(item.id, refs, true);
-  if(overlay) overlay.scrollTop = 0;
+  const panel = overlay?.querySelector(".eloPlacementPanel");
+  if(panel) panel.scrollTop = 0;
 }
 
 export function exitEloCorrectionMode(){
@@ -116,7 +117,10 @@ export function exitEloCorrectionMode(){
   correctionIndex = 0;
   pendingPlacement = null;
   const overlay = document.getElementById("eloPlacementOverlay");
-  if(overlay) overlay.style.display = "none";
+  if(overlay){
+    overlay.style.display = "none";
+    overlay.classList.remove("eloCorrectionFullscreen");
+  }
   window.setMode("home");
 }
 
@@ -184,6 +188,7 @@ function openEloPlacement(itemId, existingItems, isCorrectionMode = false){
   if(heading) heading.textContent = isCorrectionMode ? "⭐ ELO Correction · Uendelig modus" : "⭐ ELO Correction";
   if(skip) skip.textContent = isCorrectionMode ? "Hopp over · neste item" : "Hopp over · behold 1000 ELO";
   if(exit) exit.hidden = !isCorrectionMode;
+  overlay.classList.toggle("eloCorrectionFullscreen", isCorrectionMode);
 
   const slotButton = index => {
     const estimated = placementRating(anchors,index);
@@ -200,6 +205,8 @@ function openEloPlacement(itemId, existingItems, isCorrectionMode = false){
     Math.round(anchor.rating)+'</strong></div>'
   ).join("") + slotButton(anchors.length);
   overlay.style.display = "flex";
+  const panel = overlay.querySelector(".eloPlacementPanel");
+  if(panel) panel.scrollTop = 0;
 }
 
 export function chooseEloPlacement(slot){
