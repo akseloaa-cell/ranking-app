@@ -39,37 +39,17 @@ export function openCategoryManager(){
 export function searchCategoryManagerCategory(query){
   state.categoryManagerCategorySearch = query;
   const menu = document.getElementById("categoryManagerDropdownMenu");
-  if(menu) menu.classList.remove("hidden");
+  if(!menu) return;
+  menu.classList.remove("hidden");
 
-  const q = String(query || "").trim().toLowerCase();
-  if (!menu) return;
-
-  if (!q) {
-    const categories = [...state.categories];
-    const selected = state.categoryManagerCategory || "";
-    const input = menu.querySelector(".categoryManagerCategorySearch");
-
-    menu.querySelectorAll(".categoryManagerOption").forEach(option => option.remove());
-
-    const html = categories.map(category => {
-      const count = state.items.filter(item => (item.categories || []).includes(category)).length;
-      const safeCategory = encodeURIComponent(category).replace(/\x27/g, "%27");
-      return `
-        <div class="categoryManagerOption ${category === selected ? "active" : ""}" onclick="selectCategoryManagerCategory(decodeURIComponent('${safeCategory}'))">
-          <span>${category}</span>
-          <span class="categoryManagerOptionCount">${count}</span>
-        </div>`;
-    }).join("");
-
-    if (input) input.insertAdjacentHTML("afterend", html);
-    return;
-  }
-
+  const q = String(query || "").trim().toLocaleLowerCase("nb");
+  // Always filter the complete list in place. Clearing the input must
+  // reveal every category, not just the previous search results.
   menu.querySelectorAll(".categoryManagerOption").forEach(option => {
-    const text = option.querySelector("span")?.textContent?.toLowerCase() || option.textContent.toLowerCase();
-    option.removeAttribute("hidden");
-    option.style.display = text.includes(q) ? "" : "none";
-    if (!text.includes(q)) option.setAttribute("hidden", "");
+    const name = option.querySelector("span")?.textContent || "";
+    const matches = !q || name.toLocaleLowerCase("nb").includes(q);
+    option.hidden = !matches;
+    option.style.display = matches ? "" : "none";
   });
 }
 
@@ -165,7 +145,7 @@ export function renderCategoryManager(){
   const q = (state.categoryManagerSearch || "").trim().toLowerCase();
   const sourceFilter = state.categoryManagerSourceFilter || "all";
   const categoryQuery = (state.categoryManagerCategorySearch || "").trim().toLowerCase();
-  const visibleCategories = categories.filter(category => !categoryQuery || category.toLowerCase().includes(categoryQuery));
+  const visibleCategories = categories;
   const categoryItemCount = selected
     ? state.items.filter(item => (item.categories || []).includes(selected)).length
     : 0;
