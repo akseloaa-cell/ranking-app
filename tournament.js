@@ -103,7 +103,7 @@ const DAILY_RULE_DESCRIPTIONS = {
     "Fresh Blood": "Kun items som er lagt til de siste 30 dagene kan delta.",
     Unplayed: "Items med færrest tidligere turneringsdeltakelser prioriteres.",
     Category: "Deltakerne hentes fra én tilfeldig valgt kategori.",
-    "Category Mix": "Deltakerne hentes fra to tilfeldig valgte kategorier.",
+    "Category Mix": "Deltakerne hentes fra to kategorier med nok unike items til å fylle turneringen.",
     Comeback: "Items med flest tidligere turneringstap prioriteres.",
     Revenge: "Items som tapte sin forrige turnering prioriteres.",
     Veterans: "Kun items som har deltatt i minst 5 turneringer kan delta.",
@@ -1208,17 +1208,27 @@ function getDailyParticipantPool(pool, config){
       candidates = candidates.filter(item => item.categories?.includes(category));
     }
   } else if (config.participants === "category_mix") {
+    // Both categories need enough participants for their share, and their
+    // combined pool must contain enough distinct items for the full bracket.
+    const required = config.size === "random" ? 4 : Number(config.size);
+    const perCategory = Math.ceil(required / 2);
     const categories = [...new Set(candidates.flatMap(item => item.categories || []))];
-    const valid = categories.filter(category =>
-      candidates.filter(item => item.categories?.includes(category)).length >= 2
+    const eligible = categories.filter(category =>
+      candidates.filter(item => item.categories?.includes(category)).length >= perCategory
     );
-    if (valid.length >= 2) {
-      const seed = getTodayKey().split("-").reduce((a, b) => a * 31 + Number(b), 17);
-      const chosen = dailyShuffle(valid, seed).slice(0, 2);
-      candidates = candidates.filter(item =>
-        item.categories?.some(category => chosen.includes(category))
-      );
+    const validPairs = [];
+    for (let i = 0; i < eligible.length; i++) {
+      for (let j = i + 1; j < eligible.length; j++) {
+        const pair = [eligible[i], eligible[j]];
+        const combined = candidates.filter(item =>
+          item.categories?.some(category => pair.includes(category))
+        );
+        if (combined.length >= required) validPairs.push(combined);
+      }
     }
+    if (!validPairs.length) return [];
+    const seed = getTodayKey().split("-").reduce((a, b) => a * 31 + Number(b), 17);
+    candidates = dailyShuffle(validPairs, seed)[0];
   }
 
   return candidates;
