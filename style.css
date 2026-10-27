@@ -2874,3 +2874,11 @@ button:active {
 .dailyShoutoutDistributionActions button{width:auto;flex:1;min-width:0;margin:0;padding:12px 8px;}
 .dailyShoutoutBack{background:#344157;}
 .dailyShoutoutPreviousBonus{white-space:nowrap;}
+
+
+/* The exit control is only visible in the endless ELO Correction mode. */
+#eloPlacementExit{
+  width:100%;margin:8px 0 0;padding:12px;border-radius:10px;
+  border:1px solid #455269;background:#151d2b;color:#d3deed;
+}
+#eloPlacementExit[hidden]{display:none!important;}
