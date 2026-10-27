@@ -3,8 +3,10 @@ import { save } from "./storage.js";
 import { update } from "./ranking.js";
 import { nextMatch, updateHistory } from "./match.js";
 
-const BONUS = 100;
-let selectedId = null;
+const BONUS = 200;
+const chosenIds = new Set();
+const allocations = new Map();
+let step = "select";
 
 function todayKey(){
   const now = new Date();
@@ -24,7 +26,7 @@ function lastShoutout(){
   }
   const inState = state.dailyShoutout;
   const valid = [saved, inState].filter(record =>
-    record && /^\d{4}-\d{2}-\d{2}$/.test(record.date) && record.itemId != null
+    record && /^\d{4}-\d{2}-\d{2}$/.test(record.date) && (record.itemId != null || Array.isArray(record.awards))
   );
   return valid.sort((a, b) => b.date.localeCompare(a.date))[0] || null;
 }
@@ -34,10 +36,17 @@ function awardedToday(){
   return last?.date === todayKey() ? last : null;
 }
 
-function shoutoutName(record){
-  if(!record) return "";
-  const item = state.items.find(item => String(item.id) === String(record.itemId));
-  return item?.name || record.itemName || "Et item";
+function shoutoutAwards(record){
+  if(!record) return [];
+  // Earlier shoutouts gave 100 ELO to one item; preserve their display.
+  if(Array.isArray(record.awards)) return record.awards.filter(x => x?.itemId != null);
+  if(record.itemId != null) return [{ itemId: record.itemId, itemName: record.itemName, amount: record.amount ?? 100 }];
+  return [];
+}
+
+function shoutoutName(award){
+  const item = state.items.find(item => String(item.id) === String(award.itemId));
+  return item?.name || award.itemName || "Et item";
 }
 
 export function refreshDailyShoutout(){
@@ -56,22 +65,101 @@ function escapeHtml(value){
   })[char]);
 }
 
+function validChosenItems(){
+  return [...chosenIds].map(id => state.items.find(item => String(item.id) === id)).filter(Boolean);
+}
+
 function renderShoutoutResults(query = ""){
   const list = document.getElementById("dailyShoutoutResults");
-  const confirm = document.getElementById("dailyShoutoutConfirm");
-  if(!list || !confirm) return;
+  const next = document.getElementById("dailyShoutoutNext");
+  if(!list || !next) return;
   const search = query.trim().toLocaleLowerCase("nb");
+  // Selected options stay above the others, including when searching.
   const candidates = state.items
     .filter(item => item.name.toLocaleLowerCase("nb").includes(search))
-    .sort((a,b) => a.name.localeCompare(b.name, "nb"))
-    .slice(0, 40);
-  list.innerHTML = candidates.length ? candidates.map(item =>
-    `<button type="button" class="dailyShoutoutOption ${String(item.id) === String(selectedId) ? "selected" : ""}"
-      data-shoutout-id="${escapeHtml(item.id)}"><span>${escapeHtml(item.name)}</span><span>⭐ ${Math.round(item.rating)}</span></button>`
-  ).join("") : '<p class="dailyShoutoutEmpty">Ingen items funnet.</p>';
-  confirm.disabled = selectedId === null || !state.items.some(item => String(item.id) === String(selectedId));
-  const selected = state.items.find(item => String(item.id) === String(selectedId));
-  confirm.textContent = selected ? "Gi +100 ELO til " + selected.name : "Velg et item";
+    .sort((a,b) => Number(chosenIds.has(String(b.id))) - Number(chosenIds.has(String(a.id)))
+      || a.name.localeCompare(b.name, "nb"));
+  list.innerHTML = candidates.length ? candidates.map(item => {
+    const chosen = chosenIds.has(String(item.id));
+    return `<button type="button" aria-pressed="${chosen}" class="dailyShoutoutOption ${chosen ? "selected" : ""}"
+      data-shoutout-id="${escapeHtml(item.id)}"><span class="dailyShoutoutOptionName">${chosen ? "✓ " : ""}${escapeHtml(item.name)}</span><span>⭐ ${Math.round(item.rating)}</span></button>`;
+  }).join("") : '<p class="dailyShoutoutEmpty">Ingen items funnet.</p>';
+  const n = validChosenItems().length;
+  document.getElementById("dailyShoutoutSelectedCount").textContent = n + " items valgt";
+  next.disabled = n === 0;
+  next.textContent = n ? "Videre med " + n + " items →" : "Velg minst ett item";
+}
+
+function renderPreviousShoutout(){
+  const list = document.getElementById("dailyShoutoutPreviousList");
+  if(!list) return;
+  const last = lastShoutout();
+  const awards = shoutoutAwards(last);
+  list.innerHTML = awards.length ? awards.map(award =>
+    '<div class="dailyShoutoutPreviewCard"><span class="dailyShoutoutPreviewStar">🌟</span>' +
+    '<span class="dailyShoutoutPreviousName">' + escapeHtml(shoutoutName(award)) + '</span>' +
+    '<span class="dailyShoutoutPreviousBonus">+' + Math.round(Number(award.amount) || 0) + ' ELO</span></div>'
+  ).join("") : '<div class="dailyShoutoutPreviewCard">Ingen shoutout valgt ennå</div>';
+}
+
+function renderDistribution(){
+  const sliderRow = document.getElementById("dailyShoutoutSliders");
+  if(!sliderRow) return;
+  sliderRow.innerHTML = validChosenItems().map(item => {
+    const id = String(item.id);
+    const amount = allocations.get(id) || 0;
+    return `<div class="dailyShoutoutSliderCard">
+      <div class="dailyShoutoutSliderAmount" data-amount-id="${escapeHtml(id)}">+${amount} ELO</div>
+      <input class="dailyShoutoutSlider" type="range" min="0" max="200" step="1" value="${amount}"
+        data-slider-id="${escapeHtml(id)}" aria-label="ELO til ${escapeHtml(item.name)}">
+      <div class="dailyShoutoutSliderName">${escapeHtml(item.name)}</div>
+    </div>`;
+  }).join("");
+  updateDistributionTotals();
+}
+
+function updateDistributionTotals(){
+  const used = [...allocations.values()].reduce((sum, amount) => sum + amount, 0);
+  const remaining = BONUS - used;
+  document.getElementById("dailyShoutoutBudgetAmount").textContent = used + " / " + BONUS;
+  document.getElementById("dailyShoutoutBudgetFill").style.width = (used / BONUS * 100) + "%";
+  const valid = validChosenItems().length > 0
+    && validChosenItems().every(item => (allocations.get(String(item.id)) || 0) > 0)
+    && used === BONUS;
+  document.getElementById("dailyShoutoutConfirm").disabled = !valid;
+  document.getElementById("dailyShoutoutDistributionError").textContent =
+    valid ? "Alle 200 ELO er fordelt." : remaining > 0
+      ? remaining + " ELO gjenstår. Alle valgte items må få minst 1 ELO."
+      : "Alle valgte items må få minst 1 ELO.";
+  // Each slider can consume only the amount currently left unallocated.
+  document.querySelectorAll("[data-slider-id]").forEach(slider => {
+    const amount = allocations.get(slider.dataset.sliderId) || 0;
+    slider.max = Math.min(BONUS, amount + remaining);
+  });
+}
+
+export function nextDailyShoutoutStep(){
+  if(!availableNow() || awardedToday() || chosenIds.size === 0) return;
+  if(chosenIds.size > BONUS){
+    alert("Du kan velge maksimalt 200 items når alle skal få minst 1 ELO.");
+    return;
+  }
+  // Keep allocations when returning to the selection step.
+  for(const id of [...allocations.keys()]) if(!chosenIds.has(id)) allocations.delete(id);
+  for(const id of chosenIds) if(!allocations.has(id)) allocations.set(id, 0);
+  step = "distribute";
+  document.getElementById("dailyShoutoutSelection").hidden = true;
+  document.getElementById("dailyShoutoutDistribution").hidden = false;
+  document.getElementById("dailyShoutoutContent").textContent = "Fordel dagens 200 ELO";
+  renderDistribution();
+}
+
+export function backDailyShoutoutStep(){
+  step = "select";
+  document.getElementById("dailyShoutoutDistribution").hidden = true;
+  document.getElementById("dailyShoutoutSelection").hidden = false;
+  document.getElementById("dailyShoutoutContent").textContent = "Velg items som skal få en del av dagens 200 ELO.";
+  renderShoutoutResults(document.getElementById("dailyShoutoutSearch").value);
 }
 
 function updateDailyShoutoutCountdown(){
@@ -93,42 +181,38 @@ function updateDailyShoutoutCountdown(){
 export function openDailyShoutout(){
   const overlay = document.getElementById("dailyShoutoutOverlay");
   const content = document.getElementById("dailyShoutoutContent");
-  const input = document.getElementById("dailyShoutoutSearch");
-  if(!overlay || !content || !input) return;
-  selectedId = null;
-  input.value = "";
+  const search = document.getElementById("dailyShoutoutSearch");
+  if(!overlay || !content || !search) return;
+  chosenIds.clear();
+  allocations.clear();
+  step = "select";
+  search.value = "";
   const already = awardedToday();
-  const available = availableNow();
-  const locked = !available || Boolean(already);
-  const lockedView = document.getElementById("dailyShoutoutLockedView");
-  input.hidden = locked;
-  document.getElementById("dailyShoutoutResults").hidden = locked;
-  document.getElementById("dailyShoutoutConfirm").hidden = locked;
-  lockedView.hidden = !locked;
+  const locked = !availableNow() || Boolean(already);
+  document.getElementById("dailyShoutoutLockedView").hidden = !locked;
+  document.getElementById("dailyShoutoutSelection").hidden = locked;
+  document.getElementById("dailyShoutoutDistribution").hidden = true;
   overlay.dataset.shoutoutLocked = String(locked);
+  content.hidden = locked;
   if(locked){
-    const last = lastShoutout();
-    document.getElementById("dailyShoutoutPreviousName").textContent =
-      last ? shoutoutName(last) : "Ingen shoutout valgt ennå";
-    document.getElementById("dailyShoutoutPreviousBonus").hidden = !last;
+    content.textContent = "";
+    renderPreviousShoutout();
     document.getElementById("dailyShoutoutAvailability").textContent =
       already ? "Neste shoutout åpner i morgen kl. 18" : "Neste shoutout åpner i dag kl. 18";
-    content.textContent = "";
-    content.hidden = true;
     updateDailyShoutoutCountdown();
   } else {
-    content.hidden = false;
-    content.textContent = "Velg dagens item. Shoutouten gir +100 ELO";
+    content.textContent = "Velg items som skal få en del av dagens 200 ELO.";
     renderShoutoutResults();
   }
   overlay.hidden = false;
-  if(!locked) input.focus();
+  if(!locked) search.focus();
 }
 
 export function closeDailyShoutout(){
   const overlay = document.getElementById("dailyShoutoutOverlay");
   if(overlay) overlay.hidden = true;
-  selectedId = null;
+  chosenIds.clear();
+  allocations.clear();
 }
 
 export function initDailyShoutout(){
@@ -139,14 +223,36 @@ export function initDailyShoutout(){
   results.addEventListener("click", event => {
     const button = event.target.closest("[data-shoutout-id]");
     if(!button) return;
-    selectedId = button.dataset.shoutoutId;
+    const id = button.dataset.shoutoutId;
+    if(chosenIds.has(id)){
+      chosenIds.delete(id);
+      allocations.delete(id);
+    } else if(chosenIds.size < BONUS) {
+      chosenIds.add(id);
+    } else {
+      alert("Maksimalt 200 items kan motta ELO på én dag.");
+    }
     renderShoutoutResults(search.value);
+  });
+  document.getElementById("dailyShoutoutSliders")?.addEventListener("input", event => {
+    const slider = event.target.closest("[data-slider-id]");
+    if(!slider) return;
+    const id = slider.dataset.sliderId;
+    const previous = allocations.get(id) || 0;
+    const used = [...allocations.values()].reduce((sum, n) => sum + n, 0);
+    const allowed = Math.min(BONUS, BONUS - (used - previous));
+    const amount = Math.max(0, Math.min(allowed, Math.round(Number(slider.value) || 0)));
+    allocations.set(id, amount);
+    slider.value = amount;
+    document.querySelectorAll("[data-amount-id]").forEach(label => {
+      if(label.dataset.amountId === id) label.textContent = "+" + amount + " ELO";
+    });
+    updateDistributionTotals();
   });
   document.getElementById("dailyShoutoutOverlay")?.addEventListener("click", event => {
     if(event.target.id === "dailyShoutoutOverlay") closeDailyShoutout();
   });
   refreshDailyShoutout();
-  // Keep the badge and countdown live while the app remains open.
   setInterval(() => {
     refreshDailyShoutout();
     const overlay = document.getElementById("dailyShoutoutOverlay");
@@ -171,29 +277,52 @@ export function initDailyShoutout(){
 }
 
 export function confirmDailyShoutout(){
-  if(!availableNow() || awardedToday()) {
+  if(!availableNow() || awardedToday()){
     refreshDailyShoutout();
     openDailyShoutout();
     return;
   }
-  const item = state.items.find(candidate => String(candidate.id) === String(selectedId));
-  if(!item) return;
-  const key = todayKey();
-  const record = { date:key, itemId:item.id, itemName:item.name, amount:BONUS };
-  // Keep award data in both the normal saved state and a dedicated guard key.
-  const previousRating = item.rating;
-  const previousHistory = Array.isArray(item.history) ? [...item.history] : item.history;
-  item.rating = Math.round((Number(item.rating) || 1000) + BONUS);
-  updateHistory(item);
+  if(step !== "distribute") return;
+  const recipients = validChosenItems();
+  if(!recipients.length || recipients.length !== chosenIds.size) return;
+  const awards = recipients.map(item => ({
+    itemId: item.id,
+    itemName: item.name,
+    amount: allocations.get(String(item.id)) || 0
+  }));
+  if(awards.some(award => !Number.isInteger(award.amount) || award.amount < 1)
+    || awards.reduce((sum, award) => sum + award.amount, 0) !== BONUS){
+    updateDistributionTotals();
+    return;
+  }
+  const record = { date:todayKey(), awards, amount:BONUS };
+  // Retain the entire previous record and all item ratings if writing fails.
+  const previousRecord = state.dailyShoutout;
+  const previousGuard = localStorage.getItem("dailyShoutout");
+  const snapshots = recipients.map(item => ({
+    item, rating:item.rating, history:Array.isArray(item.history) ? [...item.history] : item.history
+  }));
+  for(const award of awards){
+    const item = state.items.find(item => String(item.id) === String(award.itemId));
+    item.rating = Math.round((Number(item.rating) || 1000) + award.amount);
+    updateHistory(item);
+  }
   state.dailyShoutout = record;
   try {
-    localStorage.setItem("dailyShoutout", JSON.stringify(record));
+    // Save updated rankings before marking the date as redeemed.
     save();
-  } catch(error) {
-    item.rating = previousRating;
-    item.history = previousHistory;
-    state.dailyShoutout = null;
-    try { localStorage.removeItem("dailyShoutout"); } catch(_) {}
+    localStorage.setItem("dailyShoutout", JSON.stringify(record));
+  } catch(error){
+    for(const snapshot of snapshots){
+      snapshot.item.rating = snapshot.rating;
+      snapshot.item.history = snapshot.history;
+    }
+    state.dailyShoutout = previousRecord;
+    try {
+      if(previousGuard === null) localStorage.removeItem("dailyShoutout");
+      else localStorage.setItem("dailyShoutout", previousGuard);
+      save();
+    } catch(rollbackError){ console.error("Kunne ikke gjenopprette lagring", rollbackError); }
     alert("Kunne ikke lagre shoutouten. Prøv igjen.");
     console.error(error);
     return;
