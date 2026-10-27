@@ -5,7 +5,7 @@ import { update } from "./ranking.js";
 import * as ui from "./ui.js?v=20261025-hide-item-suggestions";
 import * as stats from "./stats.js";
 import * as tournament from "./tournament.js?v=20261027-daily-category-mix-size";
-import { addItem, chooseEloPlacement, skipEloPlacement } from "./items.js?v=elo-correction-20261025-fix1";
+import { addItem, chooseEloPlacement, skipEloPlacement, startEloCorrectionMode, exitEloCorrectionMode } from "./items.js?v=20261027-endless-elo-correction";
 import { addCategory, openCategoryManager, selectCategoryManagerCategory, toggleItemInCategory, searchCategoryManager, searchCategoryManagerCategory, setCategoryManagerItemSort, toggleCategoryManagerItemSortDir, renderCategoryManager, toggleCategoryManagerSortDropdown, toggleCategoryManagerDropdown, setCategoryManagerSourceFilter, toggleCategoryManagerSourceDropdown } from "./categories.js?v=20261025-custom-source-dropdown";
 import {
   renameItem,
@@ -140,6 +140,8 @@ window.closeAddItem = closeAddItem;
 window.addItem = addItem;
 window.chooseEloPlacement = chooseEloPlacement;
 window.skipEloPlacement = skipEloPlacement;
+window.startEloCorrectionMode = startEloCorrectionMode;
+window.exitEloCorrectionMode = exitEloCorrectionMode;
 window.addCategory = addCategory;
 window.renderItemSuggestions = ui.renderItemSuggestions;
 window.selectItemSuggestion = ui.selectItemSuggestion;
