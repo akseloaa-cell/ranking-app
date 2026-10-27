@@ -3051,3 +3051,93 @@ button:active {
   .vsSelectSortDropdown{flex:1;}
   #categorySelectView .vsSelectSortButton{width:100%;}
 }
+
+
+/* Category Versus uses the same compact horizontal match layout as Home. */
+#categoryBattleView .battle-topbar{
+  margin:0 auto 12px;
+  width:100%;
+  max-width:500px;
+  gap:10px;
+}
+#categoryBattleView #battleCategoryTitle{
+  flex:1;min-width:0;
+  font-size:17px;
+  line-height:1.35;
+  overflow-wrap:anywhere;
+  text-align:right;
+}
+#categoryBattleView .battle-back{
+  flex:0 0 auto;
+  width:auto;margin:0;
+  padding:9px 12px;
+  font-size:12px;
+}
+#categoryBattleView #battleArena.vs{
+  display:flex;
+  flex-direction:row;
+  flex-wrap:nowrap;
+  align-items:stretch;
+  justify-content:center;
+  gap:10px;
+  width:80%;
+  margin:14px auto 0;
+}
+#categoryBattleView #battleArena .battle-card.choice{
+  flex:1 1 0;
+  width:0;
+  min-width:0;
+  min-height:0;
+  margin:0;
+  padding:20px;
+  border:1px solid #2a3142;
+  border-radius:12px;
+  background:#1f1f1f;
+  box-sizing:border-box;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  justify-content:center;
+  text-align:center;
+  overflow-wrap:anywhere;
+  cursor:pointer;
+  font-weight:600;
+}
+#categoryBattleView #battleArena .battle-card.choice:hover{
+  border-color:#4f8cff;
+  transform:translateY(-2px);
+}
+#categoryBattleView #battleArena .battle-card.choice:active{transform:scale(.97);}
+#categoryBattleView .battle-buttons{
+  margin-top:10px;
+  gap:10px;
+}
+#categoryBattleView .battle-buttons button{
+  width:80%;
+  margin:0 auto;
+  padding:12px 14px;
+  border-radius:12px;
+  font-size:14px;
+}
+#categoryBattleView #categoryBattleRanking{
+  width:80%;
+  max-width:500px;
+  margin:18px auto 0;
+}
+@media(max-width:600px){
+  #categoryBattleView #battleArena.vs{
+    flex-direction:row;
+    flex-wrap:nowrap;
+    align-items:stretch;
+    gap:10px;
+  }
+  #categoryBattleView #battleArena .battle-card.choice{
+    width:0;
+    min-height:0;
+    padding:14px 9px;
+  }
+  #categoryBattleView #battleArena .battle-card.choice > div:first-child{
+    font-size:16px!important;
+    overflow-wrap:anywhere;
+  }
+}
