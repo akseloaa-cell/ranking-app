@@ -2779,3 +2779,37 @@ button:active {
   overflow-wrap:anywhere;
 }
 .dailyShoutoutLast[hidden]{display:none!important;}
+
+
+/* Last shoutout details and countdown displayed inside the round button's modal. */
+.dailyShoutoutLockedView{display:flex;flex-direction:column;gap:12px;margin-top:14px;}
+.dailyShoutoutLockedView[hidden]{display:none!important;}
+.dailyShoutoutPreviewTitle{
+  text-align:center;font-size:11px;font-weight:700;
+  letter-spacing:.1em;color:#9caec9;
+}
+.dailyShoutoutPreviewCard{
+  display:flex;align-items:center;gap:10px;padding:15px;
+  border:1px solid #394e6b;border-radius:15px;
+  background:linear-gradient(135deg,#202d43,#172338);
+}
+.dailyShoutoutPreviewStar{font-size:23px;flex:0 0 auto;}
+.dailyShoutoutPreviousName{
+  flex:1;min-width:0;overflow-wrap:anywhere;
+  font-size:15px;font-weight:700;color:#f0f4fc;
+}
+.dailyShoutoutPreviousBonus{
+  flex:0 0 auto;white-space:nowrap;
+  font-size:12px;font-weight:800;color:#67d994;
+}
+.dailyShoutoutPreviousBonus[hidden]{display:none!important;}
+.dailyShoutoutTimerCard{
+  padding:17px 12px;text-align:center;
+  border:1px solid #303e56;border-radius:15px;background:#111b2a;
+}
+.dailyShoutoutTimerLabel{font-size:12px;color:#aabbd4;margin-bottom:8px;}
+.dailyShoutoutCountdown{
+  font-size:clamp(26px,7vw,37px);line-height:1.2;font-weight:800;
+  font-variant-numeric:tabular-nums;letter-spacing:.035em;color:#f1f5ff;
+}
+.dailyShoutoutAvailability{font-size:11px;color:#9baac2;margin-top:9px;}
