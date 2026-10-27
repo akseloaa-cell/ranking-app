@@ -32,7 +32,7 @@ import {
   openCategoryVs,
   exitCategoryVs,
   backToCategorySelect
-} from "./categoryVs.js?v=20261025-versus-new-badge";
+} from "./categoryVs.js?v=20261027-versus-ui-refresh";
 
 import {
   startTournament,
