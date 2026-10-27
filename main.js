@@ -1,3 +1,4 @@
+import { openDailyShoutout, closeDailyShoutout, confirmDailyShoutout, initDailyShoutout } from "./shoutout.js";
 import { state } from "./state.js"; 
 import { nextMatch } from "./match.js";
 import { update } from "./ranking.js";
@@ -50,6 +51,10 @@ import {
 
 import { load } from "./storage.js";
 import { openScenarioRankingSetup, openScenarioModeSetup, selectScenarioItemCount, selectScenarioRankingType, selectScenarioMode, selectScenario, cycleScenario, selectScenarioEndlessOrder, selectScenarioEndlessMode, selectScenarioTournamentMode, selectScenarioTournamentSize, selectScenarioTournamentScenario, startScenario, renderScenarioGame, renderScenarioEndlessGame, chooseScenarioEndlessWinner, exitScenarioEndless, placeScenarioItem, moveScenarioItem, dragScenarioItem, allowScenarioDrop, dropScenarioItem, finishScenario, backToScenarioSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, clearScenarioCategories, filterScenarioCategories, filterScenarios, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown, renderScenarioResult, scenarioPlayAgain, scenarioNewSettings, openScenarioLeaderboard, renderScenarioLeaderboard, showScenarioStats, closeScenarioStats } from "./scenario.js?v=20261025-leaderboard-daily-rank";
+
+window.openDailyShoutout = openDailyShoutout;
+window.closeDailyShoutout = closeDailyShoutout;
+window.confirmDailyShoutout = confirmDailyShoutout;
 
 window.startTournament = startTournament;
 window.selectTournamentMode = selectTournamentMode;
@@ -301,5 +306,6 @@ if(!state.previousRankingByCategory || !Object.keys(state.previousRankingByCateg
 
 saveDailyRanking();
 saveDailyScenarioRanking();
+initDailyShoutout();
 update();
 nextMatch();
