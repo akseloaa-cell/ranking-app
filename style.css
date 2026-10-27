@@ -2762,3 +2762,20 @@ button:active {
 #dailyShoutoutSearch[hidden],
 #dailyShoutoutResults[hidden],
 #dailyShoutoutConfirm[hidden]{display:none!important;}
+
+
+.dailyShoutoutLast{
+  width:80%;
+  box-sizing:border-box;
+  margin:0 auto 12px;
+  padding:9px 12px;
+  border:1px solid #364866;
+  background:#192438;
+  border-radius:12px;
+  color:#dbe7ff;
+  font-size:12px;
+  font-weight:600;
+  line-height:1.4;
+  overflow-wrap:anywhere;
+}
+.dailyShoutoutLast[hidden]{display:none!important;}
