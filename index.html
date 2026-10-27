@@ -6,9 +6,9 @@
 
 <link rel="icon" type="image/png" href="file_000000006acc720aabe74bd60fd54078.png"> 
  
-<script type="module" src="main.js?v=20261027-show-last-shoutout"></script>
+<script type="module" src="main.js?v=20261027-shoutout-timer-card"></script>
 
-<link rel="stylesheet" href="./style.css?v=20261027-show-last-shoutout">
+<link rel="stylesheet" href="./style.css?v=20261027-shoutout-timer-card">
  
 </head>
 
@@ -163,6 +163,19 @@
       <button type="button" class="dailyShoutoutClose" onclick="closeDailyShoutout()" aria-label="Lukk">✕</button>
     </div>
     <p id="dailyShoutoutContent"></p>
+    <div id="dailyShoutoutLockedView" class="dailyShoutoutLockedView" hidden>
+      <div class="dailyShoutoutPreviewTitle">SISTE SHOUTOUT</div>
+      <div class="dailyShoutoutPreviewCard">
+        <span class="dailyShoutoutPreviewStar" aria-hidden="true">🌟</span>
+        <span id="dailyShoutoutPreviousName" class="dailyShoutoutPreviousName">Ingen shoutout ennå</span>
+        <span id="dailyShoutoutPreviousBonus" class="dailyShoutoutPreviousBonus" hidden>+100 ELO</span>
+      </div>
+      <div class="dailyShoutoutTimerCard">
+        <div class="dailyShoutoutTimerLabel">Nedtelling til kl. 12</div>
+        <div id="dailyShoutoutCountdown" class="dailyShoutoutCountdown" role="timer">--:--:--</div>
+        <div id="dailyShoutoutAvailability" class="dailyShoutoutAvailability">Neste shoutout åpner kl. 18</div>
+      </div>
+    </div>
     <input id="dailyShoutoutSearch" type="search" placeholder="Søk etter item..." autocomplete="off">
     <div id="dailyShoutoutResults" class="dailyShoutoutResults"></div>
     <button id="dailyShoutoutConfirm" type="button" onclick="confirmDailyShoutout()" disabled>Velg et item</button>
