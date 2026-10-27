@@ -4,7 +4,7 @@ import { nextMatch } from "./match.js";
 import { update } from "./ranking.js";
 import * as ui from "./ui.js?v=20261025-hide-item-suggestions";
 import * as stats from "./stats.js";
-import * as tournament from "./tournament.js?v=20261027-daily-category-mix-size";
+import * as tournament from "./tournament.js?v=20261027-no-tournament-h2h";
 import { addItem, chooseEloPlacement, skipEloPlacement, startEloCorrectionMode, exitEloCorrectionMode } from "./items.js?v=20261027-elo-fullscreen";
 import { addCategory, openCategoryManager, selectCategoryManagerCategory, toggleItemInCategory, searchCategoryManager, searchCategoryManagerCategory, setCategoryManagerItemSort, toggleCategoryManagerItemSortDir, renderCategoryManager, toggleCategoryManagerSortDropdown, toggleCategoryManagerDropdown, setCategoryManagerSourceFilter, toggleCategoryManagerSourceDropdown } from "./categories.js?v=20261025-custom-source-dropdown";
 import {
@@ -47,7 +47,7 @@ import {
   toggleDailyRule,
   resumeTournament,
   filterTournamentCategories,
-} from "./tournament.js?v=20261027-daily-category-mix-size";
+} from "./tournament.js?v=20261027-no-tournament-h2h";
 
 import { load } from "./storage.js";
 import { openScenarioRankingSetup, openScenarioModeSetup, selectScenarioItemCount, selectScenarioRankingType, selectScenarioMode, selectScenario, cycleScenario, selectScenarioEndlessOrder, selectScenarioEndlessMode, selectScenarioTournamentMode, selectScenarioTournamentSize, selectScenarioTournamentScenario, startScenario, renderScenarioGame, renderScenarioEndlessGame, chooseScenarioEndlessWinner, exitScenarioEndless, placeScenarioItem, moveScenarioItem, dragScenarioItem, allowScenarioDrop, dropScenarioItem, finishScenario, backToScenarioSetup, backToScenarioHub, toggleScenarioCategoryDropdown, selectScenarioCategory, clearScenarioCategories, filterScenarioCategories, filterScenarios, renderScenarioCategoryDropdown, setupScenarioCategoryDropdown, renderScenarioResult, scenarioPlayAgain, scenarioNewSettings, openScenarioLeaderboard, renderScenarioLeaderboard, showScenarioStats, closeScenarioStats } from "./scenario.js?v=20261025-leaderboard-daily-rank";
