@@ -1,4 +1,4 @@
-import { openDailyShoutout, closeDailyShoutout, confirmDailyShoutout, initDailyShoutout } from "./shoutout.js?v=20261027-text-update";
+import { openDailyShoutout, closeDailyShoutout, confirmDailyShoutout, initDailyShoutout } from "./shoutout.js?v=20261027-show-last-shoutout";
 import { state } from "./state.js"; 
 import { nextMatch } from "./match.js";
 import { update } from "./ranking.js";
