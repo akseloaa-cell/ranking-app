@@ -24,7 +24,7 @@ function lastShoutout(){
   }
   const inState = state.dailyShoutout;
   const valid = [saved, inState].filter(record =>
-    record && /^\\d{4}-\\d{2}-\\d{2}$/.test(record.date) && record.itemId != null
+    record && /^\d{4}-\d{2}-\d{2}$/.test(record.date) && record.itemId != null
   );
   return valid.sort((a, b) => b.date.localeCompare(a.date))[0] || null;
 }
