@@ -122,23 +122,41 @@ export function update(){
   }).join("");
 
   const rankingElement = document.getElementById("ranking");
-  const previousTop10 = [...rankingElement.querySelectorAll("[data-ranking-item]")].map(el => Number(el.dataset.rankingItem));
+  if(!rankingElement) return;
+
+  // Remember the actual position of each row before re-sorting. A CSS
+  // up/down animation alone doesn't show the item travelling to its new rank.
+  const previousPositions = new Map(
+    [...rankingElement.querySelectorAll("[data-ranking-item]")].map(row => [
+      row.dataset.rankingItem,
+      row.getBoundingClientRect()
+    ])
+  );
 
   rankingElement.innerHTML = renderDailyMVPCard() + html;
 
-  const previousPositions = new Map(previousTop10.map((id, index) => [id, index + 1]));
-  rankingElement.querySelectorAll("[data-ranking-item]").forEach(row => {
-    const id = Number(row.dataset.rankingItem);
-    const oldPosition = previousPositions.get(id);
-    const newPosition = Number(row.dataset.rank);
+  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  if(!reducedMotion){
+    rankingElement.querySelectorAll("[data-ranking-item]").forEach(row => {
+      const previousRect = previousPositions.get(row.dataset.rankingItem);
+      if(!previousRect) return; // Initial render or newly entered top-10 item.
 
-    if(oldPosition !== undefined && oldPosition !== newPosition){
-      row.classList.add(newPosition < oldPosition ? "rankingMoveUp" : "rankingMoveDown");
-      row.addEventListener("animationend", () => {
-        row.classList.remove("rankingMoveUp", "rankingMoveDown");
-      }, { once:true });
-    }
-  });
+      const nextRect = row.getBoundingClientRect();
+      const deltaY = previousRect.top - nextRect.top;
+      if(Math.abs(deltaY) < 1) return;
+
+      row.animate(
+        [
+          { transform: `translateY(${deltaY}px)`, offset: 0 },
+          { transform: "translateY(0)", offset: 1 }
+        ],
+        {
+          duration: 650,
+          easing: "cubic-bezier(0.22, 1, 0.36, 1)"
+        }
+      );
+    });
+  }
 
   document.getElementById("a").innerHTML = "";
 document.getElementById("b").innerHTML = "";
