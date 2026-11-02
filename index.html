@@ -435,7 +435,13 @@
 
     <div class="chip-container" id="chipBox"></div>
 
-    <input id="catInput" placeholder="Ny kategori">
+    <div class="itemInputWrap">
+      <input id="catInput" placeholder="Ny kategori" autocomplete="off"
+        oninput="renderCategorySuggestions(this.value)"
+        onfocus="renderCategorySuggestions(this.value)"
+        onblur="setTimeout(() => { const box = document.getElementById('categorySuggestions'); if(box) box.style.display = 'none'; }, 150)">
+      <div id="categorySuggestions"></div>
+    </div>
     <button onclick="addCategory()">+ Kategori</button>
 
     <button onclick="addItem()">Legg til</button>
