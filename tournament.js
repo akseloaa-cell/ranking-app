@@ -106,7 +106,7 @@ const DAILY_RULE_DESCRIPTIONS = {
     "Category Mix": "Deltakerne hentes fra to kategorier med nok unike items til å fylle turneringen.",
     Comeback: "Items med flest tidligere turneringstap prioriteres.",
     Revenge: "Items som tapte sin forrige turnering prioriteres.",
-    Veterans: "Kun items som har deltatt i minst 5 turneringer kan delta.",
+    Veterans: "De 16 itemene med flest turneringsdeltakelser kvalifiserer seg. Ved likt antall avgjøres rekkefølgen etter navn.",
     Undefeated: "Kun items som aldri har tapt en turnering kan delta."
   },
   matchups: {
@@ -1194,7 +1194,8 @@ function getDailyParticipantPool(pool, config){
   } else if (config.participants === "revenge") {
     candidates = candidates.filter(item => item.lastTournamentResult === "loss");
   } else if (config.participants === "veterans") {
-    candidates = candidates.filter(item => (item.tournamentsPlayed || 0) >= 5);
+    candidates.sort((a, b) => (b.tournamentsPlayed || 0) - (a.tournamentsPlayed || 0) || a.name.localeCompare(b.name));
+    candidates = candidates.slice(0, 16);
   } else if (config.participants === "undefeated") {
     candidates = candidates.filter(item => (item.tournamentsPlayed || 0) === (item.tournamentWins || 0));
   } else if (config.participants === "category") {
