@@ -300,4 +300,6 @@ export function toggleCategoryManagerDropdown(){
   if(!menu) return;
   menu.classList.toggle("hidden");
 }
-\nwindow.renderCategorySuggestions = renderCategorySuggestions;\nwindow.selectCategorySuggestion = selectCategorySuggestion;\n
+
+window.renderCategorySuggestions = renderCategorySuggestions;
+window.selectCategorySuggestion = selectCategorySuggestion;
