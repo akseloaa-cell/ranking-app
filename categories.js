@@ -12,14 +12,52 @@ export function addCategory(){
 
   v = v.trim().toLowerCase();
 
-  if(!state.categories.includes(v)){
+  if(!state.categories.some(category => normalize(category) === normalize(v))){
     state.categories.push(v);
   }
 
   document.getElementById("catInput").value = "";
+  renderCategorySuggestions("");
 
   renderChips({ targetId: "chipBox", mode: "select" });
   save();
+}
+
+export function renderCategorySuggestions(query = ""){
+  const box = document.getElementById("categorySuggestions");
+  if(!box) return;
+
+  const q = normalize(String(query || ""));
+  const matches = q
+    ? state.categories.filter(category => normalize(category).includes(q)).slice(0, 8)
+    : [];
+
+  if(!matches.length){
+    box.innerHTML = "";
+    box.style.display = "none";
+    return;
+  }
+
+  box.innerHTML = matches.map(category => `
+    <div class="itemSuggestion" data-category-suggestion="">
+      <span></span>
+      <span class="itemSuggestionStatus">Allerede lagt til</span>
+    </div>
+  `).join("");
+
+  box.querySelectorAll("[data-category-suggestion]").forEach((row, i) => {
+    row.querySelector("span").textContent = matches[i];
+    row.addEventListener("click", () => selectCategorySuggestion(matches[i]));
+  });
+  box.style.display = "block";
+}
+
+export function selectCategorySuggestion(category){
+  const input = document.getElementById("catInput");
+  if(!input) return;
+  input.value = category;
+  input.focus();
+  renderCategorySuggestions(category);
 }
 
 export function toggleCat(el){
@@ -262,3 +300,4 @@ export function toggleCategoryManagerDropdown(){
   if(!menu) return;
   menu.classList.toggle("hidden");
 }
+\nwindow.renderCategorySuggestions = renderCategorySuggestions;\nwindow.selectCategorySuggestion = selectCategorySuggestion;\n
