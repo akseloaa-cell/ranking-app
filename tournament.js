@@ -1364,7 +1364,7 @@ function applyTournamentElo(participants, avg){
 
   const rewards = state.tournament.mode === "daily"
     ? (dailyRewards[getDailyConfig().rewards] || dailyRewards.normal)
-    : [30, 20, 10];
+    : [15, 10, 5];
 
   participants.slice(0, 3).forEach((item, i) => {
 
