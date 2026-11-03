@@ -88,6 +88,20 @@ function getMatchK(a, b){
   return Math.max(12, Math.min(48, 32 * 1000 / avg));
 }
 
+function getWinEloChanges(winner, loser){
+  const expected = 1 / (1 + Math.pow(10, (loser.rating - winner.rating) / 400));
+  const base = Math.round(getMatchK(winner, loser) * (1 - expected));
+
+  // An upset earns an extra boost without taking that extra ELO from the
+  // favourite. At most 75% more than the regular winner's reward.
+  const ratingGap = Math.max(0, loser.rating - winner.rating);
+  const upsetMultiplier = 1 + Math.min(0.75, ratingGap / 1000);
+  return {
+    gain: Math.round(base * upsetMultiplier),
+    loss: base
+  };
+}
+
 
 
 export function formatChoice(item, opponent){
@@ -100,10 +114,8 @@ export function formatChoice(item, opponent){
 
   const h2h = getH2H(item, opponent);
 
-  const Ea = 1/(1+Math.pow(10,(opponent.rating-item.rating)/400));
-  const k = getMatchK(item, opponent);
-  const gain = Math.round(k * (1-Ea));
-  const loss = Math.round(-k * Ea);
+  const gain = getWinEloChanges(item, opponent).gain;
+  const loss = -getWinEloChanges(opponent, item).loss;
 
   return `
     <div style="font-size:18px;font-weight:600;">
@@ -175,14 +187,9 @@ export function pick(i){
     return;
   }
 
-  // 🔥 expected score
-  const Ea = 1 / (1 + Math.pow(10, (loser.rating - winner.rating) / 400));
-
-  // Symmetric ELO transfer, scaled by the average rating of both items.
-  const change = Math.round(getMatchK(winner, loser) * (1 - Ea));
-
-  winner.rating += change;
-  loser.rating -= change;
+  const changes = getWinEloChanges(winner, loser);
+  winner.rating += changes.gain;
+  loser.rating -= changes.loss;
 
   // 🔥 safety
   winner.rating = Math.round(winner.rating);
