@@ -162,22 +162,17 @@ export function beginEloCorrection(){
 }
 
 function refillCorrectionQueue(){
-  // Process every eligible item once, oldest first, before starting a new cycle.
-  // Use the original item order as fallback for older entries without createdAt.
+  // Least recently shown in ELO Correction comes first, across sessions.
+  // Items never shown in this mode are prioritized over previously shown ones.
+  // Keep the stored item order for ties and legacy items without history.
   correctionQueue = correctionPool()
-    .map(item => ({
-      item,
-      originalIndex: state.items.findIndex(entry => String(entry.id) === String(item.id))
-    }))
-    .sort((a, b) => {
-      const aTime = Date.parse(a.item.createdAt || "");
-      const bTime = Date.parse(b.item.createdAt || "");
-      if(Number.isFinite(aTime) && Number.isFinite(bTime) && aTime !== bTime){
-        return aTime - bTime;
-      }
-      return a.originalIndex - b.originalIndex;
-    })
-    .map(({item}) => item.id);
+    .map((item, index) => ({ item, index }))
+    .sort((a, b) =>
+      (Number(a.item.eloCorrectionLastSelected) || 0) -
+      (Number(b.item.eloCorrectionLastSelected) || 0) ||
+      a.index - b.index
+    )
+    .map(({ item }) => item.id);
   correctionIndex = 0;
 }
 
@@ -195,6 +190,11 @@ function nextEloCorrection(){
     refillCorrectionQueue();
     return nextEloCorrection();
   }
+  // Mark the item when it is actually shown, even if the user skips it.
+  // Monotonic timestamp also preserves the order if selections happen quickly.
+  const latestSelection = Math.max(0, ...state.items.map(entry => Number(entry.eloCorrectionLastSelected) || 0));
+  item.eloCorrectionLastSelected = Math.max(Date.now(), latestSelection + 1);
+  save();
   const refs = correctionPool().filter(entry => String(entry.id) !== String(item.id));
   openEloPlacement(item.id, refs, true);
   const panel = overlay?.querySelector(".eloPlacementPanel");
