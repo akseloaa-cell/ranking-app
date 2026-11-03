@@ -73,29 +73,102 @@ let pendingPlacement = null;
 let correctionQueue = [];
 let correctionIndex = 0;
 let correctionActive = false;
+let correctionCategories = [];
+let correctionUseAll = true;
+
+function correctionPool(){
+  if(correctionUseAll) return [...state.items];
+  const selected = new Set(correctionCategories);
+  return state.items.filter(item => (item.categories || []).some(category => selected.has(category)));
+}
+
+function renderCorrectionCategoryOptions(){
+  const list = document.getElementById("eloCorrectionCategories");
+  if(!list) return;
+  const search = document.getElementById("eloCorrectionCategorySearch");
+  const q = String(search?.value || "").trim().toLocaleLowerCase("nb");
+  const categories = state.categories.filter(category => category.toLocaleLowerCase("nb").includes(q));
+  list.replaceChildren();
+  for(const category of categories){
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "chip";
+    button.style.cssText = "padding:10px 12px;border-radius:12px;cursor:pointer;background:" +
+      (correctionCategories.includes(category) && !correctionUseAll ? "#4f8cff" : "#222c40") + ";color:white;";
+    button.textContent = (correctionCategories.includes(category) && !correctionUseAll ? "✓ " : "") + category;
+    button.addEventListener("click", () => {
+      correctionUseAll = false;
+      correctionCategories = correctionCategories.includes(category)
+        ? correctionCategories.filter(c => c !== category)
+        : [...correctionCategories, category];
+      renderCorrectionCategoryOptions();
+    });
+    list.appendChild(button);
+  }
+  const all = document.getElementById("eloCorrectionAll");
+  if(all){
+    all.style.background = correctionUseAll ? "#4f8cff" : "#222c40";
+    all.setAttribute("aria-pressed", String(correctionUseAll));
+  }
+  const count = correctionPool().length;
+  const description = document.getElementById("eloCorrectionPoolCount");
+  if(description) description.textContent = correctionUseAll
+    ? count + " items tilgjengelig fra alle kategorier."
+    : correctionCategories.length
+      ? count + " unike items i " + correctionCategories.length + " valgte kategorier."
+      : "Velg minst én kategori.";
+  const start = document.getElementById("eloCorrectionBegin");
+  if(start) start.disabled = count < 2 || (!correctionUseAll && !correctionCategories.length);
+}
+
+export function selectAllEloCorrectionCategories(){
+  correctionUseAll = true;
+  correctionCategories = [];
+  renderCorrectionCategoryOptions();
+}
+
+export function filterEloCorrectionCategories(){
+  renderCorrectionCategoryOptions();
+}
+
+export function startEloCorrectionMode(){
+  correctionActive = false;
+  pendingPlacement = null;
+  correctionUseAll = true;
+  correctionCategories = [];
+  const menu = document.getElementById("modeMenu");
+  if(menu) menu.style.display = "none";
+  const overlay = document.getElementById("eloCorrectionSetupOverlay");
+  if(!overlay) return;
+  const search = document.getElementById("eloCorrectionCategorySearch");
+  if(search) search.value = "";
+  overlay.style.display = "flex";
+  renderCorrectionCategoryOptions();
+}
+
+export function closeEloCorrectionSetup(){
+  const overlay = document.getElementById("eloCorrectionSetupOverlay");
+  if(overlay) overlay.style.display = "none";
+}
+
+export function beginEloCorrection(){
+  if(correctionPool().length < 2) return;
+  closeEloCorrectionSetup();
+  correctionActive = true;
+  pendingPlacement = null;
+  refillCorrectionQueue();
+  window.setMode("eloCorrection");
+  nextEloCorrection();
+}
 
 function refillCorrectionQueue(){
-  // Shuffle one cycle, so every item gets a turn before repeating.
-  correctionQueue = state.items.map(item => item.id);
+  // Each eligible item appears once per cycle.
+  correctionQueue = correctionPool().map(item => item.id);
   for(let i = correctionQueue.length - 1; i > 0; i--){
     const j = Math.floor(Math.random() * (i + 1));
     [correctionQueue[i], correctionQueue[j]] = [correctionQueue[j], correctionQueue[i]];
   }
   correctionIndex = 0;
-}
-
-export function startEloCorrectionMode(){
-  if(state.items.length < 2){
-    alert("Du trenger minst 2 items for å bruke ELO Correction.");
-    return;
-  }
-  correctionActive = true;
-  pendingPlacement = null;
-  refillCorrectionQueue();
-  document.getElementById("modeMenu").style.display = "none";
-  // Show the familiar placement dialog, but cycle through existing items.
-  window.setMode("eloCorrection");
-  nextEloCorrection();
 }
 
 function nextEloCorrection(){
@@ -112,7 +185,7 @@ function nextEloCorrection(){
     refillCorrectionQueue();
     return nextEloCorrection();
   }
-  const refs = state.items.filter(entry => String(entry.id) !== String(item.id));
+  const refs = correctionPool().filter(entry => String(entry.id) !== String(item.id));
   openEloPlacement(item.id, refs, true);
   const panel = overlay?.querySelector(".eloPlacementPanel");
   if(panel) panel.scrollTop = 0;
