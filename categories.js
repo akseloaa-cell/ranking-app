@@ -180,7 +180,6 @@ export function renderCategoryManager(){
 
   const categories = [...state.categories];
   const selected = state.categoryManagerCategory || categories[0] || "";
-  const q = (state.categoryManagerSearch || "").trim().toLowerCase();
   const sourceFilter = state.categoryManagerSourceFilter || "all";
   const categoryQuery = (state.categoryManagerCategorySearch || "").trim().toLowerCase();
   const visibleCategories = categories;
@@ -191,7 +190,6 @@ export function renderCategoryManager(){
   const items = [...state.items]
     .filter(item => sourceFilter === "all"
       || (sourceFilter === "uncategorized" ? !(item.categories || []).length : (item.categories || []).includes(sourceFilter)))
-    .filter(item => !q || item.name.toLowerCase().includes(q))
     .sort((a, b) => {
       const aActive = (a.categories || []).includes(selected);
       const bActive = (b.categories || []).includes(selected);
@@ -293,6 +291,8 @@ export function renderCategoryManager(){
       </div>
     ` : '<p style="opacity:.5;">Opprett en kategori først.</p>'}
   `;
+  // Keep all filtered-source items in the DOM so clearing item search restores them.
+  searchCategoryManager(state.categoryManagerSearch || "");
 }
 
 export function toggleCategoryManagerDropdown(){
