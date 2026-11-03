@@ -41,6 +41,12 @@ export function renderCategorySelectScreen(){
           <input id="categorySearch" type="search" placeholder="Søk etter kategori..."
             oninput="filterCategories(this.value)" autocomplete="off">
         </div>
+        <button type="button" onclick="startRandomCategoryVs()" class="vs-category-card"
+          style="width:100%;margin:10px 0;cursor:pointer;" title="Velg en tilfeldig kategori med minst to items">
+          <span class="vsCategoryFolder">🎲</span>
+          <span class="vsCategoryDetails"><strong>Random kategori</strong><small>Velg en tilfeldig kategori og start Versus</small></span>
+          <span class="vsCategoryArrow" aria-hidden="true">›</span>
+        </button>
         <div class="vsSelectToolbar">
           <span class="vsSelectSortCaption">Sorter etter</span>
           <div class="vsSelectSortControls">
@@ -159,6 +165,19 @@ export function toggleSortDir(){
 /* =========================
    START MODE
 ========================= */
+
+export function startRandomCategoryVs(){
+  // Exclude categories where a duel cannot be played.
+  const eligible = state.categories.filter(category =>
+    state.items.filter(item => (item.categories || []).includes(category)).length >= 2
+  );
+  if(!eligible.length){
+    alert("Ingen kategorier har minst 2 items ennå.");
+    return;
+  }
+  const category = eligible[Math.floor(Math.random() * eligible.length)];
+  startCategoryVs(category);
+}
 
 export function startCategoryVs(category){
 
@@ -429,6 +448,7 @@ export function renderVsCategories(value = ""){
 ========================= */
 
 window.startCategoryVs = startCategoryVs;
+window.startRandomCategoryVs = startRandomCategoryVs;
 window.exitCategoryVs = exitCategoryVs;
 window.filterCategories = filterCategories;
 window.renderVsCategories = renderVsCategories;
