@@ -110,8 +110,17 @@ function renderDistribution(){
     const amount = allocations.get(id) || 0;
     return `<div class="dailyShoutoutSliderCard">
       <div class="dailyShoutoutSliderAmount" data-amount-id="${escapeHtml(id)}">+${amount} ELO</div>
-      <input class="dailyShoutoutSlider" type="range" min="0" max="200" step="1" value="${amount}"
-        data-slider-id="${escapeHtml(id)}" aria-label="ELO til ${escapeHtml(item.name)}">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button type="button" class="dailyShoutoutStepButton" data-shoutout-step="-1" data-shoutout-item="${escapeHtml(id)}"
+          aria-label="Trekk fra 1 ELO for ${escapeHtml(item.name)}"
+          style="flex:0 0 34px;height:34px;padding:0;border-radius:9px;font-size:19px;">−</button>
+        <input class="dailyShoutoutSlider" type="range" min="0" max="200" step="1" value="${amount}"
+          data-slider-id="${escapeHtml(id)}" aria-label="ELO til ${escapeHtml(item.name)}"
+          style="flex:1;min-width:0;">
+        <button type="button" class="dailyShoutoutStepButton" data-shoutout-step="1" data-shoutout-item="${escapeHtml(id)}"
+          aria-label="Legg til 1 ELO for ${escapeHtml(item.name)}"
+          style="flex:0 0 34px;height:34px;padding:0;border-radius:9px;font-size:19px;">+</button>
+      </div>
       <div class="dailyShoutoutSliderName">${escapeHtml(item.name)}</div>
     </div>`;
   }).join("");
@@ -135,6 +144,12 @@ function updateDistributionTotals(){
   document.querySelectorAll("[data-slider-id]").forEach(slider => {
     const amount = allocations.get(slider.dataset.sliderId) || 0;
     slider.max = Math.min(BONUS, amount + remaining);
+    slider.value = amount;
+  });
+  document.querySelectorAll("[data-shoutout-step]").forEach(button => {
+    const amount = allocations.get(button.dataset.shoutoutItem) || 0;
+    const step = Number(button.dataset.shoutoutStep);
+    button.disabled = step < 0 ? amount <= 0 : remaining <= 0;
   });
 }
 
@@ -247,6 +262,22 @@ export function initDailyShoutout(){
     document.querySelectorAll("[data-amount-id]").forEach(label => {
       if(label.dataset.amountId === id) label.textContent = "+" + amount + " ELO";
     });
+    updateDistributionTotals();
+  });
+  document.getElementById("dailyShoutoutSliders")?.addEventListener("click", event => {
+    const button = event.target.closest("[data-shoutout-step]");
+    if(!button || button.disabled) return;
+    const id = button.dataset.shoutoutItem;
+    if(!chosenIds.has(id)) return;
+    const previous = allocations.get(id) || 0;
+    const used = [...allocations.values()].reduce((sum, n) => sum + n, 0);
+    const step = Number(button.dataset.shoutoutStep);
+    const next = Math.max(0, Math.min(BONUS - (used - previous), previous + step));
+    if(next === previous) return;
+    allocations.set(id, next);
+    const card = button.closest(".dailyShoutoutSliderCard");
+    const label = card?.querySelector("[data-amount-id]");
+    if(label) label.textContent = "+" + next + " ELO";
     updateDistributionTotals();
   });
   document.getElementById("dailyShoutoutOverlay")?.addEventListener("click", event => {
