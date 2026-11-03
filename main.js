@@ -32,7 +32,7 @@ import {
   openCategoryVs,
   exitCategoryVs,
   backToCategorySelect
-} from "./categoryVs.js?v=20261103-random-category";
+} from "./categoryVs.js?v=20261103-versus-category-heading";
 
 import {
   startTournament,
