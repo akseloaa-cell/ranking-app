@@ -32,7 +32,7 @@ import {
   openCategoryVs,
   exitCategoryVs,
   backToCategorySelect
-} from "./categoryVs.js?v=20261027-versus-horizontal-match";
+} from "./categoryVs.js?v=20261103-random-category";
 
 import {
   startTournament,
