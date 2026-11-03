@@ -215,11 +215,9 @@ export function renderVsScreen(){
         ← Categories
       </button>
 
-      <div id="battleCategoryTitle">
-        ⚔️ ${state.activeCategory}
-      </div>
-
     </div>
+
+    <h2 id="battleCategoryTitle" class="battle-category-heading">⚔️ ${String(state.activeCategory || "").replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]))}</h2>
 
     <div id="battleArena" class="vs">
 
