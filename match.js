@@ -80,6 +80,16 @@ export function updateHistory(item){
 
 // ================= MATCH =================
 
+// A shared K-factor for the matchup: lower average ELO means larger swings.
+// At 1000 average ELO this keeps the old K=32. Bounded for extreme ratings.
+function getMatchK(a, b){
+  const avg = (Math.max(100, Number(a.rating) || 1000) +
+               Math.max(100, Number(b.rating) || 1000)) / 2;
+  return Math.max(12, Math.min(48, 32 * 1000 / avg));
+}
+
+
+
 export function formatChoice(item, opponent){
   const rank = getRank(item.id);
   const elo = Math.round(item.rating);
@@ -91,8 +101,9 @@ export function formatChoice(item, opponent){
   const h2h = getH2H(item, opponent);
 
   const Ea = 1/(1+Math.pow(10,(opponent.rating-item.rating)/400));
-  const gain = Math.round(32*(1-Ea));
-  const loss = Math.round(32*(0-Ea));
+  const k = getMatchK(item, opponent);
+  const gain = Math.round(k * (1-Ea));
+  const loss = Math.round(-k * Ea);
 
   return `
     <div style="font-size:18px;font-weight:600;">
@@ -167,8 +178,8 @@ export function pick(i){
   // 🔥 expected score
   const Ea = 1 / (1 + Math.pow(10, (loser.rating - winner.rating) / 400));
 
-  // 🔥 clean symmetric elo change
-  const change = Math.round(32 * (1 - Ea));
+  // Symmetric ELO transfer, scaled by the average rating of both items.
+  const change = Math.round(getMatchK(winner, loser) * (1 - Ea));
 
   winner.rating += change;
   loser.rating -= change;
@@ -209,9 +220,9 @@ export function draw(){
   const Ea = 1 / (1 + Math.pow(10, (b.rating - a.rating) / 400));
   const Eb = 1 / (1 + Math.pow(10, (a.rating - b.rating) / 400));
 
-  // 🔥 draw elo changes
-  const changeA = Math.round(32 * (0.5 - Ea));
-  const changeB = Math.round(32 * (0.5 - Eb));
+  // Draw is also zero-sum and uses the same dynamic K factor.
+  const changeA = Math.round(getMatchK(a, b) * (0.5 - Ea));
+  const changeB = -changeA;
 
   a.rating += changeA;
   b.rating += changeB;
