@@ -179,6 +179,19 @@ export function openRankingView(){
   renderRankingView();
 }
 
+function getRankingWinrate(item){
+  if(!item.h2h) return {rate:0, matches:0};
+  let wins = 0;
+  let matches = 0;
+  Object.values(item.h2h).forEach(result => {
+    const w = Number(result.wins) || 0;
+    const l = Number(result.losses) || 0;
+    wins += w;
+    matches += w + l;
+  });
+  return {rate:matches ? wins / matches : 0, matches};
+}
+
 export function renderRankingView(){
 
   let list;
@@ -189,22 +202,24 @@ export function renderRankingView(){
     list = getCategorySorted(state.rankingFilter);
   }
 
-  if(state.rankingSort === "wins"){
-    list.sort((a,b)=>(b.tournamentWins||0)-(a.tournamentWins||0));
-  }
-
-  if(state.rankingSort === "top3"){
-    list.sort((a,b)=>(b.top3||0)-(a.top3||0));
+  if(state.rankingSort === "winrate"){
+    list.sort((a,b) => {
+      const aRate = getRankingWinrate(a);
+      const bRate = getRankingWinrate(b);
+      return bRate.rate - aRate.rate
+        || bRate.matches - aRate.matches
+        || b.rating - a.rating;
+    });
   }
 
   const html = list.map((item,i)=>{
 
     const currentRank = i + 1;
-    const prevRank = getPrevRank(item);
+    const prevRank = state.rankingSort === "elo" ? getPrevRank(item) : undefined;
 
     let indicator = "";
 
-    if(isNewToday(item)){
+    if(state.rankingSort === "elo" && isNewToday(item)){
       indicator = `<span style="
         background:#4f8cff;
         color:white;
@@ -236,7 +251,7 @@ export function renderRankingView(){
           <span>${item.name}</span>
         </div>
 
-        <span>${Math.floor(item.rating)}</span>
+        <span>${state.rankingSort === "winrate" ? (getRankingWinrate(item).matches ? (getRankingWinrate(item).rate * 100).toFixed(1) + "%" : "–") : Math.floor(item.rating)}</span>
       </div>
     `;
   }).join("");
@@ -332,7 +347,7 @@ export function setRankingFilter(cat){
 }
 
 export function setSort(type){
-  state.rankingSort = type;
+  state.rankingSort = ["elo", "winrate"].includes(type) ? type : "elo";
   renderRankingView();
 }
 
