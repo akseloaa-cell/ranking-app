@@ -162,12 +162,22 @@ export function beginEloCorrection(){
 }
 
 function refillCorrectionQueue(){
-  // Each eligible item appears once per cycle.
-  correctionQueue = correctionPool().map(item => item.id);
-  for(let i = correctionQueue.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    [correctionQueue[i], correctionQueue[j]] = [correctionQueue[j], correctionQueue[i]];
-  }
+  // Process every eligible item once, oldest first, before starting a new cycle.
+  // Use the original item order as fallback for older entries without createdAt.
+  correctionQueue = correctionPool()
+    .map(item => ({
+      item,
+      originalIndex: state.items.findIndex(entry => String(entry.id) === String(item.id))
+    }))
+    .sort((a, b) => {
+      const aTime = Date.parse(a.item.createdAt || "");
+      const bTime = Date.parse(b.item.createdAt || "");
+      if(Number.isFinite(aTime) && Number.isFinite(bTime) && aTime !== bTime){
+        return aTime - bTime;
+      }
+      return a.originalIndex - b.originalIndex;
+    })
+    .map(({item}) => item.id);
   correctionIndex = 0;
 }
 
